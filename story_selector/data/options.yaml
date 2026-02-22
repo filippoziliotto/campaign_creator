@@ -23,6 +23,7 @@ setting_descriptions:
   Theros: Ambientazione greco-mitologica con dei attivi, oracoli e mostri leggendari legati al destino degli eroi.
   Dark Sun: Mondo post-apocalittico desertico, duro e distopico, dove la magia consuma risorse e la sopravvivenza e centrale.
   Wildemount: Scenario politico e bellico di Exandria, ideale per campagne di conflitto tra nazioni, intrighi e fronti di guerra.
+  Feywild: Piano fatato, specchio distorto del mondo materiale, popolato da creature magiche, regni incantati e stranezze imprevedibili.
 
 campaign_types:
   - One-Shot
@@ -50,6 +51,7 @@ tones:
   - Tragico
   - Comico
   - Noir
+  - Bizzaro
 
 styles:
   - Epico
@@ -59,6 +61,7 @@ styles:
   - High fantasy
   - Low fantasy
   - Investigativo
+  - Fiabesco
 
 party_archetypes:
   - Guerriero
@@ -89,7 +92,10 @@ twists:
   - I PG sono già morti e non lo sanno
   - Il villain ha già vinto e la missione è limitare i danni
   - Il party è inconsapevolmente al servizio del villain
-
+  - I mostri stanno fuggendo da un predatore di scala cataclismica
+  - L'intera regione è una simulazione magica o il sogno di un dio dormiente
+  - La cura per la piaga richiede il sacrificio della persona che l'ha commissionata
+  
 output_lengths:
   - Breve
   - Medio
