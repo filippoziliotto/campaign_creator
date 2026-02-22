@@ -151,35 +151,6 @@ def render_ui() -> None:
                 height=110,
                 placeholder="Una riga per vincolo. Es: no romanticismo, no orrore corporeo, focus su diplomazia.",
             )
-
-        section_divider()
-        with st.container(border=True):
-            st.caption("Dinamiche precompilate")
-            preset_choice(
-                "🧙 Preset rapido",
-                list(options["presets"].keys()),
-                options.get("preset_descriptions", {}),
-                key="preset_name",
-            )
-            preset_col, random_col = st.columns(2)
-            with preset_col:
-                st.button(
-                    "🧙 Applica preset",
-                    use_container_width=True,
-                    on_click=apply_selected_preset,
-                    args=(options["presets"],),
-                )
-            with random_col:
-                st.button(
-                    "🎲 Tira i dadi (Random)",
-                    use_container_width=True,
-                    on_click=randomize_and_notify,
-                    args=(options,),
-                )
-            st.caption("Il preset aggiorna i campi chiusi. Il random crea una bozza iniziale.")
-
-        section_divider()
-        with st.container(border=True):
             with st.expander("Advanced: NPC, fazioni, encounter, safety", expanded=False):
                 include_npcs = st.toggle("Includi NPC chiave", key="include_npcs")
                 include_encounters = st.toggle(
@@ -207,6 +178,32 @@ def render_ui() -> None:
                     height=80,
                     placeholder="Es: evita body horror, niente violenza esplicita.",
                 )
+
+        section_divider()
+        with st.container(border=True):
+            st.caption("Dinamiche precompilate")
+            preset_choice(
+                "🧙 Preset rapido",
+                list(options["presets"].keys()),
+                options.get("preset_descriptions", {}),
+                key="preset_name",
+            )
+            preset_col, random_col = st.columns(2)
+            with preset_col:
+                st.button(
+                    "🧙 Applica preset",
+                    use_container_width=True,
+                    on_click=apply_selected_preset,
+                    args=(options["presets"],),
+                )
+            with random_col:
+                st.button(
+                    "🎲 Tira i dadi (Random)",
+                    use_container_width=True,
+                    on_click=randomize_and_notify,
+                    args=(options,),
+                )
+            st.caption("Il preset aggiorna i campi chiusi. Il random crea una bozza iniziale.")
 
     section_divider()
     generate_clicked = st.button("📜 Genera prompt", type="primary", use_container_width=True)
