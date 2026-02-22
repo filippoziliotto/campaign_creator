@@ -10,6 +10,7 @@ settings:
   - Theros
   - Dark Sun
   - Wildemount
+  - Feywild
 
 setting_descriptions:
   Forgotten Realms: Mondo fantasy classico, ricco di regni, magie antiche e avventure eroiche.
@@ -95,7 +96,7 @@ twists:
   - I mostri stanno fuggendo da un predatore di scala cataclismica
   - L'intera regione è una simulazione magica o il sogno di un dio dormiente
   - La cura per la piaga richiede il sacrificio della persona che l'ha commissionata
-  
+
 output_lengths:
   - Breve
   - Medio
