@@ -1,0 +1,18 @@
+[theme]
+base = "light"
+
+# Colore primario — usato da Streamlit per slider, checkbox, progress bar
+# Usa il rosso carminio già presente nei tuoi bottoni
+primaryColor = "#9b2317"
+
+# Sfondo app — anche se lo sovrascrive il tuo CSS, serve come fallback
+# e influenza componenti non raggiungibili via CSS (es. sidebar mobile)
+backgroundColor = "#efe2c4"
+
+# Sfondo dei widget (input, selectbox, text area)
+secondaryBackgroundColor = "#fdf6e4"
+
+
+# Font — Streamlit supporta solo: sans serif, serif, monospace
+# "serif" è l'unico che si avvicina al tuo Crimson Text come fallback
+font = "serif"
