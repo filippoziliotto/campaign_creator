@@ -6,6 +6,10 @@ settings:
   - Continente homebrew
   - Dragonlance
   - Ravnica
+  - Spelljammer
+  - Theros
+  - Dark Sun
+  - Wildemount
 
 setting_descriptions:
   Forgotten Realms: Mondo fantasy classico, ricco di regni, magie antiche e avventure eroiche.
@@ -15,6 +19,10 @@ setting_descriptions:
   Continente homebrew: Mondo originale creato dal tavolo, flessibile per tono, storia e regole custom.
   Dragonlance: Fantasy eroico segnato dalla guerra tra draghi, ordini cavallereschi e profezie.
   Ravnica: Megalopoli planare dominata da gilde rivali, perfetta per trame urbane e lotte di potere.
+  Spelljammer: Viaggio cosmico tra sfere cristalline, navi volanti e equipaggi misti in avventure spaziali fantasy.
+  Theros: Ambientazione greco-mitologica con dei attivi, oracoli e mostri leggendari legati al destino degli eroi.
+  Dark Sun: Mondo post-apocalittico desertico, duro e distopico, dove la magia consuma risorse e la sopravvivenza e centrale.
+  Wildemount: Scenario politico e bellico di Exandria, ideale per campagne di conflitto tra nazioni, intrighi e fronti di guerra.
 
 campaign_types:
   - One-Shot
@@ -32,6 +40,7 @@ themes:
   - Avventura nautica
   - Guerra tra fazioni
   - Caccia ai mostri
+  - Steampunk medievale
 
 tones:
   - Eroico
@@ -49,6 +58,7 @@ styles:
   - Crudo
   - High fantasy
   - Low fantasy
+  - Investigativo
 
 party_archetypes:
   - Guerriero
@@ -76,6 +86,9 @@ twists:
   - Il mondo è bloccato in un sottile loop temporale
   - Il dungeon è un organismo vivente
   - L'obiettivo della missione è una persona che non vuole essere salvata
+  - I PG sono già morti e non lo sanno
+  - Il villain ha già vinto e la missione è limitare i danni
+  - Il party è inconsapevolmente al servizio del villain
 
 output_lengths:
   - Breve
@@ -127,6 +140,63 @@ presets:
     twist: L'antagonista vuole evitare una catastrofe peggiore
     output_length: Lungo
 
+  # ── Nuovi preset ───────────────────────────────────────────────────
+
+  Dungeon Maledetto:
+    setting: Forgotten Realms
+    campaign_type: Esplorazione dungeon
+    theme: Caccia ai mostri
+    tone: Misterioso
+    style: Realistico
+    party_level: 4
+    party_size: 4
+    twist: Il dungeon è un organismo vivente
+    output_length: Lungo
+
+  Sopravvivenza:
+    setting: Dark Sun
+    campaign_type: Mini-campagna
+    theme: Sopravvivenza selvaggia
+    tone: Cupo
+    style: Crudo
+    party_level: 3
+    party_size: 5
+    twist: Il villain ha già vinto e la missione è limitare i danni
+    output_length: Medio
+
+  Destino degli Eroi:
+    setting: Theros
+    campaign_type: Campagna lunga
+    theme: Fantasy classico
+    tone: Tragico
+    style: Epico
+    party_level: 5
+    party_size: 4
+    twist: Il party condivide un'origine dimenticata
+    output_length: Lungo
+
+  Fronte di Guerra:
+    setting: Wildemount
+    campaign_type: Campagna lunga
+    theme: Guerra tra fazioni
+    tone: Tragico
+    style: Realistico
+    party_level: 6
+    party_size: 5
+    twist: Il party è inconsapevolmente al servizio del villain
+    output_length: Lungo
+
+  Rotte Stellari:
+    setting: Spelljammer
+    campaign_type: One-Shot
+    theme: Avventura nautica
+    tone: Ironico
+    style: Cinematografico
+    party_level: 5
+    party_size: 5
+    twist: L'obiettivo della missione è una persona che non vuole essere salvata
+    output_length: Medio
+
 preset_descriptions:
   Classico: |
     Eroi emergenti in un mondo high fantasy tradizionale.
@@ -148,3 +218,28 @@ preset_descriptions:
     Fazioni extraplanari e conflitti su scala epica.
     Alterna meraviglia, pericolo e decisioni ad alto impatto.
     Indicato per campagne lunghe con scope molto ampio.
+  Dungeon Maledetto: |
+    Un dungeon antico che respira, cresce e risponde alle azioni del party.
+    Esplorazione tattica con fazioni interne in conflitto tra loro.
+    Ogni livello cela una rivelazione che cambia la comprensione del luogo.
+    Ideale per chi vuole un dungeon crawl con forte spessore narrativo.
+  Sopravvivenza: |
+    Un mondo bruciato dove l'acqua vale più dell'oro e la magia uccide.
+    Il villain ha già vinto: la missione è sopravvivere e salvare il salvabile.
+    Decisioni morali difficili, risorse limitate, nessun salvatore in arrivo.
+    Perfetto per gruppi che vogliono un'esperienza brutale e realistica.
+  Destino degli Eroi: |
+    Gli dei di Theros hanno scelto il party — ma il destino ha un costo.
+    Origine comune nascosta, mostri leggendari e oracoli in contraddizione.
+    Tono epico-tragico: le gesta entreranno nei miti, ma a quale prezzo?
+    Indicato per campagne lunghe con forte arco personale dei PG.
+  Fronte di Guerra: |
+    Il party serve una causa giusta — o almeno così credeva.
+    Conflitto tra nazioni, propaganda, tradimenti e ordini difficili da eseguire.
+    La verità sulla fazione che li ha ingaggiati emerge lentamente.
+    Adatto a gruppi che amano la complessità morale e le scelte impossibili.
+  Rotte Stellari: |
+    Una nave spelljammer, un equipaggio improbabile e una consegna impossibile.
+    L'obiettivo non vuole essere trovato — e ha le sue buone ragioni.
+    Tono avventuroso e ironico, con colpi di scena ad alta velocità.
+    Perfetto per una serata leggera con voglia di caos cosmico.

@@ -143,6 +143,49 @@ def render_quest_summary() -> None:
         )
 
 
+def render_context_completeness_indicator(
+    narrative_hooks: str,
+    character_notes: str,
+    constraints: str,
+    factions: str,
+    npc_focus: str,
+    encounter_focus: str,
+    safety_notes: str,
+) -> None:
+    def _filled(value: str) -> bool:
+        return bool((value or "").strip())
+
+    advanced_filled = any(_filled(item) for item in (factions, npc_focus, encounter_focus))
+
+    sections = [
+        ("Ganci narrativi", _filled(narrative_hooks)),
+        ("Note personaggi", _filled(character_notes)),
+        ("Limiti e preferenze", _filled(constraints)),
+        ("Dettagli avanzati", advanced_filled),
+        ("Safety", _filled(safety_notes)),
+    ]
+    completed_sections = sum(is_done for _, is_done in sections)
+    total_sections = len(sections)
+    progress_percent = int((completed_sections / total_sections) * 100)
+
+    if completed_sections <= 1:
+        quality_text = "Contesto ancora essenziale."
+    elif completed_sections <= 3:
+        quality_text = "Contesto buono."
+    else:
+        quality_text = "Contesto ricco."
+
+    st.caption(
+        f"🧭 Completezza contesto: {completed_sections}/{total_sections} sezioni compilate."
+    )
+    st.progress(progress_percent)
+    st.caption(quality_text)
+
+    missing_sections = [label for label, is_done in sections if not is_done]
+    if missing_sections:
+        st.caption("Per arricchire il prompt puoi aggiungere: " + ", ".join(missing_sections))
+
+
 def render_parchment_output(prompt_text: str) -> None:
     st.markdown(
         f"<div class='parchment-output'><pre>{escape(prompt_text)}</pre></div>",

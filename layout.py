@@ -9,6 +9,7 @@ from styles import inject_styles
 from widgets import (
     chip_choice,
     chip_multi_choice,
+    render_context_completeness_indicator,
     render_open_chatgpt_button,
     preset_choice,
     render_copy_prompt_button,
@@ -189,6 +190,15 @@ def render_ui() -> None:
                     height=80,
                     placeholder="Es: evita body horror, niente violenza esplicita.",
                 )
+            render_context_completeness_indicator(
+                narrative_hooks=narrative_hooks,
+                character_notes=character_notes,
+                constraints=constraints,
+                factions=factions,
+                npc_focus=npc_focus,
+                encounter_focus=encounter_focus,
+                safety_notes=safety_notes,
+            )
 
         section_divider()
 
