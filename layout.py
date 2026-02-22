@@ -28,131 +28,142 @@ def render_ui() -> None:
     if pending_toast_message:
         st.toast(pending_toast_message)
 
+    # ── Hero ──────────────────────────────────────────────────────────
     st.markdown(
         """
         <div class="hero">
-            <h1>Creatore Campagne D&amp;D</h1>
-            <p>Configura la tua campagna e genera un prompt pronto da incollare su ChatGPT.</p>
+            <h1>⚔️ Creatore Campagne D&amp;D</h1>
+            <hr class="hero-rule">
+            <p>Forgia la tua avventura. Configura la campagna e genera un prompt pronto da incollare su ChatGPT.</p>
         </div>
         """,
         unsafe_allow_html=True,
     )
+
     render_quest_summary()
     section_divider()
 
+    # ── Two-column layout ─────────────────────────────────────────────
     left_col, right_col = st.columns(2, gap="large")
 
+    # ── LEFT: Campagna ────────────────────────────────────────────────
     with left_col:
         st.subheader("🗺️ Campagna")
+
         with st.container(border=True):
-            st.caption("Mondo e formato")
+            st.caption("✦ Mondo e formato")
             setting = setting_choice(
-                "🗺️ Ambientazione",
+                "Ambientazione",
                 options["settings"],
                 options.get("setting_descriptions", {}),
                 key="setting",
             )
             campaign_type = chip_choice(
-                "📚 Tipo campagna",
+                "Tipo di campagna",
                 options["campaign_types"],
                 key="campaign_type",
             )
+
         section_divider()
 
         with st.container(border=True):
-            st.caption("Tono e stile")
+            st.caption("✦ Tono e stile narrativo")
             theme_preferences = chip_multi_choice(
-                "🎭 Tema",
+                "Tema",
                 options["themes"],
                 key="theme_preferences",
-                help_text="Clic per selezionare; clic di nuovo per deselezionare.",
+                help_text="Seleziona uno o più temi. Clic per attivare/disattivare.",
             )
             tone_preferences = chip_multi_choice(
-                "🕯️ Tono",
+                "Tono",
                 options["tones"],
                 key="tone_preferences",
-                help_text="Clic per selezionare; clic di nuovo per deselezionare.",
+                help_text="Seleziona uno o più toni. Clic per attivare/disattivare.",
             )
             style_preferences = chip_multi_choice(
-                "✒️ Stile",
+                "Stile",
                 options["styles"],
                 key="style_preferences",
-                help_text="Clic per selezionare; clic di nuovo per deselezionare.",
+                help_text="Seleziona uno o più stili. Clic per attivare/disattivare.",
             )
+
         section_divider()
 
         with st.container(border=True):
-            st.caption("Direzione narrativa")
-            twist = chip_choice("🧩 Colpo di scena", options["twists"], key="twist")
+            st.caption("✦ Direzione narrativa")
+            twist = chip_choice("Colpo di scena", options["twists"], key="twist")
             output_length = segmented_choice(
-                "📏 Lunghezza output",
+                "Lunghezza output",
                 options["output_lengths"],
                 key="output_length",
             )
-            st.caption("📜 Output sempre in italiano.")
+            st.caption("📜 Il prompt viene generato sempre in italiano.")
 
+    # ── RIGHT: Party e Vincoli ────────────────────────────────────────
     with right_col:
         st.subheader("⚔️ Party e Vincoli")
+
         with st.container(border=True):
-            st.caption("Party")
+            st.caption("✦ Composizione del gruppo")
             level_col, size_col = st.columns(2)
             with level_col:
                 party_level = st.selectbox(
                     "Livello party",
                     options=list(range(1, 21)),
                     key="party_level",
-                    help="Scegli il livello medio del gruppo.",
+                    help="Livello medio del gruppo avventuriero.",
                 )
             with size_col:
                 party_size = st.selectbox(
                     "Dimensione party",
                     options=list(range(1, 8)),
                     key="party_size",
-                    help="Scegli quanti personaggi ci sono nel party.",
+                    help="Numero di personaggi giocanti.",
                 )
             party_archetypes = st.multiselect(
-                "⚔️ Composizione party (classi/ruoli dei PG)",
+                "Composizione party (classi / ruoli)",
                 options["party_archetypes"],
                 key="party_archetypes",
                 help=(
-                    "Indica le classi/ruoli dei membri del party giocante. "
-                    "Puoi lasciarlo vuoto se vuoi che il modello proponga combinazioni."
+                    "Indica le classi o i ruoli dei PG. "
+                    "Lascia vuoto per lasciare al modello la scelta."
                 ),
             )
-
             st.markdown(
                 (
                     "<div class='party-kpi'>"
-                    "<span class='party-kpi-label'>Riepilogo rapido</span>"
-                    f"<span class='party-kpi-value'>Lv {party_level} | {party_size} PG</span>"
+                    "<span class='party-kpi-label'>📋 Riepilogo rapido</span>"
+                    f"<span class='party-kpi-value'>⚔️ Lv {party_level}"
+                    f"&nbsp;&nbsp;|&nbsp;&nbsp;👥 {party_size} PG</span>"
                     "</div>"
                 ),
                 unsafe_allow_html=True,
             )
 
         section_divider()
+
         with st.container(border=True):
-            st.caption("Vincoli e input liberi")
+            st.caption("✦ Vincoli e input narrativi")
             narrative_hooks = st.text_area(
                 "Ganci narrativi preferiti",
                 key="narrative_hooks",
-                height=110,
-                placeholder="Es: mistero su una citta volante, reliquia rubata, rivalita tra casate...",
+                height=105,
+                placeholder="Es: mistero su una città volante, reliquia rubata, rivalità tra casate...",
             )
             character_notes = st.text_area(
-                "Nomi o note personaggi",
+                "Nomi o note sui personaggi",
                 key="character_notes",
-                height=110,
+                height=105,
                 placeholder="Es: un paladino in crisi di fede, una ladra ex-spia, un mago ossessionato dai portali.",
             )
             constraints = st.text_area(
                 "Limiti e preferenze",
                 key="constraints",
-                height=110,
+                height=105,
                 placeholder="Una riga per vincolo. Es: no romanticismo, no orrore corporeo, focus su diplomazia.",
             )
-            with st.expander("Advanced: NPC, fazioni, encounter, safety", expanded=False):
-                include_npcs = st.toggle("Includi NPC chiave", key="include_npcs")
+            with st.expander("⚙️ Avanzato: NPC, fazioni, incontri, safety", expanded=False):
+                include_npcs = st.toggle("Includi PNG chiave", key="include_npcs")
                 include_encounters = st.toggle(
                     "Includi incontri strutturati", key="include_encounters"
                 )
@@ -163,14 +174,14 @@ def render_ui() -> None:
                     placeholder="Es: gilda dei mercanti, culto draconico, casata nobiliare rivale.",
                 )
                 npc_focus = st.text_input(
-                    "Focus NPC (opzionale)",
+                    "Focus PNG (opzionale)",
                     key="npc_focus",
-                    placeholder="Es: PNG moralmente ambiguo che tradisce a meta campagna.",
+                    placeholder="Es: PNG moralmente ambiguo che tradisce a metà campagna.",
                 )
                 encounter_focus = st.text_input(
                     "Focus incontri (opzionale)",
                     key="encounter_focus",
-                    placeholder="Es: pochi combattimenti, piu investigazione e dilemmi sociali.",
+                    placeholder="Es: pochi combattimenti, più investigazione e dilemmi sociali.",
                 )
                 safety_notes = st.text_area(
                     "Safety e contenuti sensibili (opzionale)",
@@ -180,10 +191,11 @@ def render_ui() -> None:
                 )
 
         section_divider()
+
         with st.container(border=True):
-            st.caption("Dinamiche precompilate")
+            st.caption("✦ Preset e casualità")
             preset_choice(
-                "🧙 Preset rapido",
+                "Preset rapido",
                 list(options["presets"].keys()),
                 options.get("preset_descriptions", {}),
                 key="preset_name",
@@ -198,15 +210,19 @@ def render_ui() -> None:
                 )
             with random_col:
                 st.button(
-                    "🎲 Tira i dadi (Random)",
+                    "🎲 Tira i dadi",
                     use_container_width=True,
                     on_click=randomize_and_notify,
                     args=(options,),
                 )
-            st.caption("Il preset aggiorna i campi chiusi. Il random crea una bozza iniziale.")
+            st.caption("Il preset precompila i campi chiusi. Il dado crea una bozza casuale.")
 
+    # ── Generate ──────────────────────────────────────────────────────
     section_divider()
-    generate_clicked = st.button("📜 Genera prompt", type="primary", use_container_width=True)
+    generate_clicked = st.button(
+        "📜 Forgia la Pergamena", type="primary", use_container_width=True
+    )
+
     if generate_clicked:
         try:
             request = CampaignRequest(
@@ -232,15 +248,17 @@ def render_ui() -> None:
             )
             st.session_state["generated_prompt"] = render_prompt(request)
             st.session_state["just_forged"] = True
-            st.toast("📜 Pergamena forgiata")
+            st.toast("📜 Pergamena forgiata con successo!")
         except ValidationError as exc:
-            st.error(f"Input non validi: {exc}")
+            st.error(f"⚠️ Input non validi: {exc}")
 
     if st.session_state.pop("just_forged", False):
-        st.success("✨ Pergamena forgiata. Pronta da copiare o salvare.")
+        st.success("✨ La pergamena è pronta. Copiane il contenuto o aprila direttamente in ChatGPT.")
 
+    # ── Output ────────────────────────────────────────────────────────
     section_divider()
-    st.subheader("📜 Output Prompt")
+    st.subheader("📜 Pergamena Generata")
+
     generated_prompt = st.session_state.get("generated_prompt", "")
     if generated_prompt:
         render_parchment_output(generated_prompt)
@@ -250,4 +268,4 @@ def render_ui() -> None:
         with action_right:
             render_open_chatgpt_button(generated_prompt)
     else:
-        st.info("Configura la campagna e forgia la tua pergamena.")
+        st.info("⚗️ Configura la campagna e forgia la tua pergamena per vederla qui.")
