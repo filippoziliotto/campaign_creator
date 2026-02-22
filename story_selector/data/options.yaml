@@ -1,0 +1,150 @@
+settings:
+  - Forgotten Realms
+  - Eberron
+  - Ravenloft
+  - Exandria
+  - Continente homebrew
+  - Dragonlance
+  - Ravnica
+
+setting_descriptions:
+  Forgotten Realms: Mondo fantasy classico, ricco di regni, magie antiche e avventure eroiche.
+  Eberron: Ambientazione pulp-noir con tecnologia arcana, intrighi politici e misteri metropolitani.
+  Ravenloft: Dominio gotico dell'orrore, dove la nebbia cela maledizioni e signori oscuri.
+  Exandria: Scenario epico e moderno, con grandi conflitti, divinita attive e regioni molto diverse.
+  Continente homebrew: Mondo originale creato dal tavolo, flessibile per tono, storia e regole custom.
+  Dragonlance: Fantasy eroico segnato dalla guerra tra draghi, ordini cavallereschi e profezie.
+  Ravnica: Megalopoli planare dominata da gilde rivali, perfetta per trame urbane e lotte di potere.
+
+campaign_types:
+  - One-Shot
+  - Mini-campagna
+  - Campagna lunga
+  - Esplorazione dungeon
+
+themes:
+  - Fantasy classico
+  - Colpo urbano
+  - Horror gotico
+  - Viaggio planare
+  - Intrigo politico
+  - Sopravvivenza selvaggia
+  - Avventura nautica
+  - Guerra tra fazioni
+  - Caccia ai mostri
+
+tones:
+  - Eroico
+  - Cupo
+  - Ironico
+  - Misterioso
+  - Tragico
+  - Comico
+  - Noir
+
+styles:
+  - Epico
+  - Cinematografico
+  - Realistico
+  - Crudo
+  - High fantasy
+  - Low fantasy
+
+party_archetypes:
+  - Guerriero
+  - Mago
+  - Chierico
+  - Ladro
+  - Ranger
+  - Bardo
+  - Paladino
+  - Druido
+  - Warlock
+  - Stregone
+  - Monaco
+  - Barbaro
+  - Artefice
+
+twists:
+  - Nessun colpo di scena
+  - La profezia è falsa
+  - L'alleato fidato è il traditore
+  - L'antagonista vuole evitare una catastrofe peggiore
+  - Il party condivide un'origine dimenticata
+  - Il manufatto principale è senziente e manipolatore
+  - La vera minaccia è un'istituzione benefica (chiesa, gilda, accademia)
+  - Il mondo è bloccato in un sottile loop temporale
+  - Il dungeon è un organismo vivente
+  - L'obiettivo della missione è una persona che non vuole essere salvata
+
+output_lengths:
+  - Breve
+  - Medio
+  - Lungo
+
+presets:
+  Classico:
+    setting: Forgotten Realms
+    campaign_type: Mini-campagna
+    theme: Fantasy classico
+    tone: Eroico
+    style: Epico
+    party_level: 3
+    party_size: 4
+    twist: La profezia è falsa
+    output_length: Medio
+
+  Urbano:
+    setting: Eberron
+    campaign_type: One-Shot
+    theme: Colpo urbano
+    tone: Misterioso
+    style: Cinematografico
+    party_level: 5
+    party_size: 4
+    twist: L'alleato fidato è il traditore
+    output_length: Medio
+
+  Gotico:
+    setting: Ravenloft
+    campaign_type: Mini-campagna
+    theme: Horror gotico
+    tone: Cupo
+    style: Crudo
+    party_level: 4
+    party_size: 4
+    twist: Il manufatto principale è senziente e manipolatore
+    output_length: Medio
+
+  Planare:
+    setting: Exandria
+    campaign_type: Campagna lunga
+    theme: Viaggio planare
+    tone: Eroico
+    style: Cinematografico
+    party_level: 7
+    party_size: 5
+    twist: L'antagonista vuole evitare una catastrofe peggiore
+    output_length: Lungo
+
+preset_descriptions:
+  Classico: |
+    Eroi emergenti in un mondo high fantasy tradizionale.
+    Minacce antiche, reliquie perdute e viaggi tra regni in conflitto.
+    Ritmo bilanciato tra esplorazione, diplomazia e combattimenti.
+    Ideale per un tono epico con progressione chiara.
+  Urbano: |
+    Colpo ad alto rischio in una metropoli arcano-tecnologica.
+    Intrighi tra gilde, inseguimenti e obiettivi protetti da magie.
+    Focus su piano, infiltrazione e conseguenze politiche.
+    Perfetto per sessioni tese e ricche di colpi di scena.
+  Gotico: |
+    Nebbia, maledizioni e misteri in un dominio oscuro.
+    Horror psicologico, culti segreti e alleati ambigui.
+    Progressione lenta con forte pressione narrativa.
+    Ottimo per atmosfere cupe e scelte morali difficili.
+  Planare: |
+    Viaggio tra piani con minacce cosmiche e portali instabili.
+    Fazioni extraplanari e conflitti su scala epica.
+    Alterna meraviglia, pericolo e decisioni ad alto impatto.
+    Indicato per campagne lunghe con scope molto ampio.
