@@ -97,7 +97,7 @@ Rispetta questi vincoli in **ogni sezione dell'output**. Prima di concludere, ve
 ## Consegna finale — ordine obbligatorio
 
 ### 1. Concetto portante
-4-6 righe. Rispondi a: *Qual è la promessa di questa mini-campagna? Cosa fa il party sessione dopo sessione? Quale emozione deve dominare? Cosa cambia nel mondo alla fine?*
+4-6 righe. Genera una trama che risponda a: *Qual è la trama di questa mini-campagna? Cosa fa il party sessione dopo sessione? Quale deve essere lo scopo finale? Cosa cambia nel mondo alla fine?*
 
 ### 2. Panorama + posta in gioco
 - **Minaccia centrale:** chi/cosa minaccia il mondo e perché agisce adesso

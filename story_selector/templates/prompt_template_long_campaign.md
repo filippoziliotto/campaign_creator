@@ -9,19 +9,19 @@ Usa un linguaggio preciso. Evita frasi generiche come "sarà epico" o "i giocato
 | Campo | Valore |
 |---|---|
 | Ambientazione | {{ setting }} |
-| Tipo | Esplorazione dungeon (multi-sessione) |
+| Tipo | Campagna lunga (10-25+ sessioni) |
 | Temi | {{ theme_preferences }} |
 | Tono | {{ tone_preferences }} |
 | Stile narrativo | {{ style_preferences }} |
-| Livello party | {{ party_level }} |
+| Livello party iniziale | {{ party_level }} |
 | Dimensione party | {{ party_size }} PG |
 | Composizione party | {{ party_archetypes }} |
 
 ---
 
 ## Twist narrativo
-Il seguente twist **deve alterare la comprensione del dungeon stesso** — non è un evento esterno, ma qualcosa che ribalta ciò che il party credeva di sapere sul luogo o sulla minaccia.
-Indica in quale livello/zona viene rivelato e quali indizi ambientali lo anticipano nei livelli precedenti.
+Il seguente twist **deve strutturare l'intera campagna** — non è un evento isolato, ma un elemento che ridefinisce ciò che il party credeva di sapere.
+Indica: in quale arco viene rivelato, quali indizi vengono seminati nei precedenti, e come cambia il comportamento degli NPC dopo la rivelazione.
 > **Twist:** {{ twist }}
 
 ---
@@ -36,31 +36,24 @@ Rispetta questi vincoli in **ogni sezione dell'output**. Prima di concludere, ve
 
 ## Input narrativi dell'utente
 {% if narrative_hooks %}
-**Ganci narrativi richiesti** (integrali nella struttura del dungeon e negli agganci iniziali):
+**Ganci narrativi richiesti** (integrali nella struttura degli archi, non ignorarli):
 {{ narrative_hooks }}
 {% else %}
 **Ganci narrativi:** non forniti — proponi 3 agganci iniziali alternativi nella sezione dedicata.
 {% endif %}
 
 {% if character_notes %}
-**Note sui personaggi** (usa questi elementi nei PNG interni o negli indizi del dungeon):
+**Note sui personaggi** (usa questi elementi nei PNG, nelle sottotrame o nei momenti di backstory):
 {{ character_notes }}
 {% endif %}
 
 ---
 
 ## Indicazioni avanzate
-**Fazioni**
-{{ factions }}
-
-**Focus PNG**
-{{ npc_focus }}
-
-**Focus incontri**
-{{ encounter_focus }}
-
-**Safety**
-{{ safety_notes }}
+{% if factions %}**Fazioni:** {{ factions }}{% endif %}
+{% if npc_focus %}**Focus PNG:** {{ npc_focus }}{% endif %}
+{% if encounter_focus %}**Focus incontri:** {{ encounter_focus }}{% endif %}
+{% if safety_notes %}**Safety:** {{ safety_notes }}{% endif %}
 
 ---
 
@@ -68,7 +61,7 @@ Rispetta questi vincoli in **ogni sezione dell'output**. Prima di concludere, ve
 
 **Lingua:** scrivi tutto in {{ language }}.
 
-**Lunghezza target:** {{ length_target }}. Distribuisci il dettaglio equamente tra i livelli. Le stanze chiave devono avere abbastanza dettaglio da essere masterabili senza preparazione extra.
+**Lunghezza target:** {{ length_target }}. Concentra il dettaglio sull'Atto 1 (prime 2-3 sessioni). Gli archi successivi restano ad alto livello ma devono essere abbastanza concreti da essere usabili.
 
 **PNG:** {{ npc_instructions }}
 
@@ -76,86 +69,73 @@ Rispetta questi vincoli in **ogni sezione dell'output**. Prima di concludere, ve
 
 **Formato:**
 - Usa intestazioni Markdown (`##`, `###`)
-- Per ogni stanza usa il formato strutturato indicato sotto
-- Separa ogni livello/zona con `---`
-- Usa grassetto per **nomi propri**, **trappole**, **oggetti chiave** la prima volta che compaiono
+- Per ogni PNG usa il formato: `**Nome** — Ruolo | Obiettivo | Segreto | Come entra`
+- Separa ogni arco/stagione con `---`
+- Usa grassetto per **nomi propri** e **meccaniche chiave** la prima volta che compaiono
 
 **Coerenza interna obbligatoria:**
-- Ogni fazione interna deve avere una presenza fisica in almeno 2 stanze distinte
-- Il twist deve essere anticipato da almeno 2 indizi ambientali nei livelli precedenti — elencali esplicitamente
-- Il dungeon deve funzionare come sistema vivo: indica almeno 2 eventi che cambiano se il party ritarda o torna dopo una pausa
-- Ogni livello deve avere almeno 1 collegamento narrativo con il livello successivo (oggetto, indizio, PNG in fuga)
-- Le note personaggi devono legarsi ad almeno 1 stanza chiave o PNG interno
+- Ogni PNG chiave deve comparire in almeno 2 archi diversi e avere un'evoluzione visibile
+- Il twist deve avere indizi distribuiti in almeno 2 archi precedenti alla rivelazione — elencali esplicitamente
+- Le fazioni devono reagire alle azioni del party: includi almeno 1 "stato fazione" per arco
+- Le note personaggi devono generare almeno 1 sottorama o momento personale per PG menzionato
+- Il clock di escalation deve essere sempre collegato alle azioni (o inazioni) del party
 
 ---
 
 ## Consegna finale — ordine obbligatorio
 
 ### 1. Concetto portante
-4-6 righe. Rispondi a: *Cos'è questo dungeon? Perché esiste? Qual è la promessa esplorativa? Quale emozione deve dominare?*
+4-6 righe. Genera una trama che risponda a: *Qual è la trama di questa campagna? Cosa fa il party? Quale tema viene esplorato? Come cambia il mondo (e i PG) dalla sessione 1 alla fine?*
 
-### 2. Perché il dungeon esiste + posta in gioco
-- **Origine:** chi lo ha costruito, perché, cosa è andato storto
-- **Posta in gioco:** cosa succede se i PG non entrano, non finiscono, o falliscono
-- **Ricompensa:** cosa guadagna concretamente il party se riesce
-- **Dove si integra il twist:** in quale livello e con quale impatto sulla posta in gioco
+### 2. Tema centrale + promessa di gioco
+- **Tema:** la domanda narrativa che la campagna esplora (es. "Cosa costa il potere?")
+- **Promessa di gioco:** cosa fanno i giocatori di solito in questa campagna (esplorano, intrecciano alleanze, indagano…)
+- **Arco dei PG:** come dovrebbero cambiare i personaggi dall'inizio alla fine
 
-### 3. Struttura del dungeon (overview)
-- **Tema visivo e atmosferico:** cosa vedono, sentono, annusano i PG al primo ingresso
-- **Regole speciali:** magia, luce, rumore, gravità, tempo — qualcosa che rende questo dungeon unico
-- **Loop di esplorazione:** dove i PG possono riposare, rifornirsi, ritirarsi — e a quale costo
-- **Scala del rischio:** come aumenta la pericolosità scendendo di livello
+### 3. Minaccia centrale + clock di escalation
+- **Antagonista/minaccia:** chi è, cosa vuole, perché agisce adesso
+- **Clock di escalation (4-6 step):** cosa succede nel mondo se i PG non intervengono, in ordine crescente di gravità. Ogni step deve essere percepibile al tavolo (notizia, evento, PNG che scompare, ecc.)
+- **Dove si posiziona il twist:** in quale step o arco cambia la natura della minaccia
 
-### 4. Mappa a zone / livelli (1-3 livelli)
-Per ogni livello:
+### 4. Archi / Stagioni (3-5)
+Per ogni arco:
 
 ```
-### Livello N — [Nome evocativo]
-**Tema:** elemento dominante (architettura, creature, magia)
-**Obiettivo del party in questo livello:** cosa cercano
-**Pericolo distintivo:** una minaccia unica di questo livello (non solo mostri)
-**Ingressi/uscite (min 2):** come si entra e come si esce
-**Shortcut/loop:** collegamento non ovvio con un altro livello o zona
-**Revelation:** cosa scoprono i PG che cambia la loro comprensione del dungeon
-**Indizi per il twist:** [solo nel livello pertinente]
-**Evento dinamico:** cosa cambia se il party torna dopo un riposo lungo
+### Arco N — [Titolo evocativo]
+**Sessioni indicative:** N-M
+**Obiettivo del party:** cosa devono fare i PG in questo arco
+**Antagonista/fazione dominante:** chi si oppone e perché
+**Rivelazione chiave:** cosa scoprono i PG che cambia la loro comprensione
+**Set-piece centrale:** scena o momento ad alto impatto (descrivi in 3-4 righe)
+**Stato fazioni:** come reagiscono le fazioni alle azioni del party in questo arco
+**Esito standard:** cosa cambia nel mondo se i PG hanno successo
+**Indizi per il twist:** [solo negli archi pertinenti]
 ```
 
-### 5. Fazioni interne (2-3)
+### 5. Atto 1 dettagliato (prime 2-3 sessioni)
+Per ogni sessione:
+- **Obiettivo:** cosa fanno i PG
+- **Scene chiave:** 2-3 scene con setup, conflitto e esito
+- **Indizi:** almeno 2 per sessione (uno sul mistero principale, uno su una sottorama)
+- **Ganci backstory:** quale PG ha un momento personale e con quale PNG
+
+### 6. PNG chiave
+Formato: `**Nome** — Ruolo | Obiettivo | Segreto | Come entra in gioco`
+Per ciascuno: *tono di voce, dettaglio fisico memorabile, in quali archi compare, come evolve.*
+Indica anche: *cosa succede se i PG lo uccidono o lo alienano.*
+
+### 7. Fazioni e relazioni
 Per ogni fazione:
-- **Nome** | Obiettivo nel dungeon | Risorsa/vantaggio | Punto debole
-- **Cosa offrono ai PG** se trattano (informazione, via sicura, equipaggiamento)
-- **Cosa fanno se i PG li aiutano:** conseguenza positiva concreta
-- **Cosa fanno se i PG li tradiscono o li ignorano:** reazione e conseguenze
-- **Dove si trovano fisicamente:** in quali stanze/livelli
-
-### 6. Stanze / Set-piece chiave
-Massimo 6 per livello. Per ogni stanza:
-
-```
-### Stanza [N.X] — [Nome]
-**Cosa si vede:** descrizione in 2-3 righe (sensoriale, non solo visiva)
-**Cosa succede:** evento o situazione attiva (non statica)
-**Trigger:** cosa attiva la complicazione principale
-**Indizio/ricompensa:** cosa ottengono i PG che esplorano bene
-**Variante se falliscono:** come avanza la storia senza bloccarsi
-**Collegamento fazione:** [se applicabile]
-```
-
-### 7. Incontri principali
-Almeno 1 per tipo (sociale, esplorazione, combattimento) per livello.
-Per ciascuno:
-- **Tipo** | **Livello** | **Setup**
-- **Obiettivo PG vs obiettivo antagonista/fazione**
-- **Posta:** guadagno / perdita
-- **Fallimento non letale:** come avanza la storia comunque
-- **Connessione narrativa:** come questo incontro cambia la percezione del dungeon
+- **Nome** | Obiettivo | Risorsa chiave | Punto debole
+- **Relazione con le altre fazioni:** alleanza, rivalità, dipendenza
+- **Come i PG possono influenzarla:** azioni che aumentano/diminuiscono la reputazione
+- **Conseguenza se ignorata:** cosa fa da sola nel corso della campagna
 
 ### 8. Tre agganci iniziali alternativi
-Ogni gancio deve: coinvolgere almeno 2 PG, essere diverso per tono e punto d'ingresso, spiegare perché il party entra nel dungeon. Indica quale gancio si abbina meglio a quale composizione di party.
+Ogni gancio deve: coinvolgere almeno 2 PG, essere diverso per tono e punto d'ingresso, collegarsi alla minaccia principale. Indica quale gancio si abbina meglio a quale composizione di party.
 
 ### 9. Finale possibile + due evoluzioni future
-- **Finale standard:** esito se i PG completano l'obiettivo principale del dungeon
-- **Finale parziale:** esito con perdite o obiettivo incompleto
-- **Evoluzione A:** cosa emerge dopo che il dungeon è "risolto" (nuovo livello segreto, conseguenza esterna)
-- **Evoluzione B:** cosa succede se il party lascia il dungeon a metà e ci torna settimane dopo
+- **Finale standard:** esito se i PG sconfiggono la minaccia centrale
+- **Finale parziale:** esito con costi o compromessi significativi
+- **Sequel hook A:** conseguenza diretta degli eventi della campagna
+- **Sequel hook B:** minaccia latente che emerge dopo la fine

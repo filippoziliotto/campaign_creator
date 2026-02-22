@@ -92,7 +92,7 @@ Rispetta questi vincoli in **ogni sezione dell'output**. Prima di concludere, ve
 ## Consegna finale — ordine obbligatorio
 
 ### 1. Concetto portante
-4-6 righe. Rispondi a: *Qual è la promessa di questa sessione? Cosa fa il party? Cosa c'è in gioco? Quale emozione deve dominare?*
+4-6 righe. Genera una trama che risponda a: *Qual è la trama di questa sessione? Cosa deve fare il party? Cosa c'è in gioco?*
 
 ### 2. Obiettivo della one-shot + posta in gioco
 - **Obiettivo principale:** cosa devono fare i PG per "vincere" la sessione
