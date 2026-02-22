@@ -16,3 +16,9 @@ secondaryBackgroundColor = "#fdf6e4"
 # Font — Streamlit supporta solo: sans serif, serif, monospace
 # "serif" è l'unico che si avvicina al tuo Crimson Text come fallback
 font = "serif"
+
+
+[client]
+# Nasconde il menu hamburger in alto a destra (quello di Streamlit)
+# Utile se non vuoi che l'utente veda "Rerun", "Settings" ecc.
+showSidebarNavigation = false

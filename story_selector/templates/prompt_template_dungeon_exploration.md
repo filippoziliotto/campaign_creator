@@ -1,4 +1,4 @@
-# Ruolo
+# Ruolo e contesto
 Agisci come progettista narrativo senior per D&D 5e. Sii creativo ma disciplinato e segui le indicazioni fornite.
 Scrivi una campagna centrata su ESPLORAZIONE DUNGEON: dungeon giocabile, loop di esplorazione, fazioni interne, e progressione del rischio.
 
