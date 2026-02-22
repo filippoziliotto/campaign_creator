@@ -21,9 +21,18 @@ Scrivi una campagna centrata su ESPLORAZIONE DUNGEON: dungeon giocabile, loop di
 - Note personaggi: {{ character_notes }}
 - Ganci desiderati: {{ narrative_hooks }}
 
-## Indicazioni avanzate (se vuote, ignora)
-- Fazioni: {{ factions }} | Focus NPC: {{ npc_focus }} | Focus incontri: {{ encounter_focus }}
-- Safety: {{ safety_notes }}
+## Indicazioni avanzate
+**Fazioni**
+{{ factions }}
+
+**Focus PNG**
+{{ npc_focus }}
+
+**Focus incontri**
+{{ encounter_focus }}
+
+**Safety**
+{{ safety_notes }}
 
 ## Output (Markdown, concreto, giocabile)
 - Obiettivo: materiale per masterare un dungeon multi-sessione.
