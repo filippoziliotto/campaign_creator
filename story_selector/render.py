@@ -10,8 +10,22 @@ from jinja2 import Environment, FileSystemLoader
 from .prompt_builder import build_prompt_context
 from .schema import CampaignRequest
 
-_TEMPLATE_NAME = "prompt_template.md"
+_DEFAULT_TEMPLATE_NAME = "prompt_template.md"
 _TEMPLATE_DIR = Path(__file__).resolve().parent / "templates"
+_TEMPLATE_BY_CAMPAIGN_TYPE = {
+    "one-shot": "prompt_template_one_shot.md",
+    "one shot": "prompt_template_one_shot.md",
+    "oneshot": "prompt_template_one_shot.md",
+    "avventura singola": "prompt_template_one_shot.md",
+    "mini-campagna": "prompt_template_mini_campaign.md",
+    "mini campagna": "prompt_template_mini_campaign.md",
+    "mini-campaign": "prompt_template_mini_campaign.md",
+    "mini campaign": "prompt_template_mini_campaign.md",
+    "campagna lunga": "prompt_template_long_campaign.md",
+    "long campaign": "prompt_template_long_campaign.md",
+    "esplorazione dungeon": "prompt_template_dungeon_exploration.md",
+    "dungeon crawl": "prompt_template_dungeon_exploration.md",
+}
 
 
 def _build_environment() -> Environment:
@@ -29,10 +43,16 @@ def _post_process(text: str) -> str:
     return text.strip() + "\n"
 
 
+def _select_template_name(campaign_type: str) -> str:
+    normalized_type = " ".join(campaign_type.strip().lower().split())
+    return _TEMPLATE_BY_CAMPAIGN_TYPE.get(normalized_type, _DEFAULT_TEMPLATE_NAME)
+
+
 def render_prompt(request: CampaignRequest) -> str:
     """Render the final markdown prompt from a validated request."""
 
     env = _build_environment()
-    template = env.get_template(_TEMPLATE_NAME)
+    template_name = _select_template_name(request.campaign_type)
+    template = env.get_template(template_name)
     rendered = template.render(**build_prompt_context(request))
     return _post_process(rendered)
