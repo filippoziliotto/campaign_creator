@@ -61,6 +61,7 @@ def apply_selected_preset(presets: dict[str, dict[str, object]]) -> None:
 def randomize_and_notify(options: dict[str, Any]) -> None:
     randomize_closed_choices(options)
     st.session_state["active_preset_name"] = ""
+    st.session_state["just_rolled_dice"] = True
     st.session_state["ui_toast_message"] = "🎲 Il fato ha lanciato i dadi"
 
 
@@ -90,6 +91,7 @@ def init_state(options: dict[str, Any]) -> None:
     st.session_state.setdefault("narrative_hooks", "")
     st.session_state.setdefault("character_notes", "")
     st.session_state.setdefault("constraints", "")
+    st.session_state.setdefault("custom_twist", "")
     st.session_state.setdefault("factions", "")
     st.session_state.setdefault("npc_focus", "")
     st.session_state.setdefault("encounter_focus", "")
@@ -97,6 +99,7 @@ def init_state(options: dict[str, Any]) -> None:
     st.session_state.setdefault("include_npcs", True)
     st.session_state.setdefault("include_encounters", True)
     st.session_state.setdefault("just_forged", False)
+    st.session_state.setdefault("just_rolled_dice", False)
     st.session_state.setdefault("theme_preferences", [])
     st.session_state.setdefault("tone_preferences", [])
     st.session_state.setdefault("style_preferences", [])

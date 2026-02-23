@@ -376,6 +376,46 @@ def inject_styles() -> None:
             text-shadow: 0 0 12px rgba(196, 154, 42, 0.35);
         }
 
+        /* ── Dice roll animation ─────────────────────────── */
+        .dice-roll-flash {
+            margin-top: 0.45rem;
+            padding: 0.45rem 0.6rem;
+            border: 1px solid rgba(196, 154, 42, 0.55);
+            border-radius: 4px;
+            background: linear-gradient(135deg, rgba(42, 24, 8, 0.85), rgba(80, 44, 14, 0.82));
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
+        .dice-roll-icon {
+            display: inline-block;
+            font-size: 1.22rem;
+            filter: drop-shadow(0 0 10px rgba(196, 154, 42, 0.5));
+            animation: dndDiceSpin 800ms ease-out 1;
+        }
+
+        .dice-roll-text {
+            color: #f3e3be;
+            font-family: 'Cinzel', serif;
+            font-size: 0.82rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            animation: dndDicePulse 900ms ease-out 1;
+        }
+
+        @keyframes dndDiceSpin {
+            0% { transform: rotate(0deg) scale(0.95); }
+            40% { transform: rotate(180deg) scale(1.12); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        @keyframes dndDicePulse {
+            0% { opacity: 0.55; }
+            50% { opacity: 1; }
+            100% { opacity: 0.9; }
+        }
+
         /* ── Quest summary pills ──────────────────────────── */
         .quest-summary {
             display: flex;

@@ -7,16 +7,15 @@ from actions import apply_selected_preset, init_state, randomize_and_notify
 from story_selector import CampaignRequest, load_options, render_prompt
 from styles import inject_styles
 from widgets import (
-    chip_choice,
     chip_multi_choice,
     render_context_completeness_indicator,
+    render_dice_roll_animation,
     render_open_chatgpt_button,
     preset_choice,
     render_copy_prompt_button,
     render_parchment_output,
     render_quest_summary,
     section_divider,
-    segmented_choice,
     setting_choice,
 )
 
@@ -154,13 +153,38 @@ def render_ui() -> None:
 
         with st.container(border=True):
             st.caption("✦ Direzione narrativa")
-            twist = chip_choice("Colpo di scena", options["twists"], key="twist")
-            output_length = segmented_choice(
-                "Lunghezza output",
-                options["output_lengths"],
-                key="output_length",
+            selected_twist = st.selectbox(
+                "Colpo di scena",
+                options["twists"],
+                key="twist",
             )
+            custom_twist = st.text_input(
+                "Suggerisci tu un colpo di scena",
+                key="custom_twist",
+                max_chars=140,
+                placeholder="Es: il vero mandante è uno dei mentori dei PG.",
+            )
+            st.caption("Se compilato, questo testo sovrascrive la scelta del menu.")
+            twist = custom_twist.strip() if custom_twist.strip() else selected_twist
             st.caption("📜 Il prompt viene generato sempre in italiano.")
+
+        #section_divider()
+
+        with st.container(border=True):
+            st.caption("✦ Preset rapido")
+            preset_choice(
+                "Preset rapido",
+                list(options["presets"].keys()),
+                options.get("preset_descriptions", {}),
+                key="preset_name",
+            )
+            st.button(
+                "🧙 Applica preset",
+                use_container_width=True,
+                on_click=apply_selected_preset,
+                args=(options["presets"],),
+            )
+            st.caption("Applica un preset per precompilare i campi principali.")
 
     # ── RIGHT: Party e Vincoli ────────────────────────────────────────
     with right_col:
@@ -265,29 +289,16 @@ def render_ui() -> None:
         #section_divider()
 
         with st.container(border=True):
-            st.caption("✦ Preset e casualità")
-            preset_choice(
-                "Preset rapido",
-                list(options["presets"].keys()),
-                options.get("preset_descriptions", {}),
-                key="preset_name",
+            st.caption("✦ Tira i dadi")
+            st.button(
+                "🎲 Tira i dadi",
+                use_container_width=True,
+                on_click=randomize_and_notify,
+                args=(options,),
             )
-            preset_col, random_col = st.columns(2)
-            with preset_col:
-                st.button(
-                    "🧙 Applica preset",
-                    use_container_width=True,
-                    on_click=apply_selected_preset,
-                    args=(options["presets"],),
-                )
-            with random_col:
-                st.button(
-                    "🎲 Tira i dadi",
-                    use_container_width=True,
-                    on_click=randomize_and_notify,
-                    args=(options,),
-                )
-            st.caption("Il preset precompila i campi chiusi. Il dado crea una bozza casuale.")
+            st.caption("Genera una bozza casuale sui campi chiusi, mantenendo il tipo campagna scelto.")
+            if st.session_state.pop("just_rolled_dice", False):
+                render_dice_roll_animation()
 
     # ── Generate ──────────────────────────────────────────────────────
     #section_divider()
@@ -314,7 +325,7 @@ def render_ui() -> None:
                 npc_focus=npc_focus,
                 encounter_focus=encounter_focus,
                 safety_notes=safety_notes,
-                output_length=output_length,
+                output_length="Medio",
                 include_npcs=include_npcs,
                 include_encounters=include_encounters,
             )

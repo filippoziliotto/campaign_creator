@@ -186,6 +186,18 @@ def render_context_completeness_indicator(
         st.caption("Per arricchire il prompt puoi aggiungere: " + ", ".join(missing_sections))
 
 
+def render_dice_roll_animation() -> None:
+    st.markdown(
+        """
+        <div class="dice-roll-flash">
+            <span class="dice-roll-icon">🎲</span>
+            <span class="dice-roll-text">Il fato rimescola i fili del destino...</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def render_parchment_output(prompt_text: str) -> None:
     st.markdown(
         f"<div class='parchment-output'><pre>{escape(prompt_text)}</pre></div>",
