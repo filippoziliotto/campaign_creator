@@ -33,6 +33,55 @@ def _parse_custom_list(raw_text: str) -> list[str]:
     return [item.strip() for item in normalized.split(",") if item.strip()]
 
 
+def _parse_tone_style_override(
+    raw_text: str, tone_options: list[str], style_options: list[str]
+) -> tuple[list[str], list[str]]:
+    text = raw_text.strip()
+    if not text:
+        return [], []
+
+    tone_lookup = {item.casefold(): item for item in tone_options}
+    style_lookup = {item.casefold(): item for item in style_options}
+    tone_values: list[str] = []
+    style_values: list[str] = []
+
+    def _append_unique(target: list[str], value: str) -> None:
+        if value and value not in target:
+            target.append(value)
+
+    explicit_mode = False
+    for raw_line in text.splitlines():
+        line = raw_line.strip()
+        if not line or ":" not in line:
+            continue
+
+        prefix, content = line.split(":", 1)
+        normalized_prefix = prefix.strip().casefold()
+        parsed_values = _parse_custom_list(content)
+        if normalized_prefix in {"tono", "toni"}:
+            explicit_mode = True
+            for value in parsed_values:
+                _append_unique(tone_values, tone_lookup.get(value.casefold(), value))
+        elif normalized_prefix in {"stile", "stili"}:
+            explicit_mode = True
+            for value in parsed_values:
+                _append_unique(style_values, style_lookup.get(value.casefold(), value))
+
+    if explicit_mode:
+        return tone_values, style_values
+
+    for value in _parse_custom_list(text):
+        normalized_value = value.casefold()
+        tone_match = tone_lookup.get(normalized_value)
+        style_match = style_lookup.get(normalized_value)
+        if tone_match:
+            _append_unique(tone_values, tone_match)
+        if style_match:
+            _append_unique(style_values, style_match)
+
+    return tone_values, style_values
+
+
 def _filter_presets_by_campaign_type(
     presets: dict[str, dict[str, object]], campaign_type: str
 ) -> dict[str, dict[str, object]]:
@@ -186,6 +235,25 @@ def render_ui() -> None:
                 key="style_preferences",
                 help_text="Seleziona uno o più stili. Clic per attivare/disattivare.",
             )
+            custom_tone_style = st.text_area(
+                "Suggerisci un TONO/Stile",
+                key="custom_tone_style",
+                height=95,
+                placeholder="Tono: Misterioso, Tragico\nStile: Cinematografico, Investigativo",
+            )
+            st.caption(
+                "Se compilato, sovrascrive tono/stile selezionati. "
+                "Usa due righe: 'Tono:' e 'Stile:'."
+            )
+            parsed_custom_tones, parsed_custom_styles = _parse_tone_style_override(
+                custom_tone_style,
+                options["tones"],
+                options["styles"],
+            )
+            if parsed_custom_tones:
+                tone_preferences = parsed_custom_tones
+            if parsed_custom_styles:
+                style_preferences = parsed_custom_styles
 
         #section_divider()
 

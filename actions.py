@@ -90,6 +90,7 @@ def init_state(options: dict[str, Any]) -> None:
     st.session_state.setdefault("custom_twist", "")
     st.session_state.setdefault("custom_setting", "")
     st.session_state.setdefault("custom_theme", "")
+    st.session_state.setdefault("custom_tone_style", "")
     st.session_state.setdefault("factions", "")
     st.session_state.setdefault("npc_focus", "")
     st.session_state.setdefault("encounter_focus", "")
