@@ -28,18 +28,18 @@ Sei un progettista narrativo senior per D&D 5e. Crei materiale **immediatamente 
 - {{ item }}
 {% endfor %}
 
-**Lingua:** {{ language }} | **PNG:** {{ npc_instructions }} | **Incontri:** {{ encounter_instructions }}
+**Lingua:** {{ language }} | **Lunghezza:** {{ length_target }} | **PNG:** {{ npc_instructions }} | **Incontri:** {{ encounter_instructions }}
 
 ---
 
-## FASE 1 — TRE CONCEPT
+## FASE 1 — CINQUE CONCEPT
 
-Proponi tre concept di trama genuinamente diversi per questa one-shot. Non variazioni dello stesso — devono differire per **tipo di conflitto, struttura o emozione dominante**.
+Proponi cinque concept di trama genuinamente diversi per questa one-shot. Tutti e cinque devono rispettare **esattamente** ambientazione, temi, tono e stile indicati nei dati — quelli sono fissi. La differenza deve stare nella storia e trama che definisci.
 
-Per ciascuno, scrivi in forma libera (4–6 righe):
+Per ciascuno, scrivi in forma libera (8–10 righe):
+- Quel è la trama della storia?
 - Qual è la situazione di partenza e cosa spinge il party ad agire?
-- Qual è il cuore emotivo: cosa si chiede davvero al giocatore, non solo al personaggio?
-- Come si inserisce il twist `{{ twist }}` e in quale momento cambia tutto?
+- Come si inserisce il twist `{{ twist }}` e in quale momento cambia tutto? (se nessun twist viene inserito skippa questo passaggio)
 - Perché funziona in una singola sessione da 3–5 ore?
 
 > Sentiti libero di ignorare le impostazioni se ti suggeriscono qualcosa di più interessante — segnalalo e proponi la variante.
@@ -100,3 +100,5 @@ Tre modi diversi in cui il party può essere coinvolto — diversi per tono, mot
 Ogni finale deve essere raggiungibile nel tempo reale di una sessione.
 
 ---
+
+> **Nota per il DM:** tutto ciò che non è nella scaletta è suggerimento, non obbligo. Cambia nomi, luoghi e PNG liberamente. Il twist è il solo elemento strutturale che ti chiediamo di non rimuovere — è il cuore della storia.

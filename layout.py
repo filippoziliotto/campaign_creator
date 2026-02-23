@@ -166,7 +166,7 @@ def render_ui() -> None:
             )
             st.caption("Se compilato, questo testo sovrascrive la scelta del menu.")
             twist = custom_twist.strip() if custom_twist.strip() else selected_twist
-            st.caption("📜 Il prompt viene generato sempre in italiano.")
+            # st.caption("📜 Il prompt viene generato sempre in italiano.")
 
         #section_divider()
 

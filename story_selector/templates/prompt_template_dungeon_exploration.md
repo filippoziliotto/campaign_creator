@@ -32,17 +32,17 @@ Sei un progettista narrativo senior per D&D 5e. Crei materiale **immediatamente 
 
 ---
 
-## FASE 1 — TRE CONCEPT DI DUNGEON
+## FASE 1 — CINQUE CONCEPT DI DUNGEON
 
-Proponi tre concept genuinamente diversi. Non variazioni dello stesso — devono differire per **origine, atmosfera o tipo di minaccia**.
+Proponi cinque concept di mini-campagna genuinamente diversi. Tutti e cinque devono rispettare **esattamente** ambientazione, temi, tono e stile indicati nei dati — quelli sono fissi. La differenza deve stare nella storia e trama che definisci.
 
-Per ciascuno, scrivi in forma libera (5–7 righe):
+Per ciascuno, scrivi in forma libera (8–10 righe):
+- Quel è la trama della storia e la storia di questo dungeon?
 - Chi ha costruito questo dungeon, perché esiste, cosa è andato storto?
-- Cosa rende questo luogo unico visivamente e sensorialmente — cosa provano i PG al primo ingresso?
 - Qual è la meccanica speciale che cambia come ci si muove, riposa o combatte qui?
 - Chi o cosa governa il dungeon adesso — e perché è pericoloso in modo diverso dai soliti mostri?
-- Come si inserisce il twist `{{ twist }}` — ribalta la comprensione del luogo o della minaccia?
-- Qual è la stanza che i giocatori descriveranno agli amici?
+- Come si inserisce il twist `{{ twist }}` — ribalta la comprensione del luogo o della minaccia? (se nessun twist viene inserito skippa questo passaggio)
+- Qual è la stanza che i giocatori si ricorderanno?
 
 > Se i dati ti suggeriscono qualcosa di più interessante rispetto alle impostazioni, proponilo — segnala cosa hai cambiato.
 

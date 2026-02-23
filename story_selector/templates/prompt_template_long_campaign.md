@@ -32,11 +32,11 @@ Sei un progettista narrativo senior per D&D 5e. Crei materiale **immediatamente 
 
 ---
 
-## FASE 1 — TRE CONCEPT DI CAMPAGNA
+## FASE 1 — CINQUE CONCEPT
 
-Proponi tre concept di campagna lunga genuinamente diversi. Non variazioni dello stesso — devono differire per **domanda narrativa, tipo di antagonista o struttura degli archi**.
+Proponi cinque concept di mini-campagna genuinamente diversi. Tutti e cinque devono rispettare **esattamente** ambientazione, temi, tono e stile indicati nei dati — quelli sono fissi. La differenza deve stare nella storia e trama che definisci.
 
-Per ciascuno, scrivi in forma libera (6–8 righe):
+Per ciascuno, scrivi in forma libera (8–10 righe):
 - Qual è la domanda narrativa al cuore della campagna — quella a cui i PG danno una risposta con le loro scelte?
 - Come si distribuisce la storia in 3 macro-archi? Cosa succede, cosa si ribalta, come si chiude?
 - Chi è l'antagonista — e cosa lo rende interessante al di là dell'essere "il cattivo"?
