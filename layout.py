@@ -109,8 +109,6 @@ def render_ui() -> None:
             on_click=_return_to_entry,
         )
 
-    section_divider()
-
     # ── Two-column layout ─────────────────────────────────────────────
     left_col, right_col = st.columns(2, gap="large")
 
@@ -129,7 +127,7 @@ def render_ui() -> None:
                 key="setting",
             )
 
-        section_divider()
+        #section_divider()
 
         with st.container(border=True):
             st.caption("✦ Tono e stile narrativo")
@@ -152,7 +150,7 @@ def render_ui() -> None:
                 help_text="Seleziona uno o più stili. Clic per attivare/disattivare.",
             )
 
-        section_divider()
+        #section_divider()
 
         with st.container(border=True):
             st.caption("✦ Direzione narrativa")
@@ -205,7 +203,7 @@ def render_ui() -> None:
                 unsafe_allow_html=True,
             )
 
-        section_divider()
+        #section_divider()
 
         with st.container(border=True):
             st.caption("✦ Vincoli e input narrativi")
@@ -264,7 +262,7 @@ def render_ui() -> None:
                 safety_notes=safety_notes,
             )
 
-        section_divider()
+        #section_divider()
 
         with st.container(border=True):
             st.caption("✦ Preset e casualità")
@@ -292,7 +290,7 @@ def render_ui() -> None:
             st.caption("Il preset precompila i campi chiusi. Il dado crea una bozza casuale.")
 
     # ── Generate ──────────────────────────────────────────────────────
-    section_divider()
+    #section_divider()
     generate_clicked = st.button(
         "📜 Forgia la Pergamena", type="primary", use_container_width=True
     )
@@ -330,7 +328,7 @@ def render_ui() -> None:
         st.success("✨ La pergamena è pronta. Copiane il contenuto o aprila direttamente in ChatGPT.")
 
     # ── Output ────────────────────────────────────────────────────────
-    section_divider()
+    #section_divider()
     st.subheader("📜 Pergamena Generata")
 
     generated_prompt = st.session_state.get("generated_prompt", "")
