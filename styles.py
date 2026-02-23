@@ -159,6 +159,23 @@ def inject_styles() -> None:
             margin-bottom: 0.4rem;
         }
 
+        .entry-choice-marker {
+            display: none;
+        }
+
+        [data-testid="stVerticalBlockBorderWrapper"]:has(.entry-choice-marker) {
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+            transform-origin: center center;
+        }
+
+        [data-testid="stVerticalBlockBorderWrapper"]:has(.entry-choice-marker):hover {
+            transform: translateY(-2px) scale(1.02);
+            border-color: rgba(196, 154, 42, 0.82);
+            box-shadow:
+                0 10px 28px rgba(40, 20, 5, 0.22),
+                inset 0 1px 0 rgba(255, 240, 200, 0.6);
+        }
+
         /* ── Caption — flavor text ────────────────────────── */
         [data-testid="stCaptionContainer"] p,
         .stCaption {

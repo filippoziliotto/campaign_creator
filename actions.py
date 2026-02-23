@@ -23,7 +23,6 @@ def apply_preset(preset_name: str, presets: dict[str, dict[str, object]]) -> Non
 
 def randomize_closed_choices(options: dict[str, Any]) -> None:
     settings = list(options["settings"])
-    campaign_types = list(options["campaign_types"])
     themes = list(options["themes"])
     tones = list(options["tones"])
     styles = list(options["styles"])
@@ -32,7 +31,6 @@ def randomize_closed_choices(options: dict[str, Any]) -> None:
     archetypes = list(options["party_archetypes"])
 
     st.session_state["setting"] = random.choice(settings)
-    st.session_state["campaign_type"] = random.choice(campaign_types)
     st.session_state["twist"] = random.choice(twists)
     st.session_state["output_length"] = random.choice(lengths)
 

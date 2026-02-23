@@ -21,13 +21,71 @@ from widgets import (
 )
 
 
+_CAMPAIGN_ENTRY_CHOICES: list[tuple[str, str, str]] = [
+    ("⚡ One-shot", "One-Shot", "1 sessione, ritmo rapido e payoff immediato."),
+    ("🧭 Campagna breve", "Mini-campagna", "3-6 sessioni con progressione e cliffhanger."),
+    ("👑 Campagna lunga", "Campagna lunga", "Archi narrativi estesi e sviluppo del mondo."),
+    ("🗝️ Esplorazione dungeon", "Esplorazione dungeon", "Focus su mappe, rischio e scoperte multi-sessione."),
+]
+
+
+def _activate_campaign_type(campaign_type: str) -> None:
+    st.session_state["campaign_type"] = campaign_type
+    st.session_state["campaign_entry_completed"] = True
+    st.session_state["active_preset_name"] = ""
+
+
+def _return_to_entry() -> None:
+    st.session_state["campaign_entry_completed"] = False
+    st.session_state["active_preset_name"] = ""
+
+
+def _render_campaign_entry_page() -> None:
+    st.markdown(
+        """
+        <div class="hero">
+            <h1>⚔️ Creatore Campagne D&amp;D</h1>
+            <hr class="hero-rule">
+            <p>Scegli il formato della tua avventura per iniziare.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.subheader("Per cosa sei qui?")
+    st.caption("Scegli uno stile di campagna. Potrai sempre cambiarlo dopo.")
+
+    row_one = st.columns(2, gap="large")
+    row_two = st.columns(2, gap="large")
+    columns = [row_one[0], row_one[1], row_two[0], row_two[1]]
+
+    for col, (label, value, description) in zip(columns, _CAMPAIGN_ENTRY_CHOICES, strict=True):
+        with col:
+            with st.container(border=True):
+                st.markdown("<span class='entry-choice-marker'></span>", unsafe_allow_html=True)
+                st.markdown(f"**{label}**")
+                st.caption(description)
+                st.button(
+                    "Seleziona",
+                    type="primary",
+                    use_container_width=True,
+                    key=f"entry_{value}",
+                    on_click=_activate_campaign_type,
+                    args=(value,),
+                )
+
+
 def render_ui() -> None:
     options = load_options()
     inject_styles()
     init_state(options)
+    st.session_state.setdefault("campaign_entry_completed", False)
     pending_toast_message = st.session_state.pop("ui_toast_message", "")
     if pending_toast_message:
         st.toast(pending_toast_message)
+
+    if not st.session_state.get("campaign_entry_completed", False):
+        _render_campaign_entry_page()
+        return
 
     # ── Hero ──────────────────────────────────────────────────────────
     st.markdown(
@@ -40,8 +98,17 @@ def render_ui() -> None:
         """,
         unsafe_allow_html=True,
     )
+    top_left, top_right = st.columns([4, 1])
+    with top_left:
+        render_quest_summary()
+    with top_right:
+        st.button(
+            "⬅️ Cambia tipo",
+            use_container_width=True,
+            key="change_campaign_type_top",
+            on_click=_return_to_entry,
+        )
 
-    render_quest_summary()
     section_divider()
 
     # ── Two-column layout ─────────────────────────────────────────────
@@ -53,16 +120,13 @@ def render_ui() -> None:
 
         with st.container(border=True):
             st.caption("✦ Mondo e formato")
+            campaign_type = str(st.session_state.get("campaign_type", "Mini-campagna"))
+            st.caption(f"🎯 Tipo selezionato: **{campaign_type}**")
             setting = setting_choice(
                 "Ambientazione",
                 options["settings"],
                 options.get("setting_descriptions", {}),
                 key="setting",
-            )
-            campaign_type = chip_choice(
-                "Tipo di campagna",
-                options["campaign_types"],
-                key="campaign_type",
             )
 
         section_divider()
