@@ -97,103 +97,102 @@ twists:
   - L'intera regione è una simulazione magica o il sogno di un dio dormiente
   - La cura per la piaga richiede il sacrificio della persona che l'ha commissionata
 
-output_lengths:
-  - Breve
-  - Medio
-  - Lungo
 
 presets:
-  Classico:
-    setting: Forgotten Realms
-    campaign_type: Mini-campagna
-    theme: Fantasy classico
-    tone: Eroico
-    style: Epico
-    party_level: 3
-    party_size: 4
-    twist: La profezia è falsa
-    output_length: Medio
 
-  Urbano:
+ # ── ONE-SHOT (10) ────────────────────────────────────────────────────────────
+
+  NULLA NELLE TORRI:
     setting: Eberron
     campaign_type: One-Shot
     theme: Colpo urbano
-    tone: Misterioso
+    tone: Noir
     style: Cinematografico
     party_level: 5
     party_size: 4
-    twist: L'alleato fidato è il traditore
-    output_length: Medio
+    twist: Il party è inconsapevolmente al servizio del villain
 
-  Gotico:
+  SPECCHI SENZA VITA:
     setting: Ravenloft
-    campaign_type: Mini-campagna
+    campaign_type: One-Shot
     theme: Horror gotico
     tone: Cupo
-    style: Crudo
+    style: Investigativo
     party_level: 4
     party_size: 4
-    twist: Il manufatto principale è senziente e manipolatore
-    output_length: Medio
+    twist: I PG sono già morti e non lo sanno
 
-  Planare:
-    setting: Exandria
-    campaign_type: Campagna lunga
-    theme: Viaggio planare
-    tone: Eroico
-    style: Cinematografico
-    party_level: 7
-    party_size: 5
-    twist: L'antagonista vuole evitare una catastrofe peggiore
-    output_length: Lungo
-
-  # ── Nuovi preset ───────────────────────────────────────────────────
-
-  Dungeon Maledetto:
-    setting: Forgotten Realms
-    campaign_type: Esplorazione dungeon
-    theme: Caccia ai mostri
-    tone: Misterioso
+  ORDINI SPEZZATI:
+    setting: Wildemount
+    campaign_type: One-Shot
+    theme: Guerra tra fazioni
+    tone: Tragico
     style: Realistico
-    party_level: 4
+    party_level: 6
     party_size: 4
-    twist: Il dungeon è un organismo vivente
-    output_length: Lungo
+    twist: L'alleato fidato è il traditore
 
-  Sopravvivenza:
+  CENERI SENZA SPERANZA:
     setting: Dark Sun
-    campaign_type: Mini-campagna
+    campaign_type: One-Shot
     theme: Sopravvivenza selvaggia
     tone: Cupo
     style: Crudo
     party_level: 3
     party_size: 5
     twist: Il villain ha già vinto e la missione è limitare i danni
-    output_length: Medio
 
-  Destino degli Eroi:
-    setting: Theros
-    campaign_type: Campagna lunga
-    theme: Fantasy classico
-    tone: Tragico
-    style: Epico
+  FIERA SOTTO PRESSIONE:
+    setting: Ravnica
+    campaign_type: One-Shot
+    theme: Intrigo politico
+    tone: Ironico
+    style: Cinematografico
     party_level: 5
     party_size: 4
-    twist: Il party condivide un'origine dimenticata
-    output_length: Lungo
+    twist: L'obiettivo della missione è una persona che non vuole essere salvata
 
-  Fronte di Guerra:
-    setting: Wildemount
-    campaign_type: Campagna lunga
-    theme: Guerra tra fazioni
-    tone: Tragico
-    style: Realistico
-    party_level: 6
+  FUNERALE SBAGLIATO:
+    setting: Forgotten Realms
+    campaign_type: One-Shot
+    theme: Fantasy classico
+    tone: Misterioso
+    style: Investigativo
+    party_level: 4
+    party_size: 4
+    twist: L'antagonista vuole evitare una catastrofe peggiore
+
+  OMBRA NELLA CACCIA:
+    setting: Continente homebrew
+    campaign_type: One-Shot
+    theme: Caccia ai mostri
+    tone: Bizzaro
+    style: Low fantasy
+    party_level: 3
     party_size: 5
-    twist: Il party è inconsapevolmente al servizio del villain
-    output_length: Lungo
+    twist: I mostri stanno fuggendo da un predatore di scala cataclismica
 
-  Rotte Stellari:
+  ECO DAL FUTURO:
+    setting: Exandria
+    campaign_type: One-Shot
+    theme: Viaggio planare
+    tone: Bizzaro
+    style: Cinematografico
+    party_level: 7
+    party_size: 4
+    twist: Il mondo è bloccato in un sottile loop temporale
+
+  LOCANDA AL CREPUSCOLO:
+    setting: Feywild
+    campaign_type: One-Shot
+    theme: Horror gotico
+    tone: Misterioso
+    style: Fiabesco
+    party_level: 4
+    party_size: 4
+    twist: Il manufatto principale è senziente e manipolatore
+
+  ROTTE STELLARI:
     setting: Spelljammer
     campaign_type: One-Shot
     theme: Avventura nautica
@@ -202,51 +201,398 @@ presets:
     party_level: 5
     party_size: 5
     twist: L'obiettivo della missione è una persona che non vuole essere salvata
-    output_length: Medio
+
+  # ── MINI-CAMPAGNA (10) ───────────────────────────────────────────────────────
+
+  # ── MINI-CAMPAGNA (10) ───────────────────────────────────────────────────────
+
+  CICATRICI DI FERRO:
+    setting: Wildemount
+    campaign_type: Mini-campagna
+    theme: Guerra tra fazioni
+    tone: Tragico
+    style: Realistico
+    party_level: 5
+    party_size: 4
+    twist: Il party è inconsapevolmente al servizio del villain
+
+  MARE CHE SCOMPARE:
+    setting: Continente homebrew
+    campaign_type: Mini-campagna
+    theme: Avventura nautica
+    tone: Misterioso
+    style: Low fantasy
+    party_level: 4
+    party_size: 4
+    twist: L'intera regione è una simulazione magica o il sogno di un dio dormiente
+
+  ARCHIVI IN FIAMME:
+    setting: Eberron
+    campaign_type: Mini-campagna
+    theme: Intrigo politico
+    tone: Noir
+    style: Investigativo
+    party_level: 5
+    party_size: 4
+    twist: La vera minaccia è un'istituzione benefica (chiesa, gilda, accademia)
+
+  NODI DI SANGUE:
+    setting: Ravnica
+    campaign_type: Mini-campagna
+    theme: Intrigo politico
+    tone: Misterioso
+    style: Cinematografico
+    party_level: 6
+    party_size: 4
+    twist: L'alleato fidato è il traditore
+
+  RADICE DEL MORBO:
+    setting: Forgotten Realms
+    campaign_type: Mini-campagna
+    theme: Horror gotico
+    tone: Cupo
+    style: Crudo
+    party_level: 4
+    party_size: 4
+    twist: La cura per la piaga richiede il sacrificio della persona che l'ha commissionata
+
+  GIURAMENTO INFRANTO:
+    setting: Dragonlance
+    campaign_type: Mini-campagna
+    theme: Fantasy classico
+    tone: Tragico
+    style: Epico
+    party_level: 5
+    party_size: 4
+    twist: Il party condivide un'origine dimenticata
+
+  PROFEZIA DI CARTA:
+    setting: Continente homebrew
+    campaign_type: Mini-campagna
+    theme: Fantasy classico
+    tone: Misterioso
+    style: Investigativo
+    party_level: 4
+    party_size: 5
+    twist: La profezia è falsa
+
+  POLVERE E SILENZIO:
+    setting: Dark Sun
+    campaign_type: Mini-campagna
+    theme: Sopravvivenza selvaggia
+    tone: Cupo
+    style: Crudo
+    party_level: 3
+    party_size: 5
+    twist: Il villain ha già vinto e la missione è limitare i danni
+
+  SETTIMANA DI VETRO:
+    setting: Eberron
+    campaign_type: Mini-campagna
+    theme: Colpo urbano
+    tone: Noir
+    style: Cinematografico
+    party_level: 6
+    party_size: 4
+    twist: Il manufatto principale è senziente e manipolatore
+
+  CERCHIO CHIUSO:
+    setting: Ravenloft
+    campaign_type: Mini-campagna
+    theme: Horror gotico
+    tone: Cupo
+    style: Investigativo
+    party_level: 5
+    party_size: 4
+    twist: Il party è inconsapevolmente al servizio del villain
+
+  # ── ESPLORAZIONE DUNGEON (10) ────────────────────────────────────────────────
+
+  TOMBA RESPIRANTE:
+    setting: Forgotten Realms
+    campaign_type: Esplorazione dungeon
+    theme: Fantasy classico
+    tone: Misterioso
+    style: Investigativo
+    party_level: 4
+    party_size: 4
+    twist: Il dungeon è un organismo vivente
+
+  PALUDE SENZA RITORNO:
+    setting: Continente homebrew
+    campaign_type: Esplorazione dungeon
+    theme: Horror gotico
+    tone: Cupo
+    style: Crudo
+    party_level: 3
+    party_size: 4
+    twist: I PG sono già morti e non lo sanno
+
+  FUGA DAL PROFONDO:
+    setting: Dark Sun
+    campaign_type: Esplorazione dungeon
+    theme: Sopravvivenza selvaggia
+    tone: Cupo
+    style: Crudo
+    party_level: 5
+    party_size: 5
+    twist: I mostri stanno fuggendo da un predatore di scala cataclismica
+
+  SANTUARIO DEL PECCATO:
+    setting: Ravenloft
+    campaign_type: Esplorazione dungeon
+    theme: Horror gotico
+    tone: Tragico
+    style: Crudo
+    party_level: 6
+    party_size: 4
+    twist: La vera minaccia è un'istituzione benefica (chiesa, gilda, accademia)
+
+  FONDERIA SENZA PADRONE:
+    setting: Eberron
+    campaign_type: Esplorazione dungeon
+    theme: Steampunk medievale
+    tone: Noir
+    style: Cinematografico
+    party_level: 5
+    party_size: 4
+    twist: Il manufatto principale è senziente e manipolatore
+
+  SOGNO A LIVELLI:
+    setting: Exandria
+    campaign_type: Esplorazione dungeon
+    theme: Viaggio planare
+    tone: Bizzaro
+    style: Epico
+    party_level: 8
+    party_size: 5
+    twist: L'intera regione è una simulazione magica o il sogno di un dio dormiente
+
+  ABISSO NECESSARIO:
+    setting: Continente homebrew
+    campaign_type: Esplorazione dungeon
+    theme: Caccia ai mostri
+    tone: Cupo
+    style: Crudo
+    party_level: 5
+    party_size: 4
+    twist: L'antagonista vuole evitare una catastrofe peggiore
+
+  LABIRINTO RISCRITTO:
+    setting: Feywild
+    campaign_type: Esplorazione dungeon
+    theme: Horror gotico
+    tone: Bizzaro
+    style: Fiabesco
+    party_level: 4
+    party_size: 4
+    twist: Il mondo è bloccato in un sottile loop temporale
+
+  TANA DELL'ORIGINE:
+    setting: Dragonlance
+    campaign_type: Esplorazione dungeon
+    theme: Caccia ai mostri
+    tone: Eroico
+    style: Epico
+    party_level: 7
+    party_size: 5
+    twist: Il party condivide un'origine dimenticata
+
+  AVAMPOSTO CONTESO:
+    setting: Wildemount
+    campaign_type: Esplorazione dungeon
+    theme: Guerra tra fazioni
+    tone: Misterioso
+    style: Investigativo
+    party_level: 6
+    party_size: 4
+    twist: L'alleato fidato è il traditore
+
 
 preset_descriptions:
-  Classico: |
-    Eroi emergenti in un mondo high fantasy tradizionale.
-    Minacce antiche, reliquie perdute e viaggi tra regni in conflitto.
-    Ritmo bilanciato tra esplorazione, diplomazia e combattimenti.
-    Ideale per un tono epico con progressione chiara.
-  Urbano: |
-    Colpo ad alto rischio in una metropoli arcano-tecnologica.
-    Intrighi tra gilde, inseguimenti e obiettivi protetti da magie.
-    Focus su piano, infiltrazione e conseguenze politiche.
-    Perfetto per sessioni tese e ricche di colpi di scena.
-  Gotico: |
-    Nebbia, maledizioni e misteri in un dominio oscuro.
-    Horror psicologico, culti segreti e alleati ambigui.
-    Progressione lenta con forte pressione narrativa.
-    Ottimo per atmosfere cupe e scelte morali difficili.
-  Planare: |
-    Viaggio tra piani con minacce cosmiche e portali instabili.
-    Fazioni extraplanari e conflitti su scala epica.
-    Alterna meraviglia, pericolo e decisioni ad alto impatto.
-    Indicato per campagne lunghe con scope molto ampio.
-  Dungeon Maledetto: |
-    Un dungeon antico che respira, cresce e risponde alle azioni del party.
-    Esplorazione tattica con fazioni interne in conflitto tra loro.
-    Ogni livello cela una rivelazione che cambia la comprensione del luogo.
-    Ideale per chi vuole un dungeon crawl con forte spessore narrativo.
-  Sopravvivenza: |
-    Un mondo bruciato dove l'acqua vale più dell'oro e la magia uccide.
-    Il villain ha già vinto: la missione è sopravvivere e salvare il salvabile.
-    Decisioni morali difficili, risorse limitate, nessun salvatore in arrivo.
-    Perfetto per gruppi che vogliono un'esperienza brutale e realistica.
-  Destino degli Eroi: |
-    Gli dei di Theros hanno scelto il party — ma il destino ha un costo.
-    Origine comune nascosta, mostri leggendari e oracoli in contraddizione.
-    Tono epico-tragico: le gesta entreranno nei miti, ma a quale prezzo?
-    Indicato per campagne lunghe con forte arco personale dei PG.
-  Fronte di Guerra: |
-    Il party serve una causa giusta — o almeno così credeva.
-    Conflitto tra nazioni, propaganda, tradimenti e ordini difficili da eseguire.
-    La verità sulla fazione che li ha ingaggiati emerge lentamente.
-    Adatto a gruppi che amano la complessità morale e le scelte impossibili.
-  Rotte Stellari: |
-    Una nave spelljammer, un equipaggio improbabile e una consegna impossibile.
+
+  # ── ONE-SHOT ─────────────────────────────────────────────────────────────────
+
+  NULLA NELLE TORRI: |
+    One-Shot · Eberron · Noir
+    Un artefatto rubato apre un varco verso il nulla — e qualcosa lo attraversa.
+    Corsa contro il tempo in una città che non sa ancora di essere condannata.
+    Il party lavora per qualcuno. Scopre troppo tardi per chi.
+
+  SPECCHI SENZA VITA: |
+    One-Shot · Ravenloft · Horror
+    Una maledizione di porta in porta. Il party è già infetto.
+    Investigazione tesa con orologio interno e nessuna risposta facile.
+    Il colpo di scena non arriva dall'esterno — arriva dallo specchio.
+
+  ORDINI SPEZZATI: |
+    One-Shot · Wildemount · Guerra
+    Un ordine da eseguire. Un alleato che sorride troppo.
+    Infiltrazione in zona di guerra con fazioni in collisione.
+    Ritmo frenetico, moral ambiguity, un finale che pesa.
+
+  CENERI SENZA SPERANZA: |
+    One-Shot · Dark Sun · Sopravvivenza
+    Il villain ha già vinto. Il party arriva nelle macerie.
+    Corsa contro il tempo in un mondo bruciato, senza salvatori.
+    Sopravvivere non è abbastanza — bisogna scegliere cosa salvare.
+
+  FIERA SOTTO PRESSIONE: |
+    One-Shot · Ravnica · Intrigo
+    Trenta minuti per fermare qualcosa in una fiera affollata.
+    Tre sospettati, mille civili, zero autorità disponibili.
+    L'obiettivo non vuole essere fermato. Ha le sue buone ragioni.
+
+  FUNERALE SBAGLIATO: |
+    One-Shot · Forgotten Realms · Mistero
+    Un funerale sbagliato. Un corpo che non è quello giusto.
+    Chi ha sostituito il cadavere sa già che il party è lì.
+    Il cattivo non è il cattivo che sembra — e ha ragione.
+
+  OMBRA NELLA CACCIA: |
+    One-Shot · Homebrew · Caccia
+    La caccia era semplice. La creatura non era quello che pensavano.
+    Qualcosa di molto più grande li ha spinti verso il party.
+    Scelta finale: combattere la minaccia o seguirla fino alla fonte.
+
+  ECO DAL FUTURO: |
+    One-Shot · Exandria · Loop
+    Un portale aperto. Da dentro arriva il party stesso.
+    Versioni future, avvertimenti impossibili, un nemico che sa tutto.
+    Il cerchio si chiude solo se capisci dove ha avuto inizio.
+
+  LOCANDA AL CREPUSCOLO: |
+    One-Shot · Feywild · Fiabesco
+    L'ultima locanda prima del confine. Un ospite non se ne va.
+    Horror claustrofobico con rivelazione distribuita stanza per stanza.
+    Il manufatto non è un'arma — è qualcuno che ricorda.
+
+  ROTTE STELLARI: |
+    One-Shot · Spelljammer · Spazio
+    Una nave, un equipaggio improbabile, una consegna impossibile.
     L'obiettivo non vuole essere trovato — e ha le sue buone ragioni.
-    Tono avventuroso e ironico, con colpi di scena ad alta velocità.
-    Perfetto per una serata leggera con voglia di caos cosmico.
+    Tono ironico e ad alta velocità, caos cosmico garantito.
+
+  # ── MINI-CAMPAGNA ────────────────────────────────────────────────────────────
+
+  CICATRICI DI FERRO: |
+    Mini · Wildemount · Guerra
+    Una guerra finita due anni fa. Le cicatrici non si sono chiuse.
+    Il party segue vendette che risalgono a ordini mai dati ufficialmente.
+    Ogni sessione scopre un nuovo strato di chi ha mentito e perché.
+
+  MARE CHE SCOMPARE: |
+    Mini · Homebrew · Oceano
+    Una cittadina costiera scompare dalle mappe ogni trent'anni. È di nuovo l'ora.
+    Il party ha poche sessioni per capire — e decidere se vale la pena fermarlo.
+    Folklore, politica locale e una rivelazione cosmologica finale.
+
+  ARCHIVI IN FIAMME: |
+    Mini · Eberron · Intrigo
+    Qualcuno brucia gli archivi magici di tre città in ordine preciso.
+    Le tracce portano a una verità che la gilda vuole seppellire.
+    Intrigo accademico, inseguimenti, alleati che cambiano lato.
+
+  NODI DI SANGUE: |
+    Mini · Ravnica · Potere
+    Quattro famiglie nobili. Un'eredità contesa. Un cadavere ogni sessione.
+    Il party è coinvolto loro malgrado — e ognuno vuole usarli.
+    Colpo di scena finale su chi ingaggiava davvero chi.
+
+  RADICE DEL MORBO: |
+    Mini · Forgotten Realms · Piaga
+    Un villaggio chiede aiuto. Quello che trovano non è un mostro.
+    La creatura è una conseguenza — la causa sorride tra la gente.
+    Horror rurale con finale ad alto impatto emotivo.
+
+  GIURAMENTO INFRANTO: |
+    Mini · Dragonlance · Destino
+    Il party ha fatto un giuramento anni fa. Qualcuno vuole il pagamento.
+    Tre sessioni per onorare, tradire o reinterpretare una promessa impossibile.
+    Backstory al centro, climax personale, nessun lato pulito.
+
+  PROFEZIA DI CARTA: |
+    Mini · Homebrew · Profezia
+    La profezia è falsa — ma qualcuno ci ha costruito un potere sopra.
+    Il party segue iscrizioni antiche verso una verità scomoda.
+    Mystery a strati con rivelazione che riscrive la premessa iniziale.
+
+  POLVERE E SILENZIO: |
+    Mini · Dark Sun · Sopravvivenza
+    Il villain ha già vinto. La missione è salvare il salvabile.
+    Un mondo bruciato, risorse limitate, nessun salvatore in arrivo.
+    Decisioni morali difficili e un finale che dipende da cosa hai scelto.
+
+  SETTIMANA DI VETRO: |
+    Mini · Eberron · Paranoia
+    Proteggi qualcuno per una settimana. È giovedì. Tre attentati già falliti.
+    Il quarto arriva da dentro. Il manufatto sa più di quanto dica.
+    Tensione crescente, informazioni parziali, countdown che stringe.
+
+  CERCHIO CHIUSO: |
+    Mini · Ravenloft · Setta
+    Una setta non fa del male — ufficialmente. Gli ex-membri scompaiono.
+    Il party si infiltra e trova una verità peggio del sospettato.
+    Escalation a strati, identità doppie, scelte impossibili al finale.
+
+  # ── ESPLORAZIONE DUNGEON ─────────────────────────────────────────────────────
+
+  TOMBA RESPIRANTE: |
+    Dungeon · Forgotten Realms · Mistero
+    Una tomba che non dovrebbe essere vuota — e non lo è.
+    Il dungeon respira, cresce, risponde alle azioni del party.
+    Ogni stanza cela una rivelazione. L'ultima cambia tutto.
+
+  PALUDE SENZA RITORNO: |
+    Dungeon · Homebrew · Horror
+    Sono entrati per saccheggiare. Hanno trovato qualcosa che non dovrebbe esistere.
+    Il party è già morto — non lo sa ancora.
+    Horror claustrofobico con rivelazione distribuita livello per livello.
+
+  FUGA DAL PROFONDO: |
+    Dungeon · Dark Sun · Sopravvivenza
+    Le creature fuggono in superficie da qualcosa sotto.
+    Il party scende verso quello da cui tutti gli altri scappano.
+    Risorse limitate, fazioni disperate, un predatore di scala cataclismica.
+
+  SANTUARIO DEL PECCATO: |
+    Dungeon · Ravenloft · Istituzione
+    Un santuario maledetto — costruito dalla chiesa per nascondere una verità.
+    La minaccia non è il non-morto: è chi l'ha creato e perché.
+    Horror con forte componente investigativa e finale moralmente pesante.
+
+  FONDERIA SENZA PADRONE: |
+    Dungeon · Eberron · Arcano
+    Una fonderia arcana abbandonata. I golem lavorano ancora — per qualcuno.
+    Il manufatto al centro sa più di quanto sembri — e ha un piano.
+    Steampunk sotterraneo con meccaniche uniche e rivelazione finale a sorpresa.
+
+  SOGNO A LIVELLI: |
+    Dungeon · Exandria · Cosmico
+    Il dungeon non è un luogo — è il sogno di un dio che non si è ancora svegliato.
+    Ogni livello segue regole diverse. La realtà è negoziabile.
+    Per chi vuole un dungeon crawl che sfida le categorie.
+
+  ABISSO NECESSARIO: |
+    Dungeon · Homebrew · Caccia
+    Sono scesi per uccidere il mostro. Il mostro sta cercando di fermare qualcosa di peggio.
+    Fazioni interne in conflitto, rivelazione che ribalta la missione iniziale.
+    Un dungeon dove la minaccia più grande non è sul fondo — è chi li ha mandati.
+
+  LABIRINTO RISCRITTO: |
+    Dungeon · Feywild · Loop
+    Un labirinto che si riscrive ogni volta che il party riposa.
+    Il tempo scorre diversamente qui — e qualcuno lo usa a suo vantaggio.
+    Fiabesco e disorientante, con un finale che richiede di capire le regole.
+
+  TANA DELL'ORIGINE: |
+    Dungeon · Dragonlance · Eredità
+    La tana del drago è vuota. I dragoni sono fuggiti — e il party ha la stessa origine di ciò che li ha cacciati.
+    Dungeon eroico con rivelazione sull'identità del party come climax centrale.
+    Per chi vuole un crawl classico con una svolta personale devastante.
+
+  AVAMPOSTO CONTESO: |
+    Dungeon · Wildemount · Guerra
+    Un avamposto militare caduto sotto la superficie. Qualcuno ha preso il controllo.
+    Fazioni che si combattono su ogni livello — il party è la variabile imprevista.
+    L'alleato che li guida dentro ha le sue ragioni. Non tutte coincidono con le loro.

@@ -33,6 +33,17 @@ def _parse_custom_list(raw_text: str) -> list[str]:
     return [item.strip() for item in normalized.split(",") if item.strip()]
 
 
+def _filter_presets_by_campaign_type(
+    presets: dict[str, dict[str, object]], campaign_type: str
+) -> dict[str, dict[str, object]]:
+    normalized_campaign_type = campaign_type.strip().lower()
+    return {
+        name: values
+        for name, values in presets.items()
+        if str(values.get("campaign_type", "")).strip().lower() == normalized_campaign_type
+    }
+
+
 def _activate_campaign_type(campaign_type: str) -> None:
     st.session_state["campaign_type"] = campaign_type
     st.session_state["campaign_entry_completed"] = True
@@ -197,22 +208,6 @@ def render_ui() -> None:
 
         #section_divider()
 
-        with st.container(border=True):
-            st.caption("✦ Preset rapido")
-            preset_choice(
-                "Preset rapido",
-                list(options["presets"].keys()),
-                options.get("preset_descriptions", {}),
-                key="preset_name",
-            )
-            st.button(
-                "🧙 Applica preset",
-                use_container_width=True,
-                on_click=apply_selected_preset,
-                args=(options["presets"],),
-            )
-            st.caption("Applica un preset per precompilare i campi principali.")
-
     # ── RIGHT: Party e Vincoli ────────────────────────────────────────
     with right_col:
         st.subheader("⚔️ Party e Vincoli")
@@ -327,6 +322,32 @@ def render_ui() -> None:
             if st.session_state.pop("just_rolled_dice", False):
                 render_dice_roll_animation()
 
+    with st.container(border=True):
+        st.caption("✦ Preset rapido")
+        filtered_presets = _filter_presets_by_campaign_type(
+            options["presets"],
+            campaign_type,
+        )
+        if filtered_presets:
+            preset_choice(
+                "Preset rapido",
+                list(filtered_presets.keys()),
+                options.get("preset_descriptions", {}),
+                key="preset_name",
+            )
+            st.button(
+                "🧙 Applica preset",
+                use_container_width=True,
+                on_click=apply_selected_preset,
+                args=(filtered_presets,),
+            )
+            st.caption(
+                f"Mostrati solo preset per: {campaign_type}. "
+                "Applicane uno per precompilare i campi principali."
+            )
+        else:
+            st.info(f"Nessun preset disponibile per: {campaign_type}.")
+
     # ── Generate ──────────────────────────────────────────────────────
     #section_divider()
     generate_clicked = st.button(
@@ -352,7 +373,6 @@ def render_ui() -> None:
                 npc_focus=npc_focus,
                 encounter_focus=encounter_focus,
                 safety_notes=safety_notes,
-                output_length="Medio",
                 include_npcs=include_npcs,
                 include_encounters=include_encounters,
             )

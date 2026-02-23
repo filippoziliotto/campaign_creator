@@ -39,7 +39,6 @@ Scrivi una proposta campagna pronta da portare al tavolo.
 
 ## Formato output
 - Lingua: Italiano
-- Lunghezza target: {{ length_target }}
 - Output in Markdown con sezioni chiare e elenco puntato.
 - Includi sempre: panoramica, minaccia centrale, mappa atti/sessioni, PNG chiave, incontri, agganci futuri.
 - Obiettivo: materiale usabile dal DM. Sii concreto.

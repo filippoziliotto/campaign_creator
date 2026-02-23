@@ -6,15 +6,6 @@ from typing import Any
 
 from .schema import CampaignRequest
 
-_LENGTH_TARGETS = {
-    "Breve": "450-700 parole",
-    "Medio": "900-1300 parole",
-    "Lungo": "1600-2400 parole",
-    "Short": "450-700 parole",
-    "Medium": "900-1300 parole",
-    "Long": "1600-2400 parole",
-}
-
 _STRUCTURE_RULES = {
     "Avventura singola": (
         "Progetta una struttura in 3 atti: apertura, sviluppo, climax+epilogo. "
@@ -142,8 +133,6 @@ def build_prompt_context(request: CampaignRequest) -> dict[str, Any]:
         else "Nessuna preferenza forte (mix libero)."
     )
 
-    length_target = _LENGTH_TARGETS.get(request.output_length, "900-1300 parole")
-
     return {
         "setting": request.setting,
         "campaign_type": request.campaign_type,
@@ -164,6 +153,5 @@ def build_prompt_context(request: CampaignRequest) -> dict[str, Any]:
         "structure_instructions": structure_instructions,
         "npc_instructions": npc_instructions,
         "encounter_instructions": encounter_instructions,
-        "length_target": length_target,
         "language": request.language,
     }

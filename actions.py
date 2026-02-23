@@ -27,12 +27,10 @@ def randomize_closed_choices(options: dict[str, Any]) -> None:
     tones = list(options["tones"])
     styles = list(options["styles"])
     twists = list(options["twists"])
-    lengths = list(options["output_lengths"])
     archetypes = list(options["party_archetypes"])
 
     st.session_state["setting"] = random.choice(settings)
     st.session_state["twist"] = random.choice(twists)
-    st.session_state["output_length"] = random.choice(lengths)
 
     theme_count = random.randint(1, min(2, len(themes)))
     tone_count = random.randint(1, min(2, len(tones)))
@@ -41,13 +39,15 @@ def randomize_closed_choices(options: dict[str, Any]) -> None:
     st.session_state["tone_preferences"] = random.sample(tones, k=tone_count)
     st.session_state["style_preferences"] = random.sample(styles, k=style_count)
 
-    st.session_state["party_level"] = random.randint(1, 20)
-    st.session_state["party_size"] = random.randint(2, 6)
+    st.session_state["party_level"] = random.randint(1, 10)
 
-    archetype_count = random.randint(0, min(st.session_state["party_size"], 4))
-    st.session_state["party_archetypes"] = (
-        random.sample(archetypes, k=archetype_count) if archetype_count else []
-    )
+    archetype_count = random.randint(0, min(6, len(archetypes)))
+    if archetype_count == 0:
+        st.session_state["party_archetypes"] = []
+        st.session_state["party_size"] = 3
+    else:
+        st.session_state["party_archetypes"] = random.sample(archetypes, k=archetype_count)
+        st.session_state["party_size"] = archetype_count
 
 
 def apply_selected_preset(presets: dict[str, dict[str, object]]) -> None:
@@ -83,10 +83,6 @@ def init_state(options: dict[str, Any]) -> None:
         st.session_state["party_level"] = 3
     if "party_size" not in st.session_state:
         st.session_state["party_size"] = 4
-    default_output = (
-        "Medio" if "Medio" in options["output_lengths"] else options["output_lengths"][0]
-    )
-    st.session_state.setdefault("output_length", default_output)
     st.session_state.setdefault("party_archetypes", [])
     st.session_state.setdefault("narrative_hooks", "")
     st.session_state.setdefault("character_notes", "")
@@ -112,8 +108,6 @@ def init_state(options: dict[str, Any]) -> None:
         st.session_state["campaign_type"] = options["campaign_types"][0]
     if st.session_state["twist"] not in options["twists"]:
         st.session_state["twist"] = options["twists"][0]
-    if st.session_state["output_length"] not in options["output_lengths"]:
-        st.session_state["output_length"] = default_output
     if not isinstance(st.session_state["party_level"], int) or not (
         1 <= st.session_state["party_level"] <= 20
     ):

@@ -28,7 +28,7 @@ Sei un progettista narrativo senior per D&D 5e. Crei materiale **immediatamente 
 - {{ item }}
 {% endfor %}
 
-**Lingua:** {{ language }} | **Lunghezza:** {{ length_target }} | **PNG:** {{ npc_instructions }} | **Incontri:** {{ encounter_instructions }}
+**Lingua:** {{ language }} | **PNG:** {{ npc_instructions }} | **Incontri:** {{ encounter_instructions }}
 
 ---
 

@@ -28,7 +28,6 @@ class CampaignRequest(BaseModel):
     npc_focus: str = Field(default="", max_length=400)
     encounter_focus: str = Field(default="", max_length=400)
     safety_notes: str = Field(default="", max_length=800)
-    output_length: str = Field(..., min_length=2, max_length=40)
     include_npcs: bool = True
     include_encounters: bool = True
     language: Literal["Italiano"] = "Italiano"
@@ -78,7 +77,6 @@ def load_options(path: str | Path | None = None) -> dict[str, Any]:
         "styles",
         "party_archetypes",
         "twists",
-        "output_lengths",
         "presets",
     }
     missing = sorted(required_keys - set(data))
