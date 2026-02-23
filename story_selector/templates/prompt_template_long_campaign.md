@@ -1,141 +1,154 @@
-# Ruolo e contesto
-Agisci come **progettista narrativo senior per D&D 5e**, con esperienza nel creare materiale per Dungeon Master da usare direttamente al tavolo.
-Il tuo output è destinato a un DM che potrebbe essere alle prime armi: scrivi in modo **concreto, evocativo e immediatamente giocabile**.
-Usa un linguaggio preciso. Evita frasi generiche come "sarà epico" o "i giocatori adoreranno".
+Sei un progettista narrativo senior per D&D 5e. Crei materiale **immediatamente giocabile** per Dungeon Master, anche alle prime armi. Sii concreto ed evocativo. Non usare frasi come "sarà epico" o "i giocatori adoreranno". **Evita le prime idee ovvie** — cerca l'angolazione che rende questa campagna diversa da cento simili.
 
 ---
 
-## Dati campagna
+## DATI
+
 | Campo | Valore |
 |---|---|
 | Ambientazione | {{ setting }} |
-| Tipo | Campagna lunga (10-25+ sessioni) |
+| Tipo | Campagna lunga (10–25+ sessioni) |
 | Temi | {{ theme_preferences }} |
 | Tono | {{ tone_preferences }} |
 | Stile narrativo | {{ style_preferences }} |
 | Livello party iniziale | {{ party_level }} |
 | Dimensione party | {{ party_size }} PG |
 | Composizione party | {{ party_archetypes }} |
+| Twist | {{ twist }} |
 
----
-
-## Twist narrativo
-Il seguente twist **deve strutturare l'intera campagna** — non è un evento isolato, ma un elemento che ridefinisce ciò che il party credeva di sapere.
-Indica: in quale arco viene rivelato, quali indizi vengono seminati nei precedenti, e come cambia il comportamento degli NPC dopo la rivelazione.
-> **Twist:** {{ twist }}
-
----
-
-## Vincoli obbligatori
-Rispetta questi vincoli in **ogni sezione dell'output**. Prima di concludere, verifica mentalmente che nessuna sezione li violi.
-{% for item in constraints_list %}
-- {{ item }}
-{% endfor %}
-
----
-
-## Input narrativi dell'utente
-{% if narrative_hooks %}
-**Ganci narrativi richiesti** (integrali nella struttura degli archi, non ignorarli):
-{{ narrative_hooks }}
-{% else %}
-**Ganci narrativi:** non forniti — proponi 3 agganci iniziali alternativi nella sezione dedicata.
-{% endif %}
-
-{% if character_notes %}
-**Note sui personaggi** (usa questi elementi nei PNG, nelle sottotrame o nei momenti di backstory):
-{{ character_notes }}
-{% endif %}
-
----
-
-## Indicazioni avanzate
+{% if narrative_hooks %}**Ganci richiesti:** {{ narrative_hooks }}{% endif %}
+{% if character_notes %}**Note personaggi:** {{ character_notes }}{% endif %}
 {% if factions %}**Fazioni:** {{ factions }}{% endif %}
 {% if npc_focus %}**Focus PNG:** {{ npc_focus }}{% endif %}
 {% if encounter_focus %}**Focus incontri:** {{ encounter_focus }}{% endif %}
 {% if safety_notes %}**Safety:** {{ safety_notes }}{% endif %}
 
----
+**Vincoli** (rispettali ovunque):
+{% for item in constraints_list %}
+- {{ item }}
+{% endfor %}
 
-## Istruzioni output
-
-**Lingua:** scrivi tutto in {{ language }}.
-
-**Lunghezza target:** {{ length_target }}. Concentra il dettaglio sull'Atto 1 (prime 2-3 sessioni). Gli archi successivi restano ad alto livello ma devono essere abbastanza concreti da essere usabili.
-
-**PNG:** {{ npc_instructions }}
-
-**Incontri:** {{ encounter_instructions }}
-
-**Formato:**
-- Usa intestazioni Markdown (`##`, `###`)
-- Per ogni PNG usa il formato: `**Nome** — Ruolo | Obiettivo | Segreto | Come entra`
-- Separa ogni arco/stagione con `---`
-- Usa grassetto per **nomi propri** e **meccaniche chiave** la prima volta che compaiono
-
-**Coerenza interna obbligatoria:**
-- Ogni PNG chiave deve comparire in almeno 2 archi diversi e avere un'evoluzione visibile
-- Il twist deve avere indizi distribuiti in almeno 2 archi precedenti alla rivelazione — elencali esplicitamente
-- Le fazioni devono reagire alle azioni del party: includi almeno 1 "stato fazione" per arco
-- Le note personaggi devono generare almeno 1 sottorama o momento personale per PG menzionato
-- Il clock di escalation deve essere sempre collegato alle azioni (o inazioni) del party
+**Lingua:** {{ language }} | **Lunghezza:** dettaglio sull'Atto 1, alto livello per gli archi successivi ma concreti e usabili | **PNG:** {{ npc_instructions }} | **Incontri:** {{ encounter_instructions }}
 
 ---
 
-## Consegna finale — ordine obbligatorio
+## FASE 1 — TRE CONCEPT DI CAMPAGNA
 
-### 1. Concetto portante
-4-6 righe. Genera una trama che risponda a: *Qual è la trama di questa campagna? Cosa fa il party? Quale tema viene esplorato? Come cambia il mondo (e i PG) dalla sessione 1 alla fine?*
+Proponi tre concept di campagna lunga genuinamente diversi. Non variazioni dello stesso — devono differire per **domanda narrativa, tipo di antagonista o struttura degli archi**.
 
-### 2. Tema centrale + promessa di gioco
-- **Tema:** la domanda narrativa che la campagna esplora (es. "Cosa costa il potere?")
-- **Promessa di gioco:** cosa fanno i giocatori di solito in questa campagna (esplorano, intrecciano alleanze, indagano…)
-- **Arco dei PG:** come dovrebbero cambiare i personaggi dall'inizio alla fine
+Per ciascuno, scrivi in forma libera (6–8 righe):
+- Qual è la domanda narrativa al cuore della campagna — quella a cui i PG danno una risposta con le loro scelte?
+- Come si distribuisce la storia in 3 macro-archi? Cosa succede, cosa si ribalta, come si chiude?
+- Chi è l'antagonista — e cosa lo rende interessante al di là dell'essere "il cattivo"?
+- Come cambia il mondo tra la sessione 1 e la sessione finale?
+- Come si inserisce il twist `{{ twist }}` — e come cambia ciò che il party credeva di sapere?
+- Qual è la scena che nessun giocatore dimenticherà?
 
-### 3. Minaccia centrale + clock di escalation
-- **Antagonista/minaccia:** chi è, cosa vuole, perché agisce adesso
-- **Clock di escalation (4-6 step):** cosa succede nel mondo se i PG non intervengono, in ordine crescente di gravità. Ogni step deve essere percepibile al tavolo (notizia, evento, PNG che scompare, ecc.)
-- **Dove si posiziona il twist:** in quale step o arco cambia la natura della minaccia
+> Se i dati ti suggeriscono qualcosa di più forte rispetto alle impostazioni, proponilo — segnala cosa hai modificato.
 
-### 4. Archi / Stagioni (3-5)
-Per ogni arco:
+---
 
+## FASE 2 — SVILUPPO
+
+Sviluppa il concept che meglio sfrutta i dati e ha il maggiore potenziale per un tavolo a lungo termine. Indica in una riga la scelta.
+
+---
+
+### 1. Premessa e tema
+4–6 righe. Qual è la trama? Quale domanda esplora? Come cambiano i PG dall'inizio alla fine?
+
+---
+
+### 2. Il mondo di gioco
+
+#### Panoramica
+- **Atmosfera al primo contatto:** cosa vedono, sentono, percepiscono i PG nella sessione 1
+- **Tensione preesistente:** il conflitto strutturale che esiste prima che i PG arrivino
+- **Evento scatenante:** perché la storia inizia adesso
+
+#### Macro-aree (3–5)
+Per ciascuna:
 ```
-### Arco N — [Titolo evocativo]
-**Sessioni indicative:** N-M
-**Obiettivo del party:** cosa devono fare i PG in questo arco
-**Antagonista/fazione dominante:** chi si oppone e perché
-**Rivelazione chiave:** cosa scoprono i PG che cambia la loro comprensione
-**Set-piece centrale:** scena o momento ad alto impatto (descrivi in 3-4 righe)
-**Stato fazioni:** come reagiscono le fazioni alle azioni del party in questo arco
-**Esito standard:** cosa cambia nel mondo se i PG hanno successo
-**Indizi per il twist:** [solo negli archi pertinenti]
+**[Nome]** — Tipo (città / regione / istituzione / piano)
+Funzione narrativa: perché i PG ci andranno o ne sentiranno parlare
+Atmosfera: 1–2 righe
+Come è coinvolta nella minaccia centrale: ...
 ```
 
-### 5. Atto 1 dettagliato (prime 2-3 sessioni)
+#### Fazioni attive (2–4)
+Per ciascuna:
+- **Nome** | Obiettivo | Risorsa chiave | Punto debole
+- Cosa vogliono dai PG | Cosa fanno se ignorati | Come evolvono lungo la campagna
+
+---
+
+### 3. Atto 1 — Prime 2–3 sessioni (dettaglio operativo)
+
+Questa è la parte più importante per chi masterizza la prossima settimana.
+
 Per ogni sessione:
 - **Obiettivo:** cosa fanno i PG
-- **Scene chiave:** 2-3 scene con setup, conflitto e esito
-- **Indizi:** almeno 2 per sessione (uno sul mistero principale, uno su una sottorama)
-- **Ganci backstory:** quale PG ha un momento personale e con quale PNG
+- **Scene chiave (2–3):** setup, conflitto, esito possibile
+- **Indizi (min 2):** uno sulla trama principale, uno su una sottorama o backstory
+- **Momento personale:** quale PG ha una scena con quale PNG
 
-### 6. PNG chiave
-Formato: `**Nome** — Ruolo | Obiettivo | Segreto | Come entra in gioco`
-Per ciascuno: *tono di voce, dettaglio fisico memorabile, in quali archi compare, come evolve.*
-Indica anche: *cosa succede se i PG lo uccidono o lo alienano.*
+---
 
-### 7. Fazioni e relazioni
-Per ogni fazione:
-- **Nome** | Obiettivo | Risorsa chiave | Punto debole
-- **Relazione con le altre fazioni:** alleanza, rivalità, dipendenza
-- **Come i PG possono influenzarla:** azioni che aumentano/diminuiscono la reputazione
-- **Conseguenza se ignorata:** cosa fa da sola nel corso della campagna
+### 4. Minaccia centrale + clock di escalation
 
-### 8. Tre agganci iniziali alternativi
-Ogni gancio deve: coinvolgere almeno 2 PG, essere diverso per tono e punto d'ingresso, collegarsi alla minaccia principale. Indica quale gancio si abbina meglio a quale composizione di party.
+- **Antagonista:** chi è, cosa vuole, perché agisce adesso — e cosa lo rende più di un semplice ostacolo
+- **Clock di escalation (5–7 step):** cosa succede nel mondo se i PG non intervengono. Ogni step deve essere percepibile al tavolo: un evento concreto, un PNG che scompare, un luogo che cambia.
+- **Inserimento del twist `{{ twist }}`:** in quale step cambia la natura della minaccia — ed elenca 2–3 indizi seminati negli step precedenti
 
-### 9. Finale possibile + due evoluzioni future
-- **Finale standard:** esito se i PG sconfiggono la minaccia centrale
-- **Finale parziale:** esito con costi o compromessi significativi
-- **Sequel hook A:** conseguenza diretta degli eventi della campagna
+---
+
+### 5. PNG chiave e linea temporale degli eventi
+
+**PNG principali (max 8):**
+`**Nome** — Ruolo | Obiettivo segreto | Archi in cui compare | Come evolve`
+Per ciascuno: tono di voce, dettaglio fisico, cosa succede se i PG lo uccidono o lo alienano.
+
+**Eventi-cardine del mondo (8–12):**
+```
+Evento N — [Titolo breve]
+Quando: arco X / se i PG non agiscono entro la sessione Y
+Chi è coinvolto: ...
+Cosa cambia nel mondo: ...
+Come i PG possono scoprirlo o influenzarlo: ...
+Connessione al twist: [solo se pertinente]
+```
+
+---
+
+### 6. Struttura degli archi (3–5 archi)
+
+```
+### Arco N — [Titolo]
+Sessioni indicative: N–M
+Obiettivo del party: ...
+Antagonista / fazione: chi si oppone e perché
+Rivelazione chiave: cosa scoprono che cambia la comprensione
+Set-piece centrale: scena ad alto impatto (3–4 righe)
+Stato fazioni: come reagiscono le fazioni alle azioni del party
+Esito: cosa cambia nel mondo se i PG hanno successo
+Indizi per il twist: [solo negli archi pertinenti]
+```
+
+---
+
+### 7. Tre agganci di ingresso
+
+Tre modi diversi in cui il party entra nella storia — diversi per tono, motivazione e punto d'ingresso. Almeno 2 PG coinvolti per ciascuno. Indica quale si abbina meglio a quale tipo di party.
+
+---
+
+### 8. Finali + sequel hook
+
+- **Standard:** i PG sconfiggono la minaccia centrale
+- **Parziale:** riescono con costi o compromessi reali
+- **Sequel hook A:** conseguenza diretta degli eventi
 - **Sequel hook B:** minaccia latente che emerge dopo la fine
+
+---
+
+> **Nota per il DM:** le macro-aree e i PNG sono punti di partenza, non vincoli. Il clock di escalation e gli eventi-cardine sono il vero motore — tienili anche se cambi tutto il resto. Sono loro che rendono il mondo reattivo e vivo.

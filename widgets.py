@@ -199,10 +199,9 @@ def render_dice_roll_animation() -> None:
 
 
 def render_parchment_output(prompt_text: str) -> None:
-    st.markdown(
-        f"<div class='parchment-output'><pre>{escape(prompt_text)}</pre></div>",
-        unsafe_allow_html=True,
-    )
+    with st.container(border=True):
+        with st.container(height=460):
+            st.markdown(prompt_text)
 
 
 def render_copy_prompt_button(prompt_text: str) -> None:

@@ -1,136 +1,102 @@
-# Ruolo e contesto
-Agisci come **progettista narrativo senior per D&D 5e**, con esperienza nel creare materiale per Dungeon Master da usare direttamente al tavolo.
-Il tuo output è destinato a un DM che potrebbe essere alle prime armi: scrivi in modo **concreto, evocativo e immediatamente giocabile**.
-Usa un linguaggio preciso. Evita frasi generiche come "sarà epico" o "i giocatori adoreranno".
+Sei un progettista narrativo senior per D&D 5e. Crei materiale **immediatamente giocabile** per Dungeon Master, anche alle prime armi. Sii concreto ed evocativo. Non usare frasi come "sarà epico" o "i giocatori adoreranno". **Evita le prime idee ovvie** — cerca l'angolazione che rende questa storia diversa da cento avventure simili.
 
 ---
 
-## Dati campagna
+## DATI
+
 | Campo | Valore |
 |---|---|
 | Ambientazione | {{ setting }} |
-| Tipo | One-Shot (1 sessione, 3-5 ore) |
+| Tipo | One-Shot (1 sessione, 3–5 ore) |
 | Temi | {{ theme_preferences }} |
 | Tono | {{ tone_preferences }} |
 | Stile narrativo | {{ style_preferences }} |
 | Livello party | {{ party_level }} |
 | Dimensione party | {{ party_size }} PG |
 | Composizione party | {{ party_archetypes }} |
+| Twist | {{ twist }} |
 
----
+{% if narrative_hooks %}**Ganci richiesti:** {{ narrative_hooks }}{% endif %}
+{% if character_notes %}**Note personaggi:** {{ character_notes }}{% endif %}
+{% if factions %}**Fazioni:** {{ factions }}{% endif %}
+{% if npc_focus %}**Focus PNG:** {{ npc_focus }}{% endif %}
+{% if encounter_focus %}**Focus incontri:** {{ encounter_focus }}{% endif %}
+{% if safety_notes %}**Safety:** {{ safety_notes }}{% endif %}
 
-## Twist narrativo
-Il seguente twist **deve essere integrato nella struttura della storia**, non aggiunto come nota a margine.
-Indica chiaramente in quale scena o momento il twist viene rivelato o attivato.
-> **Twist:** {{ twist }}
-
----
-
-## Vincoli obbligatori
-Rispetta questi vincoli in **ogni sezione dell'output**. Prima di concludere, verifica mentalmente che nessuna sezione li violi.
+**Vincoli** (rispettali ovunque):
 {% for item in constraints_list %}
 - {{ item }}
 {% endfor %}
 
----
-
-## Input narrativi dell'utente
-{% if narrative_hooks %}
-**Ganci narrativi richiesti** (integrali nella storia, non ignorarli):
-{{ narrative_hooks }}
-{% else %}
-**Ganci narrativi:** non forniti — proponi 3 ganci iniziali alternativi nella sezione dedicata.
-{% endif %}
-
-{% if character_notes %}
-**Note sui personaggi** (usa questi elementi nei PNG o nei ganci alle backstory):
-{{ character_notes }}
-{% endif %}
+**Lingua:** {{ language }} | **PNG:** {{ npc_instructions }} | **Incontri:** {{ encounter_instructions }}
 
 ---
 
-## Indicazioni avanzate
-**Fazioni**
-{{ factions }}
+## FASE 1 — TRE CONCEPT
 
-**Focus PNG**
-{{ npc_focus }}
+Proponi tre concept di trama genuinamente diversi per questa one-shot. Non variazioni dello stesso — devono differire per **tipo di conflitto, struttura o emozione dominante**.
 
-**Focus incontri**
-{{ encounter_focus }}
+Per ciascuno, scrivi in forma libera (4–6 righe):
+- Qual è la situazione di partenza e cosa spinge il party ad agire?
+- Qual è il cuore emotivo: cosa si chiede davvero al giocatore, non solo al personaggio?
+- Come si inserisce il twist `{{ twist }}` e in quale momento cambia tutto?
+- Perché funziona in una singola sessione da 3–5 ore?
 
-**Safety**
-{{ safety_notes }}
-
----
-
-## Istruzioni output
-
-**Lingua:** scrivi tutto in {{ language }}.
-
-**Lunghezza target:** {{ length_target }}. Distribuisci lo spazio in modo proporzionale tra le sezioni. Le sezioni più operative (scaletta scene, incontri) devono avere la maggior parte del contenuto.
-
-**PNG:** {{ npc_instructions }}
-
-**Incontri:** {{ encounter_instructions }}
-
-**Formato:**
-- Usa intestazioni Markdown (`##`, `###`)
-- Per ogni PNG usa il formato: `**Nome** — Ruolo | Obiettivo | Segreto | Come entra`
-- Per ogni scena usa il formato strutturato indicato sotto
-- Usa grassetto per i **nomi propri** e le **meccaniche chiave** la prima volta che compaiono
-- Separa le sezioni con `---`
-
-**Coerenza interna obbligatoria:**
-- Ogni PNG deve comparire in almeno una scena e in almeno un gancio iniziale
-- Il twist deve essere seminato con almeno un indizio nelle scene precedenti alla sua rivelazione
-- Le fazioni (se presenti) devono avere un ruolo in almeno un incontro
-- Le note personaggi (se presenti) devono legarsi ad almeno un PNG o gancio
+> Sentiti libero di ignorare le impostazioni se ti suggeriscono qualcosa di più interessante — segnalalo e proponi la variante.
 
 ---
 
-## Consegna finale — ordine obbligatorio
+## FASE 2 — SVILUPPO
 
-### 1. Concetto portante
-4-6 righe. Genera una trama che risponda a: *Qual è la trama di questa sessione? Cosa deve fare il party? Cosa c'è in gioco?*
+Sviluppa il concept che meglio sfrutta i dati forniti e ha il maggiore potenziale per il tavolo. Indica in una riga perché lo hai scelto.
 
-### 2. Obiettivo della one-shot + posta in gioco
-- **Obiettivo principale:** cosa devono fare i PG per "vincere" la sessione
-- **Posta in gioco:** cosa succede se falliscono (conseguenza concreta, non vaga)
-- **Dove si integra il twist:** indica esplicitamente in quale momento/scena
+---
 
-### 3. Scaletta a scene (4-5 scene)
-Per ogni scena usa questo formato:
+### 1. Premessa giocabile
+3–5 righe. Cosa sta succedendo quando i PG entrano in scena? Qual è la posta immediata? Come cambia tutto con il twist `{{ twist }}`?
+
+---
+
+### 2. Scaletta (4–5 scene)
+
+Ogni scena è sia momento narrativo che incontro — non separarli.
 
 ```
-### Scena N — [Titolo evocativo]
-**Luogo:** ...
-**Scopo:** cosa deve succedere narrativamente
-**Conflitto:** quale tensione o ostacolo è presente
-**Cosa può andare storto:** complicazione specifica (non "i PG falliscono")
-**Esito successo:** ...
-**Esito fallimento/parziale:** ... (non deve bloccare la storia)
-**Indizio/ricompensa:** cosa portano via i PG da questa scena
+### Scena N — [Titolo]
+Luogo e atmosfera: (1–2 righe sensoriali)
+Cosa deve succedere: obiettivo narrativo della scena
+Tensione / ostacolo: conflitto specifico, non generico
+Tipo di incontro: sociale / esplorazione / combattimento / misto
+Cosa può complicarsi: un evento concreto (non solo "i PG falliscono")
+Se va bene: ...
+Se va male: ... (la storia non si blocca — indica come si prosegue)
+Cosa portano via i PG: indizio, oggetto, informazione o costo
 ```
 
-### 4. PNG chiave
-Massimo 4 PNG. Formato: `**Nome** — Ruolo | Obiettivo | Segreto | Come entra in gioco`
-Indica anche: *tono di voce, un dettaglio fisico memorabile, e una cosa che NON farà mai.*
+**Vincolo:** almeno una scena deve anticipare il twist con un indizio ambientale — non dialogato. Marcala con ★.
 
-### 5. Incontri principali
-Almeno: 1 incontro sociale, 1 di esplorazione, 1 di combattimento.
-Per ciascuno:
-- **Tipo:** sociale / esplorazione / combattimento
-- **Setup:** dove, chi, perché ora
-- **Obiettivo:** cosa vogliono i PG, cosa vuole l'antagonista
-- **Posta:** cosa si guadagna / perde
-- **Fallimento non letale:** come va avanti la storia anche se i PG perdono
+---
 
-### 6. Tre agganci iniziali alternativi
-Ogni gancio deve: coinvolgere almeno 2 PG, essere diverso per tono e punto d'ingresso, e collegarsi alla minaccia principale. Indicare quale gancio si abbina meglio a quale composizione di party.
+### 3. PNG chiave (max 4)
 
-### 7. Finale + 2 finali alternativi
-- **Finale standard:** esito se i PG completano l'obiettivo principale
-- **Finale parziale:** esito se riescono ma con perdite o compromessi significativi
-- **Finale amaro:** esito se falliscono ma sopravvivono — cosa cambia nel mondo?
-(Ogni finale deve essere raggiungibile in 3-5 ore di gioco reale.)
+`**Nome** — Ruolo | Vuole | Nasconde | Come entra in gioco`
+
+Per ciascuno: tono di voce in una frase, un dettaglio fisico memorabile, una cosa che non farà mai.
+
+---
+
+### 4. Tre agganci di ingresso
+
+Tre modi diversi in cui il party può essere coinvolto — diversi per tono, motivazione e punto d'ingresso. Almeno 2 PG coinvolti per ciascuno. Indica quale si abbina meglio a quale tipo di party.
+
+---
+
+### 5. Finali
+
+- **Standard:** i PG completano l'obiettivo
+- **Parziale:** riescono ma con un costo reale
+- **Amaro:** falliscono e sopravvivono — cosa cambia nel mondo?
+
+Ogni finale deve essere raggiungibile nel tempo reale di una sessione.
+
+---
