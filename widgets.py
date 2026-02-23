@@ -118,11 +118,23 @@ def section_divider() -> None:
 
 
 def render_quest_summary() -> None:
-    theme_values = st.session_state.get("theme_preferences", [])
-    theme_text = ", ".join(theme_values[:2]) if theme_values else "mix libero"
+    custom_setting = str(st.session_state.get("custom_setting", "")).strip()
+    setting_text = custom_setting if custom_setting else str(st.session_state.get("setting", "-"))
+
+    custom_theme_raw = str(st.session_state.get("custom_theme", "")).strip()
+    if custom_theme_raw:
+        custom_theme_values = [
+            item.strip()
+            for item in custom_theme_raw.replace("\n", ",").replace(";", ",").split(",")
+            if item.strip()
+        ]
+        theme_text = ", ".join(custom_theme_values[:2]) if custom_theme_values else "mix libero"
+    else:
+        theme_values = st.session_state.get("theme_preferences", [])
+        theme_text = ", ".join(theme_values[:2]) if theme_values else "mix libero"
 
     summary_items = [
-        f"🗺️ {st.session_state.get('setting', '-')}",
+        f"🗺️ {setting_text}",
         f"⚔️ Lv {st.session_state.get('party_level', '-')}",
         f"👥 {st.session_state.get('party_size', '-')} PG",
         f"🕯️ {theme_text}",

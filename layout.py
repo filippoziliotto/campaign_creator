@@ -28,6 +28,11 @@ _CAMPAIGN_ENTRY_CHOICES: list[tuple[str, str, str]] = [
 ]
 
 
+def _parse_custom_list(raw_text: str) -> list[str]:
+    normalized = raw_text.replace("\n", ",").replace(";", ",")
+    return [item.strip() for item in normalized.split(",") if item.strip()]
+
+
 def _activate_campaign_type(campaign_type: str) -> None:
     st.session_state["campaign_type"] = campaign_type
     st.session_state["campaign_entry_completed"] = True
@@ -119,22 +124,44 @@ def render_ui() -> None:
             st.caption("✦ Mondo e formato")
             campaign_type = str(st.session_state.get("campaign_type", "Mini-campagna"))
             st.caption(f"🎯 Tipo selezionato: **{campaign_type}**")
-            setting = setting_choice(
+            selected_setting = setting_choice(
                 "Ambientazione",
                 options["settings"],
                 options.get("setting_descriptions", {}),
                 key="setting",
             )
+            custom_setting = st.text_input(
+                "Suggerisci un'ambientazione",
+                key="custom_setting",
+                max_chars=80,
+                placeholder="Es: arcipelago di citta-stato sospese nel cielo.",
+            )
+            st.caption("Se compilato, questo testo sovrascrive la scelta del menu.")
+            setting = custom_setting.strip() if custom_setting.strip() else selected_setting
 
         #section_divider()
 
         with st.container(border=True):
             st.caption("✦ Tono e stile narrativo")
-            theme_preferences = chip_multi_choice(
+            selected_theme_preferences = chip_multi_choice(
                 "Tema",
                 options["themes"],
                 key="theme_preferences",
                 help_text="Seleziona uno o più temi. Clic per attivare/disattivare.",
+            )
+            custom_theme = st.text_input(
+                "Suggerisci un tema",
+                key="custom_theme",
+                max_chars=240,
+                placeholder="Es: rovina morale, esplorazione del proibito, redenzione.",
+            )
+            st.caption(
+                "Se compilato, questo testo sovrascrive i temi selezionati. "
+                "Puoi separare più temi con virgola."
+            )
+            parsed_custom_theme = _parse_custom_list(custom_theme)
+            theme_preferences = (
+                parsed_custom_theme if parsed_custom_theme else selected_theme_preferences
             )
             tone_preferences = chip_multi_choice(
                 "Tono",
