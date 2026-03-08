@@ -6,7 +6,7 @@ from html import escape
 import streamlit as st
 import streamlit.components.v1 as components
 
-from styles import get_divider_texture_uri
+from .styles import get_divider_texture_uri
 
 
 def chip_choice(

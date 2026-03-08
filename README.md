@@ -4,9 +4,10 @@ Web app Streamlit per creare un prompt strutturato da incollare su ChatGPT e gen
 La lingua di output e sempre italiano.
 
 ## Obiettivo
-L'app separa la logica dall'interfaccia:
-- `story_selector/`: validazione, regole, rendering prompt
-- `app.py`: interfaccia Streamlit (input, preset, output)
+L'app e ora divisa in frontend e backend Python:
+- `frontend/streamlit_app/`: interfaccia Streamlit (input, preset, output, stile)
+- `backend/`: validazione input, regole di generazione prompt, rendering template
+- `app.py`: entrypoint Streamlit minimale che avvia il frontend
 
 ## Avvio locale
 ```bash
@@ -26,16 +27,33 @@ streamlit run app.py
 ```text
 .
 ├── app.py
-├── requirements.txt
-├── story_selector
+├── backend
 │   ├── __init__.py
-│   ├── schema.py
-│   ├── prompt_builder.py
-│   ├── render.py
-│   ├── data
-│   │   └── options.yaml
-│   └── templates
-│       └── prompt_template.md
+│   └── story_selector
+│       ├── __init__.py
+│       ├── schema.py
+│       ├── prompt_builder.py
+│       ├── render.py
+│       ├── data
+│       │   └── options.yaml
+│       └── templates
+│           ├── prompt_template.md
+│           ├── prompt_template_one_shot.md
+│           ├── prompt_template_mini_campaign.md
+│           ├── prompt_template_long_campaign.md
+│           └── prompt_template_dungeon_exploration.md
+├── frontend
+│   └── streamlit_app
+│       ├── app.py
+│       ├── layout.py
+│       ├── actions.py
+│       ├── widgets.py
+│       ├── styles.py
+│       └── assets
+│           ├── parchment.jpg
+│           ├── watermark_dragon.png
+│           └── divider.svg
+├── requirements.txt
 ├── LICENSE
 └── .gitignore
 ```

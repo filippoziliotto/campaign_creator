@@ -118,7 +118,7 @@ def inject_styles() -> None:
         }
 
         .hero p {
-            margin: 0.45rem 0 0;
+            margin: 0.28rem 0 0;
             color: #d4bc8a;
             font-family: 'Crimson Text', serif;
             font-style: italic;
@@ -130,7 +130,7 @@ def inject_styles() -> None:
         .hero-rule {
             border: none;
             border-top: 1px solid rgba(196, 154, 42, 0.4);
-            margin: 0.85rem 0 0.7rem;
+            margin: 0.52rem 0 0.34rem;
         }
 
         /* ── Section subheaders — Chapter titles ─────────── */

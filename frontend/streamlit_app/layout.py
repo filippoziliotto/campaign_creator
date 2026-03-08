@@ -3,10 +3,11 @@ from __future__ import annotations
 import streamlit as st
 from pydantic import ValidationError
 
-from actions import apply_selected_preset, init_state, randomize_and_notify
-from story_selector import CampaignRequest, load_options, render_prompt
-from styles import inject_styles
-from widgets import (
+from backend import CampaignRequest, load_options, render_prompt
+
+from .actions import apply_selected_preset, init_state, randomize_and_notify
+from .styles import inject_styles
+from .widgets import (
     chip_multi_choice,
     render_context_completeness_indicator,
     render_dice_roll_animation,
