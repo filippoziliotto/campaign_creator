@@ -134,7 +134,9 @@ extension on _CampaignBuilderPageState {
       readinessHint: _forgeReadinessHint(),
       isPrimaryEnabled: primaryActionEnabled,
       isGenerating: _isGenerating,
-      primaryLabel: _isGenerating ? 'Forgiando...' : _nextForgeActionLabel(),
+      primaryLabel: _isGenerating
+          ? context.l10n.forgeButtonForging
+          : _nextForgeActionLabel(),
       primaryIcon: _forgeSection == _ForgeSection.narrative
           ? Icons.auto_awesome_rounded
           : Icons.arrow_forward_rounded,
@@ -152,20 +154,20 @@ extension on _CampaignBuilderPageState {
       case _ForgeSection.world:
         return _primaryActionHint(
           ready: _canAdvanceWorldSection(),
-          readyText: 'Puoi passare al party.',
-          pendingText: 'Scegli formato, ambientazione e segnali chiave.',
+          readyText: context.l10n.forgeReadinessWorldReady,
+          pendingText: context.l10n.forgeReadinessWorldPending,
         );
       case _ForgeSection.party:
         return _primaryActionHint(
           ready: _canAdvancePartySection(),
-          readyText: 'Puoi aprire la trama.',
-          pendingText: 'Definisci livello, dimensione e ruoli del gruppo.',
+          readyText: context.l10n.forgeReadinessPartyReady,
+          pendingText: context.l10n.forgeReadinessPartyPending,
         );
       case _ForgeSection.narrative:
         return _primaryActionHint(
           ready: _canForgeNarrativeSection(),
-          readyText: 'Puoi forgiare la pergamena.',
-          pendingText: 'Aggiungi almeno un aggancio narrativo.',
+          readyText: context.l10n.forgeReadinessNarrativeReady,
+          pendingText: context.l10n.forgeReadinessNarrativePending,
         );
     }
   }
@@ -189,8 +191,8 @@ extension on _CampaignBuilderPageState {
         : options.presetDescriptions[effectiveSelectedPreset];
 
     return SectionFrame(
-      title: 'Mondo e firma creativa',
-      subtitle: 'Formato, ambientazione e segnali iniziali della campagna.',
+      title: context.l10n.forgeWorldSectionTitle,
+      subtitle: context.l10n.forgeWorldSectionSubtitle,
       density: FrameDensity.featured,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,9 +240,9 @@ extension on _CampaignBuilderPageState {
     String? settingDescription,
   ) {
     return ControlRoomPanel(
-      label: 'Fondazione',
-      title: 'Impostazioni base',
-      subtitle: 'Formato, preset rapido e ambientazione.',
+      label: context.l10n.forgeFoundationLabel,
+      title: context.l10n.forgeFoundationTitle,
+      subtitle: context.l10n.forgeFoundationSubtitle,
       icon: Icons.public_rounded,
       density: FrameDensity.featured,
       showDivider: true,
@@ -255,7 +257,7 @@ extension on _CampaignBuilderPageState {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     _buildStringDropdown(
-                      label: 'Preset rapido',
+                      label: context.l10n.forgeQuickPresetLabel,
                       value: effectiveSelectedPreset,
                       options: presets,
                       onChanged: (value) {
@@ -268,7 +270,7 @@ extension on _CampaignBuilderPageState {
                     FilledButton(
                       onPressed:
                           effectiveSelectedPreset == null ? null : _applyPreset,
-                      child: const Text('Applica preset'),
+                      child: Text(context.l10n.forgeApplyPreset),
                     ),
                   ],
                 );
@@ -279,7 +281,7 @@ extension on _CampaignBuilderPageState {
                 children: [
                   Expanded(
                     child: _buildStringDropdown(
-                      label: 'Preset rapido',
+                      label: context.l10n.forgeQuickPresetLabel,
                       value: effectiveSelectedPreset,
                       options: presets,
                       onChanged: (value) {
@@ -293,7 +295,7 @@ extension on _CampaignBuilderPageState {
                   FilledButton(
                     onPressed:
                         effectiveSelectedPreset == null ? null : _applyPreset,
-                    child: const Text('Applica'),
+                    child: Text(context.l10n.forgeApply),
                   ),
                 ],
               );
@@ -308,7 +310,7 @@ extension on _CampaignBuilderPageState {
           ],
           const SizedBox(height: 14),
           _buildStringDropdown(
-            label: 'Ambientazione',
+            label: context.l10n.forgeSettingLabel,
             value: _selectedSetting,
             options: options.settings,
             onChanged: (value) {
@@ -327,9 +329,8 @@ extension on _CampaignBuilderPageState {
           const SizedBox(height: 14),
           _buildLoreTextField(
             controller: _customSettingController,
-            label: 'Dettaglio ambientazione personalizzato',
-            hintText:
-                'Regno in guerra, frontiera sospesa, città verticale, arcipelago infernale...',
+            label: context.l10n.forgeCustomSettingLabel,
+            hintText: context.l10n.forgeCustomSettingHint,
             minLines: 2,
             maxLines: 4,
           ),
@@ -340,12 +341,12 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildWorldTwistPanel(CampaignOptions options) {
     return ControlRoomPanel(
-      title: 'Twist iniziale',
+      title: context.l10n.forgeTwistTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildStringDropdown(
-            label: 'Twist',
+            label: context.l10n.forgeTwistLabel,
             value: _selectedTwist,
             options: options.twists,
             onChanged: (value) {
@@ -357,8 +358,8 @@ extension on _CampaignBuilderPageState {
           const SizedBox(height: 14),
           _buildLoreTextField(
             controller: _customTwistController,
-            label: 'Twist personalizzato',
-            hintText: 'Un alleato mente, il dungeon e vivo, la missione e una trappola...',
+            label: context.l10n.forgeCustomTwistLabel,
+            hintText: context.l10n.forgeCustomTwistHint,
             minLines: 2,
             maxLines: 4,
           ),
@@ -369,11 +370,14 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildCreativeDirectionPanel(CampaignOptions options) {
     return ControlRoomPanel(
-      title: 'Temi, tono e stile',
+      title: context.l10n.forgeCreativeTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Temi', style: _resolvedAtmosphereTheme().textTheme.titleMedium),
+          Text(
+            context.l10n.forgeThemesTitle,
+            style: _resolvedAtmosphereTheme().textTheme.titleMedium,
+          ),
           const SizedBox(height: 10),
           _buildChipWrap(
             options.themes,
@@ -391,13 +395,16 @@ extension on _CampaignBuilderPageState {
           const SizedBox(height: 14),
           _buildLoreTextField(
             controller: _customThemeController,
-            label: 'Temi personalizzati',
-            hintText: 'Intrigo politico, redenzione, sopravvivenza, orrore cosmico...',
+            label: context.l10n.forgeCustomThemesLabel,
+            hintText: context.l10n.forgeCustomThemesHint,
             minLines: 2,
             maxLines: 3,
           ),
           const SizedBox(height: 18),
-          Text('Tono', style: _resolvedAtmosphereTheme().textTheme.titleMedium),
+          Text(
+            context.l10n.forgeToneTitle,
+            style: _resolvedAtmosphereTheme().textTheme.titleMedium,
+          ),
           const SizedBox(height: 10),
           _buildChipWrap(
             options.tones,
@@ -413,7 +420,10 @@ extension on _CampaignBuilderPageState {
             },
           ),
           const SizedBox(height: 18),
-          Text('Stile', style: _resolvedAtmosphereTheme().textTheme.titleMedium),
+          Text(
+            context.l10n.forgeStyleTitle,
+            style: _resolvedAtmosphereTheme().textTheme.titleMedium,
+          ),
           const SizedBox(height: 10),
           _buildChipWrap(
             options.styles,
@@ -431,8 +441,8 @@ extension on _CampaignBuilderPageState {
           const SizedBox(height: 14),
           _buildLoreTextField(
             controller: _customToneStyleController,
-            label: 'Override tono e stile',
-            hintText: 'Es: tono: cupo, epico\nstile: sandbox, mystery',
+            label: context.l10n.forgeToneStyleOverrideLabel,
+            hintText: context.l10n.forgeToneStyleOverrideHint,
             minLines: 2,
             maxLines: 4,
           ),
@@ -443,8 +453,8 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildPartySection(CampaignOptions options) {
     return SectionFrame(
-      title: 'Party e scala di gioco',
-      subtitle: 'Livello, dimensione e ruoli principali del gruppo.',
+      title: context.l10n.forgePartySectionTitle,
+      subtitle: context.l10n.forgePartySectionSubtitle,
       density: FrameDensity.featured,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -472,21 +482,21 @@ extension on _CampaignBuilderPageState {
           ),
           const SizedBox(height: 18),
           ControlRoomPanel(
-            title: 'Informazioni utili',
+            title: context.l10n.forgePartyInfoTitle,
             child: Column(
               children: [
                 _buildLoreTextField(
                   controller: _characterNotesController,
-                  label: 'Note sui personaggi',
-                  hintText: 'Segreti, legami, paure, background importanti...',
+                  label: context.l10n.forgeCharacterNotesLabel,
+                  hintText: context.l10n.forgeCharacterNotesHint,
                   minLines: 3,
                   maxLines: 5,
                 ),
                 const SizedBox(height: 14),
                 _buildLoreTextField(
                   controller: _constraintsController,
-                  label: 'Vincoli',
-                  hintText: 'Durata breve, niente viaggi planari, boss finale obbligatorio...',
+                  label: context.l10n.forgeConstraintsLabel,
+                  hintText: context.l10n.forgeConstraintsHint,
                   minLines: 2,
                   maxLines: 4,
                 ),
@@ -500,8 +510,8 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildPartyMetricsPanel() {
     return ControlRoomPanel(
-      label: 'Scala',
-      title: 'Livello e dimensione',
+      label: context.l10n.forgeScaleLabel,
+      title: context.l10n.forgeScaleTitle,
       icon: Icons.tune_rounded,
       density: FrameDensity.featured,
       showDivider: true,
@@ -509,7 +519,7 @@ extension on _CampaignBuilderPageState {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Livello party: $_partyLevel',
+            context.l10n.forgePartyLevel(_partyLevel),
             style: _resolvedAtmosphereTheme().textTheme.titleMedium,
           ),
           Slider(
@@ -526,7 +536,7 @@ extension on _CampaignBuilderPageState {
           ),
           const SizedBox(height: 10),
           Text(
-            'Numero personaggi: $_partySize',
+            context.l10n.forgePartySize(_partySize),
             style: _resolvedAtmosphereTheme().textTheme.titleMedium,
           ),
           Slider(
@@ -549,8 +559,8 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildPartyArchetypesPanel(CampaignOptions options) {
     return ControlRoomPanel(
-      title: 'Archetipi del party',
-      subtitle: 'Seleziona fino a $_partySize archetipi.',
+      title: context.l10n.forgePartyArchetypesTitle,
+      subtitle: context.l10n.forgePartyArchetypesSubtitle(_partySize),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -573,8 +583,7 @@ extension on _CampaignBuilderPageState {
             const SizedBox(height: 12),
             LoreCallout(
               icon: Icons.info_outline_rounded,
-              text:
-                  'Hai raggiunto il massimo di archetipi selezionabili per il party attuale.',
+              text: context.l10n.forgePartyArchetypesMaxReached,
             ),
           ],
         ],
@@ -584,14 +593,14 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildNarrativeSection() {
     return SectionFrame(
-      title: 'Pressione narrativa',
-      subtitle: 'Agganci, fazioni, incontri e limiti di contenuto.',
+      title: context.l10n.forgeNarrativeSectionTitle,
+      subtitle: context.l10n.forgeNarrativeSectionSubtitle,
       density: FrameDensity.featured,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ControlRoomPanel(
-            title: 'Trama e forze in gioco',
+            title: context.l10n.forgeNarrativePanelTitle,
             icon: Icons.hub_rounded,
             density: FrameDensity.featured,
             showDivider: true,
@@ -599,32 +608,32 @@ extension on _CampaignBuilderPageState {
               children: [
                 _buildLoreTextField(
                   controller: _narrativeHooksController,
-                  label: 'Agganci narrativi',
-                  hintText: 'Missione iniziale, minaccia, mistero, countdown...',
+                  label: context.l10n.forgeNarrativeHooksLabel,
+                  hintText: context.l10n.forgeNarrativeHooksHint,
                   minLines: 3,
                   maxLines: 5,
                 ),
                 const SizedBox(height: 14),
                 _buildLoreTextField(
                   controller: _factionsController,
-                  label: 'Fazioni e poteri',
-                  hintText: 'Gilde, culti, casate, antagonisti, alleati instabili...',
+                  label: context.l10n.forgeFactionsLabel,
+                  hintText: context.l10n.forgeFactionsHint,
                   minLines: 2,
                   maxLines: 4,
                 ),
                 const SizedBox(height: 14),
                 _buildLoreTextField(
                   controller: _npcFocusController,
-                  label: 'NPC chiave',
-                  hintText: 'Mentore ambiguo, rivale, patrono, traditore...',
+                  label: context.l10n.forgeNpcFocusLabel,
+                  hintText: context.l10n.forgeNpcFocusHint,
                   minLines: 2,
                   maxLines: 4,
                 ),
                 const SizedBox(height: 14),
                 _buildLoreTextField(
                   controller: _encounterFocusController,
-                  label: 'Incontri desiderati',
-                  hintText: 'Assedio, indagine sociale, inseguimento, boss finale...',
+                  label: context.l10n.forgeEncounterFocusLabel,
+                  hintText: context.l10n.forgeEncounterFocusHint,
                   minLines: 2,
                   maxLines: 4,
                 ),
@@ -633,12 +642,12 @@ extension on _CampaignBuilderPageState {
           ),
           const SizedBox(height: 18),
           ControlRoomPanel(
-            title: 'Vincoli di contenuto',
+            title: context.l10n.forgeContentConstraintsTitle,
             child: Column(
               children: [
                 ToggleTile(
-                  label: 'Includi NPC',
-                  subtitle: 'Il prompt includera personaggi non giocanti rilevanti.',
+                  label: context.l10n.forgeIncludeNpcsLabel,
+                  subtitle: context.l10n.forgeIncludeNpcsSubtitle,
                   value: _includeNpcs,
                   onChanged: (value) {
                     _markDirty(() {
@@ -648,8 +657,8 @@ extension on _CampaignBuilderPageState {
                 ),
                 const SizedBox(height: 12),
                 ToggleTile(
-                  label: 'Includi incontri',
-                  subtitle: 'Il prompt suggerira scene e combattimenti.',
+                  label: context.l10n.forgeIncludeEncountersLabel,
+                  subtitle: context.l10n.forgeIncludeEncountersSubtitle,
                   value: _includeEncounters,
                   onChanged: (value) {
                     _markDirty(() {
@@ -660,8 +669,8 @@ extension on _CampaignBuilderPageState {
                 const SizedBox(height: 14),
                 _buildLoreTextField(
                   controller: _safetyNotesController,
-                  label: 'Note di sicurezza',
-                  hintText: 'Temi da evitare, linee e veli, limiti di tono...',
+                  label: context.l10n.forgeSafetyNotesLabel,
+                  hintText: context.l10n.forgeSafetyNotesHint,
                   minLines: 2,
                   maxLines: 4,
                 ),

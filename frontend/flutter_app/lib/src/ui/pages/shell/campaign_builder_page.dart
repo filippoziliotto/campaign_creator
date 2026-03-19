@@ -1,11 +1,13 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../config/app_config.dart';
+import '../../../l10n_extension.dart';
 import '../../../models/campaign_models.dart';
 import '../../../services/backend_api.dart';
 import '../../../theme/fantasy_theme.dart';
@@ -27,16 +29,12 @@ enum _ForgeSection { world, party, narrative }
 
 class _CampaignTypeMeta {
   const _CampaignTypeMeta({
-    required this.badge,
-    required this.description,
     required this.icon,
     required this.colors,
     required this.artAsset,
     required this.atmosphere,
   });
 
-  final String badge;
-  final String description;
   final IconData icon;
   final List<Color> colors;
   final String artAsset;
@@ -144,8 +142,6 @@ const CampaignAtmosphereData _dungeonAtmosphere = CampaignAtmosphereData(
 );
 
 const _CampaignTypeMeta _defaultCampaignMeta = _CampaignTypeMeta(
-  badge: 'Formato',
-  description: 'Formato campagna disponibile nel backend.',
   icon: Icons.auto_awesome_rounded,
   colors: <Color>[FantasyPalette.ember, FantasyPalette.cardSoft],
   artAsset: 'assets/entry_cards/one_shot.jpg',
@@ -155,36 +151,24 @@ const _CampaignTypeMeta _defaultCampaignMeta = _CampaignTypeMeta(
 const Map<String, _CampaignTypeMeta> _campaignTypeMeta =
     <String, _CampaignTypeMeta>{
   'One-Shot': _CampaignTypeMeta(
-    badge: 'Lama rapida',
-    description:
-        'Una missione ad alto impatto da giocare in una sola seduta, con payoff immediato e twist preciso.',
     icon: Icons.bolt_rounded,
     colors: <Color>[Color(0xFFB03A2E), Color(0xFF6D2018)],
     artAsset: 'assets/entry_cards/one_shot.jpg',
     atmosphere: _oneShotAtmosphere,
   ),
   'Mini-campagna': _CampaignTypeMeta(
-    badge: 'Arco breve',
-    description:
-        'Una storia concentrata in poche sessioni, con progressione forte, escalation e finale netto.',
     icon: Icons.alt_route_rounded,
     colors: <Color>[Color(0xFF9A6A2F), Color(0xFF5A3318)],
     artAsset: 'assets/entry_cards/campagna_corta.jpg',
     atmosphere: _miniCampaignAtmosphere,
   ),
   'Campagna lunga': _CampaignTypeMeta(
-    badge: 'Saga ampia',
-    description:
-        'Fazioni, cambi di equilibrio e sottotrame persistenti per una campagna da far crescere nel tempo.',
     icon: Icons.account_tree_rounded,
     colors: <Color>[Color(0xFF47644A), Color(0xFF1E2E22)],
     artAsset: 'assets/entry_cards/campagna_lunga.jpg',
     atmosphere: _longCampaignAtmosphere,
   ),
   'Esplorazione dungeon': _CampaignTypeMeta(
-    badge: 'Profondita',
-    description:
-        'Una discesa strutturata tra mappe, rischio, logoramento e scoperte stratificate.',
     icon: Icons.explore_rounded,
     colors: <Color>[Color(0xFF5E4C80), Color(0xFF292036)],
     artAsset: 'assets/entry_cards/dungeon.jpg',
@@ -193,7 +177,14 @@ const Map<String, _CampaignTypeMeta> _campaignTypeMeta =
 };
 
 class CampaignBuilderPage extends StatefulWidget {
-  const CampaignBuilderPage({super.key});
+  const CampaignBuilderPage({
+    super.key,
+    required this.currentLocale,
+    required this.onLocaleChanged,
+  });
+
+  final Locale currentLocale;
+  final ValueChanged<Locale> onLocaleChanged;
 
   @override
   State<CampaignBuilderPage> createState() => _CampaignBuilderPageState();
@@ -358,7 +349,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         return;
       }
       setState(() {
-        _errorMessage = 'Impossibile caricare le opzioni: $exc';
+        _errorMessage = context.l10n.appLoadOptionsError(exc.toString());
       });
     } finally {
       if (mounted) {
@@ -420,12 +411,18 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       final content = parts.sublist(1).join(':');
       final parsedValues = _parseCustomList(content);
 
-      if (prefix == 'tono' || prefix == 'toni') {
+      if (prefix == 'tono' ||
+          prefix == 'toni' ||
+          prefix == 'tone' ||
+          prefix == 'tones') {
         explicitMode = true;
         for (final value in parsedValues) {
           appendUnique(toneValues, toneLookup[value.toLowerCase()] ?? value);
         }
-      } else if (prefix == 'stile' || prefix == 'stili') {
+      } else if (prefix == 'stile' ||
+          prefix == 'stili' ||
+          prefix == 'style' ||
+          prefix == 'styles') {
         explicitMode = true;
         for (final value in parsedValues) {
           appendUnique(styleValues, styleLookup[value.toLowerCase()] ?? value);
@@ -566,8 +563,10 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     }
 
     if (_selectedArchetypes.length > _partySize) {
-      final message =
-          'Hai selezionato ${_selectedArchetypes.length} archetipi, ma il party e impostato a $_partySize PG.';
+      final message = context.l10n.appInvalidArchetypeSelection(
+        _selectedArchetypes.length,
+        _partySize,
+      );
       setState(() {
         _errorMessage = message;
       });
@@ -596,16 +595,15 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       if (!mounted) {
         return;
       }
-      _showSnackBar('Pergamena forgiata e prompt copiato negli appunti.');
+      _showSnackBar(context.l10n.appSnackForgedAndCopied);
     } catch (exc) {
       if (!mounted) {
         return;
       }
       setState(() {
-        _errorMessage = 'Generazione fallita: $exc';
+        _errorMessage = context.l10n.appGenerationFailedError(exc.toString());
       });
-      _showSnackBar(
-          'Generazione fallita. Controlla il messaggio mostrato nella schermata.');
+      _showSnackBar(context.l10n.appSnackGenerationFailed);
     } finally {
       if (mounted) {
         setState(() {
@@ -626,14 +624,14 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       return;
     }
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Prompt copiato negli appunti.')),
+      SnackBar(content: Text(context.l10n.appSnackPromptCopied)),
     );
   }
 
   Future<void> _sharePrompt() async {
     final prompt = _generatedPrompt;
     if (prompt == null || prompt.trim().isEmpty) {
-      _showSnackBar('Non c e ancora una pergamena da condividere.');
+      _showSnackBar(context.l10n.appSnackNoParchmentToShare);
       return;
     }
 
@@ -641,22 +639,22 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       await SharePlus.instance.share(
         ShareParams(
           text: prompt,
-          title: 'Pergamena della campagna',
-          subject: 'Prompt campagna D&D',
+          title: context.l10n.parchmentReadyTitle,
+          subject: context.l10n.appTitle,
         ),
       );
     } catch (exc) {
       if (!mounted) {
         return;
       }
-      _showSnackBar('Condivisione non disponibile: $exc');
+      _showSnackBar(context.l10n.appSnackShareUnavailable(exc.toString()));
     }
   }
 
   Future<void> _openPromptInChatGpt() async {
     final prompt = _generatedPrompt;
     if (prompt == null || prompt.trim().isEmpty) {
-      _showSnackBar('Genera prima una pergamena da inviare.');
+      _showSnackBar(context.l10n.appSnackGenerateFirst);
       return;
     }
 
@@ -674,11 +672,11 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       return;
     }
     if (launched) {
-      _showSnackBar('ChatGPT aperto. Il prompt e gia negli appunti.');
+      _showSnackBar(context.l10n.appSnackChatGptOpened);
       return;
     }
 
-    _showSnackBar('Impossibile aprire ChatGPT, ma il prompt e stato copiato.');
+    _showSnackBar(context.l10n.appSnackChatGptCopiedOnly);
   }
 
   Future<void> _loadSavedDraftState() async {
@@ -712,7 +710,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   Future<bool> _savePromptDraft({bool showFeedback = true}) async {
     final prompt = _generatedPrompt;
     if (prompt == null || prompt.trim().isEmpty) {
-      _showSnackBar('Non c e nessuna pergamena da salvare.');
+      _showSnackBar(context.l10n.appSnackNoParchmentToSave);
       return false;
     }
 
@@ -748,8 +746,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     if (showFeedback) {
       _showSnackBar(
         persisted
-            ? 'Bozza della pergamena salvata in locale.'
-            : 'Bozza salvata solo in memoria. Riavvia completamente l app per abilitare la persistenza locale.',
+            ? context.l10n.appSnackDraftSaved
+            : context.l10n.appSnackDraftMemoryOnly,
       );
     }
     return persisted;
@@ -763,8 +761,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     }
     _showSnackBar(
       persisted
-          ? 'Pergamena sigillata: bozza salvata e prompt copiato.'
-          : 'Pergamena sigillata: prompt copiato. Riavvia completamente l app per abilitare il salvataggio locale.',
+          ? context.l10n.appSnackSealedSavedAndCopied
+          : context.l10n.appSnackSealedCopiedOnlyMemory,
     );
   }
 
@@ -773,9 +771,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   }) async {
     if (!_draftPersistenceAvailable) {
       if (notifyOnFailure) {
-        _showSnackBar(
-          'Salvataggio locale non disponibile in questa sessione. Chiudi e rilancia l app per registrare il plugin.',
-        );
+        _showSnackBar(context.l10n.appSnackLocalSaveUnavailable);
       }
       return null;
     }
@@ -801,9 +797,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     }
 
     if (notifyUser && mounted) {
-      _showSnackBar(
-        'Salvataggio locale non disponibile in questa sessione. Chiudi e rilancia l app per registrare il plugin.',
-      );
+      _showSnackBar(context.l10n.appSnackLocalSaveUnavailable);
     }
   }
 
@@ -874,11 +868,11 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     if (!_isForgePrimaryActionEnabled()) {
       final message = switch (_forgeSection) {
         _ForgeSection.world =>
-          'Definisci almeno tono, stile o temi prima di passare al party.',
+          context.l10n.forgeAdvanceBlockedWorld,
         _ForgeSection.party =>
-          'Controlla livello, dimensione e archetipi del party prima di procedere.',
+          context.l10n.forgeAdvanceBlockedParty,
         _ForgeSection.narrative =>
-          'Aggiungi almeno un dettaglio narrativo prima di forgiare la pergamena.',
+          context.l10n.forgeAdvanceBlockedNarrative,
       };
       setState(() {
         _errorMessage = message;
@@ -927,7 +921,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     if (customSetting.isNotEmpty) {
       return customSetting;
     }
-    return _selectedSetting ?? 'Ambientazione da definire';
+    return _selectedSetting ?? context.l10n.appSettingPending;
   }
 
   String _currentTwistLabel() {
@@ -935,7 +929,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     if (customTwist.isNotEmpty) {
       return customTwist;
     }
-    return _selectedTwist ?? 'Twist da definire';
+    return _selectedTwist ?? context.l10n.appTwistPending;
   }
 
   double _contextProgress() {
@@ -974,10 +968,10 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
   List<String> _summaryTokens({int? limit}) {
     final tokens = <String>[
-      _selectedCampaignType ?? 'Formato libero',
+      _selectedCampaignType ?? context.l10n.appFreeFormat,
       _currentSettingLabel(),
-      'Lv $_partyLevel',
-      '$_partySize PG',
+      context.l10n.appSummaryLevel(_partyLevel),
+      context.l10n.appSummaryPartySize(_partySize),
     ];
 
     if (_selectedThemes.isNotEmpty) {
@@ -987,7 +981,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       tokens.add(_selectedTones.take(2).join(' + '));
     }
     if (_selectedPreset != null) {
-      tokens.add('Preset: $_selectedPreset');
+      tokens.add(context.l10n.appSummaryPreset(_selectedPreset!));
     }
 
     if (limit == null || tokens.length <= limit) {
@@ -1015,6 +1009,36 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     }
 
     return _defaultCampaignMeta;
+  }
+
+  String _localizedCampaignBadge(String? campaignType) {
+    switch (campaignType) {
+      case 'One-Shot':
+        return context.l10n.entryBadgeOneShot;
+      case 'Mini-campagna':
+        return context.l10n.entryBadgeMiniCampaign;
+      case 'Campagna lunga':
+        return context.l10n.entryBadgeLongCampaign;
+      case 'Esplorazione dungeon':
+        return context.l10n.entryBadgeDungeon;
+      default:
+        return context.l10n.entryBadgeDefault;
+    }
+  }
+
+  String _localizedCampaignDescription(String? campaignType) {
+    switch (campaignType) {
+      case 'One-Shot':
+        return context.l10n.entryDescriptionOneShot;
+      case 'Mini-campagna':
+        return context.l10n.entryDescriptionMiniCampaign;
+      case 'Campagna lunga':
+        return context.l10n.entryDescriptionLongCampaign;
+      case 'Esplorazione dungeon':
+        return context.l10n.entryDescriptionDungeon;
+      default:
+        return context.l10n.entryDescriptionDefault;
+    }
   }
 
   CampaignAtmosphereData _currentAtmosphere([CampaignOptions? options]) {
@@ -1052,7 +1076,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
   String? _savedDraftLabel() {
     if (!_draftPersistenceAvailable) {
-      return 'Bozza mantenuta solo in memoria. Riavvia completamente l app per riattivare il salvataggio locale.';
+      return context.l10n.appDraftMemoryOnly;
     }
 
     final savedAt = _savedDraftSavedAt;
@@ -1061,52 +1085,49 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     }
 
     final timestamp = DateTime.fromMillisecondsSinceEpoch(savedAt).toLocal();
-    String twoDigits(int value) => value.toString().padLeft(2, '0');
-
-    final dateLabel =
-        '${twoDigits(timestamp.day)}/${twoDigits(timestamp.month)}/${timestamp.year}';
-    final timeLabel =
-        '${twoDigits(timestamp.hour)}:${twoDigits(timestamp.minute)}';
+    final formattedDateTime = DateFormat.yMd(
+      widget.currentLocale.toLanguageTag(),
+    ).add_Hm().format(timestamp);
 
     if (_isCurrentDraftSaved()) {
-      return 'Bozza locale allineata il $dateLabel alle $timeLabel.';
+      return context.l10n.appDraftAligned(formattedDateTime);
     }
 
-    return 'Ultima bozza salvata il $dateLabel alle $timeLabel.';
+    return context.l10n.appDraftLastSaved(formattedDateTime);
   }
 
   String _appStageLabel(_AppStage stage) {
     switch (stage) {
       case _AppStage.entry:
-        return 'Scelta';
+        return context.l10n.appStageEntry;
       case _AppStage.forge:
-        return 'Forgia';
+        return context.l10n.appStageForge;
       case _AppStage.parchment:
-        return 'Pergamena';
+        return context.l10n.appStageParchment;
     }
   }
 
   String _forgeSectionLabel(_ForgeSection section) {
     switch (section) {
       case _ForgeSection.world:
-        return 'Mondo';
+        return context.l10n.forgeSectionWorld;
       case _ForgeSection.party:
-        return 'Party';
+        return context.l10n.forgeSectionParty;
       case _ForgeSection.narrative:
-        return 'Trama';
+        return context.l10n.forgeSectionNarrative;
     }
   }
 
   String _nextForgeActionLabel() {
     switch (_forgeSection) {
       case _ForgeSection.world:
-        return 'Vai al Party';
+        return context.l10n.forgeNextParty;
       case _ForgeSection.party:
-        return 'Vai alla Trama';
+        return context.l10n.forgeNextNarrative;
       case _ForgeSection.narrative:
         return _hasUnsavedChanges && _generatedPrompt != null
-            ? 'Riforgia la Pergamena'
-            : 'Forgia la Pergamena';
+            ? context.l10n.forgeReforgeParchment
+            : context.l10n.forgeForgeParchment;
     }
   }
 
@@ -1268,7 +1289,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   Widget _buildPersistentTopBar() {
     final atmosphere = _currentAtmosphere();
     final theme = _resolvedAtmosphereTheme();
-    final campaignTypeLabel = _selectedCampaignType ?? 'Formato libero';
+    final campaignTypeLabel = _selectedCampaignType ?? context.l10n.appFreeFormat;
     final header = Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1299,7 +1320,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   Text(
-                    'Creatore Campagne',
+                    context.l10n.appNameShort,
                     style: theme.textTheme.titleSmall,
                   ),
                   Container(
@@ -1340,6 +1361,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       },
     );
 
+    final languageSwitch = _buildLanguageSwitch();
     final action = _buildTopBarAction();
 
     return Container(
@@ -1373,13 +1395,16 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                   header,
                   const SizedBox(height: 12),
                   stageSummary,
-                  if (action != null) ...[
-                    const SizedBox(height: 12),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: action,
-                    ),
-                  ],
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      languageSwitch,
+                      if (action != null) action,
+                    ],
+                  ),
                 ],
               ),
             );
@@ -1397,11 +1422,18 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          languageSwitch,
+                          if (action != null) ...[
+                            const SizedBox(width: 10),
+                            action,
+                          ],
+                        ],
+                      ),
+                      const SizedBox(height: 12),
                       stageSummary,
-                      if (action != null) ...[
-                        const SizedBox(height: 12),
-                        action,
-                      ],
                     ],
                   ),
                 ),
@@ -1424,15 +1456,49 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         return FilledButton.icon(
           onPressed: () => _goToStage(_AppStage.parchment),
           icon: const Icon(Icons.description_rounded),
-          label: const Text('Apri pergamena'),
+          label: Text(context.l10n.appOpenParchment),
         );
       case _AppStage.parchment:
         return FilledButton.icon(
           onPressed: _sealCurrentParchment,
           icon: const Icon(Icons.approval_rounded),
-          label: const Text('Sigilla pergamena'),
+          label: Text(context.l10n.appSealParchment),
         );
     }
+  }
+
+  Widget _buildLanguageSwitch() {
+    final selectedCode = widget.currentLocale.languageCode;
+    return Theme(
+      data: _resolvedAtmosphereTheme().copyWith(
+        segmentedButtonTheme: SegmentedButtonThemeData(
+          style: ButtonStyle(
+            visualDensity: VisualDensity.compact,
+            padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
+              EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            ),
+          ),
+        ),
+      ),
+      child: SegmentedButton<String>(
+        showSelectedIcon: false,
+        segments: <ButtonSegment<String>>[
+          ButtonSegment<String>(
+            value: 'it',
+            label: Text(context.l10n.languageItalianShort),
+          ),
+          ButtonSegment<String>(
+            value: 'en',
+            label: Text(context.l10n.languageEnglishShort),
+          ),
+        ],
+        selected: <String>{selectedCode},
+        onSelectionChanged: (selection) {
+          final languageCode = selection.first;
+          widget.onLocaleChanged(Locale(languageCode));
+        },
+      ),
+    );
   }
 
   Widget _buildErrorBanner(String message) {
@@ -1500,14 +1566,13 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 540),
           child: SectionFrame(
-            eyebrow: 'Rituale interrotto',
-            title: 'Il grimorio non risponde',
-            subtitle:
-                _errorMessage ?? 'Errore sconosciuto nel caricamento opzioni.',
+            eyebrow: context.l10n.appErrorEyebrow,
+            title: context.l10n.appErrorTitle,
+            subtitle: _errorMessage ?? context.l10n.appErrorUnknownLoad,
             icon: Icons.error_outline_rounded,
             child: FilledButton(
               onPressed: _loadOptions,
-              child: const Text('Riprova'),
+              child: Text(context.l10n.commonRetry),
             ),
           ),
         ),

@@ -1,0 +1,108 @@
+import 'package:campaign_creator_flutter/src/app.dart';
+import 'package:campaign_creator_flutter/src/l10n_extension.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+void main() {
+  setUp(() {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+  });
+
+  testWidgets('CampaignCreatorApp defaults to Italian on first launch', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      CampaignCreatorApp(
+        homeBuilder: (_, onLocaleChanged) => _LocaleProbe(
+          onLocaleChanged: onLocaleChanged,
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    expect(find.text('Creatore Campagne D&D'), findsOneWidget);
+    expect(find.text('locale:it'), findsOneWidget);
+    expect(find.text('🇮🇹 IT | 🇬🇧 EN'), findsOneWidget);
+  });
+
+  testWidgets('CampaignCreatorApp switches locale at runtime without restart', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      CampaignCreatorApp(
+        homeBuilder: (_, onLocaleChanged) => _LocaleProbe(
+          onLocaleChanged: onLocaleChanged,
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('switch-en')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('D&D Campaign Creator'), findsOneWidget);
+    expect(find.text('locale:en'), findsOneWidget);
+  });
+
+  testWidgets('CampaignCreatorApp restores the saved locale on startup', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      'app.locale_code': 'en',
+    });
+
+    await tester.pumpWidget(
+      CampaignCreatorApp(
+        homeBuilder: (_, onLocaleChanged) => _LocaleProbe(
+          onLocaleChanged: onLocaleChanged,
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    expect(find.text('D&D Campaign Creator'), findsOneWidget);
+    expect(find.text('locale:en'), findsOneWidget);
+  });
+}
+
+class _LocaleProbe extends StatelessWidget {
+  const _LocaleProbe({
+    required this.onLocaleChanged,
+  });
+
+  final ValueChanged<Locale> onLocaleChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final localeCode = Localizations.localeOf(context).languageCode;
+
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(context.l10n.appTitle),
+            Text('locale:$localeCode'),
+            Text(
+              '${context.l10n.languageItalianShort} | ${context.l10n.languageEnglishShort}',
+            ),
+            const SizedBox(height: 12),
+            TextButton(
+              key: const Key('switch-it'),
+              onPressed: () => onLocaleChanged(const Locale('it')),
+              child: const Text('IT'),
+            ),
+            TextButton(
+              key: const Key('switch-en'),
+              onPressed: () => onLocaleChanged(const Locale('en')),
+              child: const Text('EN'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -23,10 +23,10 @@ extension on _CampaignBuilderPageState {
   Widget _buildParchmentSidebar() {
     final atmosphere = _currentAtmosphere();
     return SectionFrame(
-      title: 'Pergamena pronta',
+      title: context.l10n.parchmentReadyTitle,
       subtitle: _hasUnsavedChanges
-          ? 'Hai modificato la forgia: il prompt copiato non e piu aggiornato.'
-          : 'Il prompt copiato e allineato con lo stato attuale della forgia.',
+          ? context.l10n.parchmentReadySubtitleStale
+          : context.l10n.parchmentReadySubtitleAligned,
       density: FrameDensity.featured,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

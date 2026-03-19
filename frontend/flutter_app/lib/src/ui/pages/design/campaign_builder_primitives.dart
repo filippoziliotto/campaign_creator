@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:campaign_creator_flutter/src/l10n_extension.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -479,7 +480,7 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
                             Text(
                               widget.description,
                               style: descriptionStyle,
-                              maxLines: compactCopy ? 1 : 2,
+                              maxLines: (compactCopy || showCallToAction) ? 1 : 2,
                               overflow: TextOverflow.ellipsis,
                             ),
                             if (showCallToAction) ...[
@@ -487,7 +488,7 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
                               Row(
                                 children: [
                                   Text(
-                                    'Apri la forgia',
+                                    context.l10n.entryOpenForge,
                                     style: Theme.of(context).textTheme.labelLarge,
                                   ),
                                   const SizedBox(width: 4),
@@ -1063,7 +1064,7 @@ class SignalStatusRow extends StatelessWidget {
               color: accent.withValues(alpha: 0.14),
             ),
             child: Text(
-              ready ? 'Pronto' : 'Da rifinire',
+              ready ? context.l10n.statusReady : context.l10n.statusNeedsPolish,
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: accent,
                   ),
@@ -1313,9 +1314,9 @@ class ForgeActionStrip extends StatelessWidget {
         parchmentReady && !hasUnsavedChanges ? colorScheme.secondary : colorScheme.primary;
     final parchmentStatusText = parchmentReady
         ? (hasUnsavedChanges
-            ? 'Configurazione modificata: rigenera.'
-            : 'Pergamena aggiornata.')
-        : 'Completa la trama per generare.';
+            ? context.l10n.forgeParchmentDirty
+            : context.l10n.forgeParchmentReady)
+        : context.l10n.forgeParchmentIncomplete;
 
     return Container(
       decoration: BoxDecoration(
@@ -1414,7 +1415,7 @@ class ForgeActionStrip extends StatelessWidget {
                     OutlinedButton.icon(
                       onPressed: onOpenParchment,
                       icon: const Icon(Icons.visibility_rounded, size: 16),
-                      label: const Text('Apri'),
+                      label: Text(context.l10n.commonOpen),
                     ),
                   ],
                 ],

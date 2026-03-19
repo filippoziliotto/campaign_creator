@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n_extension.dart';
 import '../../../theme/fantasy_theme.dart';
 import '../design/campaign_builder_atmosphere.dart';
 
@@ -485,12 +486,12 @@ class ForgedParchmentSuccessSheet extends StatelessWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 _ParchmentStatChip(
-                  label: 'Prompt copiato',
+                  label: context.l10n.parchmentPromptCopied,
                   icon: Icons.check_circle_outline_rounded,
                   atmosphere: atmosphere,
                 ),
                 _ParchmentStatChip(
-                  label: atmosphere.label,
+                  label: _localizedAtmosphereLabel(context, atmosphere),
                   icon: Icons.auto_awesome_rounded,
                   atmosphere: atmosphere,
                 ),
@@ -501,8 +502,7 @@ class ForgedParchmentSuccessSheet extends StatelessWidget {
               _ParchmentBanner(
                 atmosphere: atmosphere,
                 icon: Icons.refresh_rounded,
-                text:
-                    'Hai modificato la forgia dopo l ultima generazione. Rigenera per aggiornare il prompt copiato.',
+                text: context.l10n.parchmentCopiedStaleBanner,
               ),
               const SizedBox(height: 18),
             ],
@@ -533,13 +533,13 @@ class ForgedParchmentSuccessSheet extends StatelessWidget {
                       ),
                       const SizedBox(height: 22),
                       Text(
-                        'Prompt copiato',
+                        context.l10n.parchmentPromptCopied,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        'La pergamena e stata forgiata con successo. Usa i rituali a destra per condividerla, salvarla o aprirla in ChatGPT.',
+                        context.l10n.parchmentCopiedSuccessBody,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
@@ -586,7 +586,7 @@ class ParchmentActionRail extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                'Azioni rapide',
+                context.l10n.parchmentQuickActionsTitle,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
@@ -601,24 +601,24 @@ class ParchmentActionRail extends StatelessWidget {
         _ActionRailTile(
           atmosphere: atmosphere,
           icon: Icons.copy_rounded,
-          title: 'Copia prompt',
-          subtitle: 'Invia il prompt negli appunti.',
+          title: context.l10n.parchmentCopyPromptTitle,
+          subtitle: context.l10n.parchmentCopyPromptSubtitle,
           onTap: onCopy,
         ),
         const SizedBox(height: 10),
         _ActionRailTile(
           atmosphere: atmosphere,
           icon: Icons.ios_share_rounded,
-          title: 'Condividi',
-          subtitle: 'Apre il menu di condivisione.',
+          title: context.l10n.parchmentShareTitle,
+          subtitle: context.l10n.parchmentShareSubtitle,
           onTap: onShare,
         ),
         const SizedBox(height: 10),
         _ActionRailTile(
           atmosphere: atmosphere,
           icon: Icons.open_in_new_rounded,
-          title: 'Apri in ChatGPT',
-          subtitle: 'Apre ChatGPT in una nuova scheda.',
+          title: context.l10n.parchmentOpenChatGptTitle,
+          subtitle: context.l10n.parchmentOpenChatGptSubtitle,
           onTap: onOpenChatGpt,
         ),
         const SizedBox(height: 10),
@@ -627,13 +627,33 @@ class ParchmentActionRail extends StatelessWidget {
           icon: isCurrentDraftSaved
               ? Icons.bookmark_added_rounded
               : Icons.bookmark_border_rounded,
-          title: isCurrentDraftSaved ? 'Bozza aggiornata' : 'Salva bozza',
+          title: isCurrentDraftSaved
+              ? context.l10n.parchmentDraftUpdatedTitle
+              : context.l10n.parchmentSaveDraftTitle,
           subtitle: savedDraftLabel ??
-              'Salva il prompt localmente per dopo.',
+              context.l10n.parchmentSaveDraftSubtitle,
           onTap: onSaveDraft,
         ),
       ],
     );
+  }
+}
+
+String _localizedAtmosphereLabel(
+  BuildContext context,
+  CampaignAtmosphereData atmosphere,
+) {
+  switch (atmosphere.id) {
+    case 'one-shot':
+      return context.l10n.atmosphereOneShot;
+    case 'mini-campaign':
+      return context.l10n.atmosphereMiniCampaign;
+    case 'long-campaign':
+      return context.l10n.atmosphereLongCampaign;
+    case 'dungeon':
+      return context.l10n.atmosphereDungeon;
+    default:
+      return atmosphere.label;
   }
 }
 
@@ -986,7 +1006,7 @@ class _WaxSealButton extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'SIGILLA',
+                    context.l10n.parchmentSeal,
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
                           color: FantasyPalette.parchment,
                           letterSpacing: 1.5,
@@ -999,7 +1019,7 @@ class _WaxSealButton extends StatelessWidget {
           if (!compact) ...[
             const SizedBox(height: 10),
             Text(
-              'Sigilla e copia',
+              context.l10n.parchmentSealAndCopy,
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ],

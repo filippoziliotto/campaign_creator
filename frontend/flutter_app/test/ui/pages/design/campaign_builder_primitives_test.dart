@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:campaign_creator_flutter/src/theme/fantasy_theme.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_atmosphere.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_primitives.dart';
@@ -35,27 +36,24 @@ void main() {
     'CampaignModeCard fits within its compact height without overflow',
     (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          theme: buildFantasyTheme(),
-          home: Scaffold(
-            body: Center(
-              child: SizedBox(
-                width: 399.2,
-                child: CampaignModeCard(
-                  atmosphere: _testAtmosphere,
-                  title: 'Campagna lunga',
-                  badge: 'Saga ampia',
-                  description:
-                      'Fazioni, cambi di equilibrio e sottotrame persistenti per una campagna da far crescere nel tempo.',
-                  icon: Icons.account_tree_rounded,
-                  colors: const <Color>[
-                    Color(0xFF47644A),
-                    Color(0xFF1E2E22),
-                  ],
-                  artAsset: 'assets/entry_cards/campagna_lunga.jpg',
-                  selected: false,
-                  onTap: () {},
-                ),
+        _localizedTestApp(
+          child: Center(
+            child: SizedBox(
+              width: 399.2,
+              child: CampaignModeCard(
+                atmosphere: _testAtmosphere,
+                title: 'Campagna lunga',
+                badge: 'Saga ampia',
+                description:
+                    'Fazioni, cambi di equilibrio e sottotrame persistenti per una campagna da far crescere nel tempo.',
+                icon: Icons.account_tree_rounded,
+                colors: const <Color>[
+                  Color(0xFF47644A),
+                  Color(0xFF1E2E22),
+                ],
+                artAsset: 'assets/entry_cards/campagna_lunga.jpg',
+                selected: false,
+                onTap: () {},
               ),
             ),
           ),
@@ -74,26 +72,23 @@ void main() {
     'CampaignModeCard emphasizes CTA only when selected',
     (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          theme: buildFantasyTheme(),
-          home: Scaffold(
-            body: Center(
-              child: SizedBox(
-                width: 399.2,
-                child: CampaignModeCard(
-                  atmosphere: _testAtmosphere,
-                  title: 'One-Shot',
-                  badge: 'Lama rapida',
-                  description: 'Una missione ad alto impatto.',
-                  icon: Icons.bolt_rounded,
-                  colors: const <Color>[
-                    Color(0xFFB03A2E),
-                    Color(0xFF6D2018),
-                  ],
-                  artAsset: 'assets/entry_cards/one_shot.jpg',
-                  selected: true,
-                  onTap: () {},
-                ),
+        _localizedTestApp(
+          child: Center(
+            child: SizedBox(
+              width: 399.2,
+              child: CampaignModeCard(
+                atmosphere: _testAtmosphere,
+                title: 'One-Shot',
+                badge: 'Lama rapida',
+                description: 'Una missione ad alto impatto.',
+                icon: Icons.bolt_rounded,
+                colors: const <Color>[
+                  Color(0xFFB03A2E),
+                  Color(0xFF6D2018),
+                ],
+                artAsset: 'assets/entry_cards/one_shot.jpg',
+                selected: true,
+                onTap: () {},
               ),
             ),
           ),
@@ -110,17 +105,14 @@ void main() {
     'StagePill uses contrasting index text color when completed',
     (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          theme: buildFantasyTheme(),
-          home: const Scaffold(
-            body: StagePill(
-              index: 3,
-              label: 'Pergamena',
-              active: false,
-              enabled: true,
-              completed: true,
-              onTap: null,
-            ),
+        _localizedTestApp(
+          child: const StagePill(
+            index: 3,
+            label: 'Pergamena',
+            active: false,
+            enabled: true,
+            completed: true,
+            onTap: null,
           ),
         ),
       );
@@ -134,22 +126,19 @@ void main() {
     'ForgeActionStrip does not render the previous button',
     (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          theme: buildFantasyTheme(),
-          home: Scaffold(
-            body: ForgeActionStrip(
-              atmosphere: _testAtmosphere,
-              readinessHint: 'Pronto a forgiare.',
-              isPrimaryEnabled: true,
-              isGenerating: false,
-              primaryLabel: 'Avanza',
-              primaryIcon: Icons.arrow_forward_rounded,
-              onRetreat: () {},
-              onAdvance: () {},
-              parchmentReady: false,
-              hasUnsavedChanges: false,
-              onOpenParchment: () {},
-            ),
+        _localizedTestApp(
+          child: ForgeActionStrip(
+            atmosphere: _testAtmosphere,
+            readinessHint: 'Pronto a forgiare.',
+            isPrimaryEnabled: true,
+            isGenerating: false,
+            primaryLabel: 'Avanza',
+            primaryIcon: Icons.arrow_forward_rounded,
+            onRetreat: () {},
+            onAdvance: () {},
+            parchmentReady: false,
+            hasUnsavedChanges: false,
+            onOpenParchment: () {},
           ),
         ),
       );
@@ -166,13 +155,10 @@ void main() {
     'SectionFrame defaults to compact framing without decorative divider',
     (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          theme: buildFantasyTheme(),
-          home: const Scaffold(
-            body: SectionFrame(
-              title: 'Titolo sezione',
-              child: Text('Contenuto'),
-            ),
+        _localizedTestApp(
+          child: const SectionFrame(
+            title: 'Titolo sezione',
+            child: Text('Contenuto'),
           ),
         ),
       );
@@ -183,5 +169,15 @@ void main() {
       expect(find.text('Contenuto'), findsOneWidget);
       expect(find.byType(RuneDivider), findsNothing);
     },
+  );
+}
+
+Widget _localizedTestApp({required Widget child}) {
+  return MaterialApp(
+    locale: const Locale('it'),
+    theme: buildFantasyTheme(),
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    home: Scaffold(body: child),
   );
 }

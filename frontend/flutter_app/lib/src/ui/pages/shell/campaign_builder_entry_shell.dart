@@ -28,7 +28,7 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildCampaignModeGrid(CampaignOptions options) {
     return SectionFrame(
-      title: 'Tipi di campagna',
+      title: context.l10n.entryCampaignTypesTitle,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final spacing = constraints.maxWidth < 760 ? 12.0 : 16.0;
@@ -49,8 +49,8 @@ extension on _CampaignBuilderPageState {
                 child: CampaignModeCard(
                   atmosphere: meta.atmosphere,
                   title: campaignType,
-                  badge: meta.badge,
-                  description: meta.description,
+                  badge: _localizedCampaignBadge(campaignType),
+                  description: _localizedCampaignDescription(campaignType),
                   icon: meta.icon,
                   colors: meta.colors,
                   artAsset: meta.artAsset,
@@ -82,12 +82,12 @@ extension on _CampaignBuilderPageState {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Riprendi la sessione',
+            context.l10n.entryResumeTitle,
             style: _resolvedAtmosphereTheme().textTheme.titleMedium,
           ),
           const SizedBox(height: 6),
           Text(
-            'Hai gia una bozza attiva. Torna subito al punto giusto.',
+            context.l10n.entryResumeSubtitle,
             style: _resolvedAtmosphereTheme().textTheme.bodySmall,
           ),
           const SizedBox(height: 12),
@@ -108,13 +108,13 @@ extension on _CampaignBuilderPageState {
                   children: [
                     FilledButton(
                       onPressed: () => _goToForge(_forgeSection),
-                      child: const Text('Riprendi la forgia'),
+                      child: Text(context.l10n.entryResumeForge),
                     ),
                     if (_generatedPrompt != null) ...[
                       const SizedBox(height: 10),
                       OutlinedButton(
                         onPressed: () => _goToStage(_AppStage.parchment),
-                        child: const Text('Apri la pergamena'),
+                        child: Text(context.l10n.entryOpenParchment),
                       ),
                     ],
                   ],
@@ -126,7 +126,7 @@ extension on _CampaignBuilderPageState {
                   Expanded(
                     child: FilledButton(
                       onPressed: () => _goToForge(_forgeSection),
-                      child: const Text('Riprendi la forgia'),
+                      child: Text(context.l10n.entryResumeForge),
                     ),
                   ),
                   if (_generatedPrompt != null) ...[
@@ -134,7 +134,7 @@ extension on _CampaignBuilderPageState {
                     Expanded(
                       child: OutlinedButton(
                         onPressed: () => _goToStage(_AppStage.parchment),
-                        child: const Text('Apri la pergamena'),
+                        child: Text(context.l10n.entryOpenParchment),
                       ),
                     ),
                   ],
