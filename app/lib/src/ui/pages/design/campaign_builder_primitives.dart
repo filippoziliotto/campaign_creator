@@ -627,7 +627,7 @@ class StagePill extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(999),
       child: Ink(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(999),
@@ -637,8 +637,8 @@ class StagePill extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 22,
-              height: 22,
+              width: 18,
+              height: 18,
               decoration: BoxDecoration(
                 color: indexFillColor,
                 shape: BoxShape.circle,
@@ -648,18 +648,51 @@ class StagePill extends StatelessWidget {
                 '$index',
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: indexTextColor,
-                    ),
+                ),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 6),
             Text(
               label,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontSize: 13,
+                    height: 1.1,
                     color: enabled
                         ? colorScheme.onSurface
                         : colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
                   ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class StagePillRibbon extends StatelessWidget {
+  const StagePillRibbon({
+    super.key,
+    required this.children,
+    this.spacing = 8,
+  });
+
+  final List<Widget> children;
+  final double spacing;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        clipBehavior: Clip.none,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var index = 0; index < children.length; index++) ...[
+              if (index > 0) SizedBox(width: spacing),
+              children[index],
+            ],
           ],
         ),
       ),

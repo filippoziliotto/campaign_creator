@@ -123,6 +123,58 @@ void main() {
   );
 
   testWidgets(
+    'StagePill sequence stays on one row when enough horizontal space exists',
+    (tester) async {
+      await tester.pumpWidget(
+        _localizedTestApp(
+          child: Center(
+            child: SizedBox(
+              width: 320,
+              child: StagePillRibbon(
+                children: const [
+                  StagePill(
+                    index: 1,
+                    label: 'Scelta',
+                    active: true,
+                    enabled: true,
+                    completed: true,
+                    onTap: null,
+                  ),
+                  StagePill(
+                    index: 2,
+                    label: 'Forgia',
+                    active: false,
+                    enabled: true,
+                    completed: false,
+                    onTap: null,
+                  ),
+                  StagePill(
+                    index: 3,
+                    label: 'Pergamena',
+                    active: false,
+                    enabled: true,
+                    completed: false,
+                    onTap: null,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pump();
+
+      final sceltaY = tester.getCenter(find.text('Scelta')).dy;
+      final forgiaY = tester.getCenter(find.text('Forgia')).dy;
+      final pergamenaY = tester.getCenter(find.text('Pergamena')).dy;
+
+      expect(forgiaY, sceltaY);
+      expect(pergamenaY, sceltaY);
+    },
+  );
+
+  testWidgets(
     'ForgeActionStrip does not render the previous button',
     (tester) async {
       await tester.pumpWidget(

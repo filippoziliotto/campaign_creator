@@ -1535,27 +1535,27 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   }
 
   Widget _buildAppStageRibbon() {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: _AppStage.values.map((stage) {
-        final active = _appStage == stage;
-        final enabled = _isStageUnlocked(stage);
-        final completed = stage == _AppStage.entry
-            ? _selectedCampaignType != null
-            : stage == _AppStage.forge
-                ? _generatedPrompt != null
-                : _generatedPrompt != null && !_hasUnsavedChanges;
+    final pills = _AppStage.values.map((stage) {
+      final active = _appStage == stage;
+      final enabled = _isStageUnlocked(stage);
+      final completed = stage == _AppStage.entry
+          ? _selectedCampaignType != null
+          : stage == _AppStage.forge
+              ? _generatedPrompt != null
+              : _generatedPrompt != null && !_hasUnsavedChanges;
 
-        return StagePill(
-          index: _AppStage.values.indexOf(stage) + 1,
-          label: _appStageLabel(stage),
-          active: active,
-          enabled: enabled,
-          completed: completed,
-          onTap: enabled ? () => _goToStage(stage) : null,
-        );
-      }).toList(),
+      return StagePill(
+        index: _AppStage.values.indexOf(stage) + 1,
+        label: _appStageLabel(stage),
+        active: active,
+        enabled: enabled,
+        completed: completed,
+        onTap: enabled ? () => _goToStage(stage) : null,
+      );
+    }).toList();
+
+    return StagePillRibbon(
+      children: pills,
     );
   }
 
