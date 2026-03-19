@@ -1,100 +1,87 @@
-# Forgia Prompt Campagne D&D
+# Campaign Forge — D&D Campaign Creator
 
-Generatore prompt per campagne D&D con:
-- frontend Streamlit (web)
-- frontend Flutter (mobile)
-- backend Python condiviso
+A D&D campaign prompt generator with a Flutter mobile app and a Python API backend.
 
-La lingua di output resta italiano.
+## Architecture
 
-## Architettura
-- `frontend/streamlit_app/`: UI Streamlit che usa direttamente i moduli backend Python.
-- `frontend/flutter_app/`: UI Flutter che chiama backend via API HTTP.
-- `backend/story_selector/`: validazione input, regole di generazione prompt, rendering template.
-- `backend/api/`: adapter FastAPI con endpoint `/health`, `/options`, `/generate`.
-- `app.py`: entrypoint minimale per avviare Streamlit.
+- `app/` — Flutter frontend (iOS + Android)
+- `server/` — Python FastAPI backend
+  - `server/api/` — HTTP endpoints (`/health`, `/options`, `/generate`)
+  - `server/story_selector/` — prompt generation logic, templates, schema
+- `docs/` — privacy policy and project documentation
 
-## Setup Python
+## Setup
+
+### Backend
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r server/requirements.txt
 ```
 
-## Avvio Streamlit
+Start the server:
+
 ```bash
-streamlit run app.py
+bash scripts/start_server.sh
+# or directly:
+uvicorn server.api.app:app --reload --host 0.0.0.0 --port 8000
 ```
 
-## Avvio API Backend (per Flutter)
-```bash
-uvicorn backend.api.app:app --reload --host 0.0.0.0 --port 8000
-```
+### Flutter App
 
-## Avvio Flutter
-Prerequisito: Flutter SDK installato.
+Requires Flutter SDK.
 
 ```bash
-cd frontend/flutter_app
-flutter create .          # necessario solo la prima volta per generare i folder piattaforma
+cd app
 flutter pub get
 flutter run --dart-define=API_BASE_URL=http://127.0.0.1:8000
 ```
 
-Per Android emulator usa `http://10.0.2.2:8000`.
+For Android emulator use `http://10.0.2.2:8000`.
 
-## Struttura
+## Structure
+
 ```text
 .
-├── app.py
-├── backend
-│   ├── __init__.py
-│   ├── api
-│   │   ├── __init__.py
+├── .github/
+│   └── workflows/
+│       ├── flutter.yml
+│       └── server.yml
+├── app/
+│   ├── lib/
+│   │   ├── main.dart
+│   │   └── src/
+│   │       ├── app.dart
+│   │       ├── config/
+│   │       ├── models/
+│   │       ├── services/
+│   │       ├── theme/
+│   │       └── ui/
+│   ├── android/
+│   ├── ios/
+│   ├── assets/
+│   └── pubspec.yaml
+├── server/
+│   ├── api/
 │   │   └── app.py
-│   └── story_selector
-│       ├── __init__.py
-│       ├── schema.py
-│       ├── prompt_builder.py
-│       ├── render.py
-│       ├── data
-│       │   └── options.yaml
-│       └── templates
-│           ├── prompt_template.md
-│           ├── prompt_template_one_shot.md
-│           ├── prompt_template_mini_campaign.md
-│           ├── prompt_template_long_campaign.md
-│           └── prompt_template_dungeon_exploration.md
-├── frontend
-│   ├── streamlit_app
-│   │   ├── app.py
-│   │   ├── layout.py
-│   │   ├── actions.py
-│   │   ├── widgets.py
-│   │   ├── styles.py
-│   │   └── assets
-│   │       ├── parchment.jpg
-│   │       ├── watermark_dragon.png
-│   │       └── divider.svg
-│   └── flutter_app
-│       ├── pubspec.yaml
-│       └── lib
-│           ├── main.dart
-│           └── src
-│               ├── config
-│               ├── models
-│               ├── services
-│               └── ui
-├── requirements.txt
+│   ├── story_selector/
+│   │   ├── schema.py
+│   │   ├── prompt_builder.py
+│   │   ├── render.py
+│   │   ├── data/
+│   │   │   └── options.yaml
+│   │   └── templates/
+│   └── requirements.txt
+├── docs/
+│   └── privacy_policy.md
+├── scripts/
+│   └── start_server.sh
+├── .env.example
 ├── LICENSE
-└── .gitignore
+└── README.md
 ```
 
-## Esempio output
-L'app produce un prompt con sezioni stabili:
-- Dati campagna
-- Vincoli e tono
-- Struttura richiesta
-- Formato output
+## Output
 
-Da copiare e incollare direttamente su ChatGPT.
+The app produces a structured D&D campaign prompt ready to paste into ChatGPT.

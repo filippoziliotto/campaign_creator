@@ -1,0 +1,245 @@
+{
+  "@@locale": "it",
+  "appTitle": "Creatore Campagne D&D",
+  "appNameShort": "Creatore Campagne",
+  "languageItalianShort": "IT",
+  "languageEnglishShort": "EN",
+  "commonRetry": "Riprova",
+  "commonOpen": "Apri",
+  "appFreeFormat": "Formato libero",
+  "appSettingPending": "Ambientazione da definire",
+  "appTwistPending": "Twist da definire",
+  "appStageEntry": "Scelta",
+  "appStageForge": "Forgia",
+  "appStageParchment": "Pergamena",
+  "appOpenParchment": "Apri pergamena",
+  "appSealParchment": "Sigilla pergamena",
+  "appSummaryLevel": "Lv {level}",
+  "@appSummaryLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "appSummaryPartySize": "{size} PG",
+  "@appSummaryPartySize": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "appSummaryPreset": "Preset: {name}",
+  "@appSummaryPreset": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "appLoadOptionsError": "Impossibile caricare le opzioni: {error}",
+  "@appLoadOptionsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appGenerationFailedError": "Generazione fallita: {error}",
+  "@appGenerationFailedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appInvalidArchetypeSelection": "Hai selezionato {count} archetipi, ma il party è impostato a {size} PG.",
+  "@appInvalidArchetypeSelection": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "appSnackForgedAndCopied": "Pergamena forgiata e prompt copiato negli appunti.",
+  "appSnackGenerationFailed": "Generazione fallita. Controlla il messaggio mostrato nella schermata.",
+  "appSnackPromptCopied": "Prompt copiato negli appunti.",
+  "appSnackNoParchmentToShare": "Non c'è ancora una pergamena da condividere.",
+  "appSnackShareUnavailable": "Condivisione non disponibile: {error}",
+  "@appSnackShareUnavailable": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appSnackGenerateFirst": "Genera prima una pergamena da inviare.",
+  "appSnackChatGptOpened": "ChatGPT aperto. Il prompt è già negli appunti.",
+  "appSnackChatGptCopiedOnly": "Impossibile aprire ChatGPT, ma il prompt è stato copiato.",
+  "appSnackNoParchmentToSave": "Non c'è nessuna pergamena da salvare.",
+  "appSnackDraftSaved": "Bozza della pergamena salvata in locale.",
+  "appSnackDraftMemoryOnly": "Bozza salvata solo in memoria. Riavvia completamente l'app per abilitare la persistenza locale.",
+  "appSnackSealedSavedAndCopied": "Pergamena sigillata: bozza salvata e prompt copiato.",
+  "appSnackSealedCopiedOnlyMemory": "Pergamena sigillata: prompt copiato. Riavvia completamente l'app per abilitare il salvataggio locale.",
+  "appSnackLocalSaveUnavailable": "Salvataggio locale non disponibile in questa sessione. Chiudi e rilancia l'app per registrare il plugin.",
+  "appDraftMemoryOnly": "Bozza mantenuta solo in memoria. Riavvia completamente l'app per riattivare il salvataggio locale.",
+  "appDraftAligned": "Bozza locale allineata il {dateTime}.",
+  "@appDraftAligned": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "appDraftLastSaved": "Ultima bozza salvata il {dateTime}.",
+  "@appDraftLastSaved": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "appErrorEyebrow": "Rituale interrotto",
+  "appErrorTitle": "Il grimorio non risponde",
+  "appErrorUnknownLoad": "Errore sconosciuto nel caricamento opzioni.",
+  "entryCampaignTypesTitle": "Tipi di campagna",
+  "entryResumeTitle": "Riprendi la sessione",
+  "entryResumeSubtitle": "Hai già una bozza attiva. Torna subito al punto giusto.",
+  "entryResumeForge": "Riprendi la forgia",
+  "entryOpenForge": "Apri la forgia",
+  "entryOpenParchment": "Apri la pergamena",
+  "entryBadgeDefault": "Formato",
+  "entryDescriptionDefault": "Formato campagna disponibile nel backend.",
+  "entryBadgeOneShot": "Lama rapida",
+  "entryDescriptionOneShot": "Una missione ad alto impatto da giocare in una sola seduta, con payoff immediato e twist preciso.",
+  "entryBadgeMiniCampaign": "Arco breve",
+  "entryDescriptionMiniCampaign": "Una storia concentrata in poche sessioni, con progressione forte, escalation e finale netto.",
+  "entryBadgeLongCampaign": "Saga ampia",
+  "entryDescriptionLongCampaign": "Fazioni, cambi di equilibrio e sottotrame persistenti per una campagna da far crescere nel tempo.",
+  "entryBadgeDungeon": "Profondità",
+  "entryDescriptionDungeon": "Una discesa strutturata tra mappe, rischio, logoramento e scoperte stratificate.",
+  "forgeSectionWorld": "Mondo",
+  "forgeSectionParty": "Party",
+  "forgeSectionNarrative": "Trama",
+  "forgeButtonForging": "Forgiando...",
+  "forgeNextParty": "Vai al Party",
+  "forgeNextNarrative": "Vai alla Trama",
+  "forgeReforgeParchment": "Riforgia la Pergamena",
+  "forgeForgeParchment": "Forgia la Pergamena",
+  "forgeAdvanceBlockedWorld": "Definisci almeno tono, stile o temi prima di passare al party.",
+  "forgeAdvanceBlockedParty": "Controlla livello, dimensione e archetipi del party prima di procedere.",
+  "forgeAdvanceBlockedNarrative": "Aggiungi almeno un dettaglio narrativo prima di forgiare la pergamena.",
+  "forgeReadinessWorldReady": "Puoi passare al party.",
+  "forgeReadinessWorldPending": "Scegli formato, ambientazione e segnali chiave.",
+  "forgeReadinessPartyReady": "Puoi aprire la trama.",
+  "forgeReadinessPartyPending": "Definisci livello, dimensione e ruoli del gruppo.",
+  "forgeReadinessNarrativeReady": "Puoi forgiare la pergamena.",
+  "forgeReadinessNarrativePending": "Aggiungi almeno un aggancio narrativo.",
+  "forgeWorldSectionTitle": "Mondo e firma creativa",
+  "forgeWorldSectionSubtitle": "Formato, ambientazione e segnali iniziali della campagna.",
+  "forgeFoundationLabel": "Fondazione",
+  "forgeFoundationTitle": "Impostazioni base",
+  "forgeFoundationSubtitle": "Formato, preset rapido e ambientazione.",
+  "forgeQuickPresetLabel": "Preset rapido",
+  "forgeApplyPreset": "Applica preset",
+  "forgeApply": "Applica",
+  "forgeSettingLabel": "Ambientazione",
+  "forgeCustomSettingLabel": "Dettaglio ambientazione personalizzato",
+  "forgeCustomSettingHint": "Regno in guerra, frontiera sospesa, città verticale, arcipelago infernale...",
+  "forgeTwistTitle": "Twist iniziale",
+  "forgeTwistLabel": "Twist",
+  "forgeCustomTwistLabel": "Twist personalizzato",
+  "forgeCustomTwistHint": "Un alleato mente, il dungeon è vivo, la missione è una trappola...",
+  "forgeCreativeTitle": "Temi, tono e stile",
+  "forgeThemesTitle": "Temi",
+  "forgeCustomThemesLabel": "Temi personalizzati",
+  "forgeCustomThemesHint": "Intrigo politico, redenzione, sopravvivenza, orrore cosmico...",
+  "forgeToneTitle": "Tono",
+  "forgeStyleTitle": "Stile",
+  "forgeToneStyleOverrideLabel": "Override tono e stile",
+  "forgeToneStyleOverrideHint": "Es: tono: cupo, epico\nstile: sandbox, mystery",
+  "forgePartySectionTitle": "Party e scala di gioco",
+  "forgePartySectionSubtitle": "Livello, dimensione e ruoli principali del gruppo.",
+  "forgeScaleLabel": "Scala",
+  "forgeScaleTitle": "Livello e dimensione",
+  "forgePartyLevel": "Livello party: {level}",
+  "@forgePartyLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartySize": "Numero personaggi: {size}",
+  "@forgePartySize": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartyArchetypesTitle": "Archetipi del party",
+  "forgePartyArchetypesSubtitle": "Seleziona fino a {size} archetipi.",
+  "@forgePartyArchetypesSubtitle": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartyArchetypesMaxReached": "Hai raggiunto il massimo di archetipi selezionabili per il party attuale.",
+  "forgePartyInfoTitle": "Informazioni utili",
+  "forgeCharacterNotesLabel": "Note sui personaggi",
+  "forgeCharacterNotesHint": "Segreti, legami, paure, background importanti...",
+  "forgeConstraintsLabel": "Vincoli",
+  "forgeConstraintsHint": "Durata breve, niente viaggi planari, boss finale obbligatorio...",
+  "forgeNarrativeSectionTitle": "Pressione narrativa",
+  "forgeNarrativeSectionSubtitle": "Agganci, fazioni, incontri e limiti di contenuto.",
+  "forgeNarrativePanelTitle": "Trama e forze in gioco",
+  "forgeNarrativeHooksLabel": "Agganci narrativi",
+  "forgeNarrativeHooksHint": "Missione iniziale, minaccia, mistero, countdown...",
+  "forgeFactionsLabel": "Fazioni e poteri",
+  "forgeFactionsHint": "Gilde, culti, casate, antagonisti, alleati instabili...",
+  "forgeNpcFocusLabel": "NPC chiave",
+  "forgeNpcFocusHint": "Mentore ambiguo, rivale, patrono, traditore...",
+  "forgeEncounterFocusLabel": "Incontri desiderati",
+  "forgeEncounterFocusHint": "Assedio, indagine sociale, inseguimento, boss finale...",
+  "forgeContentConstraintsTitle": "Vincoli di contenuto",
+  "forgeIncludeNpcsLabel": "Includi NPC",
+  "forgeIncludeNpcsSubtitle": "Il prompt includerà personaggi non giocanti rilevanti.",
+  "forgeIncludeEncountersLabel": "Includi incontri",
+  "forgeIncludeEncountersSubtitle": "Il prompt suggerirà scene e combattimenti.",
+  "forgeSafetyNotesLabel": "Note di sicurezza",
+  "forgeSafetyNotesHint": "Temi da evitare, linee e veli, limiti di tono...",
+  "forgeParchmentDirty": "Configurazione modificata: rigenera.",
+  "forgeParchmentReady": "Pergamena aggiornata.",
+  "forgeParchmentIncomplete": "Completa la trama per generare.",
+  "statusReady": "Pronto",
+  "statusNeedsPolish": "Da rifinire",
+  "parchmentReadyTitle": "Pergamena pronta",
+  "parchmentReadySubtitleStale": "Hai modificato la forgia: il prompt copiato non è più aggiornato.",
+  "parchmentReadySubtitleAligned": "Il prompt copiato è allineato con lo stato attuale della forgia.",
+  "parchmentQuickActionsTitle": "Azioni rapide",
+  "parchmentCopyPromptTitle": "Copia prompt",
+  "parchmentCopyPromptSubtitle": "Invia il prompt negli appunti.",
+  "parchmentShareTitle": "Condividi",
+  "parchmentShareSubtitle": "Apre il menu di condivisione.",
+  "parchmentOpenChatGptTitle": "Apri in ChatGPT",
+  "parchmentOpenChatGptSubtitle": "Apre ChatGPT in una nuova scheda.",
+  "parchmentDraftUpdatedTitle": "Bozza aggiornata",
+  "parchmentSaveDraftTitle": "Salva bozza",
+  "parchmentSaveDraftSubtitle": "Salva il prompt localmente per dopo.",
+  "parchmentPromptCopied": "Prompt copiato",
+  "parchmentCopiedStaleBanner": "Hai modificato la forgia dopo l'ultima generazione. Rigenera per aggiornare il prompt copiato.",
+  "parchmentCopiedSuccessBody": "La pergamena è stata forgiata con successo. Usa i rituali a destra per condividerla, salvarla o aprirla in ChatGPT.",
+  "atmosphereOneShot": "Urgenza cremisi",
+  "atmosphereMiniCampaign": "Strada dorata",
+  "atmosphereLongCampaign": "Atlante verde",
+  "atmosphereDungeon": "Volta di torce",
+  "parchmentSeal": "SIGILLA",
+  "parchmentSealAndCopy": "Sigilla e copia"
+}
