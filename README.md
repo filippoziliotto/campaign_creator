@@ -1,27 +1,47 @@
 # Forgia Prompt Campagne D&D
 
-Web app Streamlit per creare un prompt strutturato da incollare su ChatGPT e generare una campagna D&D.
-La lingua di output e sempre italiano.
+Generatore prompt per campagne D&D con:
+- frontend Streamlit (web)
+- frontend Flutter (mobile)
+- backend Python condiviso
 
-## Obiettivo
-L'app e ora divisa in frontend e backend Python:
-- `frontend/streamlit_app/`: interfaccia Streamlit (input, preset, output, stile)
-- `backend/`: validazione input, regole di generazione prompt, rendering template
-- `app.py`: entrypoint Streamlit minimale che avvia il frontend
+La lingua di output resta italiano.
 
-## Avvio locale
+## Architettura
+- `frontend/streamlit_app/`: UI Streamlit che usa direttamente i moduli backend Python.
+- `frontend/flutter_app/`: UI Flutter che chiama backend via API HTTP.
+- `backend/story_selector/`: validazione input, regole di generazione prompt, rendering template.
+- `backend/api/`: adapter FastAPI con endpoint `/health`, `/options`, `/generate`.
+- `app.py`: entrypoint minimale per avviare Streamlit.
+
+## Setup Python
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+```
+
+## Avvio Streamlit
+```bash
 streamlit run app.py
 ```
 
-## Pubblicazione rapida su Streamlit Community Cloud
-1. Pubblica il repo su GitHub.
-2. Crea una nuova app su Streamlit Cloud.
-3. Seleziona il repo e imposta `app.py` come entrypoint.
-4. Pubblica.
+## Avvio API Backend (per Flutter)
+```bash
+uvicorn backend.api.app:app --reload --host 0.0.0.0 --port 8000
+```
+
+## Avvio Flutter
+Prerequisito: Flutter SDK installato.
+
+```bash
+cd frontend/flutter_app
+flutter create .          # necessario solo la prima volta per generare i folder piattaforma
+flutter pub get
+flutter run --dart-define=API_BASE_URL=http://127.0.0.1:8000
+```
+
+Per Android emulator usa `http://10.0.2.2:8000`.
 
 ## Struttura
 ```text
@@ -29,6 +49,9 @@ streamlit run app.py
 ├── app.py
 ├── backend
 │   ├── __init__.py
+│   ├── api
+│   │   ├── __init__.py
+│   │   └── app.py
 │   └── story_selector
 │       ├── __init__.py
 │       ├── schema.py
@@ -43,16 +66,25 @@ streamlit run app.py
 │           ├── prompt_template_long_campaign.md
 │           └── prompt_template_dungeon_exploration.md
 ├── frontend
-│   └── streamlit_app
-│       ├── app.py
-│       ├── layout.py
-│       ├── actions.py
-│       ├── widgets.py
-│       ├── styles.py
-│       └── assets
-│           ├── parchment.jpg
-│           ├── watermark_dragon.png
-│           └── divider.svg
+│   ├── streamlit_app
+│   │   ├── app.py
+│   │   ├── layout.py
+│   │   ├── actions.py
+│   │   ├── widgets.py
+│   │   ├── styles.py
+│   │   └── assets
+│   │       ├── parchment.jpg
+│   │       ├── watermark_dragon.png
+│   │       └── divider.svg
+│   └── flutter_app
+│       ├── pubspec.yaml
+│       └── lib
+│           ├── main.dart
+│           └── src
+│               ├── config
+│               ├── models
+│               ├── services
+│               └── ui
 ├── requirements.txt
 ├── LICENSE
 └── .gitignore
