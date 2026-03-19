@@ -28,21 +28,21 @@ class ForgeRoutePage extends StatelessWidget {
         children: [
           if (hero != null) hero!,
           if (errorBanner != null) ...[
-            if (hero != null) const SizedBox(height: 18),
+            if (hero != null) const SizedBox(height: 16),
             errorBanner!,
           ],
-          const SizedBox(height: 18),
+          const SizedBox(height: 12),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
             child: sectionRibbon,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 12),
           if (hasMainSplit)
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(flex: 10, child: activeSection),
-                const SizedBox(width: 18),
+                const SizedBox(width: 16),
                 Expanded(flex: 6, child: controlPanel),
               ],
             )
@@ -50,7 +50,7 @@ class ForgeRoutePage extends StatelessWidget {
             Column(
               children: [
                 activeSection,
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
                 controlPanel,
               ],
             ),

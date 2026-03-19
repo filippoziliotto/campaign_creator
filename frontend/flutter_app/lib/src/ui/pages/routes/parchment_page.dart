@@ -8,14 +8,14 @@ class ParchmentRoutePage extends StatelessWidget {
   const ParchmentRoutePage({
     super.key,
     required this.atmosphere,
-    required this.hero,
+    this.hero,
     required this.sidebar,
     this.sheet,
     this.errorBanner,
   });
 
   final CampaignAtmosphereData atmosphere;
-  final Widget hero;
+  final Widget? hero;
   final Widget? sheet;
   final Widget sidebar;
   final Widget? errorBanner;
@@ -28,12 +28,12 @@ class ParchmentRoutePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          hero,
+          if (hero != null) hero!,
           if (errorBanner != null) ...[
-            const SizedBox(height: 18),
+            if (hero != null) const SizedBox(height: 16),
             errorBanner!,
           ],
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
           if (sheet != null && isWide)
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +45,7 @@ class ParchmentRoutePage extends StatelessWidget {
                     child: sheet!,
                   ),
                 ),
-                const SizedBox(width: 18),
+                const SizedBox(width: 16),
                 Expanded(flex: 7, child: sidebar),
               ],
             )
@@ -56,7 +56,7 @@ class ParchmentRoutePage extends StatelessWidget {
                   atmosphere: atmosphere,
                   child: sheet!,
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
                 sidebar,
               ],
             )

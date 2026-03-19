@@ -24,13 +24,13 @@ class EntryRoutePage extends StatelessWidget {
         children: [
           if (hero != null) hero!,
           if (errorBanner != null) ...[
-            if (hero != null) const SizedBox(height: 18),
+            if (hero != null) const SizedBox(height: 16),
             errorBanner!,
           ],
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
           campaignModeGrid,
           if (resumePanel != null) ...[
-            const SizedBox(height: 18),
+            const SizedBox(height: 16),
             resumePanel!,
           ],
         ],

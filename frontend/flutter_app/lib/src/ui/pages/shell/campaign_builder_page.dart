@@ -972,20 +972,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     return completed / total;
   }
 
-  String _forgeStatusLabel() {
-    if (_isGenerating) {
-      return 'Il rituale e in corso';
-    }
-    if (_generatedPrompt != null && !_hasUnsavedChanges) {
-      return 'Pergamena pronta';
-    }
-    if (_generatedPrompt != null && _hasUnsavedChanges) {
-      return 'La pergamena va riforgiata';
-    }
-    return 'Bozza in preparazione';
-  }
-
-  List<String> _summaryTokens() {
+  List<String> _summaryTokens({int? limit}) {
     final tokens = <String>[
       _selectedCampaignType ?? 'Formato libero',
       _currentSettingLabel(),
@@ -1003,7 +990,10 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       tokens.add('Preset: $_selectedPreset');
     }
 
-    return tokens;
+    if (limit == null || tokens.length <= limit) {
+      return tokens;
+    }
+    return tokens.take(limit).toList(growable: false);
   }
 
   _CampaignTypeMeta _currentCampaignMeta([CampaignOptions? options]) {
@@ -1283,30 +1273,22 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 52,
-          height: 52,
+          width: 44,
+          height: 44,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: LinearGradient(
-              colors: <Color>[
-                atmosphere.primary.withValues(alpha: 0.86),
-                atmosphere.secondary.withValues(alpha: 0.72),
-              ],
+            borderRadius: BorderRadius.circular(14),
+            color: atmosphere.primary.withValues(alpha: 0.12),
+            border: Border.all(
+              color: atmosphere.primary.withValues(alpha: 0.2),
             ),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: atmosphere.glow.withValues(alpha: 0.24),
-                blurRadius: 22,
-                offset: const Offset(0, 10),
-              ),
-            ],
           ),
           child: Icon(
             _currentCampaignMeta().icon,
-            color: FantasyPalette.parchment,
+            color: atmosphere.highlight,
+            size: 22,
           ),
         ),
-        const SizedBox(width: 14),
+        const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1322,14 +1304,14 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5,
+                      horizontal: 8,
+                      vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: atmosphere.primary.withValues(alpha: 0.12),
+                      color: atmosphere.primary.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(999),
                       border: Border.all(
-                        color: atmosphere.primary.withValues(alpha: 0.22),
+                        color: atmosphere.primary.withValues(alpha: 0.16),
                       ),
                     ),
                     child: Text(
@@ -1338,11 +1320,6 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(height: 4),
-              Text(
-                _shellSubtitle(),
-                style: theme.textTheme.bodySmall,
               ),
             ],
           ),
@@ -1367,86 +1344,73 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: atmosphere.primary.withValues(alpha: 0.24),
+          color: atmosphere.primary.withValues(alpha: 0.18),
         ),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[
-            Color.lerp(FantasyPalette.card, atmosphere.cardTint, 0.22)!
-                .withValues(alpha: 0.94),
-            Color.lerp(FantasyPalette.cardSoft, atmosphere.cardTint, 0.34)!
-                .withValues(alpha: 0.9),
-          ],
-        ),
+        color: Color.lerp(FantasyPalette.card, atmosphere.cardTint, 0.2)!
+            .withValues(alpha: 0.92),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: atmosphere.glow.withValues(alpha: 0.14),
-            blurRadius: 28,
-            offset: const Offset(0, 14),
+            color: atmosphere.glow.withValues(alpha: 0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final compact = constraints.maxWidth < 980;
+          final padding = compact ? 16.0 : 20.0;
 
           if (compact) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                header,
-                const SizedBox(height: 16),
-                stageSummary,
-                if (action != null) ...[
-                  const SizedBox(height: 16),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: action,
-                  ),
+            return Padding(
+              padding: EdgeInsets.all(padding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  header,
+                  const SizedBox(height: 12),
+                  stageSummary,
+                  if (action != null) ...[
+                    const SizedBox(height: 12),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: action,
+                    ),
+                  ],
                 ],
-              ],
+              ),
             );
           }
 
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(child: header),
-              const SizedBox(width: 18),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 560),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    stageSummary,
-                    if (action != null) ...[
-                      const SizedBox(height: 16),
-                      action,
+          return Padding(
+            padding: EdgeInsets.all(padding),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: header),
+                const SizedBox(width: 16),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 560),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      stageSummary,
+                      if (action != null) ...[
+                        const SizedBox(height: 12),
+                        action,
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),
     );
-  }
-
-  String _shellSubtitle() {
-    switch (_appStage) {
-      case _AppStage.entry:
-        return 'Scegli il formato della campagna e apri il percorso iniziale.';
-      case _AppStage.forge:
-        return 'Costruisci mondo, party e trama in una route dedicata.';
-      case _AppStage.parchment:
-        return 'Rivedi il prompt finale in una vista separata e pronta alla copia.';
-    }
   }
 
   Widget? _buildTopBarAction() {
@@ -1506,8 +1470,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
   Widget _buildAppStageRibbon() {
     return Wrap(
-      spacing: 10,
-      runSpacing: 10,
+      spacing: 8,
+      runSpacing: 8,
       children: _AppStage.values.map((stage) {
         final active = _appStage == stage;
         final enabled = _isStageUnlocked(stage);

@@ -7,6 +7,8 @@ import '../../../theme/fantasy_theme.dart';
 import 'campaign_builder_atmosphere.dart';
 import 'campaign_builder_motion.dart';
 
+enum FrameDensity { compact, featured }
+
 class CampaignStagePage extends Page<void> {
   const CampaignStagePage({
     required this.child,
@@ -270,12 +272,14 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
     final isTouch = const {TargetPlatform.android, TargetPlatform.iOS}
         .contains(defaultTargetPlatform);
     final borderRadius = BorderRadius.circular(24);
+    final compactCopy = MediaQuery.sizeOf(context).width < 960;
     final titleStyle = Theme.of(
       context,
     ).textTheme.titleLarge?.copyWith(color: FantasyPalette.parchment);
     final descriptionStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
           color: FantasyPalette.parchment.withValues(alpha: 0.84),
         );
+    final showCallToAction = widget.selected || _hovered;
     final targetProgress = (reducedMotion || isTouch)
         ? 0.0
         : (_pressed ? 0.5 : (_hovered ? 1.0 : 0.0));
@@ -343,16 +347,16 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
                 border: Border.all(
                   color: widget.selected
                       ? widget.atmosphere.highlight
-                      : FantasyPalette.outline.withValues(alpha: 0.4),
+                      : FantasyPalette.outline.withValues(alpha: 0.22),
                   width: widget.selected ? 1.4 : 1,
                 ),
                 boxShadow: <BoxShadow>[
                   BoxShadow(
                     color: widget.atmosphere.glow.withValues(
-                      alpha: widget.selected ? 0.26 : (_hovered ? 0.18 : 0.12),
+                      alpha: widget.selected ? 0.2 : (_hovered ? 0.1 : 0.05),
                     ),
-                    blurRadius: widget.selected ? 28 : (_hovered ? 22 : 16),
-                    offset: const Offset(0, 12),
+                    blurRadius: widget.selected ? 24 : (_hovered ? 16 : 10),
+                    offset: const Offset(0, 10),
                   ),
                 ],
               ),
@@ -446,22 +450,22 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
                             const Spacer(),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 9,
-                                vertical: 5,
+                                horizontal: 8,
+                                vertical: 4,
                               ),
                               decoration: BoxDecoration(
                                 color: FantasyPalette.abyss
-                                    .withValues(alpha: 0.46),
+                                    .withValues(alpha: 0.34),
                                 borderRadius: BorderRadius.circular(999),
                                 border: Border.all(
                                   color: widget.atmosphere.highlight.withValues(
-                                    alpha: 0.32,
+                                    alpha: 0.18,
                                   ),
                                 ),
                               ),
                               child: Text(
                                 widget.badge,
-                                style: Theme.of(context).textTheme.titleSmall,
+                                style: Theme.of(context).textTheme.labelMedium,
                               ),
                             ),
                             const SizedBox(height: 6),
@@ -475,24 +479,26 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
                             Text(
                               widget.description,
                               style: descriptionStyle,
-                              maxLines: 1,
+                              maxLines: compactCopy ? 1 : 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(height: 6),
-                            Row(
-                              children: [
-                                Text(
-                                  'Apri la forgia',
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                                const SizedBox(width: 4),
-                                Icon(
-                                  Icons.arrow_forward_rounded,
-                                  size: 16,
-                                  color: widget.atmosphere.highlight,
-                                ),
-                              ],
-                            ),
+                            if (showCallToAction) ...[
+                              const SizedBox(height: 6),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Apri la forgia',
+                                    style: Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Icon(
+                                    Icons.arrow_forward_rounded,
+                                    size: 16,
+                                    color: widget.atmosphere.highlight,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ],
                         ),
                       ),
@@ -597,30 +603,30 @@ class StagePill extends StatelessWidget {
     final indexFillColor = active
         ? colorScheme.primary
         : completed
-            ? colorScheme.secondary
-            : colorScheme.surface;
+            ? colorScheme.secondary.withValues(alpha: 0.9)
+            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.9);
     final indexTextColor = active
         ? colorScheme.onPrimary
         : completed
             ? colorScheme.onSecondary
-            : colorScheme.onSurface;
+            : colorScheme.onSurfaceVariant;
     final borderColor = active
         ? colorScheme.primary
         : completed
-            ? colorScheme.secondary
-            : colorScheme.outline.withValues(alpha: 0.45);
+            ? colorScheme.secondary.withValues(alpha: 0.72)
+            : colorScheme.outline.withValues(alpha: 0.22);
 
     final backgroundColor = active
         ? colorScheme.primary.withValues(alpha: 0.12)
-        : colorScheme.surfaceContainerHighest.withValues(
-            alpha: enabled ? 0.82 : 0.45,
+        : colorScheme.surface.withValues(
+            alpha: enabled ? 0.42 : 0.24,
           );
 
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(999),
       child: Ink(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(999),
@@ -630,8 +636,8 @@ class StagePill extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 24,
-              height: 24,
+              width: 22,
+              height: 22,
               decoration: BoxDecoration(
                 color: indexFillColor,
                 shape: BoxShape.circle,
@@ -699,69 +705,107 @@ class AnimatedReveal extends StatelessWidget {
 class SectionFrame extends StatelessWidget {
   const SectionFrame({
     super.key,
-    required this.eyebrow,
     required this.title,
-    required this.subtitle,
-    required this.icon,
     required this.child,
+    this.eyebrow,
+    this.subtitle,
+    this.icon,
+    this.density = FrameDensity.compact,
+    this.showDivider = false,
   });
 
-  final String eyebrow;
+  final String? eyebrow;
   final String title;
-  final String subtitle;
-  final IconData icon;
+  final String? subtitle;
+  final IconData? icon;
   final Widget child;
+  final FrameDensity density;
+  final bool showDivider;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Card(
+    final featured = density == FrameDensity.featured;
+    final padding = featured ? 22.0 : 18.0;
+    final iconBoxSize = featured ? 48.0 : 38.0;
+    final headerSpacing = featured ? 16.0 : 12.0;
+    final sectionTitleStyle = featured
+        ? Theme.of(context).textTheme.titleLarge
+        : Theme.of(context).textTheme.titleMedium;
+    final hasHeaderMeta =
+        eyebrow != null || subtitle != null || icon != null;
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(featured ? 24 : 22),
+        color: colorScheme.surface.withValues(alpha: featured ? 0.78 : 0.66),
+        border: Border.all(
+          color: colorScheme.outline.withValues(
+            alpha: featured ? 0.28 : 0.18,
+          ),
+        ),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(22),
+        padding: EdgeInsets.all(padding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    gradient: LinearGradient(
-                      colors: <Color>[
-                        colorScheme.secondary.withValues(alpha: 0.9),
-                        colorScheme.primary.withValues(alpha: 0.85),
+            if (hasHeaderMeta) ...[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (icon != null) ...[
+                    Container(
+                      width: iconBoxSize,
+                      height: iconBoxSize,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(featured ? 14 : 12),
+                        color: colorScheme.primary.withValues(
+                          alpha: featured ? 0.14 : 0.1,
+                        ),
+                        border: Border.all(
+                          color: colorScheme.primary.withValues(alpha: 0.18),
+                        ),
+                      ),
+                      child: Icon(
+                        icon,
+                        size: featured ? 22 : 18,
+                        color: colorScheme.primary,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                  ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (eyebrow != null) ...[
+                          Text(
+                            eyebrow!,
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                          const SizedBox(height: 4),
+                        ],
+                        Text(title, style: sectionTitleStyle),
+                        if (subtitle != null) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            subtitle!,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
                       ],
                     ),
                   ),
-                  child: Icon(
-                    icon,
-                    color: colorScheme.onPrimary,
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(eyebrow,
-                          style: Theme.of(context).textTheme.titleSmall),
-                      const SizedBox(height: 6),
-                      Text(title,
-                          style: Theme.of(context).textTheme.titleLarge),
-                      const SizedBox(height: 6),
-                      Text(subtitle,
-                          style: Theme.of(context).textTheme.bodySmall),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 18),
-            const RuneDivider(),
-            const SizedBox(height: 18),
+                ],
+              ),
+            ] else
+              Text(title, style: sectionTitleStyle),
+            if (showDivider) ...[
+              SizedBox(height: headerSpacing),
+              const RuneDivider(),
+            ],
+            SizedBox(height: showDivider ? headerSpacing : 12),
             child,
           ],
         ),
@@ -773,94 +817,113 @@ class SectionFrame extends StatelessWidget {
 class ControlRoomPanel extends StatelessWidget {
   const ControlRoomPanel({
     super.key,
-    required this.label,
     required this.title,
-    required this.icon,
     required this.child,
+    this.label,
     this.subtitle,
+    this.icon,
     this.trailing,
+    this.density = FrameDensity.compact,
+    this.showDivider = false,
   });
 
-  final String label;
+  final String? label;
   final String title;
   final String? subtitle;
-  final IconData icon;
+  final IconData? icon;
   final Widget child;
   final Widget? trailing;
+  final FrameDensity density;
+  final bool showDivider;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final featured = density == FrameDensity.featured;
+    final padding = featured ? 18.0 : 16.0;
+    final showHeaderMeta =
+        label != null || subtitle != null || icon != null || trailing != null;
 
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(featured ? 22 : 20),
         border: Border.all(
-          color: colorScheme.outline.withValues(alpha: 0.3),
+          color: colorScheme.outline.withValues(alpha: featured ? 0.24 : 0.18),
         ),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[
-            colorScheme.surfaceContainerHighest.withValues(alpha: 0.68),
-            colorScheme.surface.withValues(alpha: 0.4),
-          ],
+        color: colorScheme.surfaceContainerHighest.withValues(
+          alpha: featured ? 0.44 : 0.32,
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(18),
+        padding: EdgeInsets.all(padding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 42,
-                  height: 42,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    gradient: LinearGradient(
-                      colors: <Color>[
-                        colorScheme.primary.withValues(alpha: 0.88),
-                        colorScheme.secondary.withValues(alpha: 0.82),
+            if (showHeaderMeta) ...[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (icon != null) ...[
+                    Container(
+                      width: featured ? 40 : 34,
+                      height: featured ? 40 : 34,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: colorScheme.primary.withValues(alpha: 0.12),
+                      ),
+                      child: Icon(icon, color: colorScheme.primary, size: 18),
+                    ),
+                    const SizedBox(width: 10),
+                  ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (label != null) ...[
+                          Text(
+                            label!,
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                          const SizedBox(height: 2),
+                        ],
+                        Text(
+                          title,
+                          style: featured
+                              ? Theme.of(context).textTheme.titleMedium
+                              : Theme.of(context).textTheme.titleSmall,
+                        ),
+                        if (subtitle != null) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            subtitle!,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
                       ],
                     ),
                   ),
-                  child: Icon(icon, color: colorScheme.onPrimary, size: 20),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(label,
-                          style: Theme.of(context).textTheme.titleSmall),
-                      const SizedBox(height: 4),
-                      Text(title,
-                          style: Theme.of(context).textTheme.titleMedium),
-                      if (subtitle != null) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          subtitle!,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-                if (trailing != null) ...[
-                  const SizedBox(width: 12),
-                  trailing!,
+                  if (trailing != null) ...[
+                    const SizedBox(width: 12),
+                    trailing!,
+                  ],
                 ],
+              ),
+              if (showDivider) ...[
+                const SizedBox(height: 14),
+                Container(
+                  height: 1,
+                  color: colorScheme.outline.withValues(alpha: 0.16),
+                ),
               ],
-            ),
-            const SizedBox(height: 16),
-            Container(
-              height: 1,
-              color: colorScheme.outline.withValues(alpha: 0.22),
-            ),
-            const SizedBox(height: 16),
+              const SizedBox(height: 14),
+            ] else
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
             child,
           ],
         ),
@@ -1013,9 +1076,14 @@ class SignalStatusRow extends StatelessWidget {
 }
 
 class SummaryBadge extends StatelessWidget {
-  const SummaryBadge({super.key, required this.label});
+  const SummaryBadge({
+    super.key,
+    required this.label,
+    this.maxWidth,
+  });
 
   final String label;
+  final double? maxWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -1023,17 +1091,24 @@ class SummaryBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: colorScheme.primary.withValues(alpha: 0.1),
+        color: colorScheme.primary.withValues(alpha: 0.07),
         borderRadius: BorderRadius.circular(999),
         border: Border.all(
-          color: colorScheme.primary.withValues(alpha: 0.24),
+          color: colorScheme.primary.withValues(alpha: 0.18),
         ),
       ),
-      child: Text(
-        label,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: colorScheme.onSurface,
-            ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: maxWidth ?? double.infinity,
+        ),
+        child: Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurface,
+              ),
+        ),
       ),
     );
   }
@@ -1238,32 +1313,26 @@ class ForgeActionStrip extends StatelessWidget {
         parchmentReady && !hasUnsavedChanges ? colorScheme.secondary : colorScheme.primary;
     final parchmentStatusText = parchmentReady
         ? (hasUnsavedChanges
-            ? 'Configurazione modificata: riforgia per aggiornare.'
-            : 'Pergamena allineata alla forgia.')
-        : 'Completa la trama per forgiare la pergamena.';
+            ? 'Configurazione modificata: rigenera.'
+            : 'Pergamena aggiornata.')
+        : 'Completa la trama per generare.';
 
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(22),
         border: Border.all(
-          color: colorScheme.outline.withValues(alpha: 0.3),
+          color: colorScheme.outline.withValues(alpha: 0.2),
         ),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[
-            colorScheme.surfaceContainerHighest.withValues(alpha: 0.68),
-            colorScheme.surface.withValues(alpha: 0.4),
-          ],
-        ),
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             LayoutBuilder(
               builder: (context, constraints) {
+                final compact = constraints.maxWidth < 560;
                 final primaryButton = ForgePrimaryActionButton(
                   atmosphere: atmosphere,
                   label: primaryLabel,
@@ -1272,6 +1341,23 @@ class ForgeActionStrip extends StatelessWidget {
                   shouldPulse: isPrimaryEnabled,
                   onPressed: (isGenerating || !isPrimaryEnabled) ? null : onAdvance,
                 );
+                if (compact) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        readinessHint,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+                      const SizedBox(height: 12),
+                      primaryButton,
+                    ],
+                  );
+                }
                 return Row(
                   children: [
                     Expanded(
@@ -1291,12 +1377,12 @@ class ForgeActionStrip extends StatelessWidget {
               },
             ),
             if (showParchmentRow) ...[
-              const SizedBox(height: 14),
+              const SizedBox(height: 12),
               Container(
                 height: 1,
-                color: colorScheme.outline.withValues(alpha: 0.22),
+                color: colorScheme.outline.withValues(alpha: 0.16),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 12),
               Row(
                 children: [
                   Icon(parchmentStatusIcon, size: 16, color: parchmentStatusColor),

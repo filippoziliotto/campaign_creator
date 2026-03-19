@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class StageRouteScaffold extends StatelessWidget {
@@ -37,13 +38,25 @@ class _StageScrollContainerState extends State<_StageScrollContainer> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    final compact = size.width < 760;
+    final isTouchPlatform = const {
+      TargetPlatform.android,
+      TargetPlatform.iOS,
+    }.contains(defaultTargetPlatform);
+
     return Scrollbar(
       controller: _scrollController,
-      thumbVisibility: true,
+      thumbVisibility: isTouchPlatform ? false : true,
       child: SingleChildScrollView(
         controller: _scrollController,
         primary: false,
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
+        padding: EdgeInsets.fromLTRB(
+          compact ? 16 : 20,
+          0,
+          compact ? 16 : 20,
+          compact ? 24 : 32,
+        ),
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 1380),

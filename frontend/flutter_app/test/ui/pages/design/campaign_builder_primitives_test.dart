@@ -66,6 +66,42 @@ void main() {
 
       expect(tester.takeException(), isNull);
       expect(find.text('Campagna lunga'), findsOneWidget);
+      expect(find.text('Apri la forgia'), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'CampaignModeCard emphasizes CTA only when selected',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildFantasyTheme(),
+          home: Scaffold(
+            body: Center(
+              child: SizedBox(
+                width: 399.2,
+                child: CampaignModeCard(
+                  atmosphere: _testAtmosphere,
+                  title: 'One-Shot',
+                  badge: 'Lama rapida',
+                  description: 'Una missione ad alto impatto.',
+                  icon: Icons.bolt_rounded,
+                  colors: const <Color>[
+                    Color(0xFFB03A2E),
+                    Color(0xFF6D2018),
+                  ],
+                  artAsset: 'assets/entry_cards/one_shot.jpg',
+                  selected: true,
+                  onTap: () {},
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pump();
+
       expect(find.text('Apri la forgia'), findsOneWidget);
     },
   );
@@ -123,6 +159,29 @@ void main() {
       expect(find.text('Precedente'), findsNothing);
       expect(find.byIcon(Icons.arrow_back_rounded), findsNothing);
       expect(find.text('Avanza'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'SectionFrame defaults to compact framing without decorative divider',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildFantasyTheme(),
+          home: const Scaffold(
+            body: SectionFrame(
+              title: 'Titolo sezione',
+              child: Text('Contenuto'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pump();
+
+      expect(find.text('Titolo sezione'), findsOneWidget);
+      expect(find.text('Contenuto'), findsOneWidget);
+      expect(find.byType(RuneDivider), findsNothing);
     },
   );
 }

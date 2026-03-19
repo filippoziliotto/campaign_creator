@@ -28,19 +28,18 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildCampaignModeGrid(CampaignOptions options) {
     return SectionFrame(
-      eyebrow: 'Archivio formati',
       title: 'Tipi di campagna',
-      subtitle: 'Ogni carta porta in una flow dedicata della forgia.',
-      icon: Icons.style_rounded,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final compact = constraints.maxWidth < 760;
-          final cardWidth =
-              compact ? constraints.maxWidth : (constraints.maxWidth - 16) / 2;
+          final spacing = constraints.maxWidth < 760 ? 12.0 : 16.0;
+          final twoColumns = constraints.maxWidth >= 640;
+          final cardWidth = twoColumns
+              ? (constraints.maxWidth - spacing) / 2
+              : constraints.maxWidth;
 
           return Wrap(
-            spacing: 16,
-            runSpacing: 16,
+            spacing: spacing,
+            runSpacing: spacing,
             children: options.campaignTypes.map((campaignType) {
               final meta =
                   _campaignTypeMeta[campaignType] ?? _defaultCampaignMeta;
@@ -67,23 +66,39 @@ extension on _CampaignBuilderPageState {
   }
 
   Widget _buildResumePanel() {
-    return SectionFrame(
-      eyebrow: 'Ripresa rapida',
-      title: 'La tua officina e gia viva',
-      subtitle:
-          'Hai gia una bozza o una pergamena pronta. Riprendi dal punto giusto.',
-      icon: Icons.history_rounded,
+    final colorScheme = _resolvedAtmosphereTheme().colorScheme;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(22),
+        color: colorScheme.surface.withValues(alpha: 0.64),
+        border: Border.all(
+          color: colorScheme.outline.withValues(alpha: 0.18),
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'Riprendi la sessione',
+            style: _resolvedAtmosphereTheme().textTheme.titleMedium,
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Hai gia una bozza attiva. Torna subito al punto giusto.',
+            style: _resolvedAtmosphereTheme().textTheme.bodySmall,
+          ),
+          const SizedBox(height: 12),
           Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: _summaryTokens()
-                .map((token) => SummaryBadge(label: token))
+            spacing: 8,
+            runSpacing: 8,
+            children: _summaryTokens(limit: 3)
+                .map((token) => SummaryBadge(label: token, maxWidth: 180))
                 .toList(),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           LayoutBuilder(
             builder: (context, constraints) {
               final compact = constraints.maxWidth < 640;
@@ -96,7 +111,7 @@ extension on _CampaignBuilderPageState {
                       child: const Text('Riprendi la forgia'),
                     ),
                     if (_generatedPrompt != null) ...[
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
                       OutlinedButton(
                         onPressed: () => _goToStage(_AppStage.parchment),
                         child: const Text('Apri la pergamena'),
@@ -115,7 +130,7 @@ extension on _CampaignBuilderPageState {
                     ),
                   ),
                   if (_generatedPrompt != null) ...[
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: OutlinedButton(
                         onPressed: () => _goToStage(_AppStage.parchment),

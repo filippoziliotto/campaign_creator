@@ -579,90 +579,60 @@ class ParchmentActionRail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: atmosphere.primary.withValues(alpha: 0.2),
-        ),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[
-            Color.lerp(FantasyPalette.card, atmosphere.cardTint, 0.18)!
-                .withValues(alpha: 0.96),
-            Color.lerp(FantasyPalette.cardSoft, atmosphere.cardTint, 0.24)!
-                .withValues(alpha: 0.96),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Azioni rapide',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            _WaxSealButton(
+              atmosphere: atmosphere,
+              compact: true,
+              onTap: onWaxSealTap,
+            ),
           ],
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Rituali della pergamena',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Azioni premium per distribuire, archiviare o riaprire il materiale finale.',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
-                ),
-              ),
-              _WaxSealButton(
-                atmosphere: atmosphere,
-                compact: true,
-                onTap: onWaxSealTap,
-              ),
-            ],
-          ),
-          const SizedBox(height: 18),
-          _ActionRailTile(
-            atmosphere: atmosphere,
-            icon: Icons.copy_rounded,
-            title: 'Copia prompt',
-            subtitle: 'Invia la pergamena negli appunti con un solo gesto.',
-            onTap: onCopy,
-          ),
-          const SizedBox(height: 12),
-          _ActionRailTile(
-            atmosphere: atmosphere,
-            icon: Icons.ios_share_rounded,
-            title: 'Condividi',
-            subtitle: 'Apre il menu di condivisione nativo del dispositivo.',
-            onTap: onShare,
-          ),
-          const SizedBox(height: 12),
-          _ActionRailTile(
-            atmosphere: atmosphere,
-            icon: Icons.open_in_new_rounded,
-            title: 'Apri in ChatGPT',
-            subtitle: 'Apre ChatGPT in una nuova scheda e lascia il prompt negli appunti.',
-            onTap: onOpenChatGpt,
-          ),
-          const SizedBox(height: 12),
-          _ActionRailTile(
-            atmosphere: atmosphere,
-            icon: isCurrentDraftSaved
-                ? Icons.bookmark_added_rounded
-                : Icons.bookmark_border_rounded,
-            title: isCurrentDraftSaved ? 'Bozza aggiornata' : 'Salva bozza',
-            subtitle: savedDraftLabel ??
-                'Persisti localmente il prompt per ritrovarlo nelle sessioni successive.',
-            onTap: onSaveDraft,
-          ),
-        ],
-      ),
+        const SizedBox(height: 12),
+        _ActionRailTile(
+          atmosphere: atmosphere,
+          icon: Icons.copy_rounded,
+          title: 'Copia prompt',
+          subtitle: 'Invia il prompt negli appunti.',
+          onTap: onCopy,
+        ),
+        const SizedBox(height: 10),
+        _ActionRailTile(
+          atmosphere: atmosphere,
+          icon: Icons.ios_share_rounded,
+          title: 'Condividi',
+          subtitle: 'Apre il menu di condivisione.',
+          onTap: onShare,
+        ),
+        const SizedBox(height: 10),
+        _ActionRailTile(
+          atmosphere: atmosphere,
+          icon: Icons.open_in_new_rounded,
+          title: 'Apri in ChatGPT',
+          subtitle: 'Apre ChatGPT in una nuova scheda.',
+          onTap: onOpenChatGpt,
+        ),
+        const SizedBox(height: 10),
+        _ActionRailTile(
+          atmosphere: atmosphere,
+          icon: isCurrentDraftSaved
+              ? Icons.bookmark_added_rounded
+              : Icons.bookmark_border_rounded,
+          title: isCurrentDraftSaved ? 'Bozza aggiornata' : 'Salva bozza',
+          subtitle: savedDraftLabel ??
+              'Salva il prompt localmente per dopo.',
+          onTap: onSaveDraft,
+        ),
+      ],
     );
   }
 }
@@ -1060,36 +1030,36 @@ class _ActionRailTile extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
       child: Ink(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: atmosphere.primary.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(18),
+          color: atmosphere.primary.withValues(alpha: 0.06),
           border: Border.all(
-            color: atmosphere.primary.withValues(alpha: 0.16),
+            color: atmosphere.primary.withValues(alpha: 0.12),
           ),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: 42,
-              height: 42,
+              width: 38,
+              height: 38,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-                color: atmosphere.primary.withValues(alpha: 0.16),
+                borderRadius: BorderRadius.circular(12),
+                color: atmosphere.primary.withValues(alpha: 0.12),
               ),
-              child: Icon(icon, color: atmosphere.highlight),
+              child: Icon(icon, color: atmosphere.highlight, size: 18),
             ),
-            const SizedBox(width: 14),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 4),
                   Text(
                     subtitle,
                     style: Theme.of(context).textTheme.bodySmall,

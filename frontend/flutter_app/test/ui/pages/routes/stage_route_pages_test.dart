@@ -79,14 +79,12 @@ void main() {
           home: Scaffold(
             body: ParchmentRoutePage(
               atmosphere: atmosphere,
-              hero: Text('hero'),
               sidebar: Text('sidebar'),
             ),
           ),
         ),
       );
 
-      expect(find.text('hero'), findsOneWidget);
       expect(find.text('sidebar'), findsOneWidget);
     },
   );

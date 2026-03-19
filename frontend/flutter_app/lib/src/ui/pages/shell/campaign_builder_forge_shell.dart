@@ -30,25 +30,55 @@ extension on _CampaignBuilderPageState {
   }
 
   Widget _buildForgeSectionRibbon() {
-    return SegmentedButton<_ForgeSection>(
-      showSelectedIcon: false,
-      segments: _ForgeSection.values.map((section) {
-        final index = _ForgeSection.values.indexOf(section);
-        final completed = index < _ForgeSection.values.indexOf(_forgeSection);
-        return ButtonSegment<_ForgeSection>(
-          value: section,
-          label: Text(_forgeSectionLabel(section)),
-          icon: completed
-              ? const Icon(Icons.check_circle_rounded)
-              : Icon(_forgeSectionIcon(section)),
-        );
-      }).toList(),
-      selected: {_forgeSection},
-      onSelectionChanged: (selection) {
-        _applyShellState(() {
-          _setForgeSection(selection.first);
-        });
-      },
+    final segments = _ForgeSection.values.map((section) {
+      final index = _ForgeSection.values.indexOf(section);
+      final completed = index < _ForgeSection.values.indexOf(_forgeSection);
+      return ButtonSegment<_ForgeSection>(
+        value: section,
+        label: Text(_forgeSectionLabel(section)),
+        icon: completed
+            ? const Icon(Icons.check_circle_rounded)
+            : Icon(_forgeSectionIcon(section)),
+      );
+    }).toList();
+
+    return Theme(
+      data: _resolvedAtmosphereTheme().copyWith(
+        segmentedButtonTheme: SegmentedButtonThemeData(
+          style: ButtonStyle(
+            visualDensity: VisualDensity.compact,
+            padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
+              EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            ),
+          ),
+        ),
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final button = SegmentedButton<_ForgeSection>(
+            showSelectedIcon: false,
+            segments: segments,
+            selected: {_forgeSection},
+            onSelectionChanged: (selection) {
+              _applyShellState(() {
+                _setForgeSection(selection.first);
+              });
+            },
+          );
+
+          if (constraints.maxWidth < 520) {
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                child: button,
+              ),
+            );
+          }
+
+          return button;
+        },
+      ),
     );
   }
 
@@ -122,23 +152,20 @@ extension on _CampaignBuilderPageState {
       case _ForgeSection.world:
         return _primaryActionHint(
           ready: _canAdvanceWorldSection(),
-          readyText: 'Il mondo e pronto: puoi passare al party.',
-          pendingText:
-              'Definisci formato, ambientazione e almeno una firma creativa.',
+          readyText: 'Puoi passare al party.',
+          pendingText: 'Scegli formato, ambientazione e segnali chiave.',
         );
       case _ForgeSection.party:
         return _primaryActionHint(
           ready: _canAdvancePartySection(),
-          readyText: 'Il party e pronto per aprire la trama.',
-          pendingText:
-              'Controlla livello, dimensione e archetipi del gruppo.',
+          readyText: 'Puoi aprire la trama.',
+          pendingText: 'Definisci livello, dimensione e ruoli del gruppo.',
         );
       case _ForgeSection.narrative:
         return _primaryActionHint(
           ready: _canForgeNarrativeSection(),
-          readyText: 'Hai abbastanza materiale per forgiare la pergamena.',
-          pendingText:
-              'Aggiungi almeno un segnale narrativo prima di generare.',
+          readyText: 'Puoi forgiare la pergamena.',
+          pendingText: 'Aggiungi almeno un aggancio narrativo.',
         );
     }
   }
@@ -162,10 +189,9 @@ extension on _CampaignBuilderPageState {
         : options.presetDescriptions[effectiveSelectedPreset];
 
     return SectionFrame(
-      eyebrow: 'Atto I',
       title: 'Mondo e firma creativa',
-      subtitle: 'Definisci formato, ambientazione, twist e tono della campagna.',
-      icon: Icons.map_rounded,
+      subtitle: 'Formato, ambientazione e segnali iniziali della campagna.',
+      density: FrameDensity.featured,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -213,9 +239,11 @@ extension on _CampaignBuilderPageState {
   ) {
     return ControlRoomPanel(
       label: 'Fondazione',
-      title: 'Assetto campagna',
-      subtitle: 'Formato, preset rapido e ambientazione operativa.',
+      title: 'Impostazioni base',
+      subtitle: 'Formato, preset rapido e ambientazione.',
       icon: Icons.public_rounded,
+      density: FrameDensity.featured,
+      showDivider: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -312,10 +340,7 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildWorldTwistPanel(CampaignOptions options) {
     return ControlRoomPanel(
-      label: 'Rottura',
       title: 'Twist iniziale',
-      subtitle: 'Scegli il colpo di scena o scrivine uno personalizzato.',
-      icon: Icons.bolt_rounded,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -344,10 +369,7 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildCreativeDirectionPanel(CampaignOptions options) {
     return ControlRoomPanel(
-      label: 'Firma creativa',
       title: 'Temi, tono e stile',
-      subtitle: 'Seleziona le direttrici principali della campagna.',
-      icon: Icons.palette_rounded,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -421,10 +443,9 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildPartySection(CampaignOptions options) {
     return SectionFrame(
-      eyebrow: 'Atto II',
       title: 'Party e scala di gioco',
-      subtitle: 'Imposta livello, dimensione del gruppo e archetipi principali.',
-      icon: Icons.groups_rounded,
+      subtitle: 'Livello, dimensione e ruoli principali del gruppo.',
+      density: FrameDensity.featured,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -451,10 +472,7 @@ extension on _CampaignBuilderPageState {
           ),
           const SizedBox(height: 18),
           ControlRoomPanel(
-            label: 'Note del party',
             title: 'Informazioni utili',
-            subtitle: 'Dettagli che influenzano la costruzione del prompt.',
-            icon: Icons.badge_rounded,
             child: Column(
               children: [
                 _buildLoreTextField(
@@ -484,8 +502,9 @@ extension on _CampaignBuilderPageState {
     return ControlRoomPanel(
       label: 'Scala',
       title: 'Livello e dimensione',
-      subtitle: 'La difficolta e il numero di PG definiscono il perimetro del prompt.',
       icon: Icons.tune_rounded,
+      density: FrameDensity.featured,
+      showDivider: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -530,10 +549,8 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildPartyArchetypesPanel(CampaignOptions options) {
     return ControlRoomPanel(
-      label: 'Ruoli',
       title: 'Archetipi del party',
       subtitle: 'Seleziona fino a $_partySize archetipi.',
-      icon: Icons.shield_outlined,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -567,18 +584,17 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildNarrativeSection() {
     return SectionFrame(
-      eyebrow: 'Atto III',
       title: 'Pressione narrativa',
-      subtitle: 'Aggiungi agganci, fazioni, incontri e note di sicurezza.',
-      icon: Icons.auto_stories_rounded,
+      subtitle: 'Agganci, fazioni, incontri e limiti di contenuto.',
+      density: FrameDensity.featured,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ControlRoomPanel(
-            label: 'Agganci',
             title: 'Trama e forze in gioco',
-            subtitle: 'Gli elementi che il backend usera per costruire la pergamena.',
             icon: Icons.hub_rounded,
+            density: FrameDensity.featured,
+            showDivider: true,
             child: Column(
               children: [
                 _buildLoreTextField(
@@ -617,10 +633,7 @@ extension on _CampaignBuilderPageState {
           ),
           const SizedBox(height: 18),
           ControlRoomPanel(
-            label: 'Sicurezza',
             title: 'Vincoli di contenuto',
-            subtitle: 'Definisci cosa includere e cosa evitare.',
-            icon: Icons.rule_rounded,
             child: Column(
               children: [
                 ToggleTile(
