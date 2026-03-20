@@ -55,6 +55,7 @@ app/lib/l10n/app_localizations_it.dart
 *.swp
 *.swo
 .vscode/
+docs/superpowers/
 
 # ── OS ────────────────────────────────────────────────────────────────────────
 .DS_Store
@@ -63,3 +64,4 @@ Thumbs.db
 # ── Claude Code ───────────────────────────────────────────────────────────────
 .claude
 CLAUDE.md
+docs/superpowers/
