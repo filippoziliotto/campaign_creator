@@ -30,13 +30,13 @@ class CampaignRequest(BaseModel):
     safety_notes: str = Field(default="", max_length=800)
     include_npcs: bool = True
     include_encounters: bool = True
-    language: Literal["Italiano"] = "Italiano"
+    language: Literal["Italiano", "English"] = "Italiano"
 
     @model_validator(mode="after")
     def validate_party_archetypes(self) -> "CampaignRequest":
         if len(self.party_archetypes) > self.party_size:
             raise ValueError(
-                "Il numero di archetipi non puo superare la dimensione del party."
+                "Party archetypes cannot exceed party size."
             )
 
         self.theme_preferences = _normalize_preferences(self.theme_preferences, "tema")
@@ -58,14 +58,15 @@ def _normalize_preferences(values: list[str], field_name: str) -> list[str]:
     return cleaned
 
 
-def _default_options_path() -> Path:
-    return Path(__file__).resolve().parent / "data" / "options.yaml"
+def _default_options_path(lang: str = "it") -> Path:
+    filename = "options_en.yaml" if lang == "en" else "options.yaml"
+    return Path(__file__).resolve().parent / "data" / filename
 
 
-def load_options(path: str | Path | None = None) -> dict[str, Any]:
+def load_options(path: str | Path | None = None, lang: str = "it") -> dict[str, Any]:
     """Load controlled option lists and presets from YAML."""
 
-    source = Path(path) if path else _default_options_path()
+    source = Path(path) if path else _default_options_path(lang)
     with source.open("r", encoding="utf-8") as handle:
         data = yaml.safe_load(handle) or {}
 

@@ -8,6 +8,7 @@ extension on _CampaignBuilderPageState {
       TargetPlatform.iOS,
     }.contains(defaultTargetPlatform);
     final page = ParchmentRoutePage(
+      scrollController: _parchmentScrollController,
       atmosphere: atmosphere,
       errorBanner: _errorMessage == null
           ? null
@@ -39,7 +40,7 @@ extension on _CampaignBuilderPageState {
     final dx = details.velocity.pixelsPerSecond.dx;
 
     if (dx > threshold) {
-      _goToStage(_AppStage.forge);
+      _goToForge(_ForgeSection.narrative);
     }
   }
 

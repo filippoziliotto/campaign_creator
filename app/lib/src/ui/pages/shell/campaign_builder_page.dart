@@ -163,13 +163,31 @@ const Map<String, _CampaignTypeMeta> _campaignTypeMeta =
     artAsset: 'assets/entry_cards/campagna_corta.jpg',
     atmosphere: _miniCampaignAtmosphere,
   ),
+  'Mini-campaign': _CampaignTypeMeta(
+    icon: Icons.alt_route_rounded,
+    colors: <Color>[Color(0xFF9A6A2F), Color(0xFF5A3318)],
+    artAsset: 'assets/entry_cards/campagna_corta.jpg',
+    atmosphere: _miniCampaignAtmosphere,
+  ),
   'Campagna lunga': _CampaignTypeMeta(
     icon: Icons.account_tree_rounded,
     colors: <Color>[Color(0xFF47644A), Color(0xFF1E2E22)],
     artAsset: 'assets/entry_cards/campagna_lunga.jpg',
     atmosphere: _longCampaignAtmosphere,
   ),
+  'Long campaign': _CampaignTypeMeta(
+    icon: Icons.account_tree_rounded,
+    colors: <Color>[Color(0xFF47644A), Color(0xFF1E2E22)],
+    artAsset: 'assets/entry_cards/campagna_lunga.jpg',
+    atmosphere: _longCampaignAtmosphere,
+  ),
   'Esplorazione dungeon': _CampaignTypeMeta(
+    icon: Icons.explore_rounded,
+    colors: <Color>[Color(0xFF5E4C80), Color(0xFF292036)],
+    artAsset: 'assets/entry_cards/dungeon.jpg',
+    atmosphere: _dungeonAtmosphere,
+  ),
+  'Dungeon crawl': _CampaignTypeMeta(
     icon: Icons.explore_rounded,
     colors: <Color>[Color(0xFF5E4C80), Color(0xFF292036)],
     artAsset: 'assets/entry_cards/dungeon.jpg',
@@ -203,6 +221,9 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
   late final BackendApi _api;
   late final List<TextEditingController> _textControllers;
+  final ScrollController _entryScrollController = ScrollController();
+  final ScrollController _forgeScrollController = ScrollController();
+  final ScrollController _parchmentScrollController = ScrollController();
 
   CampaignOptions? _options;
 
@@ -283,7 +304,29 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       controller.removeListener(_handleDraftInputChanged);
       controller.dispose();
     }
+    _entryScrollController.dispose();
+    _forgeScrollController.dispose();
+    _parchmentScrollController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(CampaignBuilderPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentLocale.languageCode != widget.currentLocale.languageCode) {
+      setState(_clearLocaleSelections);
+      _loadOptions();
+    }
+  }
+
+  void _clearLocaleSelections() {
+    _selectedCampaignType = null;
+    _selectedTwist = null;
+    _selectedPreset = null;
+    _selectedThemes.clear();
+    _selectedTones.clear();
+    _selectedStyles.clear();
+    _selectedArchetypes.clear();
   }
 
   void _handleDraftInputChanged() {
@@ -322,7 +365,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     });
 
     try {
-      final options = await _api.getOptions();
+      final options = await _api.getOptions(lang: widget.currentLocale.languageCode);
       if (!mounted) {
         return;
       }
@@ -556,6 +599,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       safetyNotes: _safetyNotesController.text.trim(),
       includeNpcs: _includeNpcs,
       includeEncounters: _includeEncounters,
+      language: widget.currentLocale.languageCode == 'en' ? 'English' : 'Italiano',
     );
   }
 
@@ -826,8 +870,26 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   int _forgeSectionIndex(_ForgeSection section) =>
       _ForgeSection.values.indexOf(section);
 
+  void _scrollToTop(ScrollController controller) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (controller.hasClients && controller.offset > 0) {
+        controller.animateTo(
+          0,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
   void _setAppStage(_AppStage stage) {
     _appStage = stage;
+    final controller = switch (stage) {
+      _AppStage.entry => _entryScrollController,
+      _AppStage.forge => _forgeScrollController,
+      _AppStage.parchment => _parchmentScrollController,
+    };
+    _scrollToTop(controller);
   }
 
   void _setForgeSection(_ForgeSection section) {
@@ -837,6 +899,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     _forgeTransitionReverse =
         _forgeSectionIndex(section) < _forgeSectionIndex(_forgeSection);
     _forgeSection = section;
+    _scrollToTop(_forgeScrollController);
   }
 
   void _selectCampaignType(String campaignType) {
@@ -951,39 +1014,6 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     return _selectedTwist ?? context.l10n.appTwistPending;
   }
 
-  double _contextProgress() {
-    var completed = 0;
-    const total = 6;
-
-    if (_currentSettingLabel().trim().isNotEmpty) {
-      completed += 1;
-    }
-    if (_selectedThemes.isNotEmpty ||
-        _selectedTones.isNotEmpty ||
-        _selectedStyles.isNotEmpty ||
-        _customThemeController.text.trim().isNotEmpty ||
-        _customToneStyleController.text.trim().isNotEmpty) {
-      completed += 1;
-    }
-    if (_currentTwistLabel().trim().isNotEmpty) {
-      completed += 1;
-    }
-    if (_narrativeHooksController.text.trim().isNotEmpty) {
-      completed += 1;
-    }
-    if (_characterNotesController.text.trim().isNotEmpty ||
-        _constraintsController.text.trim().isNotEmpty) {
-      completed += 1;
-    }
-    if (_factionsController.text.trim().isNotEmpty ||
-        _npcFocusController.text.trim().isNotEmpty ||
-        _encounterFocusController.text.trim().isNotEmpty ||
-        _safetyNotesController.text.trim().isNotEmpty) {
-      completed += 1;
-    }
-
-    return completed / total;
-  }
 
   List<String> _summaryTokens({int? limit}) {
     final tokens = <String>[
@@ -1035,10 +1065,13 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       case 'One-Shot':
         return context.l10n.entryBadgeOneShot;
       case 'Mini-campagna':
+      case 'Mini-campaign':
         return context.l10n.entryBadgeMiniCampaign;
       case 'Campagna lunga':
+      case 'Long campaign':
         return context.l10n.entryBadgeLongCampaign;
       case 'Esplorazione dungeon':
+      case 'Dungeon crawl':
         return context.l10n.entryBadgeDungeon;
       default:
         return context.l10n.entryBadgeDefault;
@@ -1050,10 +1083,13 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       case 'One-Shot':
         return context.l10n.entryDescriptionOneShot;
       case 'Mini-campagna':
+      case 'Mini-campaign':
         return context.l10n.entryDescriptionMiniCampaign;
       case 'Campagna lunga':
+      case 'Long campaign':
         return context.l10n.entryDescriptionLongCampaign;
       case 'Esplorazione dungeon':
+      case 'Dungeon crawl':
         return context.l10n.entryDescriptionDungeon;
       default:
         return context.l10n.entryDescriptionDefault;
@@ -1173,22 +1209,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         _selectedArchetypes.length <= _partySize;
   }
 
-  bool _hasNarrativeSignals() {
-    return _narrativeHooksController.text.trim().isNotEmpty ||
-        _characterNotesController.text.trim().isNotEmpty ||
-        _constraintsController.text.trim().isNotEmpty ||
-        _factionsController.text.trim().isNotEmpty ||
-        _npcFocusController.text.trim().isNotEmpty ||
-        _encounterFocusController.text.trim().isNotEmpty ||
-        _safetyNotesController.text.trim().isNotEmpty;
-  }
-
-  bool _canForgeNarrativeSection() {
-    return _canAdvancePartySection() &&
-        (_hasNarrativeSignals() ||
-            (_generatedPrompt ?? '').trim().isNotEmpty ||
-            _contextProgress() >= 0.58);
-  }
+  bool _canForgeNarrativeSection() => true;
 
   bool _isForgePrimaryActionEnabled() {
     switch (_forgeSection) {
@@ -1512,16 +1533,16 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         showSelectedIcon: false,
         segments: <ButtonSegment<String>>[
           ButtonSegment<String>(
-            value: 'it',
+            value: 'en',
             label: Text(
-              context.l10n.languageItalianShort,
+              context.l10n.languageEnglishShort,
               style: Theme.of(context).textTheme.labelSmall,
             ),
           ),
           ButtonSegment<String>(
-            value: 'en',
+            value: 'it',
             label: Text(
-              context.l10n.languageEnglishShort,
+              context.l10n.languageItalianShort,
               style: Theme.of(context).textTheme.labelSmall,
             ),
           ),

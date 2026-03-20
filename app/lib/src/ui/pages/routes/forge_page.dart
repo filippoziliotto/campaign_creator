@@ -10,6 +10,7 @@ class ForgeRoutePage extends StatelessWidget {
     required this.activeSection,
     required this.controlPanel,
     this.errorBanner,
+    this.scrollController,
   });
 
   final Widget? hero;
@@ -17,12 +18,14 @@ class ForgeRoutePage extends StatelessWidget {
   final Widget activeSection;
   final Widget controlPanel;
   final Widget? errorBanner;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     final hasMainSplit = MediaQuery.of(context).size.width >= 1240;
 
     return StageRouteScaffold(
+      scrollController: scrollController,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

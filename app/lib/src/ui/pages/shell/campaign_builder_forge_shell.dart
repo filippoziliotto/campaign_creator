@@ -14,6 +14,7 @@ extension on _CampaignBuilderPageState {
     );
 
     return ForgeRoutePage(
+      scrollController: _forgeScrollController,
       errorBanner: _errorMessage == null
           ? null
           : _revealed(
@@ -52,6 +53,11 @@ extension on _CampaignBuilderPageState {
       _applyShellState(() {
         _setForgeSection(sections[currentIndex + 1]);
       });
+      return;
+    }
+
+    if (dx < -threshold && currentIndex == lastIndex) {
+      _goToStage(_AppStage.parchment);
       return;
     }
 

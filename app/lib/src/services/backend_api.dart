@@ -12,8 +12,9 @@ class BackendApi {
   final String _baseUrl;
   final http.Client _client;
 
-  Future<CampaignOptions> getOptions() async {
-    final response = await _client.get(_uri('/options'));
+  Future<CampaignOptions> getOptions({String lang = 'it'}) async {
+    final uri = _uri('/options').replace(queryParameters: {'lang': lang});
+    final response = await _client.get(uri);
     if (response.statusCode != 200) {
       throw BackendApiException.fromResponse(response);
     }

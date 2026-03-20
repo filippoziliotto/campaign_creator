@@ -18,9 +18,13 @@ void main() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
-  testWidgets('forge section swipe follows mobile direction conventions', (
+  testWidgets('forge swipe advances from narrative into parchment', (
     tester,
   ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      'campaign_builder.saved_prompt': 'Prompt salvato',
+    });
+
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -64,37 +68,10 @@ void main() {
 
     await _pumpUi(tester);
 
-    await tester.tap(find.text('One-Shot').last);
+    await tester.tap(find.text('Riprendi la forgia'));
     await _pumpUi(tester);
 
-    expect(
-      find.byKey(const ValueKey<String>('forge-section-world')),
-      findsOneWidget,
-    );
-    await tester.ensureVisible(
-      find.byKey(const ValueKey<String>('forge-section-world')),
-    );
-
-    await tester.fling(
-      find.byKey(const ValueKey<String>('forge-section-world')),
-      const Offset(-500, 0),
-      1000,
-    );
-    await _pumpUi(tester);
-
-    expect(
-      find.byKey(const ValueKey<String>('forge-section-party')),
-      findsOneWidget,
-    );
-    await tester.ensureVisible(
-      find.byKey(const ValueKey<String>('forge-section-party')),
-    );
-
-    await tester.fling(
-      find.byKey(const ValueKey<String>('forge-section-party')),
-      const Offset(-500, 0),
-      1000,
-    );
+    await tester.tap(find.text('Trama'));
     await _pumpUi(tester);
 
     expect(
@@ -105,27 +82,24 @@ void main() {
       find.byKey(const ValueKey<String>('forge-section-narrative')),
     );
 
-    await tester.fling(
+    await _flingSection(
+      tester,
       find.byKey(const ValueKey<String>('forge-section-narrative')),
       const Offset(-500, 0),
-      1000,
     );
     await _pumpUi(tester);
 
-    expect(
-      find.byKey(const ValueKey<String>('forge-section-narrative')),
-      findsOneWidget,
-    );
+    expect(find.byType(ParchmentRoutePage), findsOneWidget);
 
-    await tester.fling(
-      find.byKey(const ValueKey<String>('forge-section-narrative')),
+    await _flingSection(
+      tester,
+      find.byType(ParchmentRoutePage),
       const Offset(500, 0),
-      1000,
     );
     await _pumpUi(tester);
 
     expect(
-      find.byKey(const ValueKey<String>('forge-section-party')),
+      find.byKey(const ValueKey<String>('forge-section-narrative')),
       findsOneWidget,
     );
   },
@@ -189,10 +163,10 @@ void main() {
       find.byKey(const ValueKey<String>('forge-section-world')),
     );
 
-    await tester.fling(
+    await _flingSection(
+      tester,
       find.byKey(const ValueKey<String>('forge-section-world')),
       const Offset(500, 0),
-      1000,
     );
     await _pumpUi(tester);
 
@@ -254,10 +228,10 @@ void main() {
     await tester.tap(find.text('One-Shot').last);
     await _pumpUi(tester);
 
-    await tester.fling(
+    await _flingSection(
+      tester,
       find.byKey(const ValueKey<String>('forge-section-world')),
       const Offset(-500, 0),
-      1000,
     );
     await _pumpUi(tester);
 
@@ -281,7 +255,9 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
-  testWidgets('swiping right from parchment returns to forge', (tester) async {
+  testWidgets('swiping right from parchment returns to narrative', (
+    tester,
+  ) async {
     SharedPreferences.setMockInitialValues(<String, Object>{
       'campaign_builder.saved_prompt': 'Prompt salvato',
       'campaign_builder.saved_campaign_type': 'One-Shot',
@@ -348,7 +324,10 @@ void main() {
     await _pumpUi(tester);
 
     expect(find.byType(ParchmentRoutePage), findsNothing);
-    expect(find.widgetWithText(FilledButton, 'Apri pergamena'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey<String>('forge-section-narrative')),
+      findsOneWidget,
+    );
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
@@ -377,4 +356,14 @@ class _TestApp extends StatelessWidget {
 Future<void> _pumpUi(WidgetTester tester) async {
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 800));
+}
+
+Future<void> _flingSection(
+  WidgetTester tester,
+  Finder finder,
+  Offset offset,
+) async {
+  final rect = tester.getRect(finder);
+  final start = Offset(rect.left + 48, rect.top + 48);
+  await tester.flingFrom(start, offset, 1000);
 }

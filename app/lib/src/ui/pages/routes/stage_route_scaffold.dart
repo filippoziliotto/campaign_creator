@@ -2,37 +2,49 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class StageRouteScaffold extends StatelessWidget {
-  const StageRouteScaffold({super.key, required this.child});
+  const StageRouteScaffold({
+    super.key,
+    required this.child,
+    this.scrollController,
+  });
 
   final Widget child;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
-    return _StageScrollContainer(child: child);
+    return _StageScrollContainer(
+      scrollController: scrollController,
+      child: child,
+    );
   }
 }
 
 class _StageScrollContainer extends StatefulWidget {
-  const _StageScrollContainer({required this.child});
+  const _StageScrollContainer({required this.child, this.scrollController});
 
   final Widget child;
+  final ScrollController? scrollController;
 
   @override
   State<_StageScrollContainer> createState() => _StageScrollContainerState();
 }
 
 class _StageScrollContainerState extends State<_StageScrollContainer> {
-  late final ScrollController _scrollController;
+  late final ScrollController _ownController;
+
+  ScrollController get _effectiveController =>
+      widget.scrollController ?? _ownController;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
+    _ownController = ScrollController();
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _ownController.dispose();
     super.dispose();
   }
 
@@ -46,10 +58,10 @@ class _StageScrollContainerState extends State<_StageScrollContainer> {
     }.contains(defaultTargetPlatform);
 
     return Scrollbar(
-      controller: _scrollController,
+      controller: _effectiveController,
       thumbVisibility: isTouchPlatform ? false : true,
       child: SingleChildScrollView(
-        controller: _scrollController,
+        controller: _effectiveController,
         primary: false,
         padding: EdgeInsets.fromLTRB(
           compact ? 16 : 20,

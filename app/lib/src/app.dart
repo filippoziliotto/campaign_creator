@@ -25,7 +25,7 @@ class CampaignCreatorApp extends StatefulWidget {
 
 class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
   static const String _localePreferenceKey = 'app.locale_code';
-  static const Locale _defaultLocale = Locale('it');
+  static const Locale _defaultLocale = Locale('en');
   static const List<Locale> _supportedLocales = <Locale>[
     Locale('it'),
     Locale('en'),

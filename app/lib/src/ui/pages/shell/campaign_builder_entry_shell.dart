@@ -4,6 +4,7 @@ extension on _CampaignBuilderPageState {
   Widget _buildEntryStage(CampaignOptions options) {
     final atmosphere = _currentAtmosphere(options);
     return EntryRoutePage(
+      scrollController: _entryScrollController,
       errorBanner: _errorMessage == null
           ? null
           : _revealed(

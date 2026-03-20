@@ -25,6 +25,8 @@ void main() {
     expect(find.text('Creatore Campagne D&D'), findsOneWidget);
     expect(find.text('locale:it'), findsOneWidget);
     expect(find.text('IT | EN'), findsOneWidget);
+    expect(find.text('free-format:Scegli formato'), findsOneWidget);
+    expect(find.text('seal:Forgia pergamena'), findsOneWidget);
   });
 
   testWidgets('CampaignCreatorApp switches locale at runtime without restart', (
@@ -44,6 +46,8 @@ void main() {
 
     expect(find.text('D&D Campaign Creator'), findsOneWidget);
     expect(find.text('locale:en'), findsOneWidget);
+    expect(find.text('free-format:Choose format'), findsOneWidget);
+    expect(find.text('seal:Seal parchment'), findsOneWidget);
   });
 
   testWidgets('CampaignCreatorApp restores the saved locale on startup', (
@@ -65,6 +69,8 @@ void main() {
 
     expect(find.text('D&D Campaign Creator'), findsOneWidget);
     expect(find.text('locale:en'), findsOneWidget);
+    expect(find.text('free-format:Choose format'), findsOneWidget);
+    expect(find.text('seal:Seal parchment'), findsOneWidget);
   });
 }
 
@@ -86,6 +92,8 @@ class _LocaleProbe extends StatelessWidget {
           children: [
             Text(context.l10n.appTitle),
             Text('locale:$localeCode'),
+            Text('free-format:${context.l10n.appFreeFormat}'),
+            Text('seal:${context.l10n.appSealParchment}'),
             Text(
               '${context.l10n.languageItalianShort} | ${context.l10n.languageEnglishShort}',
             ),

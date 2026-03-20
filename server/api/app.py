@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -34,9 +34,9 @@ def create_app() -> FastAPI:
         return {"status": "ok"}
 
     @api.get("/options")
-    def options() -> dict[str, Any]:
+    def options(lang: str = Query(default="it", pattern="^(it|en)$")) -> dict[str, Any]:
         try:
-            return load_options()
+            return load_options(lang=lang)
         except Exception as exc:  # pragma: no cover - runtime safety fallback
             raise HTTPException(status_code=500, detail=f"Failed loading options: {exc}") from exc
 

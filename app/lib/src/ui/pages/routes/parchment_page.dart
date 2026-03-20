@@ -12,6 +12,7 @@ class ParchmentRoutePage extends StatelessWidget {
     required this.sidebar,
     this.sheet,
     this.errorBanner,
+    this.scrollController,
   });
 
   final CampaignAtmosphereData atmosphere;
@@ -19,12 +20,14 @@ class ParchmentRoutePage extends StatelessWidget {
   final Widget? sheet;
   final Widget sidebar;
   final Widget? errorBanner;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width >= 1120;
 
     return StageRouteScaffold(
+      scrollController: scrollController,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

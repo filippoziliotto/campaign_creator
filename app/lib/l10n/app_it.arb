@@ -6,14 +6,14 @@
   "languageEnglishShort": "EN",
   "commonRetry": "Riprova",
   "commonOpen": "Apri",
-  "appFreeFormat": "Formato libero",
+  "appFreeFormat": "Scegli formato",
   "appSettingPending": "Ambientazione da definire",
   "appTwistPending": "Twist da definire",
   "appStageEntry": "Scelta",
   "appStageForge": "Forgia",
   "appStageParchment": "Pergamena",
   "appOpenParchment": "Apri pergamena",
-  "appSealParchment": "Sigilla pergamena",
+  "appSealParchment": "Forgia pergamena",
   "appSummaryLevel": "Lv {level}",
   "@appSummaryLevel": {
     "placeholders": {

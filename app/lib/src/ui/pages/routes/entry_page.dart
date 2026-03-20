@@ -9,16 +9,19 @@ class EntryRoutePage extends StatelessWidget {
     required this.campaignModeGrid,
     this.errorBanner,
     this.resumePanel,
+    this.scrollController,
   });
 
   final Widget? hero;
   final Widget campaignModeGrid;
   final Widget? errorBanner;
   final Widget? resumePanel;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     return StageRouteScaffold(
+      scrollController: scrollController,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
