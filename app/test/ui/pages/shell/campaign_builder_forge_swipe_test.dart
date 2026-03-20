@@ -270,12 +270,9 @@ void main() {
     await tester.tap(resumeButton);
     await _pumpUi(tester);
 
-    final openParchmentButton = find.widgetWithText(
-      FilledButton,
-      'Apri pergamena',
-    );
-    await tester.ensureVisible(openParchmentButton);
-    await tester.tap(openParchmentButton);
+    final parchmentStage = find.text('Pergamena');
+    await tester.ensureVisible(parchmentStage);
+    await tester.tap(parchmentStage);
     await _pumpUi(tester);
 
     expect(find.byType(ParchmentRoutePage), findsOneWidget);

@@ -1448,6 +1448,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     );
 
     return Container(
+      key: const ValueKey<String>('persistent-top-bar'),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28),
@@ -1473,23 +1474,25 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
           final compact = constraints.maxWidth < 980;
           final padding = compact ? 12.0 : 20.0;
           final languageSwitch = _buildLanguageSwitch();
-          final action = _buildTopBarAction(compact: compact);
 
           if (compact) {
             return Padding(
               padding: EdgeInsets.all(padding),
-              child: Column(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  header,
-                  const SizedBox(height: 6),
-                  stageSummary,
-                  const SizedBox(height: 6),
-                  _buildTopBarUtilities(
-                    languageSwitch: languageSwitch,
-                    action: action,
-                    alignment: WrapAlignment.start,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        header,
+                        const SizedBox(height: 6),
+                        stageSummary,
+                      ],
+                    ),
                   ),
+                  const SizedBox(width: 12),
+                  languageSwitch,
                 ],
               ),
             );
@@ -1507,11 +1510,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      _buildTopBarUtilities(
-                        languageSwitch: languageSwitch,
-                        action: action,
-                        alignment: WrapAlignment.end,
-                      ),
+                      languageSwitch,
                       const SizedBox(height: 6),
                       stageSummary,
                     ],
@@ -1523,79 +1522,6 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         },
       ),
     );
-  }
-
-  Widget _buildTopBarUtilities({
-    required Widget languageSwitch,
-    required Widget? action,
-    required WrapAlignment alignment,
-  }) {
-    return Wrap(
-      spacing: 6,
-      runSpacing: 6,
-      alignment: alignment,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        languageSwitch,
-        if (action != null) action,
-      ],
-    );
-  }
-
-  ButtonStyle _topBarActionStyle() {
-    return FilledButton.styleFrom(
-      visualDensity: VisualDensity.compact,
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
-      minimumSize: Size.zero,
-      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-    );
-  }
-
-  ButtonStyle _compactTopBarActionStyle() {
-    return TextButton.styleFrom(
-      visualDensity: VisualDensity.compact,
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-      minimumSize: Size.zero,
-      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-    );
-  }
-
-  Widget? _buildTopBarAction({required bool compact}) {
-    switch (_appStage) {
-      case _AppStage.entry:
-        return null;
-      case _AppStage.forge:
-        if (_generatedPrompt == null) {
-          return null;
-        }
-        if (compact) {
-          return TextButton(
-            style: _compactTopBarActionStyle(),
-            onPressed: () => _goToStage(_AppStage.parchment),
-            child: Text(context.l10n.commonOpen),
-          );
-        }
-        return FilledButton.icon(
-          style: _topBarActionStyle(),
-          onPressed: () => _goToStage(_AppStage.parchment),
-          icon: const Icon(Icons.description_rounded),
-          label: Text(context.l10n.appOpenParchment),
-        );
-      case _AppStage.parchment:
-        if (compact) {
-          return TextButton(
-            style: _compactTopBarActionStyle(),
-            onPressed: _sealCurrentParchment,
-            child: Text(context.l10n.appStageForge),
-          );
-        }
-        return FilledButton.icon(
-          style: _topBarActionStyle(),
-          onPressed: _sealCurrentParchment,
-          icon: const Icon(Icons.approval_rounded),
-          label: Text(context.l10n.appSealParchment),
-        );
-    }
   }
 
   Widget _buildLanguageSwitch() {
@@ -1611,20 +1537,23 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       return Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(18),
           onTap: selected ? null : () => widget.onLocaleChanged(Locale(code)),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 180),
             curve: Curves.easeOut,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            width: 35,
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            alignment: Alignment.center,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(999),
+              borderRadius: BorderRadius.circular(18),
               color: selected
                   ? colorScheme.primary.withValues(alpha: 0.18)
                   : Colors.transparent,
             ),
             child: Text(
               label,
+              textAlign: TextAlign.center,
               style: theme.textTheme.labelSmall?.copyWith(
                 color: selected
                     ? colorScheme.onSurface
@@ -1640,13 +1569,13 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       key: const ValueKey<String>('top-bar-language-switch'),
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: colorScheme.outline.withValues(alpha: 0.28),
         ),
         color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.42),
       ),
-      child: Row(
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           buildSegment(

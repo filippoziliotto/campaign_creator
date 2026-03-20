@@ -211,9 +211,9 @@ Future<void> _openSavedParchment(WidgetTester tester) async {
   await tester.tap(resumeButton);
   await _pumpUi(tester);
 
-  final openButton = find.widgetWithText(TextButton, 'Apri');
-  await tester.ensureVisible(openButton.first);
-  await tester.tap(openButton.first);
+  final parchmentStage = find.text('Pergamena');
+  await tester.ensureVisible(parchmentStage);
+  await tester.tap(parchmentStage);
   await _pumpUi(tester);
 }
 

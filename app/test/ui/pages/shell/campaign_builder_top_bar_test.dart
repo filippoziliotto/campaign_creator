@@ -18,7 +18,7 @@ void main() {
   });
 
   testWidgets(
-      'parchment top bar keeps language toggle and action on one row in Italian',
+      'parchment top bar keeps a vertical language toggle without top bar actions',
       (
     tester,
   ) async {
@@ -42,29 +42,43 @@ void main() {
     await tester.tap(resumeButton);
     await _pumpUi(tester);
 
-    final openButton = find.widgetWithText(TextButton, 'Apri');
-    await tester.ensureVisible(openButton.first);
-    await tester.tap(openButton.first);
+    final parchmentStage = find.text('Pergamena');
+    await tester.ensureVisible(parchmentStage);
+    await tester.tap(parchmentStage);
     await _pumpUi(tester);
 
     final languageSwitch = find.byKey(
       const ValueKey<String>('top-bar-language-switch'),
     );
-    final actionLabel = find.text('Forgia').last;
-    final action = find.ancestor(
-      of: actionLabel,
-      matching: find.byWidgetPredicate((widget) => widget is ButtonStyleButton),
+    final topBar = find.byKey(const ValueKey<String>('persistent-top-bar'));
+    final topBarForgeAction = find.descendant(
+      of: topBar,
+      matching: find.widgetWithText(ButtonStyleButton, 'Forgia'),
+    );
+    final topBarOpenAction = find.descendant(
+      of: topBar,
+      matching: find.widgetWithText(ButtonStyleButton, 'Apri'),
     );
 
+    expect(topBar, findsOneWidget);
     expect(languageSwitch, findsOneWidget);
-    expect(actionLabel, findsOneWidget);
-    expect(action, findsOneWidget);
+    expect(topBarForgeAction, findsNothing);
+    expect(topBarOpenAction, findsNothing);
 
     final switchRect = tester.getRect(languageSwitch);
-    final actionRect = tester.getRect(action);
+    final enCenter = tester.getCenter(find.descendant(
+      of: languageSwitch,
+      matching: find.text('EN'),
+    ));
+    final itCenter = tester.getCenter(find.descendant(
+      of: languageSwitch,
+      matching: find.text('IT'),
+    ));
 
-    expect(actionRect.top, lessThan(switchRect.bottom));
-    expect(switchRect.top, lessThan(actionRect.bottom));
+    expect(switchRect.height, greaterThan(switchRect.width));
+    expect(switchRect.width, lessThan(54));
+    expect(enCenter.dx, closeTo(switchRect.center.dx, 2));
+    expect(itCenter.dx, closeTo(switchRect.center.dx, 2));
     expect(tester.takeException(), isNull);
   });
 }
