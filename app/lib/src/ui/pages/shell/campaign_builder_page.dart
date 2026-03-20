@@ -1313,10 +1313,10 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 44,
-          height: 44,
+          width: 30,
+          height: 30,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(10),
             color: atmosphere.primary.withValues(alpha: 0.12),
             border: Border.all(
               color: atmosphere.primary.withValues(alpha: 0.2),
@@ -1325,7 +1325,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
           child: Icon(
             _currentCampaignMeta().icon,
             color: atmosphere.highlight,
-            size: 22,
+            size: 17,
           ),
         ),
         const SizedBox(width: 12),
@@ -1412,9 +1412,9 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   header,
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 6),
                   stageSummary,
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 6),
                   Wrap(
                     spacing: 10,
                     runSpacing: 10,
@@ -1451,7 +1451,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                           ],
                         ],
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 6),
                       stageSummary,
                     ],
                   ),
@@ -1512,11 +1512,17 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         segments: <ButtonSegment<String>>[
           ButtonSegment<String>(
             value: 'it',
-            label: Text(context.l10n.languageItalianShort),
+            label: Text(
+              context.l10n.languageItalianShort,
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
           ),
           ButtonSegment<String>(
             value: 'en',
-            label: Text(context.l10n.languageEnglishShort),
+            label: Text(
+              context.l10n.languageEnglishShort,
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
           ),
         ],
         selected: <String>{selectedCode},

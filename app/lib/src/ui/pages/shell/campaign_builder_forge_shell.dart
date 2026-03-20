@@ -754,8 +754,8 @@ extension on _CampaignBuilderPageState {
     void Function(String value, bool selected) onSelected,
   ) {
     return Wrap(
-      spacing: 10,
-      runSpacing: 10,
+      spacing: 8,
+      runSpacing: 8,
       children: values.map((value) {
         return AnimatedRuneFilterChip(
           atmosphere: _currentAtmosphere(),

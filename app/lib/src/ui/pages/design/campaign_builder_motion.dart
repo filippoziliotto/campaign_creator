@@ -95,7 +95,7 @@ class _AnimatedRuneFilterChipState extends State<AnimatedRuneFilterChip>
               );
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               child: Text(
                 widget.label,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
