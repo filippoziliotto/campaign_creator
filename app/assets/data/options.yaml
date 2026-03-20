@@ -11,6 +11,9 @@ settings:
   - Dark Sun
   - Wildemount
   - Feywild
+  - Planescape
+  - Underdark
+  - Frontiera
 
 setting_descriptions:
   Forgotten Realms: Mondo fantasy classico, ricco di regni, magie antiche e avventure eroiche.
@@ -25,6 +28,9 @@ setting_descriptions:
   Dark Sun: Mondo post-apocalittico desertico, duro e distopico, dove la magia consuma risorse e la sopravvivenza e centrale.
   Wildemount: Scenario politico e bellico di Exandria, ideale per campagne di conflitto tra nazioni, intrighi e fronti di guerra.
   Feywild: Piano fatato, specchio distorto del mondo materiale, popolato da creature magiche, regni incantati e stranezze imprevedibili.
+  Planescape: Crocevia cosmico dominato da filosofie in guerra, dove ogni fazione rivendica la Vera Natura della Realtà tra piani infiniti.
+  Underdark: Mondo sotterraneo di oscurità infinita, percorso da tunnel senza luce, fazioni spietate e antichi segreti sepolti in profondità.
+  Frontiera: Terre selvagge ai confini della civiltà, dove la legge è incerta, le comunità sono isolate e il pericolo è una costante.
 
 campaign_types:
   - One-Shot
@@ -38,11 +44,14 @@ themes:
   - Horror gotico
   - Viaggio planare
   - Intrigo politico
-  - Sopravvivenza selvaggia
+  - Sopravvivenza
   - Avventura nautica
   - Guerra tra fazioni
   - Caccia ai mostri
   - Steampunk medievale
+  - Rovine antiche
+  - Salvataggio
+  - Spedizione
 
 tones:
   - Eroico
@@ -53,6 +62,8 @@ tones:
   - Comico
   - Noir
   - Bizzaro
+  - Teso
+  - Speranzoso
 
 styles:
   - Epico
@@ -63,6 +74,8 @@ styles:
   - Low fantasy
   - Investigativo
   - Fiabesco
+  - Sandbox
+  - Sopravvivenza
 
 party_archetypes:
   - Guerriero
@@ -135,7 +148,7 @@ presets:
   CENERI SENZA SPERANZA:
     setting: Dark Sun
     campaign_type: One-Shot
-    theme: Sopravvivenza selvaggia
+    theme: Sopravvivenza
     tone: Cupo
     style: Crudo
     party_level: 3
@@ -279,7 +292,7 @@ presets:
   POLVERE E SILENZIO:
     setting: Dark Sun
     campaign_type: Mini-campagna
-    theme: Sopravvivenza selvaggia
+    theme: Sopravvivenza
     tone: Cupo
     style: Crudo
     party_level: 3
@@ -331,7 +344,7 @@ presets:
   FUGA DAL PROFONDO:
     setting: Dark Sun
     campaign_type: Esplorazione dungeon
-    theme: Sopravvivenza selvaggia
+    theme: Sopravvivenza
     tone: Cupo
     style: Crudo
     party_level: 5

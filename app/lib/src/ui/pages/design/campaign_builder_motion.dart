@@ -41,10 +41,13 @@ class _AnimatedRuneFilterChipState extends State<AnimatedRuneFilterChip>
   @override
   void didUpdateWidget(covariant AnimatedRuneFilterChip oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.atmosphere.chipFlashDuration != widget.atmosphere.chipFlashDuration) {
+    if (oldWidget.atmosphere.chipFlashDuration !=
+        widget.atmosphere.chipFlashDuration) {
       _flashController.duration = widget.atmosphere.chipFlashDuration;
     }
-    if (!oldWidget.selected && widget.selected && !prefersReducedMotion(context)) {
+    if (!oldWidget.selected &&
+        widget.selected &&
+        !prefersReducedMotion(context)) {
       _flashController.forward(from: 0);
     }
   }
@@ -131,7 +134,8 @@ class ForgePrimaryActionButton extends StatefulWidget {
   final VoidCallback? onPressed;
 
   @override
-  State<ForgePrimaryActionButton> createState() => _ForgePrimaryActionButtonState();
+  State<ForgePrimaryActionButton> createState() =>
+      _ForgePrimaryActionButtonState();
 }
 
 class _ForgePrimaryActionButtonState extends State<ForgePrimaryActionButton>
@@ -156,7 +160,8 @@ class _ForgePrimaryActionButtonState extends State<ForgePrimaryActionButton>
   @override
   void didUpdateWidget(covariant ForgePrimaryActionButton oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.atmosphere.ctaPulseDuration != widget.atmosphere.ctaPulseDuration) {
+    if (oldWidget.atmosphere.ctaPulseDuration !=
+        widget.atmosphere.ctaPulseDuration) {
       _pulseController.duration = widget.atmosphere.ctaPulseDuration;
     }
     _syncPulse();
@@ -190,7 +195,8 @@ class _ForgePrimaryActionButtonState extends State<ForgePrimaryActionButton>
   @override
   Widget build(BuildContext context) {
     final reducedMotion = prefersReducedMotion(context);
-    final canPulse = widget.shouldPulse && widget.onPressed != null && !widget.isLoading;
+    final canPulse =
+        widget.shouldPulse && widget.onPressed != null && !widget.isLoading;
     final baseGlowAlpha = canPulse ? 0.16 : 0.08;
 
     final button = FilledButton.icon(
@@ -208,8 +214,9 @@ class _ForgePrimaryActionButtonState extends State<ForgePrimaryActionButton>
     return AnimatedBuilder(
       animation: _pulseController,
       builder: (context, child) {
-        final pulseValue =
-            reducedMotion ? 0.0 : Curves.easeInOut.transform(_pulseController.value);
+        final pulseValue = reducedMotion
+            ? 0.0
+            : Curves.easeInOut.transform(_pulseController.value);
         final scale = 1 + (canPulse ? pulseValue * 0.018 : 0.0);
         final glowAlpha = baseGlowAlpha + (canPulse ? pulseValue * 0.12 : 0.0);
         final blurRadius = 16 + (canPulse ? pulseValue * 14 : 0.0);

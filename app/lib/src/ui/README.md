@@ -54,9 +54,8 @@ La UI puo dipendere da:
 - `theme/`
 - `models/`
 - `services/`
-- `config/`
 
-Non dovrebbe introdurre logica HTTP diretta o parsing JSON.
+Non dovrebbe introdurre logica di accesso diretto agli asset o parsing strutturato dei dati.
 
 ## Evoluzione naturale
 

@@ -11,6 +11,9 @@ settings:
   - Dark Sun
   - Wildemount
   - Feywild
+  - Planescape
+  - Underdark
+  - Frontier
 
 setting_descriptions:
   Forgotten Realms: Classic high-fantasy world, rich with kingdoms, ancient magic, and heroic adventures.
@@ -25,6 +28,9 @@ setting_descriptions:
   Dark Sun: Post-apocalyptic desert world, harsh and dystopian, where magic consumes resources and survival is central.
   Wildemount: Political and warlike scenario of Exandria, ideal for campaigns of national conflict, intrigue, and war fronts.
   Feywild: Fey plane, a distorted mirror of the material world, populated by magical creatures, enchanted realms, and unpredictable strangeness.
+  Planescape: Cosmic crossroads dominated by warring philosophies, where every faction claims the True Nature of Reality across infinite planes.
+  Underdark: Endless subterranean world of darkness, threaded by lightless tunnels, ruthless factions, and ancient secrets buried deep below.
+  Frontier: Wild lands at the edges of civilisation, where law is uncertain, communities are isolated, and danger is a constant.
 
 campaign_types:
   - One-Shot
@@ -38,11 +44,14 @@ themes:
   - Gothic horror
   - Planar journey
   - Political intrigue
-  - Wilderness survival
+  - Wilderness
   - Nautical adventure
   - Faction war
   - Monster hunt
   - Medieval steampunk
+  - Ancient ruins
+  - Rescue
+  - Expedition
 
 tones:
   - Heroic
@@ -53,6 +62,8 @@ tones:
   - Comic
   - Noir
   - Bizarre
+  - Tense
+  - Hopeful
 
 styles:
   - Epic
@@ -63,6 +74,8 @@ styles:
   - Low fantasy
   - Investigative
   - Fairytale
+  - Sandbox
+  - Survival
 
 party_archetypes:
   - Fighter
@@ -135,7 +148,7 @@ presets:
   CENERI SENZA SPERANZA:
     setting: Dark Sun
     campaign_type: One-Shot
-    theme: Wilderness survival
+    theme: Wilderness
     tone: Dark
     style: Gritty
     party_level: 3
@@ -277,7 +290,7 @@ presets:
   POLVERE E SILENZIO:
     setting: Dark Sun
     campaign_type: Mini-campaign
-    theme: Wilderness survival
+    theme: Wilderness
     tone: Dark
     style: Gritty
     party_level: 3
@@ -329,7 +342,7 @@ presets:
   FUGA DAL PROFONDO:
     setting: Dark Sun
     campaign_type: Dungeon crawl
-    theme: Wilderness survival
+    theme: Wilderness
     tone: Dark
     style: Gritty
     party_level: 5

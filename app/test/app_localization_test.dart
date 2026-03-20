@@ -9,7 +9,8 @@ void main() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
-  testWidgets('CampaignCreatorApp follows a supported device locale on first launch', (
+  testWidgets(
+      'CampaignCreatorApp follows a supported device locale on first launch', (
     tester,
   ) async {
     tester.binding.platformDispatcher.localesTestValue = const <Locale>[
@@ -32,9 +33,14 @@ void main() {
     expect(find.text('IT | EN'), findsOneWidget);
     expect(find.text('free-format:Scegli formato'), findsOneWidget);
     expect(find.text('seal:Forgia pergamena'), findsOneWidget);
+    expect(
+        find.text('entry-description:Formato campagna pronto sul dispositivo.'),
+        findsOneWidget);
   });
 
-  testWidgets('CampaignCreatorApp falls back to English for unsupported device locale', (
+  testWidgets(
+      'CampaignCreatorApp falls back to English for unsupported device locale',
+      (
     tester,
   ) async {
     tester.binding.platformDispatcher.localesTestValue = const <Locale>[
@@ -56,6 +62,8 @@ void main() {
     expect(find.text('locale:en'), findsOneWidget);
     expect(find.text('free-format:Choose format'), findsOneWidget);
     expect(find.text('seal:Seal parchment'), findsOneWidget);
+    expect(find.text('entry-description:Campaign format ready on device.'),
+        findsOneWidget);
   });
 
   testWidgets('CampaignCreatorApp switches locale at runtime without restart', (
@@ -77,6 +85,8 @@ void main() {
     expect(find.text('locale:en'), findsOneWidget);
     expect(find.text('free-format:Choose format'), findsOneWidget);
     expect(find.text('seal:Seal parchment'), findsOneWidget);
+    expect(find.text('entry-description:Campaign format ready on device.'),
+        findsOneWidget);
   });
 
   testWidgets('CampaignCreatorApp restores the saved locale on startup', (
@@ -105,6 +115,8 @@ void main() {
     expect(find.text('locale:en'), findsOneWidget);
     expect(find.text('free-format:Choose format'), findsOneWidget);
     expect(find.text('seal:Seal parchment'), findsOneWidget);
+    expect(find.text('entry-description:Campaign format ready on device.'),
+        findsOneWidget);
   });
 }
 
@@ -128,6 +140,7 @@ class _LocaleProbe extends StatelessWidget {
             Text('locale:$localeCode'),
             Text('free-format:${context.l10n.appFreeFormat}'),
             Text('seal:${context.l10n.appSealParchment}'),
+            Text('entry-description:${context.l10n.entryDescriptionDefault}'),
             Text(
               '${context.l10n.languageItalianShort} | ${context.l10n.languageEnglishShort}',
             ),

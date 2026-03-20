@@ -1,57 +1,59 @@
 # services
 
-Questa cartella contiene il layer di integrazione con sistemi esterni.
-Nel progetto attuale il solo sistema esterno e il backend Python esposto via FastAPI.
+Questa cartella contiene il layer di accesso ai dati e il motore locale di generazione prompt.
+Nel progetto attuale non esiste un backend runtime: opzioni e template sono inclusi come asset dell'app.
 
 ## Responsabilita
 
-- incapsulare le chiamate HTTP
-- tradurre errori di trasporto in eccezioni leggibili dalla UI
-- convertire payload JSON in modelli del frontend
+- caricare gli asset YAML e markdown dal bundle Flutter
+- tradurre asset e input utente in modelli e prompt finali
+- offrire un'interfaccia testabile usata dalla shell UI
 
 ## File
 
-- `backend_api.dart`
-  Client applicativo verso il backend.
+- `campaign_service.dart`
+  Interfaccia astratta usata dalla UI per caricare opzioni e generare il prompt.
 
-## Cosa fa `BackendApi`
+- `local_campaign_service.dart`
+  Implementazione offline che legge asset locali e rende i template sul dispositivo.
 
-`BackendApi` riceve un `baseUrl` e opzionalmente un `http.Client`.
-Questo consente:
+## Cosa fa `LocalCampaignService`
 
-- configurazione da ambiente tramite `AppConfig`
-- testabilita del layer di rete tramite client custom
+`LocalCampaignService` non dipende dalla rete. Usa `rootBundle` per leggere:
 
 Metodi pubblici:
 
 - `getOptions()`
-  Chiama `GET /options`, valida il formato della risposta e restituisce `CampaignOptions`.
+  Carica `options.yaml` o `options_en.yaml`, effettua il parsing e restituisce `CampaignOptions`.
 
 - `generatePrompt(CampaignGenerateRequest request)`
-  Chiama `POST /generate`, invia il JSON serializzato e restituisce il prompt testuale finale.
+  Seleziona il template corretto, costruisce il contesto e restituisce il prompt markdown finale.
 
 ## Gestione errori
 
-`BackendApiException` centralizza gli errori di rete e di payload.
-La factory `fromResponse(...)` prova a leggere `detail` dalla risposta backend, cosi la UI puo mostrare un messaggio piu utile del semplice status code.
+Gli errori derivano principalmente da:
+
+- asset mancanti o malformati
+- input utente non valido per la generazione
+- problemi di parsing del template o delle opzioni
 
 ## Linee guida
 
 - nessun widget Flutter in questo layer
 - nessuna logica di layout o navigazione
-- mantenere i metodi piccoli e orientati al contratto dell'API
-- aggiungere qui nuovi endpoint invece di chiamare `http` direttamente dalla UI
+- mantenere i metodi piccoli e orientati al contratto del service
+- aggiungere qui nuove sorgenti dati locali o nuovi renderer invece di spargere parsing nella UI
 
 ## Quando modificarla
 
 Aggiorna questa cartella quando:
 
-- vengono aggiunti endpoint backend
-- cambia il formato delle risposte
-- vuoi introdurre timeout, retry, caching o logging HTTP
+- cambiano opzioni o template inclusi nell'app
+- cambia il formato dei file asset
+- vuoi introdurre caching locale o validazioni aggiuntive
 
 Se in futuro il progetto cresce, questa cartella e il posto giusto per separare:
 
-- client HTTP raw
 - repository di dominio
 - eventuale cache locale o persistenza offline
+- strategie diverse di generazione del prompt

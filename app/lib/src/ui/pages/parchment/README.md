@@ -24,7 +24,7 @@ Contiene:
 
 ## Cosa non deve stare qui
 
-- chiamate HTTP
+- accesso diretto al service layer o agli asset bundle
 - stato globale della flow
 - logica di navigazione tra entry/forge/parchment
 

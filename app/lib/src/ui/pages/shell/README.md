@@ -8,7 +8,7 @@ L'obiettivo della cartella non e disegnare ogni dettaglio UI. Il suo compito e d
 - quale stage della feature e attivo
 - quali dati sono gia disponibili
 - quando una transizione e consentita
-- quando una richiesta backend puo essere inviata
+- quando una richiesta di generazione puo essere avviata
 - quali azioni finali devono essere esposte all'utente
 
 ## File
@@ -20,8 +20,8 @@ Contiene il `StatefulWidget` principale e tutto lo stato condiviso della feature
 
 Responsabilita principali:
 
-- istanziare `BackendApi`
-- caricare `CampaignOptions` dal backend
+- istanziare il `CampaignService`
+- caricare `CampaignOptions` dagli asset locali
 - mantenere i `TextEditingController`
 - serializzare lo stato UI in `CampaignGenerateRequest`
 - orchestrare la route flow tra `Entry`, `Forge` e `Pergamena`
@@ -90,7 +90,7 @@ Questo approccio evita di duplicare campi o controller tra schermate e permette 
 - stato della flow
 - regole di navigazione tra route e sezioni
 - validazioni cross-screen
-- integrazione con backend e servizi di piattaforma
+- integrazione con service layer locale e servizi di piattaforma
 - mapping da stato condiviso a root widget delle route
 
 ## Cosa non deve stare qui

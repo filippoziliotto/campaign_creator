@@ -1,15 +1,12 @@
-import 'dart:convert';
-
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
-import 'package:campaign_creator_flutter/src/services/backend_api.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/routes/entry_page.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/routes/parchment_page.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../helpers/fake_campaign_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -28,38 +25,10 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    final api = BackendApi(
-      baseUrl: 'http://localhost:8000',
-      client: MockClient((request) async {
-        if (request.url.path == '/options') {
-          return http.Response(
-            jsonEncode({
-              'settings': ['Forgotten Realms'],
-              'campaign_types': ['One-Shot'],
-              'themes': ['Intrigo'],
-              'tones': ['Epico'],
-              'styles': ['Lineare'],
-              'party_archetypes': ['Tank'],
-              'twists': ['Tradimento'],
-              'presets': {},
-              'setting_descriptions': {
-                'Forgotten Realms': 'Classico high fantasy.',
-              },
-              'preset_descriptions': {},
-            }),
-            200,
-            headers: {'content-type': 'application/json'},
-          );
-        }
-
-        throw UnimplementedError('Unexpected request: ${request.url}');
-      }),
-    );
-
     await tester.pumpWidget(
       _TestApp(
         child: CampaignBuilderPage(
-          api: api,
+          service: FakeCampaignService(minimalOptions()),
           currentLocale: const Locale('it'),
           onLocaleChanged: (_) {},
         ),
@@ -112,38 +81,10 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(430, 932));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    final api = BackendApi(
-      baseUrl: 'http://localhost:8000',
-      client: MockClient((request) async {
-        if (request.url.path == '/options') {
-          return http.Response(
-            jsonEncode({
-              'settings': ['Forgotten Realms'],
-              'campaign_types': ['One-Shot'],
-              'themes': ['Intrigo'],
-              'tones': ['Epico'],
-              'styles': ['Lineare'],
-              'party_archetypes': ['Tank'],
-              'twists': ['Tradimento'],
-              'presets': {},
-              'setting_descriptions': {
-                'Forgotten Realms': 'Classico high fantasy.',
-              },
-              'preset_descriptions': {},
-            }),
-            200,
-            headers: {'content-type': 'application/json'},
-          );
-        }
-
-        throw UnimplementedError('Unexpected request: ${request.url}');
-      }),
-    );
-
     await tester.pumpWidget(
       _TestApp(
         child: CampaignBuilderPage(
-          api: api,
+          service: FakeCampaignService(minimalOptions()),
           currentLocale: const Locale('it'),
           onLocaleChanged: (_) {},
         ),
@@ -197,38 +138,10 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    final api = BackendApi(
-      baseUrl: 'http://localhost:8000',
-      client: MockClient((request) async {
-        if (request.url.path == '/options') {
-          return http.Response(
-            jsonEncode({
-              'settings': ['Forgotten Realms'],
-              'campaign_types': ['One-Shot'],
-              'themes': ['Intrigo'],
-              'tones': ['Epico'],
-              'styles': ['Lineare'],
-              'party_archetypes': ['Tank'],
-              'twists': ['Tradimento'],
-              'presets': {},
-              'setting_descriptions': {
-                'Forgotten Realms': 'Classico high fantasy.',
-              },
-              'preset_descriptions': {},
-            }),
-            200,
-            headers: {'content-type': 'application/json'},
-          );
-        }
-
-        throw UnimplementedError('Unexpected request: ${request.url}');
-      }),
-    );
-
     await tester.pumpWidget(
       _TestApp(
         child: CampaignBuilderPage(
-          api: api,
+          service: FakeCampaignService(minimalOptions()),
           currentLocale: const Locale('it'),
           onLocaleChanged: (_) {},
         ),
@@ -270,38 +183,10 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    final api = BackendApi(
-      baseUrl: 'http://localhost:8000',
-      client: MockClient((request) async {
-        if (request.url.path == '/options') {
-          return http.Response(
-            jsonEncode({
-              'settings': ['Forgotten Realms'],
-              'campaign_types': ['One-Shot'],
-              'themes': ['Intrigo'],
-              'tones': ['Epico'],
-              'styles': ['Lineare'],
-              'party_archetypes': ['Tank'],
-              'twists': ['Tradimento'],
-              'presets': {},
-              'setting_descriptions': {
-                'Forgotten Realms': 'Classico high fantasy.',
-              },
-              'preset_descriptions': {},
-            }),
-            200,
-            headers: {'content-type': 'application/json'},
-          );
-        }
-
-        throw UnimplementedError('Unexpected request: ${request.url}');
-      }),
-    );
-
     await tester.pumpWidget(
       _TestApp(
         child: CampaignBuilderPage(
-          api: api,
+          service: FakeCampaignService(minimalOptions()),
           currentLocale: const Locale('it'),
           onLocaleChanged: (_) {},
         ),
@@ -352,38 +237,10 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    final api = BackendApi(
-      baseUrl: 'http://localhost:8000',
-      client: MockClient((request) async {
-        if (request.url.path == '/options') {
-          return http.Response(
-            jsonEncode({
-              'settings': ['Forgotten Realms'],
-              'campaign_types': ['One-Shot'],
-              'themes': ['Intrigo'],
-              'tones': ['Epico'],
-              'styles': ['Lineare'],
-              'party_archetypes': ['Tank'],
-              'twists': ['Tradimento'],
-              'presets': {},
-              'setting_descriptions': {
-                'Forgotten Realms': 'Classico high fantasy.',
-              },
-              'preset_descriptions': {},
-            }),
-            200,
-            headers: {'content-type': 'application/json'},
-          );
-        }
-
-        throw UnimplementedError('Unexpected request: ${request.url}');
-      }),
-    );
-
     await tester.pumpWidget(
       _TestApp(
         child: CampaignBuilderPage(
-          api: api,
+          service: FakeCampaignService(minimalOptions()),
           currentLocale: const Locale('it'),
           onLocaleChanged: (_) {},
         ),

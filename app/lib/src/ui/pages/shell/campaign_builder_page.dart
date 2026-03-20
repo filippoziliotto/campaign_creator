@@ -7,10 +7,10 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../config/app_config.dart';
 import '../../../l10n_extension.dart';
 import '../../../models/campaign_models.dart';
-import '../../../services/backend_api.dart';
+import '../../../services/campaign_service.dart';
+import '../../../services/local_campaign_service.dart';
 import '../../../theme/fantasy_theme.dart';
 import '../design/campaign_builder_atmosphere.dart';
 import '../design/campaign_builder_motion.dart';
@@ -198,12 +198,12 @@ const Map<String, _CampaignTypeMeta> _campaignTypeMeta =
 class CampaignBuilderPage extends StatefulWidget {
   const CampaignBuilderPage({
     super.key,
-    this.api,
+    this.service,
     required this.currentLocale,
     required this.onLocaleChanged,
   });
 
-  final BackendApi? api;
+  final CampaignService? service;
   final Locale currentLocale;
   final ValueChanged<Locale> onLocaleChanged;
 
@@ -219,7 +219,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       'campaign_builder.saved_campaign_type';
   static const String _draftSettingKey = 'campaign_builder.saved_setting';
 
-  late final BackendApi _api;
+  late final CampaignService _service;
   late final List<TextEditingController> _textControllers;
   final ScrollController _entryScrollController = ScrollController();
   final ScrollController _forgeScrollController = ScrollController();
@@ -278,7 +278,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   @override
   void initState() {
     super.initState();
-    _api = widget.api ?? BackendApi(baseUrl: AppConfig.apiBaseUrl);
+    _service = widget.service ?? LocalCampaignService();
     _textControllers = <TextEditingController>[
       _customSettingController,
       _customThemeController,
@@ -314,7 +314,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   @override
   void didUpdateWidget(CampaignBuilderPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.currentLocale.languageCode != widget.currentLocale.languageCode) {
+    if (oldWidget.currentLocale.languageCode !=
+        widget.currentLocale.languageCode) {
       setState(_clearLocaleSelections);
       _loadOptions();
     }
@@ -367,7 +368,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     });
 
     try {
-      final options = await _api.getOptions(lang: widget.currentLocale.languageCode);
+      final options =
+          await _service.getOptions(lang: widget.currentLocale.languageCode);
       if (!mounted) {
         return;
       }
@@ -603,7 +605,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       safetyNotes: _safetyNotesController.text.trim(),
       includeNpcs: _includeNpcs,
       includeEncounters: _includeEncounters,
-      language: widget.currentLocale.languageCode == 'en' ? 'English' : 'Italiano',
+      language:
+          widget.currentLocale.languageCode == 'en' ? 'English' : 'Italiano',
     );
   }
 
@@ -632,7 +635,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
     try {
       final request = _buildGenerateRequest(options);
-      final prompt = await _api.generatePrompt(request);
+      final prompt = await _service.generatePrompt(request);
 
       if (!mounted) {
         return;
@@ -1032,7 +1035,6 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     return _selectedTwist ?? context.l10n.appTwistPending;
   }
 
-
   List<String> _summaryTokens({int? limit}) {
     final tokens = <String>[
       _selectedCampaignType ?? context.l10n.appFreeFormat,
@@ -1048,7 +1050,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       tokens.add(_selectedTones.take(2).join(' + '));
     }
     if (_selectedPreset != null) {
-      final displayName = _options?.presetNames[_selectedPreset!] ?? _selectedPreset!;
+      final displayName =
+          _options?.presetNames[_selectedPreset!] ?? _selectedPreset!;
       tokens.add(context.l10n.appSummaryPreset(displayName));
     }
 

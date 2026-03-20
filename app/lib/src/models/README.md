@@ -1,20 +1,20 @@
 # models
 
-Questa cartella definisce i tipi dati scambiati tra UI e backend.
-Il suo ruolo e rendere esplicito il contratto applicativo del frontend, evitando JSON anonimo sparso nei widget.
+Questa cartella definisce i tipi dati scambiati tra UI e service layer locale.
+Il suo ruolo e rendere esplicito il contratto applicativo del frontend, evitando mappe anonime sparse nei widget.
 
 ## Responsabilita
 
-- tipizzare i payload ricevuti dal backend
-- serializzare le request inviate dal frontend
+- tipizzare le opzioni caricate dagli asset bundle
+- rappresentare la richiesta di generazione costruita dalla UI
 - offrire piccoli helper di dominio legati ai dati, non alla UI
 
 ## File
 
 - `campaign_models.dart`
   Contiene i due tipi principali del progetto:
-  - `CampaignOptions`: rappresenta il payload di `/options`
-  - `CampaignGenerateRequest`: rappresenta il payload inviato a `/generate`
+  - `CampaignOptions`: rappresenta opzioni, preset e descrizioni caricati da YAML
+  - `CampaignGenerateRequest`: rappresenta l'input utente inviato al service locale
 
 ## Dettagli implementativi
 
@@ -24,11 +24,12 @@ Gestisce:
 
 - liste di opzioni selezionabili (`settings`, `campaignTypes`, `themes`, `tones`, `styles`, `partyArchetypes`, `twists`)
 - descrizioni testuali di ambientazioni e preset
-- mappa completa dei preset backend
+- mappa completa dei preset
 
 Helper esposti:
 
-- `CampaignOptions.fromJson(...)`: parsing del payload backend
+- `CampaignOptions.fromYaml(...)`: parsing del formato asset usato dall'app offline
+- `CampaignOptions.fromJson(...)`: helper di compatibilita utile per fixture o test
 - `presetsForCampaignType(...)`: filtra i preset per tipo campagna
 - `presetByName(...)`: recupera un preset per chiave
 
@@ -45,14 +46,10 @@ Tiene insieme:
 - flag su NPC e incontri
 - lingua di output
 
-Helper esposto:
-
-- `toJson()`: serializza il payload in forma compatibile con l'API backend
-
 ## Regole di progettazione
 
 - niente dipendenze da Flutter UI
-- niente chiamate HTTP
+- niente chiamate HTTP o accesso a `rootBundle`
 - niente stato mutabile condiviso
 - piccoli helper di dominio sono accettabili se riguardano il modello stesso
 
@@ -60,7 +57,7 @@ Helper esposto:
 
 Aggiorna questa cartella quando:
 
-- il backend cambia il contratto JSON
+- cambia la struttura dei file YAML
 - aggiungi nuovi campi alla flow del builder
 - servono helper di parsing o normalizzazione legati al payload
 

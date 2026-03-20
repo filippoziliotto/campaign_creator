@@ -14,12 +14,12 @@ Non e piu una directory piatta. La struttura e stata separata per responsabilita
 
 La dipendenza corretta va letta cosi:
 
-1. `shell/` decide stato, validazioni, transizioni e chiamate backend
+1. `shell/` decide stato, validazioni, transizioni e chiamate al service layer
 2. `routes/` riceve blocchi gia costruiti e li dispone nella pagina corretta
 3. `design/` fornisce il vocabolario visivo della feature
 4. `parchment/` si occupa del dominio UI specifico del prompt finale
 
-Questo ordine evita che widget visivi inizino a conoscere il backend o che le route inglobino logica di business.
+Questo ordine evita che widget visivi inizino a conoscere il caricamento dati o che le route inglobino logica di business.
 
 ## Dettaglio per sottocartella
 
@@ -52,7 +52,7 @@ Non e un design system globale dell'app, ma il set di elementi necessari a dare 
 - motion widget
 - campaign cards interattive
 
-Se un elemento viene riusato in piu punti della feature e non dipende dal backend, probabilmente appartiene qui.
+Se un elemento viene riusato in piu punti della feature e non dipende dal service layer, probabilmente appartiene qui.
 
 ### `parchment/`
 
@@ -63,7 +63,7 @@ Questa cartella e dedicata alla presentazione della pergamena come oggetto UI di
 
 Le dipendenze dovrebbero restare orientate in una sola direzione:
 
-- `shell/` puo dipendere da `routes/`, `design/`, `parchment/`, `models/`, `services/`, `config/`, `theme/`
+- `shell/` puo dipendere da `routes/`, `design/`, `parchment/`, `models/`, `services/`, `theme/`
 - `routes/` puo dipendere da `design/` e ricevere widget composti dalla shell
 - `design/` non deve dipendere da `shell/`
 - `parchment/` non deve dipendere da `shell/`

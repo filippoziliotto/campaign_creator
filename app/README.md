@@ -1,6 +1,6 @@
 # Flutter Frontend
 
-Frontend mobile in Flutter che usa il backend Python via HTTP.
+Campaign Forge ora funziona interamente offline. Le opzioni sono caricate da asset YAML inclusi nell'app e la generazione del prompt avviene sul dispositivo.
 
 ## Stato del progetto
 
@@ -16,22 +16,19 @@ piattaforma Flutter (`android/`, `ios/`, `web/`, `macos/`, `windows/`, `linux/`)
    flutter pub get
    ```
 
-3. Avvia l'app (dev locale):
+3. Avvia l'app:
 
    ```bash
-   # iOS simulator
-   flutter run --dart-define=API_BASE_URL=http://127.0.0.1:8000
-   # Android emulator
-   flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000
+   flutter run
    ```
 
-## API richiesta
+## Dati e template inclusi
 
-L'app richiede i seguenti endpoint dal backend Python:
+L'app usa questi asset locali:
 
-- `GET /options`
-- `POST /generate`
-- `GET /health`
+- `assets/data/options.yaml`
+- `assets/data/options_en.yaml`
+- `assets/templates/prompt_template*.md`
 
 ## Build di produzione
 
@@ -42,14 +39,15 @@ L'app richiede i seguenti endpoint dal backend Python:
 3. Esegui il build:
 
    ```bash
-   flutter build appbundle --dart-define=API_BASE_URL=https://tuo-backend.com
+   flutter build appbundle
    ```
 
 **iOS:**
 
 ```bash
-flutter build ipa --dart-define=API_BASE_URL=https://tuo-backend.com
+flutter build ipa
 ```
 
-> Il flag `--dart-define=API_BASE_URL=...` è obbligatorio per i build di produzione.
-> Senza di esso l'app non raggiungerà il backend.
+## Nota di runtime
+
+L'app non richiede un server locale o remoto. L'unica interazione di rete opzionale è l'apertura del sito di ChatGPT dal browser tramite l'azione dedicata.

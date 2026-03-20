@@ -1,3 +1,5 @@
+import 'package:yaml/yaml.dart';
+
 class CampaignOptions {
   CampaignOptions({
     required this.settings,
@@ -38,8 +40,8 @@ class CampaignOptions {
       partyArchetypes: _stringList(json['party_archetypes']),
       twists: _stringList(json['twists']),
       presets: rawPresets.map(
-        (key, value) =>
-            MapEntry(key, Map<String, dynamic>.from(value as Map<dynamic, dynamic>)),
+        (key, value) => MapEntry(
+            key, Map<String, dynamic>.from(value as Map<dynamic, dynamic>)),
       ),
       settingDescriptions: _stringMap(json['setting_descriptions']),
       presetDescriptions: _stringMap(json['preset_descriptions']),
@@ -47,14 +49,54 @@ class CampaignOptions {
     );
   }
 
+  factory CampaignOptions.fromYaml(YamlMap yaml) {
+    List<String> yamlList(dynamic v) =>
+        v is YamlList ? v.map((e) => e.toString()).toList() : <String>[];
+
+    Map<String, String> yamlStringMap(dynamic v) {
+      if (v is! YamlMap) return {};
+      return v.map((k, val) => MapEntry(k.toString(), val.toString()));
+    }
+
+    final rawPresets = yaml['presets'];
+    final presets = <String, Map<String, dynamic>>{};
+    if (rawPresets is YamlMap) {
+      for (final entry in rawPresets.entries) {
+        if (entry.value is YamlMap) {
+          presets[entry.key.toString()] =
+              (entry.value as YamlMap).map((k, v) => MapEntry(k.toString(), v));
+        }
+      }
+    }
+
+    return CampaignOptions(
+      settings: yamlList(yaml['settings']),
+      campaignTypes: yamlList(yaml['campaign_types']),
+      themes: yamlList(yaml['themes']),
+      tones: yamlList(yaml['tones']),
+      styles: yamlList(yaml['styles']),
+      partyArchetypes: yamlList(yaml['party_archetypes']),
+      twists: yamlList(yaml['twists']),
+      presets: presets,
+      settingDescriptions: yamlStringMap(yaml['setting_descriptions']),
+      presetDescriptions: yamlStringMap(yaml['preset_descriptions']),
+      presetNames: yamlStringMap(yaml['preset_names']),
+    );
+  }
+
   List<String> presetsForCampaignType(String campaignType) {
     final normalizedCampaignType = campaignType.trim().toLowerCase();
 
-    final filtered = presets.entries.where((entry) {
-      final normalizedPresetType =
-          (entry.value['campaign_type'] ?? '').toString().trim().toLowerCase();
-      return normalizedPresetType == normalizedCampaignType;
-    }).map((entry) => entry.key).toList();
+    final filtered = presets.entries
+        .where((entry) {
+          final normalizedPresetType = (entry.value['campaign_type'] ?? '')
+              .toString()
+              .trim()
+              .toLowerCase();
+          return normalizedPresetType == normalizedCampaignType;
+        })
+        .map((entry) => entry.key)
+        .toList();
 
     filtered.sort();
     return filtered;
@@ -105,30 +147,6 @@ class CampaignGenerateRequest {
   final bool includeNpcs;
   final bool includeEncounters;
   final String language;
-
-  Map<String, dynamic> toJson() {
-    return {
-      'setting': setting,
-      'campaign_type': campaignType,
-      'theme_preferences': themePreferences,
-      'tone_preferences': tonePreferences,
-      'style_preferences': stylePreferences,
-      'party_level': partyLevel,
-      'party_size': partySize,
-      'party_archetypes': partyArchetypes,
-      'twist': twist,
-      'narrative_hooks': narrativeHooks,
-      'character_notes': characterNotes,
-      'constraints': constraints,
-      'factions': factions,
-      'npc_focus': npcFocus,
-      'encounter_focus': encounterFocus,
-      'safety_notes': safetyNotes,
-      'include_npcs': includeNpcs,
-      'include_encounters': includeEncounters,
-      'language': language,
-    };
-  }
 }
 
 List<String> _stringList(dynamic raw) {

@@ -16,11 +16,7 @@ Campaign Forge does not collect, transmit, or share any personally identifiable 
 
 ## Network Requests
 
-The app makes HTTP/HTTPS requests to the developer's own backend server solely to:
-- Load campaign configuration options (e.g. campaign types, settings, themes)
-- Generate a campaign prompt based on the options you select in the app
-
-No account creation, login, or user identification is required or possible. The requests contain only the campaign preferences you enter in the app (e.g. party level, twist, tone). This information is not stored on the server after the response is returned.
+Campaign Forge makes no network requests. All campaign configuration options and prompt generation run entirely on your device using bundled data. No data is ever sent to any server.
 
 ## Local Storage
 

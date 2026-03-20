@@ -185,7 +185,8 @@ class _ParchmentUnfoldRevealState extends State<ParchmentUnfoldReveal>
         final progress = _reducedMotion ? 1.0 : curvedAnimation.value;
         final heightFactor = 0.16 + (progress * 0.84);
         final verticalScale = 0.88 + (progress * 0.12);
-        final opacity = _reducedMotion ? 1.0 : Curves.easeOut.transform(progress);
+        final opacity =
+            _reducedMotion ? 1.0 : Curves.easeOut.transform(progress);
         final glowAlpha = 0.04 + (progress * 0.08);
 
         return Opacity(
@@ -205,7 +206,8 @@ class _ParchmentUnfoldRevealState extends State<ParchmentUnfoldReveal>
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                          color: widget.atmosphere.glow.withValues(alpha: glowAlpha),
+                          color: widget.atmosphere.glow
+                              .withValues(alpha: glowAlpha),
                           blurRadius: 14 + (progress * 12),
                           offset: const Offset(0, 12),
                         ),
@@ -368,15 +370,22 @@ class PremiumParchmentSheet extends StatelessWidget {
                         children: [
                           Text(
                             'Pergamena del Cronista',
-                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.copyWith(
                                   color: FantasyPalette.ink,
                                 ),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             'Una lettura strutturata del prompt finale, con capitoli richiudibili e punti chiave messi in rilievo.',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: FantasyPalette.ink.withValues(alpha: 0.76),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: FantasyPalette.ink
+                                      .withValues(alpha: 0.76),
                                 ),
                           ),
                         ],
@@ -630,8 +639,7 @@ class ParchmentActionRail extends StatelessWidget {
           title: isCurrentDraftSaved
               ? context.l10n.parchmentDraftUpdatedTitle
               : context.l10n.parchmentSaveDraftTitle,
-          subtitle: savedDraftLabel ??
-              context.l10n.parchmentSaveDraftSubtitle,
+          subtitle: savedDraftLabel ?? context.l10n.parchmentSaveDraftSubtitle,
           onTap: onSaveDraft,
         ),
       ],
@@ -680,7 +688,8 @@ String _normalizeHeading(String line) {
 }
 
 String _buildPreview(String body) {
-  final collapsed = body.replaceAll('\n', ' ').replaceAll(RegExp(r'\s+'), ' ').trim();
+  final collapsed =
+      body.replaceAll('\n', ' ').replaceAll(RegExp(r'\s+'), ' ').trim();
   if (collapsed.length <= 144) {
     return collapsed;
   }

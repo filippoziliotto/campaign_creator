@@ -1,32 +1,16 @@
 # Campaign Forge — D&D Campaign Creator
 
-A D&D campaign prompt generator with a Flutter mobile app and a Python API backend.
+A fully offline D&D campaign prompt generator. Flutter mobile app (iOS + Android) with no backend required — all options and prompt generation run on-device.
 
 ## Architecture
 
 - `app/` — Flutter frontend (iOS + Android)
-- `server/` — Python FastAPI backend
-  - `server/api/` — HTTP endpoints (`/health`, `/options`, `/generate`)
-  - `server/story_selector/` — prompt generation logic, templates, schema
+  - `app/assets/data/` — bundled YAML option files (Italian + English)
+  - `app/assets/templates/` — bundled Jinja2-style prompt templates
+  - `app/lib/src/services/local_campaign_service.dart` — on-device prompt generation
 - `docs/` — privacy policy and project documentation
 
 ## Setup
-
-### Backend
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r server/requirements.txt
-```
-
-Start the server:
-
-```bash
-bash scripts/start_server.sh
-# or directly:
-uvicorn server.api.app:app --reload --host 0.0.0.0 --port 8000
-```
 
 ### Flutter App
 
@@ -35,53 +19,17 @@ Requires Flutter SDK.
 ```bash
 cd app
 flutter pub get
-flutter run --dart-define=API_BASE_URL=http://127.0.0.1:8000
+flutter run
 ```
 
-For Android emulator use `http://10.0.2.2:8000`.
+## Build
 
-## Structure
-
-```text
-.
-├── .github/
-│   └── workflows/
-│       ├── flutter.yml
-│       └── server.yml
-├── app/
-│   ├── lib/
-│   │   ├── main.dart
-│   │   └── src/
-│   │       ├── app.dart
-│   │       ├── config/
-│   │       ├── models/
-│   │       ├── services/
-│   │       ├── theme/
-│   │       └── ui/
-│   ├── android/
-│   ├── ios/
-│   ├── assets/
-│   └── pubspec.yaml
-├── server/
-│   ├── api/
-│   │   └── app.py
-│   ├── story_selector/
-│   │   ├── schema.py
-│   │   ├── prompt_builder.py
-│   │   ├── render.py
-│   │   ├── data/
-│   │   │   └── options.yaml
-│   │   └── templates/
-│   └── requirements.txt
-├── docs/
-│   └── privacy_policy.md
-├── scripts/
-│   └── start_server.sh
-├── .env.example
-├── LICENSE
-└── README.md
+```bash
+cd app
+flutter build appbundle
+flutter build ipa
 ```
 
 ## Output
 
-The app produces a structured D&D campaign prompt ready to paste into ChatGPT.
+The app produces a structured D&D campaign prompt ready to paste into ChatGPT. The optional "Open in ChatGPT" action opens `chatgpt.com` in a browser and copies the prompt to the clipboard.

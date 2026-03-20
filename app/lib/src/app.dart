@@ -8,8 +8,8 @@ import 'l10n_extension.dart';
 import 'theme/fantasy_theme.dart';
 import 'ui/pages/shell/campaign_builder_page.dart';
 
-typedef CampaignCreatorHomeBuilder =
-    Widget Function(Locale locale, ValueChanged<Locale> onLocaleChanged);
+typedef CampaignCreatorHomeBuilder = Widget Function(
+    Locale locale, ValueChanged<Locale> onLocaleChanged);
 
 class CampaignCreatorApp extends StatefulWidget {
   const CampaignCreatorApp({

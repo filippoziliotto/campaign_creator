@@ -1,14 +1,11 @@
-import 'dart:convert';
-
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
-import 'package:campaign_creator_flutter/src/services/backend_api.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_primitives.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../helpers/fake_campaign_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +23,7 @@ void main() {
     await tester.pumpWidget(
       _TestApp(
         child: CampaignBuilderPage(
-          api: _buildTestApi(),
+          service: FakeCampaignService(presetsOptions()),
           currentLocale: const Locale('it'),
           onLocaleChanged: (_) {},
         ),
@@ -58,7 +55,7 @@ void main() {
     await tester.pumpWidget(
       _TestApp(
         child: CampaignBuilderPage(
-          api: _buildTestApi(),
+          service: FakeCampaignService(presetsOptions()),
           currentLocale: const Locale('it'),
           onLocaleChanged: (_) {},
         ),
@@ -99,7 +96,7 @@ void main() {
     await tester.pumpWidget(
       _TestApp(
         child: CampaignBuilderPage(
-          api: _buildTestApi(),
+          service: FakeCampaignService(presetsOptions()),
           currentLocale: const Locale('it'),
           onLocaleChanged: (_) {},
         ),
@@ -149,50 +146,6 @@ void main() {
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
-}
-
-BackendApi _buildTestApi() {
-  return BackendApi(
-    baseUrl: 'http://localhost:8000',
-    client: MockClient((request) async {
-      if (request.url.path == '/options') {
-        return http.Response(
-          jsonEncode({
-            'settings': ['Forgotten Realms', 'Eberron'],
-            'campaign_types': ['One-Shot'],
-            'themes': ['Intrigo'],
-            'tones': ['Epico'],
-            'styles': ['Lineare'],
-            'party_archetypes': ['Tank'],
-            'twists': ['Tradimento', 'Portale'],
-            'presets': {
-              'Cronache del Porto': {
-                'campaign_type': 'one-shot',
-                'setting': 'Eberron',
-                'twist': 'Tradimento',
-                'theme': 'Intrigo',
-                'tone': 'Epico',
-                'style': 'Lineare',
-                'party_level': 5,
-                'party_size': 4,
-              },
-            },
-            'setting_descriptions': {
-              'Forgotten Realms': 'Classico high fantasy.',
-              'Eberron': 'Metropoli magica e pulp noir.',
-            },
-            'preset_descriptions': {
-              'Cronache del Porto': 'Intrighi nei moli e faide tra casate.',
-            },
-          }),
-          200,
-          headers: {'content-type': 'application/json'},
-        );
-      }
-
-      throw UnimplementedError('Unexpected request: ${request.url}');
-    }),
-  );
 }
 
 class _TestApp extends StatelessWidget {
