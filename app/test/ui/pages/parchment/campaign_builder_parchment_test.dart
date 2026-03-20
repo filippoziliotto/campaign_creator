@@ -6,6 +6,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+const _testAtmosphere = CampaignAtmosphereData(
+  id: 'test',
+  label: 'Test',
+  primary: Color(0xFFC2482D),
+  secondary: Color(0xFFF0A35B),
+  highlight: Color(0xFFF5E6C9),
+  cardTint: Color(0xFF4C1E17),
+  linework: Color(0xFF8A3A28),
+  glow: Color(0xFFE46B3C),
+  backdropVariant: CampaignBackdropVariant.emberRush,
+  routeTransitionType: SharedAxisTransitionType.horizontal,
+  sectionTransitionType: SharedAxisTransitionType.horizontal,
+  routeTransitionDuration: Duration(milliseconds: 420),
+  reverseRouteTransitionDuration: Duration(milliseconds: 320),
+  sectionTransitionDuration: Duration(milliseconds: 260),
+  revealDuration: Duration(milliseconds: 520),
+  revealDistance: 30,
+  cardHoverLift: 14,
+  cardHoverTilt: 0.095,
+  chipFlashDuration: Duration(milliseconds: 300),
+  ctaPulseDuration: Duration(milliseconds: 1300),
+  parchmentUnfoldDuration: Duration(milliseconds: 620),
+  parchmentUnfoldCurve: Curves.easeOutCubic,
+);
+
+const _sheetPrompt = '''
+# Premessa
+La compagnia arriva a Vallaki.
+
+## Minaccia
+Strahd osserva da lontano.
+
+## Finale
+Il campanile si spezza durante il rituale.
+''';
+
 void main() {
   group('parsePromptChapters', () {
     test('splits prompt into chapters using markdown headings', () {
@@ -73,6 +109,105 @@ Ingresso nel dungeon.
     });
   });
 
+  group('PremiumParchmentSheet', () {
+    testWidgets('renders keyed ceremonial frame surfaces', (tester) async {
+      await tester.pumpWidget(
+        _localizedParchmentApp(
+          child: SingleChildScrollView(
+            child: PremiumParchmentSheet(
+              atmosphere: _testAtmosphere,
+              chapters: parsePromptChapters(_sheetPrompt),
+              prompt: _sheetPrompt,
+              isStale: false,
+              onSealTap: () {},
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byKey(const ValueKey('parchment-outer-shell')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('parchment-body-frame')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('parchment-highlight-strip')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('renders editorial chapter affordances', (tester) async {
+      await tester.pumpWidget(
+        _localizedParchmentApp(
+          child: SingleChildScrollView(
+            child: PremiumParchmentSheet(
+              atmosphere: _testAtmosphere,
+              chapters: parsePromptChapters(_sheetPrompt),
+              prompt: _sheetPrompt,
+              isStale: false,
+              onSealTap: () {},
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const ValueKey('parchment-chapter-1')), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('parchment-chapter-meta-1')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('parchment-chapter-divider-1')),
+        findsNothing,
+      );
+
+      final firstChapter = find.byKey(const ValueKey('parchment-chapter-1'));
+      await tester.ensureVisible(firstChapter);
+      await tester.tap(firstChapter);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byKey(const ValueKey('parchment-chapter-divider-1')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('wraps the full wax seal in a reveal container',
+        (tester) async {
+      await tester.pumpWidget(
+        _localizedParchmentApp(
+          child: SingleChildScrollView(
+            child: PremiumParchmentSheet(
+              atmosphere: _testAtmosphere,
+              chapters: parsePromptChapters(_sheetPrompt),
+              prompt: _sheetPrompt,
+              isStale: false,
+              onSealTap: () {},
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byKey(const ValueKey('parchment-wax-seal-reveal')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('parchment-wax-seal-full')),
+        findsOneWidget,
+      );
+    });
+  });
+
   group('ForgedParchmentSuccessSheet', () {
     testWidgets('shows success state without rendering prompt content', (
       tester,
@@ -80,30 +215,7 @@ Ingresso nel dungeon.
       await tester.pumpWidget(
         _localizedParchmentApp(
           child: ForgedParchmentSuccessSheet(
-            atmosphere: const CampaignAtmosphereData(
-              id: 'test',
-              label: 'Test',
-              primary: Color(0xFFC2482D),
-              secondary: Color(0xFFF0A35B),
-              highlight: Color(0xFFF5E6C9),
-              cardTint: Color(0xFF4C1E17),
-              linework: Color(0xFF8A3A28),
-              glow: Color(0xFFE46B3C),
-              backdropVariant: CampaignBackdropVariant.emberRush,
-              routeTransitionType: SharedAxisTransitionType.horizontal,
-              sectionTransitionType: SharedAxisTransitionType.horizontal,
-              routeTransitionDuration: Duration(milliseconds: 420),
-              reverseRouteTransitionDuration: Duration(milliseconds: 320),
-              sectionTransitionDuration: Duration(milliseconds: 260),
-              revealDuration: Duration(milliseconds: 520),
-              revealDistance: 30,
-              cardHoverLift: 14,
-              cardHoverTilt: 0.095,
-              chipFlashDuration: Duration(milliseconds: 300),
-              ctaPulseDuration: Duration(milliseconds: 1300),
-              parchmentUnfoldDuration: Duration(milliseconds: 620),
-              parchmentUnfoldCurve: Curves.easeOutCubic,
-            ),
+            atmosphere: _testAtmosphere,
             isStale: false,
             onSealTap: () {},
           ),
@@ -124,30 +236,7 @@ Ingresso nel dungeon.
         _localizedParchmentApp(
           child: SingleChildScrollView(
             child: ForgedParchmentSuccessSheet(
-              atmosphere: const CampaignAtmosphereData(
-                id: 'test',
-                label: 'Test',
-                primary: Color(0xFFC2482D),
-                secondary: Color(0xFFF0A35B),
-                highlight: Color(0xFFF5E6C9),
-                cardTint: Color(0xFF4C1E17),
-                linework: Color(0xFF8A3A28),
-                glow: Color(0xFFE46B3C),
-                backdropVariant: CampaignBackdropVariant.emberRush,
-                routeTransitionType: SharedAxisTransitionType.horizontal,
-                sectionTransitionType: SharedAxisTransitionType.horizontal,
-                routeTransitionDuration: Duration(milliseconds: 420),
-                reverseRouteTransitionDuration: Duration(milliseconds: 320),
-                sectionTransitionDuration: Duration(milliseconds: 260),
-                revealDuration: Duration(milliseconds: 520),
-                revealDistance: 30,
-                cardHoverLift: 14,
-                cardHoverTilt: 0.095,
-                chipFlashDuration: Duration(milliseconds: 300),
-                ctaPulseDuration: Duration(milliseconds: 1300),
-                parchmentUnfoldDuration: Duration(milliseconds: 620),
-                parchmentUnfoldCurve: Curves.easeOutCubic,
-              ),
+              atmosphere: _testAtmosphere,
               isStale: true,
               onSealTap: () {},
             ),

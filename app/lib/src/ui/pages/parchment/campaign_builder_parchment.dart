@@ -250,6 +250,7 @@ class PremiumParchmentSheet extends StatelessWidget {
         .length;
 
     return Container(
+      key: const ValueKey('parchment-outer-shell'),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         boxShadow: <BoxShadow>[
@@ -316,49 +317,37 @@ class PremiumParchmentSheet extends StatelessWidget {
               const SizedBox(height: 18),
             ],
             if (highlightChapters.isNotEmpty) ...[
-              Text(
-                'Capitoli in evidenza',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 14,
-                runSpacing: 14,
-                children: highlightChapters.map((chapter) {
-                  return SizedBox(
-                    width: 240,
-                    child: _ParchmentHighlightCard(
-                      atmosphere: atmosphere,
-                      chapter: chapter,
+              Container(
+                key: const ValueKey('parchment-highlight-strip'),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Capitoli in evidenza',
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 22),
-            ],
-            Container(
-              width: double.infinity,
-              constraints: const BoxConstraints(minHeight: 420),
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(28),
-                border: Border.all(
-                  color: atmosphere.primary.withValues(alpha: 0.22),
-                ),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: <Color>[
-                    const Color(0xFFF7ECD1),
-                    Color.lerp(
-                      FantasyPalette.parchmentDeep,
-                      atmosphere.highlight,
-                      0.18,
-                    )!,
-                    const Color(0xFFDABF8F),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 14,
+                      runSpacing: 14,
+                      children: highlightChapters.map((chapter) {
+                        return SizedBox(
+                          width: 240,
+                          child: _ParchmentHighlightCard(
+                            atmosphere: atmosphere,
+                            chapter: chapter,
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ],
                 ),
               ),
+              const SizedBox(height: 22),
+            ],
+            _ParchmentBodyFrame(
+              key: const ValueKey('parchment-body-frame'),
+              atmosphere: atmosphere,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -391,9 +380,14 @@ class PremiumParchmentSheet extends StatelessWidget {
                         ],
                       );
 
-                      final seal = _WaxSealButton(
+                      final seal = _WaxSealReveal(
+                        key: const ValueKey('parchment-wax-seal-reveal'),
                         atmosphere: atmosphere,
-                        onTap: onSealTap,
+                        child: _WaxSealButton(
+                          key: const ValueKey('parchment-wax-seal-full'),
+                          atmosphere: atmosphere,
+                          onTap: onSealTap,
+                        ),
                       );
 
                       if (compact) {
@@ -437,6 +431,165 @@ class PremiumParchmentSheet extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ParchmentBodyFrame extends StatelessWidget {
+  const _ParchmentBodyFrame({
+    super.key,
+    required this.atmosphere,
+    required this.child,
+  });
+
+  final CampaignAtmosphereData atmosphere;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final frameTint = Color.lerp(
+      FantasyPalette.parchmentDeep,
+      atmosphere.primary,
+      0.14,
+    )!;
+
+    return Container(
+      width: double.infinity,
+      constraints: const BoxConstraints(minHeight: 420),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: atmosphere.primary.withValues(alpha: 0.2),
+          width: 1.2,
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[
+            frameTint.withValues(alpha: 0.32),
+            const Color(0xFFF2E2BC),
+            const Color(0xFFE0C694),
+          ],
+        ),
+      ),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[
+                    const Color(0xFFF8EED7),
+                    Color.lerp(
+                      FantasyPalette.parchment,
+                      atmosphere.highlight,
+                      0.18,
+                    )!,
+                    const Color(0xFFE3C78F),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: FantasyPalette.ink.withValues(alpha: 0.08),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: Padding(
+              padding: const EdgeInsets.all(22),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: atmosphere.primary.withValues(alpha: 0.08),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: child,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WaxSealReveal extends StatelessWidget {
+  const _WaxSealReveal({
+    super.key,
+    required this.atmosphere,
+    required this.child,
+  });
+
+  final CampaignAtmosphereData atmosphere;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final reducedMotion =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    if (reducedMotion) {
+      return child;
+    }
+
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: 1),
+      duration: atmosphere.parchmentUnfoldDuration +
+          const Duration(milliseconds: 120),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) {
+        final opacity = Curves.easeOut.transform(value);
+        final scale = 0.9 + (value * 0.1);
+        final translateY = (1 - value) * 14;
+        final glowAlpha = 0.04 + (value * 0.08);
+
+        return Opacity(
+          opacity: opacity,
+          child: Transform.translate(
+            offset: Offset(0, translateY),
+            child: Transform.scale(
+              scale: scale,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: atmosphere.glow.withValues(alpha: glowAlpha),
+                      blurRadius: 18 + (value * 8),
+                      offset: const Offset(0, 14),
+                    ),
+                  ],
+                ),
+                child: child,
+              ),
+            ),
+          ),
+        );
+      },
+      child: child,
     );
   }
 }
@@ -525,16 +678,8 @@ class ForgedParchmentSuccessSheet extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      TweenAnimationBuilder<double>(
-                        tween: Tween<double>(begin: 0.86, end: 1.0),
-                        duration: atmosphere.parchmentUnfoldDuration,
-                        curve: Curves.easeOutBack,
-                        builder: (context, value, child) {
-                          return Transform.scale(
-                            scale: value,
-                            child: child,
-                          );
-                        },
+                      _WaxSealReveal(
+                        atmosphere: atmosphere,
                         child: _WaxSealButton(
                           atmosphere: atmosphere,
                           onTap: onSealTap,
@@ -608,6 +753,7 @@ class ParchmentActionRail extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         _ActionRailTile(
+          key: const ValueKey('parchment-action-copy'),
           atmosphere: atmosphere,
           icon: Icons.copy_rounded,
           title: context.l10n.parchmentCopyPromptTitle,
@@ -616,6 +762,7 @@ class ParchmentActionRail extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         _ActionRailTile(
+          key: const ValueKey('parchment-action-share'),
           atmosphere: atmosphere,
           icon: Icons.ios_share_rounded,
           title: context.l10n.parchmentShareTitle,
@@ -624,6 +771,7 @@ class ParchmentActionRail extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         _ActionRailTile(
+          key: const ValueKey('parchment-action-open-chatgpt'),
           atmosphere: atmosphere,
           icon: Icons.open_in_new_rounded,
           title: context.l10n.parchmentOpenChatGptTitle,
@@ -632,6 +780,7 @@ class ParchmentActionRail extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         _ActionRailTile(
+          key: const ValueKey('parchment-action-save-draft'),
           atmosphere: atmosphere,
           icon: isCurrentDraftSaved
               ? Icons.bookmark_added_rounded
@@ -710,20 +859,42 @@ class _ParchmentStatChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(999),
-        color: atmosphere.primary.withValues(alpha: 0.08),
+        color: atmosphere.primary.withValues(alpha: 0.05),
         border: Border.all(
-          color: atmosphere.primary.withValues(alpha: 0.22),
+          color: atmosphere.primary.withValues(alpha: 0.12),
         ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16, color: atmosphere.highlight),
+          Container(
+            width: 22,
+            height: 22,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: atmosphere.primary.withValues(alpha: 0.1),
+            ),
+            alignment: Alignment.center,
+            child: Icon(
+              icon,
+              size: 12,
+              color: atmosphere.primary.withValues(alpha: 0.88),
+            ),
+          ),
           const SizedBox(width: 8),
-          Text(label, style: Theme.of(context).textTheme.bodySmall),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.color
+                      ?.withValues(alpha: 0.88),
+                ),
+          ),
         ],
       ),
     );
@@ -782,13 +953,25 @@ class _ParchmentHighlightCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(22),
-        color: atmosphere.primary.withValues(alpha: 0.08),
+        color: Color.lerp(
+          FantasyPalette.cardSoft,
+          atmosphere.primary,
+          0.16,
+        )!
+            .withValues(alpha: 0.28),
         border: Border.all(
-          color: atmosphere.primary.withValues(alpha: 0.18),
+          color: atmosphere.primary.withValues(alpha: 0.28),
         ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: atmosphere.glow.withValues(alpha: 0.08),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -796,11 +979,14 @@ class _ParchmentHighlightCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 34,
-                height: 34,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: atmosphere.primary.withValues(alpha: 0.16),
+                  borderRadius: BorderRadius.circular(14),
+                  color: atmosphere.primary.withValues(alpha: 0.18),
+                  border: Border.all(
+                    color: atmosphere.highlight.withValues(alpha: 0.16),
+                  ),
                 ),
                 alignment: Alignment.center,
                 child: Icon(
@@ -813,7 +999,9 @@ class _ParchmentHighlightCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   chapter.title,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                 ),
               ),
             ],
@@ -821,7 +1009,14 @@ class _ParchmentHighlightCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             chapter.preview,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  height: 1.45,
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.color
+                      ?.withValues(alpha: 0.84),
+                ),
           ),
         ],
       ),
@@ -829,7 +1024,7 @@ class _ParchmentHighlightCard extends StatelessWidget {
   }
 }
 
-class _PromptChapterTile extends StatelessWidget {
+class _PromptChapterTile extends StatefulWidget {
   const _PromptChapterTile({
     required this.atmosphere,
     required this.chapter,
@@ -839,69 +1034,210 @@ class _PromptChapterTile extends StatelessWidget {
   final PromptChapter chapter;
 
   @override
+  State<_PromptChapterTile> createState() => _PromptChapterTileState();
+}
+
+class _PromptChapterTileState extends State<_PromptChapterTile> {
+  bool _expanded = false;
+
+  bool get _reducedMotion =>
+      MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+
+  void _toggleExpanded() {
+    setState(() {
+      _expanded = !_expanded;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        dividerColor: Colors.transparent,
+    final atmosphere = widget.atmosphere;
+    final chapter = widget.chapter;
+    final duration = _reducedMotion
+        ? const Duration(milliseconds: 120)
+        : const Duration(milliseconds: 220);
+
+    return AnimatedContainer(
+      duration: duration,
+      curve: Curves.easeOutCubic,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: _expanded
+              ? atmosphere.primary.withValues(alpha: 0.24)
+              : FantasyPalette.ink.withValues(alpha: 0.1),
+        ),
+        color: Color.lerp(
+          const Color(0xFFF7EDD8),
+          atmosphere.highlight,
+          0.06,
+        )!
+            .withValues(alpha: _expanded ? 0.94 : 0.88),
+        boxShadow: _expanded
+            ? <BoxShadow>[
+                BoxShadow(
+                  color: atmosphere.glow.withValues(alpha: 0.08),
+                  blurRadius: 18,
+                  offset: const Offset(0, 12),
+                ),
+              ]
+            : const <BoxShadow>[],
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(
-            color: atmosphere.primary.withValues(alpha: 0.14),
-          ),
-          color: Colors.white.withValues(alpha: 0.12),
-        ),
-        child: ExpansionTile(
-          tilePadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-          childrenPadding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
-          iconColor: FantasyPalette.ink,
-          collapsedIconColor: FantasyPalette.ink.withValues(alpha: 0.68),
-          leading: Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: atmosphere.primary.withValues(alpha: 0.14),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              chapter.index.toString().padLeft(2, '0'),
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: FantasyPalette.ink,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InkWell(
+            key: ValueKey('parchment-chapter-${chapter.index}'),
+            onTap: _toggleExpanded,
+            borderRadius: BorderRadius.circular(24),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 52,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18),
+                      color: atmosphere.primary.withValues(alpha: 0.12),
+                      border: Border.all(
+                        color: atmosphere.primary.withValues(alpha: 0.12),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          chapter.icon,
+                          size: 15,
+                          color: atmosphere.primary.withValues(alpha: 0.9),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          chapter.index.toString().padLeft(2, '0'),
+                          style:
+                              Theme.of(context).textTheme.labelLarge?.copyWith(
+                                    color: FantasyPalette.ink,
+                                  ),
+                        ),
+                      ],
+                    ),
                   ),
-            ),
-          ),
-          title: Text(
-            chapter.title,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: FantasyPalette.ink,
-                ),
-          ),
-          subtitle: Text(
-            chapter.preview,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: FantasyPalette.ink.withValues(alpha: 0.72),
-                ),
-          ),
-          children: [
-            SelectableText(
-              chapter.body,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: FantasyPalette.ink,
-                    height: 1.55,
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          key: ValueKey(
+                              'parchment-chapter-meta-${chapter.index}'),
+                          children: [
+                            Icon(
+                              chapter.icon,
+                              size: 14,
+                              color: atmosphere.primary.withValues(alpha: 0.88),
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              chapter.index.toString().padLeft(2, '0'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall
+                                  ?.copyWith(
+                                    color: FantasyPalette.ink
+                                        .withValues(alpha: 0.66),
+                                    letterSpacing: 1.1,
+                                  ),
+                            ),
+                            const Spacer(),
+                            AnimatedRotation(
+                              turns: _expanded ? 0.5 : 0,
+                              duration: duration,
+                              curve: Curves.easeOutCubic,
+                              child: Icon(
+                                Icons.keyboard_arrow_down_rounded,
+                                color:
+                                    FantasyPalette.ink.withValues(alpha: 0.72),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          chapter.title,
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    color: FantasyPalette.ink,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          chapter.preview,
+                          maxLines: _expanded ? 4 : 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(
+                                color:
+                                    FantasyPalette.ink.withValues(alpha: 0.7),
+                                height: 1.45,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+          ClipRect(
+            child: AnimatedSize(
+              duration: duration,
+              curve: Curves.easeOutCubic,
+              alignment: Alignment.topCenter,
+              child: _expanded
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            key: ValueKey(
+                              'parchment-chapter-divider-${chapter.index}',
+                            ),
+                            height: 1,
+                            color: FantasyPalette.ink.withValues(alpha: 0.1),
+                          ),
+                          const SizedBox(height: 14),
+                          SelectableText(
+                            chapter.body,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: FantasyPalette.ink,
+                                  height: 1.62,
+                                ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _PromptRawTextTile extends StatelessWidget {
+class _PromptRawTextTile extends StatefulWidget {
   const _PromptRawTextTile({
     required this.atmosphere,
     required this.prompt,
@@ -911,50 +1247,137 @@ class _PromptRawTextTile extends StatelessWidget {
   final String prompt;
 
   @override
+  State<_PromptRawTextTile> createState() => _PromptRawTextTileState();
+}
+
+class _PromptRawTextTileState extends State<_PromptRawTextTile> {
+  bool _expanded = false;
+
+  bool get _reducedMotion =>
+      MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+
+  void _toggleExpanded() {
+    setState(() {
+      _expanded = !_expanded;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        dividerColor: Colors.transparent,
+    final atmosphere = widget.atmosphere;
+    final duration = _reducedMotion
+        ? const Duration(milliseconds: 120)
+        : const Duration(milliseconds: 220);
+
+    return AnimatedContainer(
+      duration: duration,
+      curve: Curves.easeOutCubic,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: FantasyPalette.ink.withValues(alpha: _expanded ? 0.14 : 0.08),
+        ),
+        color: Colors.white.withValues(alpha: _expanded ? 0.18 : 0.12),
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(
-            color: FantasyPalette.ink.withValues(alpha: 0.12),
-          ),
-          color: Colors.white.withValues(alpha: 0.08),
-        ),
-        child: ExpansionTile(
-          tilePadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-          childrenPadding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
-          collapsedIconColor: FantasyPalette.ink.withValues(alpha: 0.68),
-          iconColor: FantasyPalette.ink,
-          leading: Icon(
-            Icons.article_outlined,
-            color: atmosphere.primary.withValues(alpha: 0.82),
-          ),
-          title: Text(
-            'Versione continua',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: FantasyPalette.ink,
-                ),
-          ),
-          subtitle: Text(
-            'Per leggere o selezionare il prompt senza suddivisioni.',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: FantasyPalette.ink.withValues(alpha: 0.72),
-                ),
-          ),
-          children: [
-            SelectableText(
-              prompt,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: FantasyPalette.ink,
-                    height: 1.6,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InkWell(
+            onTap: _toggleExpanded,
+            borderRadius: BorderRadius.circular(24),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: atmosphere.primary.withValues(alpha: 0.1),
+                    ),
+                    alignment: Alignment.center,
+                    child: Icon(
+                      Icons.article_outlined,
+                      color: atmosphere.primary.withValues(alpha: 0.82),
+                    ),
                   ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Versione continua',
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    color: FantasyPalette.ink,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Per leggere o selezionare il prompt senza suddivisioni.',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(
+                                color:
+                                    FantasyPalette.ink.withValues(alpha: 0.68),
+                                height: 1.4,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  AnimatedRotation(
+                    turns: _expanded ? 0.5 : 0,
+                    duration: duration,
+                    curve: Curves.easeOutCubic,
+                    child: Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: FantasyPalette.ink.withValues(alpha: 0.72),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+          ClipRect(
+            child: AnimatedSize(
+              duration: duration,
+              curve: Curves.easeOutCubic,
+              alignment: Alignment.topCenter,
+              child: _expanded
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 1,
+                            color: FantasyPalette.ink.withValues(alpha: 0.08),
+                          ),
+                          const SizedBox(height: 14),
+                          SelectableText(
+                            widget.prompt,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: FantasyPalette.ink,
+                                  height: 1.62,
+                                ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -962,6 +1385,7 @@ class _PromptRawTextTile extends StatelessWidget {
 
 class _WaxSealButton extends StatelessWidget {
   const _WaxSealButton({
+    super.key,
     required this.atmosphere,
     required this.onTap,
     this.compact = false,
@@ -988,16 +1412,21 @@ class _WaxSealButton extends StatelessWidget {
               shape: BoxShape.circle,
               boxShadow: <BoxShadow>[
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.22),
-                  blurRadius: 16,
+                  color: Colors.black.withValues(alpha: 0.28),
+                  blurRadius: 18,
                   offset: const Offset(0, 10),
+                ),
+                BoxShadow(
+                  color: atmosphere.glow.withValues(alpha: 0.12),
+                  blurRadius: 24,
+                  offset: const Offset(0, 14),
                 ),
               ],
               gradient: RadialGradient(
                 colors: <Color>[
-                  Color.lerp(atmosphere.primary, Colors.white, 0.08)!,
-                  Color.lerp(atmosphere.primary, Colors.black, 0.16)!,
-                  Color.lerp(atmosphere.primary, Colors.black, 0.34)!,
+                  Color.lerp(atmosphere.primary, Colors.white, 0.1)!,
+                  Color.lerp(atmosphere.primary, Colors.black, 0.08)!,
+                  Color.lerp(atmosphere.primary, Colors.black, 0.28)!,
                 ],
               ),
               border: Border.all(
@@ -1006,22 +1435,32 @@ class _WaxSealButton extends StatelessWidget {
               ),
             ),
             child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.local_fire_department_rounded,
-                    color: FantasyPalette.parchment,
+              child: Container(
+                width: diameter * 0.72,
+                height: diameter * 0.72,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: atmosphere.highlight.withValues(alpha: 0.22),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    context.l10n.parchmentSeal,
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: FantasyPalette.parchment,
-                          letterSpacing: 1.5,
-                        ),
-                  ),
-                ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.local_fire_department_rounded,
+                      color: FantasyPalette.parchment,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      context.l10n.parchmentSeal,
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: FantasyPalette.parchment,
+                            letterSpacing: 1.5,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -1038,8 +1477,9 @@ class _WaxSealButton extends StatelessWidget {
   }
 }
 
-class _ActionRailTile extends StatelessWidget {
+class _ActionRailTile extends StatefulWidget {
   const _ActionRailTile({
+    super.key,
     required this.atmosphere,
     required this.icon,
     required this.title,
@@ -1056,67 +1496,167 @@ class _ActionRailTile extends StatelessWidget {
   final ValueChanged<Rect>? onTapWithRect;
 
   @override
-  Widget build(BuildContext context) {
-    final tileKey = GlobalKey();
+  State<_ActionRailTile> createState() => _ActionRailTileState();
+}
 
-    return InkWell(
-      onTap: () {
-        if (onTapWithRect != null) {
-          final box = tileKey.currentContext?.findRenderObject() as RenderBox?;
-          if (box != null) {
-            onTapWithRect!(box.localToGlobal(Offset.zero) & box.size);
-            return;
-          }
+class _ActionRailTileState extends State<_ActionRailTile> {
+  final GlobalKey _tileAnchorKey = GlobalKey();
+  bool _hovered = false;
+  bool _focused = false;
+  bool _pressed = false;
+
+  bool get _reducedMotion =>
+      MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+
+  void _handleTap() {
+    if (widget.onTapWithRect != null) {
+      final box =
+          _tileAnchorKey.currentContext?.findRenderObject() as RenderBox?;
+      if (box != null) {
+        widget.onTapWithRect!(box.localToGlobal(Offset.zero) & box.size);
+        return;
+      }
+    }
+    widget.onTap?.call();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final active = _hovered || _focused || _pressed;
+    final atmosphere = widget.atmosphere;
+    final duration = _reducedMotion
+        ? const Duration(milliseconds: 120)
+        : const Duration(milliseconds: 180);
+
+    return FocusableActionDetector(
+      onShowFocusHighlight: (value) {
+        if (_focused != value) {
+          setState(() {
+            _focused = value;
+          });
         }
-        onTap?.call();
       },
-      borderRadius: BorderRadius.circular(20),
-      child: Ink(
-        key: tileKey,
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          color: atmosphere.primary.withValues(alpha: 0.06),
-          border: Border.all(
-            color: atmosphere.primary.withValues(alpha: 0.12),
-          ),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 38,
-              height: 38,
+      onShowHoverHighlight: (value) {
+        if (_hovered != value) {
+          setState(() {
+            _hovered = value;
+          });
+        }
+      },
+      child: AnimatedScale(
+        duration: duration,
+        curve: Curves.easeOutCubic,
+        scale: _pressed
+            ? 0.985
+            : active
+                ? 1.008
+                : 1.0,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: _handleTap,
+            onHighlightChanged: (value) {
+              if (_pressed != value) {
+                setState(() {
+                  _pressed = value;
+                });
+              }
+            },
+            borderRadius: BorderRadius.circular(20),
+            child: Ink(
+              key: _tileAnchorKey,
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: atmosphere.primary.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(18),
+                color:
+                    atmosphere.primary.withValues(alpha: active ? 0.11 : 0.06),
+                border: Border.all(
+                  color: atmosphere.primary
+                      .withValues(alpha: active ? 0.24 : 0.12),
+                ),
+                boxShadow: active
+                    ? <BoxShadow>[
+                        BoxShadow(
+                          color: atmosphere.glow.withValues(alpha: 0.08),
+                          blurRadius: 16,
+                          offset: const Offset(0, 10),
+                        ),
+                      ]
+                    : const <BoxShadow>[],
               ),
-              child: Icon(icon, color: atmosphere.highlight, size: 18),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleSmall,
+                  AnimatedContainer(
+                    duration: duration,
+                    curve: Curves.easeOutCubic,
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: atmosphere.primary
+                          .withValues(alpha: active ? 0.2 : 0.12),
+                      border: Border.all(
+                        color: atmosphere.highlight
+                            .withValues(alpha: active ? 0.16 : 0.08),
+                      ),
+                    ),
+                    child: Icon(
+                      widget.icon,
+                      color: atmosphere.highlight,
+                      size: 18,
+                    ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: Theme.of(context).textTheme.bodySmall,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.title,
+                          style:
+                              Theme.of(context).textTheme.titleSmall?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          widget.subtitle,
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.color
+                                        ?.withValues(alpha: 0.84),
+                                    height: 1.38,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  AnimatedContainer(
+                    duration: duration,
+                    curve: Curves.easeOutCubic,
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: atmosphere.primary
+                          .withValues(alpha: active ? 0.16 : 0.08),
+                    ),
+                    alignment: Alignment.center,
+                    child: Icon(
+                      Icons.arrow_forward_rounded,
+                      size: 16,
+                      color: atmosphere.primary,
+                    ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 10),
-            Icon(
-              Icons.arrow_forward_rounded,
-              size: 18,
-              color: atmosphere.primary,
-            ),
-          ],
+          ),
         ),
       ),
     );
