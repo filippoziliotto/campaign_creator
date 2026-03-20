@@ -157,11 +157,10 @@ extension on _CampaignBuilderPageState {
         Animation<double> primaryAnimation,
         Animation<double> secondaryAnimation,
       ) {
-        return SharedAxisTransition(
+        return buildCampaignSharedAxisTransition(
           animation: primaryAnimation,
           secondaryAnimation: secondaryAnimation,
           transitionType: atmosphere.sectionTransitionType,
-          fillColor: Colors.transparent,
           child: child,
         );
       },

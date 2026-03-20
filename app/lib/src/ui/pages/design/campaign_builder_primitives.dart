@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:campaign_creator_flutter/src/l10n_extension.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -73,19 +72,10 @@ class _CampaignStageRoute extends PageRoute<void> {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    return SharedAxisTransition(
-      animation: CurvedAnimation(
-        parent: animation,
-        curve: Curves.easeOutCubic,
-        reverseCurve: Curves.easeInCubic,
-      ),
-      secondaryAnimation: CurvedAnimation(
-        parent: secondaryAnimation,
-        curve: Curves.easeOutCubic,
-        reverseCurve: Curves.easeInCubic,
-      ),
+    return buildCampaignSharedAxisTransition(
+      animation: animation,
+      secondaryAnimation: secondaryAnimation,
       transitionType: _page.atmosphere.routeTransitionType,
-      fillColor: Colors.transparent,
       child: child,
     );
   }

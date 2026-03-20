@@ -1,4 +1,6 @@
+import 'package:animations/animations.dart';
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
+import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/routes/entry_page.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/routes/parchment_page.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
@@ -184,6 +186,56 @@ void main() {
     expect(
       find.byKey(const ValueKey<String>('forge-section-world')),
       findsNothing,
+    );
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets('long campaign uses horizontal shared-axis transitions in forge',
+      (tester) async {
+    final options = CampaignOptions(
+      settings: const ['Forgotten Realms'],
+      campaignTypes: const ['Long campaign'],
+      themes: const ['Intrigue'],
+      tones: const ['Heroic'],
+      styles: const ['Epic'],
+      partyArchetypes: const ['Fighter'],
+      twists: const ['No twist'],
+      presets: const {},
+      settingDescriptions: const {'Forgotten Realms': 'Classic high fantasy.'},
+      presetDescriptions: const {},
+      presetNames: const {},
+    );
+
+    await tester.binding.setSurfaceSize(const Size(430, 932));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(options),
+          currentLocale: const Locale('en'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    final longCampaignCard = find.byKey(
+      const ValueKey<String>('entry-campaign-card-Long campaign'),
+    );
+    await tester.ensureVisible(longCampaignCard);
+    await tester.tap(longCampaignCard);
+    await tester.pump();
+
+    final transitions = tester
+        .widgetList<SharedAxisTransition>(find.byType(SharedAxisTransition));
+
+    expect(transitions, isNotEmpty);
+    expect(
+      transitions.map((transition) => transition.transitionType).toSet(),
+      equals(<SharedAxisTransitionType>{SharedAxisTransitionType.horizontal}),
     );
   },
       variant: const TargetPlatformVariant(

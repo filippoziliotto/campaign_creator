@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
 import '../../../theme/fantasy_theme.dart';
@@ -5,6 +6,42 @@ import 'campaign_builder_atmosphere.dart';
 
 bool prefersReducedMotion(BuildContext context) {
   return MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+}
+
+const Curve _premiumSharedAxisForwardCurve = Cubic(0.18, 1.0, 0.32, 1.0);
+const Curve _premiumSharedAxisReverseCurve = Cubic(0.4, 0.0, 1.0, 1.0);
+const Curve _premiumSharedAxisSecondaryCurve = Interval(
+  0.0,
+  0.78,
+  curve: Cubic(0.3, 0.0, 0.22, 1.0),
+);
+const Curve _premiumSharedAxisSecondaryReverseCurve = Interval(
+  0.0,
+  0.68,
+  curve: Cubic(0.3, 0.0, 0.22, 1.0),
+);
+
+Widget buildCampaignSharedAxisTransition({
+  required Animation<double> animation,
+  required Animation<double> secondaryAnimation,
+  required SharedAxisTransitionType transitionType,
+  required Widget child,
+}) {
+  return SharedAxisTransition(
+    animation: CurvedAnimation(
+      parent: animation,
+      curve: _premiumSharedAxisForwardCurve,
+      reverseCurve: _premiumSharedAxisReverseCurve,
+    ),
+    secondaryAnimation: CurvedAnimation(
+      parent: secondaryAnimation,
+      curve: _premiumSharedAxisSecondaryCurve,
+      reverseCurve: _premiumSharedAxisSecondaryReverseCurve,
+    ),
+    transitionType: transitionType,
+    fillColor: Colors.transparent,
+    child: child,
+  );
 }
 
 class AnimatedRuneFilterChip extends StatefulWidget {
