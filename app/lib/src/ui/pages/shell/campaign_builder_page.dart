@@ -753,6 +753,25 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     return persisted;
   }
 
+  Future<void> _resetDraft() async {
+    final preferences = await _resolvePreferences();
+    if (preferences != null) {
+      await preferences.remove(_draftPromptKey);
+      await preferences.remove(_draftSavedAtKey);
+      await preferences.remove(_draftCampaignTypeKey);
+      await preferences.remove(_draftSettingKey);
+    }
+    if (!mounted) return;
+    setState(() {
+      _generatedPrompt = null;
+      _savedDraftPrompt = null;
+      _savedDraftSavedAt = null;
+      _hasUnsavedChanges = false;
+      _selectedCampaignType = null;
+    });
+    _showSnackBar(context.l10n.entryResetDraftConfirm);
+  }
+
   Future<void> _sealCurrentParchment() async {
     final persisted = await _savePromptDraft(showFeedback: false);
     await _copyPrompt(showFeedback: false);

@@ -102,21 +102,30 @@ extension on _CampaignBuilderPageState {
           LayoutBuilder(
             builder: (context, constraints) {
               final compact = constraints.maxWidth < 640;
+              final compactStyle = FilledButton.styleFrom(
+                visualDensity: VisualDensity.compact,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              );
+              final resetStyle = OutlinedButton.styleFrom(
+                visualDensity: VisualDensity.compact,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              );
+
               if (compact) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     FilledButton(
+                      style: compactStyle,
                       onPressed: () => _goToForge(_forgeSection),
                       child: Text(context.l10n.entryResumeForge),
                     ),
-                    if (_generatedPrompt != null) ...[
-                      const SizedBox(height: 10),
-                      OutlinedButton(
-                        onPressed: () => _goToStage(_AppStage.parchment),
-                        child: Text(context.l10n.entryOpenParchment),
-                      ),
-                    ],
+                    const SizedBox(height: 8),
+                    OutlinedButton(
+                      style: resetStyle,
+                      onPressed: _resetDraft,
+                      child: Text(context.l10n.entryResetDraft),
+                    ),
                   ],
                 );
               }
@@ -125,19 +134,19 @@ extension on _CampaignBuilderPageState {
                 children: [
                   Expanded(
                     child: FilledButton(
+                      style: compactStyle,
                       onPressed: () => _goToForge(_forgeSection),
                       child: Text(context.l10n.entryResumeForge),
                     ),
                   ),
-                  if (_generatedPrompt != null) ...[
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => _goToStage(_AppStage.parchment),
-                        child: Text(context.l10n.entryOpenParchment),
-                      ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: OutlinedButton(
+                      style: resetStyle,
+                      onPressed: _resetDraft,
+                      child: Text(context.l10n.entryResetDraft),
                     ),
-                  ],
+                  ),
                 ],
               );
             },
