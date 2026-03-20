@@ -37,18 +37,14 @@ void main() {
 
     await _pumpUi(tester);
 
-    await tester.tap(find.text('Riprendi la forgia'));
+    final resumeButton = find.text('Riprendi la forgia');
+    await tester.ensureVisible(resumeButton);
+    await tester.tap(resumeButton);
     await _pumpUi(tester);
 
-    await tester.tap(
-      find
-          .ancestor(
-            of: find.text('Apri'),
-            matching:
-                find.byWidgetPredicate((widget) => widget is ButtonStyleButton),
-          )
-          .first,
-    );
+    final openButton = find.widgetWithText(TextButton, 'Apri');
+    await tester.ensureVisible(openButton.first);
+    await tester.tap(openButton.first);
     await _pumpUi(tester);
 
     final languageSwitch = find.byKey(

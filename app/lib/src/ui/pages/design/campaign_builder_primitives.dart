@@ -274,6 +274,8 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
         MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     final isTouch = const {TargetPlatform.android, TargetPlatform.iOS}
         .contains(defaultTargetPlatform);
+    final viewportWidth = MediaQuery.sizeOf(context).width;
+    final cardHeight = viewportWidth < 640 ? 208.0 : 192.0;
     final borderRadius = BorderRadius.circular(24);
     final compactCopy = MediaQuery.sizeOf(context).width < 960;
     final titleStyle = Theme.of(
@@ -289,6 +291,7 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
     final motionDuration = reducedMotion
         ? const Duration(milliseconds: 120)
         : const Duration(milliseconds: 220);
+    final selectedScale = reducedMotion ? 1.0 : (widget.selected ? 1.02 : 1.0);
 
     Widget cardBody = GestureDetector(
       onTapDown: (_) {
@@ -339,172 +342,184 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
             ),
           );
         },
-        child: InkWell(
-          onTap: widget.onTap,
-          borderRadius: borderRadius,
-          child: AnimatedContainer(
-            duration: motionDuration,
-            curve: Curves.easeOutCubic,
-            decoration: BoxDecoration(
-              borderRadius: borderRadius,
-              border: Border.all(
-                color: widget.selected
-                    ? widget.atmosphere.highlight
-                    : FantasyPalette.outline.withValues(alpha: 0.22),
-                width: widget.selected ? 1.4 : 1,
-              ),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: widget.atmosphere.glow.withValues(
-                    alpha: widget.selected ? 0.2 : (_hovered ? 0.1 : 0.05),
-                  ),
-                  blurRadius: widget.selected ? 24 : (_hovered ? 16 : 10),
-                  offset: const Offset(0, 10),
+        child: AnimatedScale(
+          scale: selectedScale,
+          duration: motionDuration,
+          curve: Curves.easeOutCubic,
+          child: InkWell(
+            onTap: widget.onTap,
+            borderRadius: borderRadius,
+            child: AnimatedContainer(
+              duration: motionDuration,
+              curve: Curves.easeOutCubic,
+              decoration: BoxDecoration(
+                borderRadius: borderRadius,
+                border: Border.all(
+                  color: widget.selected
+                      ? widget.atmosphere.highlight
+                      : FantasyPalette.outline.withValues(alpha: 0.22),
+                  width: widget.selected ? 1.8 : 1,
                 ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: borderRadius,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: _CampaignCardArtwork(
-                      artAsset: widget.artAsset,
-                      fallbackColor: widget.colors.last.withValues(alpha: 0.9),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: widget.atmosphere.glow.withValues(
+                      alpha: widget.selected ? 0.28 : (_hovered ? 0.1 : 0.05),
                     ),
-                  ),
-                  Positioned.fill(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: <Color>[
-                            widget.colors.first.withValues(alpha: 0.22),
-                            widget.colors.last.withValues(alpha: 0.42),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: <Color>[
-                            Colors.black.withValues(alpha: 0.12),
-                            Colors.black.withValues(alpha: 0.30),
-                            Colors.black.withValues(alpha: 0.86),
-                          ],
-                          stops: const <double>[0.0, 0.46, 1.0],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 180,
-                    child: Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: FantasyPalette.abyss
-                                      .withValues(alpha: 0.42),
-                                  border: Border.all(
-                                    color: FantasyPalette.parchment.withValues(
-                                      alpha: 0.14,
-                                    ),
-                                  ),
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                child: Icon(
-                                  widget.icon,
-                                  color: FantasyPalette.parchment,
-                                  size: 20,
-                                ),
-                              ),
-                              const Spacer(),
-                              if (widget.selected)
-                                Container(
-                                  padding: const EdgeInsets.all(6),
-                                  decoration: BoxDecoration(
-                                    color: FantasyPalette.abyss
-                                        .withValues(alpha: 0.52),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(
-                                    Icons.check_circle_rounded,
-                                    color: widget.atmosphere.highlight,
-                                    size: 18,
-                                  ),
-                                ),
-                            ],
-                          ),
-                          const Spacer(),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color:
-                                  FantasyPalette.abyss.withValues(alpha: 0.34),
-                              borderRadius: BorderRadius.circular(999),
-                              border: Border.all(
-                                color: widget.atmosphere.highlight.withValues(
-                                  alpha: 0.18,
-                                ),
-                              ),
-                            ),
-                            child: Text(
-                              widget.badge,
-                              style: Theme.of(context).textTheme.labelMedium,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            widget.title,
-                            style: titleStyle,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            widget.description,
-                            style: descriptionStyle,
-                            maxLines: (compactCopy || showCallToAction) ? 1 : 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          if (showCallToAction) ...[
-                            const SizedBox(height: 6),
-                            Row(
-                              children: [
-                                Text(
-                                  context.l10n.entryOpenForge,
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                                const SizedBox(width: 4),
-                                Icon(
-                                  Icons.arrow_forward_rounded,
-                                  size: 16,
-                                  color: widget.atmosphere.highlight,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
+                    blurRadius: widget.selected ? 30 : (_hovered ? 16 : 10),
+                    offset: const Offset(0, 10),
                   ),
                 ],
+              ),
+              child: ClipRRect(
+                borderRadius: borderRadius,
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: _CampaignCardArtwork(
+                        artAsset: widget.artAsset,
+                        fallbackColor:
+                            widget.colors.last.withValues(alpha: 0.9),
+                      ),
+                    ),
+                    Positioned.fill(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: <Color>[
+                              widget.colors.first.withValues(alpha: 0.22),
+                              widget.colors.last.withValues(alpha: 0.42),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned.fill(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: <Color>[
+                              Colors.black.withValues(alpha: 0.12),
+                              Colors.black.withValues(alpha: 0.30),
+                              Colors.black.withValues(
+                                alpha: widget.selected ? 0.74 : 0.86,
+                              ),
+                            ],
+                            stops: const <double>[0.0, 0.46, 1.0],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: cardHeight,
+                      child: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: FantasyPalette.abyss
+                                        .withValues(alpha: 0.42),
+                                    border: Border.all(
+                                      color:
+                                          FantasyPalette.parchment.withValues(
+                                        alpha: 0.14,
+                                      ),
+                                    ),
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  child: Icon(
+                                    widget.icon,
+                                    color: FantasyPalette.parchment,
+                                    size: 20,
+                                  ),
+                                ),
+                                const Spacer(),
+                                if (widget.selected)
+                                  Container(
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      color: FantasyPalette.abyss
+                                          .withValues(alpha: 0.68),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.check_circle_rounded,
+                                      color: widget.atmosphere.highlight,
+                                      size: 18,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            const Spacer(),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: FantasyPalette.abyss.withValues(
+                                  alpha: widget.selected ? 0.48 : 0.34,
+                                ),
+                                borderRadius: BorderRadius.circular(999),
+                                border: Border.all(
+                                  color: widget.atmosphere.highlight.withValues(
+                                    alpha: widget.selected ? 0.30 : 0.18,
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                widget.badge,
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              widget.title,
+                              style: titleStyle,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              widget.description,
+                              style: descriptionStyle,
+                              maxLines:
+                                  (compactCopy || showCallToAction) ? 1 : 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            if (showCallToAction) ...[
+                              const SizedBox(height: 6),
+                              Row(
+                                children: [
+                                  Text(
+                                    context.l10n.entryOpenForge,
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Icon(
+                                    Icons.arrow_forward_rounded,
+                                    size: 16,
+                                    color: widget.atmosphere.highlight,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -604,8 +619,8 @@ class StagePill extends StatelessWidget {
     final indexFillColor = active
         ? colorScheme.primary
         : completed
-            ? colorScheme.secondary.withValues(alpha: 0.9)
-            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.9);
+            ? colorScheme.secondary.withValues(alpha: 0.55)
+            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.55);
     final indexTextColor = active
         ? colorScheme.onPrimary
         : completed
@@ -614,13 +629,13 @@ class StagePill extends StatelessWidget {
     final borderColor = active
         ? colorScheme.primary
         : completed
-            ? colorScheme.secondary.withValues(alpha: 0.72)
-            : colorScheme.outline.withValues(alpha: 0.22);
+            ? colorScheme.secondary.withValues(alpha: 0.40)
+            : colorScheme.outline.withValues(alpha: 0.13);
 
     final backgroundColor = active
         ? colorScheme.primary.withValues(alpha: 0.12)
         : colorScheme.surface.withValues(
-            alpha: enabled ? 0.42 : 0.24,
+            alpha: enabled ? 0.22 : 0.12,
           );
 
     return InkWell(
@@ -1541,9 +1556,11 @@ class FantasyBackdrop extends StatelessWidget {
   const FantasyBackdrop({
     super.key,
     required this.atmosphere,
+    this.stageVignette = false,
   });
 
   final CampaignAtmosphereData atmosphere;
+  final bool stageVignette;
 
   @override
   Widget build(BuildContext context) {
@@ -1604,6 +1621,23 @@ class FantasyBackdrop extends StatelessWidget {
               painter: _BackdropPatternPainter(atmosphere: atmosphere),
             ),
           ),
+          if (stageVignette)
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[
+                      Colors.black.withValues(alpha: 0.26),
+                      Colors.transparent,
+                      Colors.black.withValues(alpha: 0.06),
+                    ],
+                    stops: const <double>[0.0, 0.35, 1.0],
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );

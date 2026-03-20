@@ -30,10 +30,10 @@ class EntryRoutePage extends StatelessWidget {
             if (hero != null) const SizedBox(height: 16),
             errorBanner!,
           ],
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           campaignModeGrid,
           if (resumePanel != null) ...[
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             resumePanel!,
           ],
         ],

@@ -20,6 +20,8 @@ void main() {
   ) async {
     SharedPreferences.setMockInitialValues(<String, Object>{
       'campaign_builder.saved_prompt': 'Prompt salvato',
+      'campaign_builder.saved_campaign_type': 'One-Shot',
+      'campaign_builder.saved_setting': 'Forgotten Realms',
     });
 
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
@@ -37,7 +39,9 @@ void main() {
 
     await _pumpUi(tester);
 
-    await tester.tap(find.text('Riprendi la forgia'));
+    final resumeButton = find.text('Riprendi la forgia');
+    await tester.ensureVisible(resumeButton);
+    await tester.tap(resumeButton);
     await _pumpUi(tester);
 
     await tester.tap(find.text('Trama'));
@@ -93,7 +97,11 @@ void main() {
 
     await _pumpUi(tester);
 
-    await tester.tap(find.text('One-Shot').last);
+    final oneShotCard = find.byKey(
+      const ValueKey<String>('entry-campaign-card-One-Shot'),
+    );
+    await tester.ensureVisible(oneShotCard);
+    await tester.tap(oneShotCard);
     await _pumpUi(tester);
 
     await _flingSection(
@@ -150,7 +158,11 @@ void main() {
 
     await _pumpUi(tester);
 
-    await tester.tap(find.text('One-Shot').last);
+    final oneShotCard = find.byKey(
+      const ValueKey<String>('entry-campaign-card-One-Shot'),
+    );
+    await tester.ensureVisible(oneShotCard);
+    await tester.tap(oneShotCard);
     await _pumpUi(tester);
 
     expect(
@@ -195,7 +207,11 @@ void main() {
 
     await _pumpUi(tester);
 
-    await tester.tap(find.text('One-Shot').last);
+    final oneShotCard = find.byKey(
+      const ValueKey<String>('entry-campaign-card-One-Shot'),
+    );
+    await tester.ensureVisible(oneShotCard);
+    await tester.tap(oneShotCard);
     await _pumpUi(tester);
 
     await _flingSection(
@@ -249,10 +265,17 @@ void main() {
 
     await _pumpUi(tester);
 
-    await tester.tap(find.text('Riprendi la forgia'));
+    final resumeButton = find.text('Riprendi la forgia');
+    await tester.ensureVisible(resumeButton);
+    await tester.tap(resumeButton);
     await _pumpUi(tester);
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Apri pergamena'));
+    final openParchmentButton = find.widgetWithText(
+      FilledButton,
+      'Apri pergamena',
+    );
+    await tester.ensureVisible(openParchmentButton);
+    await tester.tap(openParchmentButton);
     await _pumpUi(tester);
 
     expect(find.byType(ParchmentRoutePage), findsOneWidget);

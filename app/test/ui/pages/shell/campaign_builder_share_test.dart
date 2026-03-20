@@ -43,7 +43,9 @@ void main() {
     await _pumpUi(tester);
     await _openSavedParchment(tester);
 
-    await tester.tap(find.text('Condividi'));
+    final shareButton = find.text('Condividi');
+    await tester.ensureVisible(shareButton);
+    await tester.tap(shareButton);
     await _pumpUi(tester);
 
     expect(captured, isNotNull);
@@ -74,7 +76,9 @@ void main() {
     await _pumpUi(tester);
     await _openSavedParchment(tester);
 
-    await tester.tap(find.text('Condividi'));
+    final shareButton = find.text('Condividi');
+    await tester.ensureVisible(shareButton);
+    await tester.tap(shareButton);
     await _pumpUi(tester);
 
     expect(
@@ -106,7 +110,9 @@ void main() {
     await _pumpUi(tester);
     await _openSavedParchment(tester);
 
-    await tester.tap(find.text('Condividi'));
+    final shareButton = find.text('Condividi');
+    await tester.ensureVisible(shareButton);
+    await tester.tap(shareButton);
     await _pumpUi(tester);
 
     expect(
@@ -137,7 +143,11 @@ void main() {
 
     await _pumpUi(tester);
 
-    await tester.tap(find.text('One-Shot').last);
+    final oneShotCard = find.byKey(
+      const ValueKey<String>('entry-campaign-card-One-Shot'),
+    );
+    await tester.ensureVisible(oneShotCard);
+    await tester.tap(oneShotCard);
     await _pumpUi(tester);
 
     await _flingSection(
@@ -161,7 +171,9 @@ void main() {
     );
     await _pumpUi(tester);
 
-    await tester.tap(find.text('Condividi'));
+    final shareButton = find.text('Condividi');
+    await tester.ensureVisible(shareButton);
+    await tester.tap(shareButton);
     await _pumpUi(tester);
 
     expect(
@@ -194,18 +206,14 @@ class _TestApp extends StatelessWidget {
 }
 
 Future<void> _openSavedParchment(WidgetTester tester) async {
-  await tester.tap(find.text('Riprendi la forgia'));
+  final resumeButton = find.text('Riprendi la forgia');
+  await tester.ensureVisible(resumeButton);
+  await tester.tap(resumeButton);
   await _pumpUi(tester);
 
-  await tester.tap(
-    find
-        .ancestor(
-          of: find.text('Apri'),
-          matching:
-              find.byWidgetPredicate((widget) => widget is ButtonStyleButton),
-        )
-        .first,
-  );
+  final openButton = find.widgetWithText(TextButton, 'Apri');
+  await tester.ensureVisible(openButton.first);
+  await tester.tap(openButton.first);
   await _pumpUi(tester);
 }
 

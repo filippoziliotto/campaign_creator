@@ -388,9 +388,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         _selectedCampaignType =
             options.campaignTypes.contains(_selectedCampaignType)
                 ? _selectedCampaignType
-                : (options.campaignTypes.isNotEmpty
-                    ? options.campaignTypes.first
-                    : null);
+                : null;
         _selectedTwist =
             options.twists.isNotEmpty ? options.twists.first : null;
         _selectedPreset = null;
@@ -1280,7 +1278,10 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         body: Stack(
           children: [
             Positioned.fill(
-              child: FantasyBackdrop(atmosphere: atmosphere),
+              child: FantasyBackdrop(
+                atmosphere: atmosphere,
+                stageVignette: _appStage == _AppStage.entry,
+              ),
             ),
             if (_isLoadingOptions)
               const Center(child: CircularProgressIndicator())
@@ -1364,6 +1365,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   Widget _buildPersistentTopBar() {
     final atmosphere = _currentAtmosphere();
     final theme = _resolvedAtmosphereTheme();
+    final isEntryStage = _appStage == _AppStage.entry;
     final campaignTypeLabel =
         _selectedCampaignType ?? context.l10n.appFreeFormat;
     final header = Row(
@@ -1374,9 +1376,13 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
           height: 30,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: atmosphere.primary.withValues(alpha: 0.12),
+            color: atmosphere.primary.withValues(
+              alpha: isEntryStage ? 0.07 : 0.12,
+            ),
             border: Border.all(
-              color: atmosphere.primary.withValues(alpha: 0.2),
+              color: atmosphere.primary.withValues(
+                alpha: isEntryStage ? 0.12 : 0.2,
+              ),
             ),
           ),
           child: Icon(
@@ -1405,10 +1411,14 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: atmosphere.primary.withValues(alpha: 0.08),
+                      color: atmosphere.primary.withValues(
+                        alpha: isEntryStage ? 0.05 : 0.08,
+                      ),
                       borderRadius: BorderRadius.circular(999),
                       border: Border.all(
-                        color: atmosphere.primary.withValues(alpha: 0.16),
+                        color: atmosphere.primary.withValues(
+                          alpha: isEntryStage ? 0.09 : 0.16,
+                        ),
                       ),
                     ),
                     child: Text(
@@ -1442,13 +1452,17 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: atmosphere.primary.withValues(alpha: 0.18),
+          color: atmosphere.primary.withValues(
+            alpha: isEntryStage ? 0.12 : 0.18,
+          ),
         ),
         color: Color.lerp(FantasyPalette.card, atmosphere.cardTint, 0.2)!
-            .withValues(alpha: 0.92),
+            .withValues(alpha: isEntryStage ? 0.86 : 0.92),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: atmosphere.glow.withValues(alpha: 0.08),
+            color: atmosphere.glow.withValues(
+              alpha: isEntryStage ? 0.04 : 0.08,
+            ),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),

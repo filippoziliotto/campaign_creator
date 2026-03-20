@@ -31,8 +31,7 @@ void main() {
     );
 
     await _pumpUi(tester);
-    await tester.tap(find.text('Apri la forgia'));
-    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
 
     expect(find.text('Impostazioni base'), findsOneWidget);
     expect(find.text('Ambientazione e scenario.'), findsOneWidget);
@@ -63,8 +62,7 @@ void main() {
     );
 
     await _pumpUi(tester);
-    await tester.tap(find.text('Apri la forgia'));
-    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
 
     final advanceButton = find.widgetWithText(FilledButton, 'Vai al Party');
     expect(tester.widget<FilledButton>(advanceButton).onPressed, isNull);
@@ -104,8 +102,7 @@ void main() {
     );
 
     await _pumpUi(tester);
-    await tester.tap(find.text('Apri la forgia'));
-    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
 
     final worldFrame =
         find.widgetWithText(SectionFrame, 'Costruzione del Mondo');
@@ -171,6 +168,15 @@ class _TestApp extends StatelessWidget {
 Future<void> _pumpUi(WidgetTester tester) async {
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 800));
+}
+
+Future<void> _openForgeFromEntry(WidgetTester tester) async {
+  final oneShotCard = find.byKey(
+    const ValueKey<String>('entry-campaign-card-One-Shot'),
+  );
+  await tester.ensureVisible(oneShotCard);
+  await tester.tap(oneShotCard);
+  await _pumpUi(tester);
 }
 
 int _backgroundAlpha(WidgetTester tester, Finder finder) {
