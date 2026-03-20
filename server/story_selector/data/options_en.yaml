@@ -407,6 +407,38 @@ presets:
     twist: The trusted ally is the traitor
 
 
+preset_names:
+  NULLA NELLE TORRI: Nothing in the Towers
+  SPECCHI SENZA VITA: Lifeless Mirrors
+  ORDINI SPEZZATI: Shattered Orders
+  CENERI SENZA SPERANZA: Ashes Without Hope
+  FIERA SOTTO PRESSIONE: Fair Under Pressure
+  FUNERALE SBAGLIATO: The Wrong Funeral
+  OMBRA NELLA CACCIA: Shadow in the Hunt
+  ECO DAL FUTURO: Echo from the Future
+  LOCANDA AL CREPUSCOLO: Inn at Dusk
+  ROTTE STELLARI: Star Routes
+  CICATRICI DI FERRO: Iron Scars
+  MARE CHE SCOMPARE: The Vanishing Sea
+  ARCHIVI IN FIAMME: Archives in Flames
+  NODI DI SANGUE: Blood Knots
+  RADICE DEL MORBO: Root of the Plague
+  GIURAMENTO INFRANTO: Broken Oath
+  PROFEZIA DI CARTA: Paper Prophecy
+  POLVERE E SILENZIO: Dust and Silence
+  SETTIMANA DI VETRO: Glass Week
+  CERCHIO CHIUSO: Closed Circle
+  TOMBA RESPIRANTE: The Breathing Tomb
+  PALUDE SENZA RITORNO: Swamp of No Return
+  FUGA DAL PROFONDO: Escape from the Deep
+  SANTUARIO DEL PECCATO: Sanctuary of Sin
+  FONDERIA SENZA PADRONE: The Masterless Foundry
+  SOGNO A LIVELLI: Layered Dream
+  ABISSO NECESSARIO: The Necessary Abyss
+  LABIRINTO RISCRITTO: The Rewritten Labyrinth
+  TANA DELL'ORIGINE: The Origin's Den
+  AVAMPOSTO CONTESO: Contested Outpost
+
 preset_descriptions:
 
   # ── ONE-SHOT ─────────────────────────────────────────────────────────────────

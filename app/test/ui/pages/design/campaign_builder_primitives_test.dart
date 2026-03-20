@@ -79,7 +79,7 @@ void main() {
               child: CampaignModeCard(
                 atmosphere: _testAtmosphere,
                 title: 'One-Shot',
-                badge: 'Lama rapida',
+                badge: 'Singola',
                 description: 'Una missione ad alto impatto.',
                 icon: Icons.bolt_rounded,
                 colors: const <Color>[

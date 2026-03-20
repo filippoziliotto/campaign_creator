@@ -35,7 +35,7 @@ void main() {
 
       final options = await api.getOptions();
 
-      expect(requestedUri.toString(), 'http://localhost:8000/options');
+      expect(requestedUri.toString(), 'http://localhost:8000/options?lang=it');
       expect(options.settings, ['Ravenloft']);
       expect(options.settingDescriptions['Ravenloft'], 'Nebbie e castelli.');
     });

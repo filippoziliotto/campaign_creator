@@ -143,7 +143,7 @@ const CampaignAtmosphereData _dungeonAtmosphere = CampaignAtmosphereData(
 );
 
 const _CampaignTypeMeta _defaultCampaignMeta = _CampaignTypeMeta(
-  icon: Icons.auto_awesome_rounded,
+  icon: Icons.bolt_rounded,
   colors: <Color>[FantasyPalette.ember, FantasyPalette.cardSoft],
   artAsset: 'assets/entry_cards/one_shot.jpg',
   atmosphere: _miniCampaignAtmosphere,
@@ -158,37 +158,37 @@ const Map<String, _CampaignTypeMeta> _campaignTypeMeta =
     atmosphere: _oneShotAtmosphere,
   ),
   'Mini-campagna': _CampaignTypeMeta(
-    icon: Icons.alt_route_rounded,
+    icon: Icons.hiking_rounded,
     colors: <Color>[Color(0xFF9A6A2F), Color(0xFF5A3318)],
     artAsset: 'assets/entry_cards/campagna_corta.jpg',
     atmosphere: _miniCampaignAtmosphere,
   ),
   'Mini-campaign': _CampaignTypeMeta(
-    icon: Icons.alt_route_rounded,
+    icon: Icons.hiking_rounded,
     colors: <Color>[Color(0xFF9A6A2F), Color(0xFF5A3318)],
     artAsset: 'assets/entry_cards/campagna_corta.jpg',
     atmosphere: _miniCampaignAtmosphere,
   ),
   'Campagna lunga': _CampaignTypeMeta(
-    icon: Icons.account_tree_rounded,
+    icon: Icons.auto_stories_rounded,
     colors: <Color>[Color(0xFF47644A), Color(0xFF1E2E22)],
     artAsset: 'assets/entry_cards/campagna_lunga.jpg',
     atmosphere: _longCampaignAtmosphere,
   ),
   'Long campaign': _CampaignTypeMeta(
-    icon: Icons.account_tree_rounded,
+    icon: Icons.auto_stories_rounded,
     colors: <Color>[Color(0xFF47644A), Color(0xFF1E2E22)],
     artAsset: 'assets/entry_cards/campagna_lunga.jpg',
     atmosphere: _longCampaignAtmosphere,
   ),
   'Esplorazione dungeon': _CampaignTypeMeta(
-    icon: Icons.explore_rounded,
+    icon: Icons.layers_rounded,
     colors: <Color>[Color(0xFF5E4C80), Color(0xFF292036)],
     artAsset: 'assets/entry_cards/dungeon.jpg',
     atmosphere: _dungeonAtmosphere,
   ),
   'Dungeon crawl': _CampaignTypeMeta(
-    icon: Icons.explore_rounded,
+    icon: Icons.layers_rounded,
     colors: <Color>[Color(0xFF5E4C80), Color(0xFF292036)],
     artAsset: 'assets/entry_cards/dungeon.jpg',
     atmosphere: _dungeonAtmosphere,
@@ -231,6 +231,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   String? _selectedCampaignType;
   String? _selectedTwist;
   String? _selectedPreset;
+  String? _appliedPreset;
 
   int _partyLevel = 3;
   int _partySize = 4;
@@ -323,6 +324,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     _selectedCampaignType = null;
     _selectedTwist = null;
     _selectedPreset = null;
+    _appliedPreset = null;
     _selectedThemes.clear();
     _selectedTones.clear();
     _selectedStyles.clear();
@@ -384,6 +386,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         _selectedTwist =
             options.twists.isNotEmpty ? options.twists.first : null;
         _selectedPreset = null;
+        _appliedPreset = null;
         _generatedPrompt = _savedDraftPrompt;
         _hasUnsavedChanges = false;
         _forgeTransitionReverse = false;
@@ -553,6 +556,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         ..addAll(style == null || style.isEmpty ? <String>[] : <String>[style]);
 
       _errorMessage = null;
+      _appliedPreset = presetName;
     });
   }
 
@@ -907,6 +911,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     setState(() {
       _selectedCampaignType = campaignType;
       _selectedPreset = null;
+      _appliedPreset = null;
       _setAppStage(_AppStage.forge);
       _setForgeSection(_ForgeSection.world);
       if (hasChanged) {
@@ -945,8 +950,21 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       case _AppStage.forge:
         return (_selectedCampaignType ?? '').trim().isNotEmpty;
       case _AppStage.parchment:
-        return (_generatedPrompt ?? '').trim().isNotEmpty;
+        return _canOpenParchmentStage();
     }
+  }
+
+  bool _canOpenParchmentStage() {
+    if ((_generatedPrompt ?? '').trim().isNotEmpty) {
+      return true;
+    }
+
+    if (_appStage == _AppStage.parchment) {
+      return true;
+    }
+
+    return _appStage == _AppStage.forge &&
+        _forgeSection == _ForgeSection.narrative;
   }
 
   void _advanceForge() {
@@ -1030,7 +1048,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       tokens.add(_selectedTones.take(2).join(' + '));
     }
     if (_selectedPreset != null) {
-      tokens.add(context.l10n.appSummaryPreset(_selectedPreset!));
+      final displayName = _options?.presetNames[_selectedPreset!] ?? _selectedPreset!;
+      tokens.add(context.l10n.appSummaryPreset(displayName));
     }
 
     if (limit == null || tokens.length <= limit) {
@@ -1402,9 +1421,6 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       },
     );
 
-    final languageSwitch = _buildLanguageSwitch();
-    final action = _buildTopBarAction();
-
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -1425,7 +1441,9 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final compact = constraints.maxWidth < 980;
-          final padding = compact ? 16.0 : 20.0;
+          final padding = compact ? 12.0 : 20.0;
+          final languageSwitch = _buildLanguageSwitch();
+          final action = _buildTopBarAction(compact: compact);
 
           if (compact) {
             return Padding(
@@ -1437,14 +1455,10 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                   const SizedBox(height: 6),
                   stageSummary,
                   const SizedBox(height: 6),
-                  Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      languageSwitch,
-                      if (action != null) action,
-                    ],
+                  _buildTopBarUtilities(
+                    languageSwitch: languageSwitch,
+                    action: action,
+                    alignment: WrapAlignment.start,
                   ),
                 ],
               ),
@@ -1463,15 +1477,10 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          languageSwitch,
-                          if (action != null) ...[
-                            const SizedBox(width: 10),
-                            action,
-                          ],
-                        ],
+                      _buildTopBarUtilities(
+                        languageSwitch: languageSwitch,
+                        action: action,
+                        alignment: WrapAlignment.end,
                       ),
                       const SizedBox(height: 6),
                       stageSummary,
@@ -1486,7 +1495,42 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     );
   }
 
-  Widget? _buildTopBarAction() {
+  Widget _buildTopBarUtilities({
+    required Widget languageSwitch,
+    required Widget? action,
+    required WrapAlignment alignment,
+  }) {
+    return Wrap(
+      spacing: 6,
+      runSpacing: 6,
+      alignment: alignment,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        languageSwitch,
+        if (action != null) action,
+      ],
+    );
+  }
+
+  ButtonStyle _topBarActionStyle() {
+    return FilledButton.styleFrom(
+      visualDensity: VisualDensity.compact,
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
+      minimumSize: Size.zero,
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    );
+  }
+
+  ButtonStyle _compactTopBarActionStyle() {
+    return TextButton.styleFrom(
+      visualDensity: VisualDensity.compact,
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+      minimumSize: Size.zero,
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    );
+  }
+
+  Widget? _buildTopBarAction({required bool compact}) {
     switch (_appStage) {
       case _AppStage.entry:
         return null;
@@ -1494,21 +1538,29 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         if (_generatedPrompt == null) {
           return null;
         }
+        if (compact) {
+          return TextButton(
+            style: _compactTopBarActionStyle(),
+            onPressed: () => _goToStage(_AppStage.parchment),
+            child: Text(context.l10n.commonOpen),
+          );
+        }
         return FilledButton.icon(
-          style: FilledButton.styleFrom(
-            visualDensity: VisualDensity.compact,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          ),
+          style: _topBarActionStyle(),
           onPressed: () => _goToStage(_AppStage.parchment),
           icon: const Icon(Icons.description_rounded),
           label: Text(context.l10n.appOpenParchment),
         );
       case _AppStage.parchment:
+        if (compact) {
+          return TextButton(
+            style: _compactTopBarActionStyle(),
+            onPressed: _sealCurrentParchment,
+            child: Text(context.l10n.appStageForge),
+          );
+        }
         return FilledButton.icon(
-          style: FilledButton.styleFrom(
-            visualDensity: VisualDensity.compact,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          ),
+          style: _topBarActionStyle(),
           onPressed: _sealCurrentParchment,
           icon: const Icon(Icons.approval_rounded),
           label: Text(context.l10n.appSealParchment),
@@ -1518,40 +1570,64 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
   Widget _buildLanguageSwitch() {
     final selectedCode = widget.currentLocale.languageCode;
-    return Theme(
-      data: _resolvedAtmosphereTheme().copyWith(
-        segmentedButtonTheme: SegmentedButtonThemeData(
-          style: ButtonStyle(
-            visualDensity: VisualDensity.compact,
-            padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
-              EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+    final theme = _resolvedAtmosphereTheme();
+    final colorScheme = theme.colorScheme;
+
+    Widget buildSegment({
+      required String code,
+      required String label,
+    }) {
+      final selected = code == selectedCode;
+      return Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(999),
+          onTap: selected ? null : () => widget.onLocaleChanged(Locale(code)),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(999),
+              color: selected
+                  ? colorScheme.primary.withValues(alpha: 0.18)
+                  : Colors.transparent,
+            ),
+            child: Text(
+              label,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: selected
+                    ? colorScheme.onSurface
+                    : colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
         ),
+      );
+    }
+
+    return Container(
+      key: const ValueKey<String>('top-bar-language-switch'),
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color: colorScheme.outline.withValues(alpha: 0.28),
+        ),
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.42),
       ),
-      child: SegmentedButton<String>(
-        showSelectedIcon: false,
-        segments: <ButtonSegment<String>>[
-          ButtonSegment<String>(
-            value: 'en',
-            label: Text(
-              context.l10n.languageEnglishShort,
-              style: Theme.of(context).textTheme.labelSmall,
-            ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          buildSegment(
+            code: 'en',
+            label: context.l10n.languageEnglishShort,
           ),
-          ButtonSegment<String>(
-            value: 'it',
-            label: Text(
-              context.l10n.languageItalianShort,
-              style: Theme.of(context).textTheme.labelSmall,
-            ),
+          buildSegment(
+            code: 'it',
+            label: context.l10n.languageItalianShort,
           ),
         ],
-        selected: <String>{selectedCode},
-        onSelectionChanged: (selection) {
-          final languageCode = selection.first;
-          widget.onLocaleChanged(Locale(languageCode));
-        },
       ),
     );
   }

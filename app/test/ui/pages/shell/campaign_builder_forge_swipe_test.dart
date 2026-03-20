@@ -106,6 +106,91 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
+  testWidgets('forge swipe opens parchment from narrative without a prompt', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(430, 932));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    final api = BackendApi(
+      baseUrl: 'http://localhost:8000',
+      client: MockClient((request) async {
+        if (request.url.path == '/options') {
+          return http.Response(
+            jsonEncode({
+              'settings': ['Forgotten Realms'],
+              'campaign_types': ['One-Shot'],
+              'themes': ['Intrigo'],
+              'tones': ['Epico'],
+              'styles': ['Lineare'],
+              'party_archetypes': ['Tank'],
+              'twists': ['Tradimento'],
+              'presets': {},
+              'setting_descriptions': {
+                'Forgotten Realms': 'Classico high fantasy.',
+              },
+              'preset_descriptions': {},
+            }),
+            200,
+            headers: {'content-type': 'application/json'},
+          );
+        }
+
+        throw UnimplementedError('Unexpected request: ${request.url}');
+      }),
+    );
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          api: api,
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    await tester.tap(find.text('One-Shot').last);
+    await _pumpUi(tester);
+
+    await _flingSection(
+      tester,
+      find.byKey(const ValueKey<String>('forge-section-world')),
+      const Offset(-500, 0),
+    );
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('forge-section-party')),
+      findsOneWidget,
+    );
+
+    await _flingSection(
+      tester,
+      find.byKey(const ValueKey<String>('forge-section-party')),
+      const Offset(-500, 0),
+    );
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('forge-section-narrative')),
+      findsOneWidget,
+    );
+
+    await _flingSection(
+      tester,
+      find.byKey(const ValueKey<String>('forge-section-narrative')),
+      const Offset(-500, 0),
+    );
+    await _pumpUi(tester);
+
+    expect(find.byType(ParchmentRoutePage), findsOneWidget);
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
   testWidgets('swiping right from the first forge section returns to entry', (
     tester,
   ) async {

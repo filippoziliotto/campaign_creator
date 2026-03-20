@@ -283,6 +283,9 @@ extension on _CampaignBuilderPageState {
             presets,
             effectiveSelectedPreset,
             presetDescription,
+            options.presetNames,
+            effectiveSelectedPreset != null &&
+                effectiveSelectedPreset == _appliedPreset,
           ),
         ),
       ],
@@ -337,6 +340,8 @@ extension on _CampaignBuilderPageState {
     List<String> presets,
     String? effectiveSelectedPreset,
     String? presetDescription,
+    Map<String, String> presetNames,
+    bool isApplied,
   ) {
     return ControlRoomPanel(
       label: context.l10n.forgePresetPanelLabel,
@@ -359,22 +364,25 @@ extension on _CampaignBuilderPageState {
                       label: context.l10n.forgeQuickPresetLabel,
                       value: effectiveSelectedPreset,
                       options: presets,
+                      labels: presetNames,
                       onChanged: (value) {
                         _markDirty(() {
                           _selectedPreset = value;
                         });
                       },
                     ),
-                    const SizedBox(height: 12),
-                    FilledButton(
-                      style: FilledButton.styleFrom(
-                        visualDensity: VisualDensity.compact,
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    if (!isApplied) ...[
+                      const SizedBox(height: 12),
+                      FilledButton(
+                        style: FilledButton.styleFrom(
+                          visualDensity: VisualDensity.compact,
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        ),
+                        onPressed:
+                            effectiveSelectedPreset == null ? null : _applyPreset,
+                        child: Text(context.l10n.forgeApplyPreset),
                       ),
-                      onPressed:
-                          effectiveSelectedPreset == null ? null : _applyPreset,
-                      child: Text(context.l10n.forgeApplyPreset),
-                    ),
+                    ],
                   ],
                 );
               }
@@ -387,6 +395,7 @@ extension on _CampaignBuilderPageState {
                       label: context.l10n.forgeQuickPresetLabel,
                       value: effectiveSelectedPreset,
                       options: presets,
+                      labels: presetNames,
                       onChanged: (value) {
                         _markDirty(() {
                           _selectedPreset = value;
@@ -394,16 +403,18 @@ extension on _CampaignBuilderPageState {
                       },
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  FilledButton(
-                    style: FilledButton.styleFrom(
-                      visualDensity: VisualDensity.compact,
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  if (!isApplied) ...[
+                    const SizedBox(width: 12),
+                    FilledButton(
+                      style: FilledButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                      ),
+                      onPressed:
+                          effectiveSelectedPreset == null ? null : _applyPreset,
+                      child: Text(context.l10n.forgeApply),
                     ),
-                    onPressed:
-                        effectiveSelectedPreset == null ? null : _applyPreset,
-                    child: Text(context.l10n.forgeApply),
-                  ),
+                  ],
                 ],
               );
             },
@@ -768,6 +779,7 @@ extension on _CampaignBuilderPageState {
     required String? value,
     required List<String> options,
     required ValueChanged<String?> onChanged,
+    Map<String, String> labels = const {},
   }) {
     final normalizedValue = options.contains(value)
         ? value
@@ -780,7 +792,7 @@ extension on _CampaignBuilderPageState {
             (option) => DropdownMenuItem<String>(
               value: option,
               child: Text(
-                option,
+                labels[option] ?? option,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -792,7 +804,7 @@ extension on _CampaignBuilderPageState {
               (option) => Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  option,
+                  labels[option] ?? option,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

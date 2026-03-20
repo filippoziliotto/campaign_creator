@@ -409,6 +409,38 @@ presets:
     twist: L'alleato fidato è il traditore
 
 
+preset_names:
+  NULLA NELLE TORRI: Nulla nelle torri
+  SPECCHI SENZA VITA: Specchi senza vita
+  ORDINI SPEZZATI: Ordini spezzati
+  CENERI SENZA SPERANZA: Ceneri senza speranza
+  FIERA SOTTO PRESSIONE: Fiera sotto pressione
+  FUNERALE SBAGLIATO: Funerale sbagliato
+  OMBRA NELLA CACCIA: Ombra nella caccia
+  ECO DAL FUTURO: Eco dal futuro
+  LOCANDA AL CREPUSCOLO: Locanda al crepuscolo
+  ROTTE STELLARI: Rotte stellari
+  CICATRICI DI FERRO: Cicatrici di ferro
+  MARE CHE SCOMPARE: Mare che scompare
+  ARCHIVI IN FIAMME: Archivi in fiamme
+  NODI DI SANGUE: Nodi di sangue
+  RADICE DEL MORBO: Radice del morbo
+  GIURAMENTO INFRANTO: Giuramento infranto
+  PROFEZIA DI CARTA: Profezia di carta
+  POLVERE E SILENZIO: Polvere e silenzio
+  SETTIMANA DI VETRO: Settimana di vetro
+  CERCHIO CHIUSO: Cerchio chiuso
+  TOMBA RESPIRANTE: Tomba respirante
+  PALUDE SENZA RITORNO: Palude senza ritorno
+  FUGA DAL PROFONDO: Fuga dal profondo
+  SANTUARIO DEL PECCATO: Santuario del peccato
+  FONDERIA SENZA PADRONE: Fonderia senza padrone
+  SOGNO A LIVELLI: Sogno a livelli
+  ABISSO NECESSARIO: Abisso necessario
+  LABIRINTO RISCRITTO: Labirinto riscritto
+  TANA DELL'ORIGINE: Tana dell'origine
+  AVAMPOSTO CONTESO: Avamposto conteso
+
 preset_descriptions:
 
   # ── ONE-SHOT ─────────────────────────────────────────────────────────────────

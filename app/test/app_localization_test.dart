@@ -9,9 +9,14 @@ void main() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
-  testWidgets('CampaignCreatorApp defaults to Italian on first launch', (
+  testWidgets('CampaignCreatorApp follows a supported device locale on first launch', (
     tester,
   ) async {
+    tester.binding.platformDispatcher.localesTestValue = const <Locale>[
+      Locale('it'),
+    ];
+    addTearDown(tester.binding.platformDispatcher.clearLocalesTestValue);
+
     await tester.pumpWidget(
       CampaignCreatorApp(
         homeBuilder: (_, onLocaleChanged) => _LocaleProbe(
@@ -27,6 +32,30 @@ void main() {
     expect(find.text('IT | EN'), findsOneWidget);
     expect(find.text('free-format:Scegli formato'), findsOneWidget);
     expect(find.text('seal:Forgia pergamena'), findsOneWidget);
+  });
+
+  testWidgets('CampaignCreatorApp falls back to English for unsupported device locale', (
+    tester,
+  ) async {
+    tester.binding.platformDispatcher.localesTestValue = const <Locale>[
+      Locale('fr'),
+    ];
+    addTearDown(tester.binding.platformDispatcher.clearLocalesTestValue);
+
+    await tester.pumpWidget(
+      CampaignCreatorApp(
+        homeBuilder: (_, onLocaleChanged) => _LocaleProbe(
+          onLocaleChanged: onLocaleChanged,
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    expect(find.text('D&D Campaign Creator'), findsOneWidget);
+    expect(find.text('locale:en'), findsOneWidget);
+    expect(find.text('free-format:Choose format'), findsOneWidget);
+    expect(find.text('seal:Seal parchment'), findsOneWidget);
   });
 
   testWidgets('CampaignCreatorApp switches locale at runtime without restart', (
@@ -53,6 +82,11 @@ void main() {
   testWidgets('CampaignCreatorApp restores the saved locale on startup', (
     tester,
   ) async {
+    tester.binding.platformDispatcher.localesTestValue = const <Locale>[
+      Locale('it'),
+    ];
+    addTearDown(tester.binding.platformDispatcher.clearLocalesTestValue);
+
     SharedPreferences.setMockInitialValues(<String, Object>{
       'app.locale_code': 'en',
     });

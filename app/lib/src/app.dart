@@ -25,17 +25,18 @@ class CampaignCreatorApp extends StatefulWidget {
 
 class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
   static const String _localePreferenceKey = 'app.locale_code';
-  static const Locale _defaultLocale = Locale('en');
+  static const Locale _fallbackLocale = Locale('en');
   static const List<Locale> _supportedLocales = <Locale>[
     Locale('it'),
     Locale('en'),
   ];
 
-  Locale _locale = _defaultLocale;
+  late Locale _locale;
 
   @override
   void initState() {
     super.initState();
+    _locale = _resolveDeviceLocale();
     _restoreSavedLocale();
   }
 
@@ -43,7 +44,11 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
     try {
       final preferences = await SharedPreferences.getInstance();
       final savedCode = preferences.getString(_localePreferenceKey);
-      final restoredLocale = _resolveLocale(savedCode);
+      if (savedCode == null) {
+        return;
+      }
+
+      final restoredLocale = _resolveSupportedLocale(savedCode);
       if (!mounted || restoredLocale == _locale) {
         return;
       }
@@ -57,18 +62,27 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
     }
   }
 
-  Locale _resolveLocale(String? languageCode) {
-    if (languageCode == null) {
-      return _defaultLocale;
+  Locale _resolveDeviceLocale() {
+    for (final locale in WidgetsBinding.instance.platformDispatcher.locales) {
+      final supported = _supportedLocales.where(
+        (candidate) => candidate.languageCode == locale.languageCode,
+      );
+      if (supported.isNotEmpty) {
+        return supported.first;
+      }
     }
+    return _fallbackLocale;
+  }
+
+  Locale _resolveSupportedLocale(String languageCode) {
     return _supportedLocales.firstWhere(
       (locale) => locale.languageCode == languageCode,
-      orElse: () => _defaultLocale,
+      orElse: () => _fallbackLocale,
     );
   }
 
   Future<void> _setLocale(Locale locale) async {
-    final resolvedLocale = _resolveLocale(locale.languageCode);
+    final resolvedLocale = _resolveSupportedLocale(locale.languageCode);
     if (resolvedLocale == _locale) {
       return;
     }

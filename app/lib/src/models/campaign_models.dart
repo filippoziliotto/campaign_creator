@@ -10,6 +10,7 @@ class CampaignOptions {
     required this.presets,
     required this.settingDescriptions,
     required this.presetDescriptions,
+    required this.presetNames,
   });
 
   final List<String> settings;
@@ -22,6 +23,7 @@ class CampaignOptions {
   final Map<String, Map<String, dynamic>> presets;
   final Map<String, String> settingDescriptions;
   final Map<String, String> presetDescriptions;
+  final Map<String, String> presetNames;
 
   factory CampaignOptions.fromJson(Map<String, dynamic> json) {
     final rawPresets =
@@ -41,6 +43,7 @@ class CampaignOptions {
       ),
       settingDescriptions: _stringMap(json['setting_descriptions']),
       presetDescriptions: _stringMap(json['preset_descriptions']),
+      presetNames: _stringMap(json['preset_names']),
     );
   }
 
