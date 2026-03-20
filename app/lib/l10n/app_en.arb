@@ -69,6 +69,7 @@
   "appSnackGenerationFailed": "Generation failed. Check the message shown on screen.",
   "appSnackPromptCopied": "Prompt copied to the clipboard.",
   "appSnackNoParchmentToShare": "There is no parchment to share yet.",
+  "appSnackShareUnavailableOnDevice": "Sharing is not available on this device.",
   "appSnackShareUnavailable": "Sharing unavailable: {error}",
   "@appSnackShareUnavailable": {
     "placeholders": {

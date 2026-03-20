@@ -69,6 +69,7 @@
   "appSnackGenerationFailed": "Generazione fallita. Controlla il messaggio mostrato nella schermata.",
   "appSnackPromptCopied": "Prompt copiato negli appunti.",
   "appSnackNoParchmentToShare": "Non c'è ancora una pergamena da condividere.",
+  "appSnackShareUnavailableOnDevice": "La condivisione non è disponibile su questo dispositivo.",
   "appSnackShareUnavailable": "Condivisione non disponibile: {error}",
   "@appSnackShareUnavailable": {
     "placeholders": {

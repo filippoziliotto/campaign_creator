@@ -579,7 +579,7 @@ class ParchmentActionRail extends StatelessWidget {
 
   final CampaignAtmosphereData atmosphere;
   final VoidCallback onCopy;
-  final VoidCallback onShare;
+  final ValueChanged<Rect> onShare;
   final VoidCallback onOpenChatGpt;
   final VoidCallback onSaveDraft;
   final VoidCallback onWaxSealTap;
@@ -620,7 +620,7 @@ class ParchmentActionRail extends StatelessWidget {
           icon: Icons.ios_share_rounded,
           title: context.l10n.parchmentShareTitle,
           subtitle: context.l10n.parchmentShareSubtitle,
-          onTap: onShare,
+          onTapWithRect: onShare,
         ),
         const SizedBox(height: 10),
         _ActionRailTile(
@@ -1044,21 +1044,35 @@ class _ActionRailTile extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.onTap,
-  });
+    this.onTap,
+    this.onTapWithRect,
+  }) : assert(onTap != null || onTapWithRect != null);
 
   final CampaignAtmosphereData atmosphere;
   final IconData icon;
   final String title;
   final String subtitle;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+  final ValueChanged<Rect>? onTapWithRect;
 
   @override
   Widget build(BuildContext context) {
+    final tileKey = GlobalKey();
+
     return InkWell(
-      onTap: onTap,
+      onTap: () {
+        if (onTapWithRect != null) {
+          final box = tileKey.currentContext?.findRenderObject() as RenderBox?;
+          if (box != null) {
+            onTapWithRect!(box.localToGlobal(Offset.zero) & box.size);
+            return;
+          }
+        }
+        onTap?.call();
+      },
       borderRadius: BorderRadius.circular(20),
       child: Ink(
+        key: tileKey,
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),

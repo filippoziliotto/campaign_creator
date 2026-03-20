@@ -82,8 +82,8 @@ extension on _CampaignBuilderPageState {
             onCopy: () {
               _copyPrompt();
             },
-            onShare: () {
-              _sharePrompt();
+            onShare: (originRect) {
+              _sharePrompt(shareOrigin: originRect);
             },
             onOpenChatGpt: () {
               _openPromptInChatGpt();

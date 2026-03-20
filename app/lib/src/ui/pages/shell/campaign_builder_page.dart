@@ -28,6 +28,8 @@ enum _AppStage { entry, forge, parchment }
 
 enum _ForgeSection { world, party, narrative }
 
+typedef SharePromptCallback = Future<ShareResult> Function(ShareParams params);
+
 class _CampaignTypeMeta {
   const _CampaignTypeMeta({
     required this.icon,
@@ -199,11 +201,13 @@ class CampaignBuilderPage extends StatefulWidget {
   const CampaignBuilderPage({
     super.key,
     this.service,
+    this.sharePrompt,
     required this.currentLocale,
     required this.onLocaleChanged,
   });
 
   final CampaignService? service;
+  final SharePromptCallback? sharePrompt;
   final Locale currentLocale;
   final ValueChanged<Locale> onLocaleChanged;
 
@@ -220,6 +224,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   static const String _draftSettingKey = 'campaign_builder.saved_setting';
 
   late final CampaignService _service;
+  late final SharePromptCallback _sharePromptCallback;
   late final List<TextEditingController> _textControllers;
   final ScrollController _entryScrollController = ScrollController();
   final ScrollController _forgeScrollController = ScrollController();
@@ -279,6 +284,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   void initState() {
     super.initState();
     _service = widget.service ?? LocalCampaignService();
+    _sharePromptCallback = widget.sharePrompt ?? SharePlus.instance.share;
     _textControllers = <TextEditingController>[
       _customSettingController,
       _customThemeController,
@@ -682,7 +688,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     );
   }
 
-  Future<void> _sharePrompt() async {
+  Future<void> _sharePrompt({Rect? shareOrigin}) async {
     final prompt = _generatedPrompt;
     if (prompt == null || prompt.trim().isEmpty) {
       _showSnackBar(context.l10n.appSnackNoParchmentToShare);
@@ -690,13 +696,20 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     }
 
     try {
-      await SharePlus.instance.share(
+      final result = await _sharePromptCallback(
         ShareParams(
           text: prompt,
           title: context.l10n.parchmentReadyTitle,
           subject: context.l10n.appTitle,
+          sharePositionOrigin: shareOrigin,
         ),
       );
+      if (!mounted) {
+        return;
+      }
+      if (result.status == ShareResultStatus.unavailable) {
+        _showSnackBar(context.l10n.appSnackShareUnavailableOnDevice);
+      }
     } catch (exc) {
       if (!mounted) {
         return;
