@@ -1454,12 +1454,20 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
           return null;
         }
         return FilledButton.icon(
+          style: FilledButton.styleFrom(
+            visualDensity: VisualDensity.compact,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          ),
           onPressed: () => _goToStage(_AppStage.parchment),
           icon: const Icon(Icons.description_rounded),
           label: Text(context.l10n.appOpenParchment),
         );
       case _AppStage.parchment:
         return FilledButton.icon(
+          style: FilledButton.styleFrom(
+            visualDensity: VisualDensity.compact,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          ),
           onPressed: _sealCurrentParchment,
           icon: const Icon(Icons.approval_rounded),
           label: Text(context.l10n.appSealParchment),
