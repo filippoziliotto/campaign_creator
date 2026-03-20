@@ -244,33 +244,11 @@ extension on _CampaignBuilderPageState {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final pairedWidth = constraints.maxWidth >= 920
-                      ? (constraints.maxWidth - 18) / 2
-                      : constraints.maxWidth;
-
-                  return Wrap(
-                    spacing: 18,
-                    runSpacing: 18,
-                    children: [
-                      SizedBox(
-                        width: pairedWidth,
-                        child: _buildWorldFoundationPanel(
-                          options,
-                          settingDescription,
-                        ),
-                      ),
-                      SizedBox(
-                        width: pairedWidth,
-                        child: _buildWorldTwistPanel(options),
-                      ),
-                    ],
-                  );
-                },
-              ),
+              _buildWorldFoundationPanel(options, settingDescription),
               const SizedBox(height: 18),
               _buildCreativeDirectionPanel(options),
+              const SizedBox(height: 18),
+              _buildWorldTwistPanel(options),
             ],
           ),
         ),
@@ -328,8 +306,9 @@ extension on _CampaignBuilderPageState {
             controller: _customSettingController,
             label: context.l10n.forgeCustomSettingLabel,
             hintText: context.l10n.forgeCustomSettingHint,
-            minLines: 2,
-            maxLines: 4,
+            minLines: 1,
+            maxLines: 2,
+            enableSuggestions: false,
           ),
         ],
       ),
@@ -489,8 +468,9 @@ extension on _CampaignBuilderPageState {
             controller: _customThemeController,
             label: context.l10n.forgeCustomThemesLabel,
             hintText: context.l10n.forgeCustomThemesHint,
-            minLines: 2,
-            maxLines: 3,
+            minLines: 1,
+            maxLines: 2,
+            enableSuggestions: false,
           ),
           const SizedBox(height: 18),
           Text(
@@ -535,8 +515,9 @@ extension on _CampaignBuilderPageState {
             controller: _customToneStyleController,
             label: context.l10n.forgeToneStyleOverrideLabel,
             hintText: context.l10n.forgeToneStyleOverrideHint,
-            minLines: 2,
-            maxLines: 4,
+            minLines: 1,
+            maxLines: 2,
+            enableSuggestions: false,
           ),
         ],
       ),
@@ -825,11 +806,14 @@ extension on _CampaignBuilderPageState {
     required String hintText,
     int minLines = 2,
     int maxLines = 4,
+    bool enableSuggestions = true,
   }) {
     return TextField(
       controller: controller,
       minLines: minLines,
       maxLines: maxLines,
+      autocorrect: enableSuggestions,
+      enableSuggestions: enableSuggestions,
       decoration: InputDecoration(
         labelText: label,
         hintText: hintText,
