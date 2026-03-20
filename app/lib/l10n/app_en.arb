@@ -145,6 +145,8 @@
   "forgeFoundationLabel": "Foundation",
   "forgeFoundationTitle": "Base setup",
   "forgeFoundationSubtitle": "Setting and scenario.",
+  "forgePresetSectionTitle": "Choose a preset",
+  "forgePresetSectionSubtitle": "Apply a preset to quickly configure your campaign.",
   "forgePresetPanelLabel": "Presets",
   "forgePresetPanelTitle": "Quick presets",
   "forgePresetPanelSubtitle": "Apply a preset to quickly configure your campaign.",

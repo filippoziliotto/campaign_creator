@@ -228,48 +228,58 @@ extension on _CampaignBuilderPageState {
         ? null
         : options.presetDescriptions[effectiveSelectedPreset];
 
-    return SectionFrame(
-      title: context.l10n.forgeWorldSectionTitle,
-      subtitle: context.l10n.forgeWorldSectionSubtitle,
-      density: FrameDensity.featured,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final pairedWidth = constraints.maxWidth >= 920
-                  ? (constraints.maxWidth - 18) / 2
-                  : constraints.maxWidth;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SectionFrame(
+          title: context.l10n.forgeWorldSectionTitle,
+          subtitle: context.l10n.forgeWorldSectionSubtitle,
+          density: FrameDensity.featured,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final pairedWidth = constraints.maxWidth >= 920
+                      ? (constraints.maxWidth - 18) / 2
+                      : constraints.maxWidth;
 
-              return Wrap(
-                spacing: 18,
-                runSpacing: 18,
-                children: [
-                  SizedBox(
-                    width: pairedWidth,
-                    child: _buildWorldFoundationPanel(
-                      options,
-                      settingDescription,
-                    ),
-                  ),
-                  SizedBox(
-                    width: pairedWidth,
-                    child: _buildWorldTwistPanel(options),
-                  ),
-                ],
-              );
-            },
+                  return Wrap(
+                    spacing: 18,
+                    runSpacing: 18,
+                    children: [
+                      SizedBox(
+                        width: pairedWidth,
+                        child: _buildWorldFoundationPanel(
+                          options,
+                          settingDescription,
+                        ),
+                      ),
+                      SizedBox(
+                        width: pairedWidth,
+                        child: _buildWorldTwistPanel(options),
+                      ),
+                    ],
+                  );
+                },
+              ),
+              const SizedBox(height: 18),
+              _buildCreativeDirectionPanel(options),
+            ],
           ),
-          const SizedBox(height: 18),
-          _buildPresetsPanel(
+        ),
+        const SizedBox(height: 24),
+        SectionFrame(
+          title: context.l10n.forgePresetSectionTitle,
+          subtitle: context.l10n.forgePresetSectionSubtitle,
+          density: FrameDensity.featured,
+          child: _buildPresetsPanel(
             presets,
             effectiveSelectedPreset,
             presetDescription,
           ),
-          const SizedBox(height: 18),
-          _buildCreativeDirectionPanel(options),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -351,6 +361,10 @@ extension on _CampaignBuilderPageState {
                     ),
                     const SizedBox(height: 12),
                     FilledButton(
+                      style: FilledButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                      ),
                       onPressed:
                           effectiveSelectedPreset == null ? null : _applyPreset,
                       child: Text(context.l10n.forgeApplyPreset),
@@ -376,6 +390,10 @@ extension on _CampaignBuilderPageState {
                   ),
                   const SizedBox(width: 12),
                   FilledButton(
+                    style: FilledButton.styleFrom(
+                      visualDensity: VisualDensity.compact,
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    ),
                     onPressed:
                         effectiveSelectedPreset == null ? null : _applyPreset,
                     child: Text(context.l10n.forgeApply),
