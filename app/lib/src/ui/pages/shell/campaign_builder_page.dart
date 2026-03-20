@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -179,10 +180,12 @@ const Map<String, _CampaignTypeMeta> _campaignTypeMeta =
 class CampaignBuilderPage extends StatefulWidget {
   const CampaignBuilderPage({
     super.key,
+    this.api,
     required this.currentLocale,
     required this.onLocaleChanged,
   });
 
+  final BackendApi? api;
   final Locale currentLocale;
   final ValueChanged<Locale> onLocaleChanged;
 
@@ -253,7 +256,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   @override
   void initState() {
     super.initState();
-    _api = BackendApi(baseUrl: AppConfig.apiBaseUrl);
+    _api = widget.api ?? BackendApi(baseUrl: AppConfig.apiBaseUrl);
     _textControllers = <TextEditingController>[
       _customSettingController,
       _customThemeController,
@@ -886,12 +889,9 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   void _advanceForge() {
     if (!_isForgePrimaryActionEnabled()) {
       final message = switch (_forgeSection) {
-        _ForgeSection.world =>
-          context.l10n.forgeAdvanceBlockedWorld,
-        _ForgeSection.party =>
-          context.l10n.forgeAdvanceBlockedParty,
-        _ForgeSection.narrative =>
-          context.l10n.forgeAdvanceBlockedNarrative,
+        _ForgeSection.world => context.l10n.forgeAdvanceBlockedWorld,
+        _ForgeSection.party => context.l10n.forgeAdvanceBlockedParty,
+        _ForgeSection.narrative => context.l10n.forgeAdvanceBlockedNarrative,
       };
       setState(() {
         _errorMessage = message;
@@ -1308,7 +1308,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   Widget _buildPersistentTopBar() {
     final atmosphere = _currentAtmosphere();
     final theme = _resolvedAtmosphereTheme();
-    final campaignTypeLabel = _selectedCampaignType ?? context.l10n.appFreeFormat;
+    final campaignTypeLabel =
+        _selectedCampaignType ?? context.l10n.appFreeFormat;
     final header = Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

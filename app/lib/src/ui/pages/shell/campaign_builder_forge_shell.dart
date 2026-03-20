@@ -3,6 +3,16 @@ part of 'campaign_builder_page.dart';
 extension on _CampaignBuilderPageState {
   Widget _buildForgeStage(CampaignOptions options) {
     final atmosphere = _currentAtmosphere(options);
+    final isTouchPlatform = const {
+      TargetPlatform.android,
+      TargetPlatform.iOS,
+    }.contains(defaultTargetPlatform);
+    final activeSection = _revealed(
+      delay: 0.18,
+      atmosphere: atmosphere,
+      child: _buildActiveForgeSection(options),
+    );
+
     return ForgeRoutePage(
       errorBanner: _errorMessage == null
           ? null
@@ -16,17 +26,45 @@ extension on _CampaignBuilderPageState {
         atmosphere: atmosphere,
         child: _buildForgeSectionRibbon(),
       ),
-      activeSection: _revealed(
-        delay: 0.18,
-        atmosphere: atmosphere,
-        child: _buildActiveForgeSection(options),
-      ),
+      activeSection: isTouchPlatform
+          ? GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onHorizontalDragEnd: _onForgeSectionSwipe,
+              child: activeSection,
+            )
+          : activeSection,
       controlPanel: _revealed(
         delay: 0.22,
         atmosphere: atmosphere,
         child: _buildForgeControlPanel(),
       ),
     );
+  }
+
+  void _onForgeSectionSwipe(DragEndDetails details) {
+    const double threshold = 300;
+    final dx = details.velocity.pixelsPerSecond.dx;
+    final sections = _ForgeSection.values;
+    final currentIndex = _forgeSectionIndex(_forgeSection);
+    final lastIndex = sections.length - 1;
+
+    if (dx < -threshold && currentIndex < lastIndex) {
+      _applyShellState(() {
+        _setForgeSection(sections[currentIndex + 1]);
+      });
+      return;
+    }
+
+    if (dx > threshold && currentIndex == 0) {
+      _goToStage(_AppStage.entry);
+      return;
+    }
+
+    if (dx > threshold && currentIndex > 0) {
+      _applyShellState(() {
+        _setForgeSection(sections[currentIndex - 1]);
+      });
+    }
   }
 
   Widget _buildForgeSectionRibbon() {
@@ -105,7 +143,7 @@ extension on _CampaignBuilderPageState {
       duration: atmosphere.sectionTransitionDuration,
       reverse: _forgeTransitionReverse,
       child: KeyedSubtree(
-        key: ValueKey<String>(_forgeSection.name),
+        key: ValueKey<String>('forge-section-${_forgeSection.name}'),
         child: child,
       ),
       transitionBuilder: (
@@ -211,9 +249,6 @@ extension on _CampaignBuilderPageState {
                     width: pairedWidth,
                     child: _buildWorldFoundationPanel(
                       options,
-                      presets,
-                      effectiveSelectedPreset,
-                      presetDescription,
                       settingDescription,
                     ),
                   ),
@@ -226,6 +261,12 @@ extension on _CampaignBuilderPageState {
             },
           ),
           const SizedBox(height: 18),
+          _buildPresetsPanel(
+            presets,
+            effectiveSelectedPreset,
+            presetDescription,
+          ),
+          const SizedBox(height: 18),
           _buildCreativeDirectionPanel(options),
         ],
       ),
@@ -234,9 +275,6 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildWorldFoundationPanel(
     CampaignOptions options,
-    List<String> presets,
-    String? effectiveSelectedPreset,
-    String? presetDescription,
     String? settingDescription,
   ) {
     return ControlRoomPanel(
@@ -244,6 +282,51 @@ extension on _CampaignBuilderPageState {
       title: context.l10n.forgeFoundationTitle,
       subtitle: context.l10n.forgeFoundationSubtitle,
       icon: Icons.public_rounded,
+      density: FrameDensity.featured,
+      showDivider: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildStringDropdown(
+            label: context.l10n.forgeSettingLabel,
+            value: _selectedSetting,
+            options: options.settings,
+            onChanged: (value) {
+              _markDirty(() {
+                _selectedSetting = value;
+              });
+            },
+          ),
+          if (settingDescription != null) ...[
+            const SizedBox(height: 12),
+            LoreCallout(
+              icon: Icons.travel_explore_rounded,
+              text: settingDescription,
+            ),
+          ],
+          const SizedBox(height: 14),
+          _buildLoreTextField(
+            controller: _customSettingController,
+            label: context.l10n.forgeCustomSettingLabel,
+            hintText: context.l10n.forgeCustomSettingHint,
+            minLines: 2,
+            maxLines: 4,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPresetsPanel(
+    List<String> presets,
+    String? effectiveSelectedPreset,
+    String? presetDescription,
+  ) {
+    return ControlRoomPanel(
+      label: context.l10n.forgePresetPanelLabel,
+      title: context.l10n.forgePresetPanelTitle,
+      subtitle: context.l10n.forgePresetPanelSubtitle,
+      icon: Icons.bolt_rounded,
       density: FrameDensity.featured,
       showDivider: true,
       child: Column(
@@ -308,32 +391,6 @@ extension on _CampaignBuilderPageState {
               text: presetDescription,
             ),
           ],
-          const SizedBox(height: 14),
-          _buildStringDropdown(
-            label: context.l10n.forgeSettingLabel,
-            value: _selectedSetting,
-            options: options.settings,
-            onChanged: (value) {
-              _markDirty(() {
-                _selectedSetting = value;
-              });
-            },
-          ),
-          if (settingDescription != null) ...[
-            const SizedBox(height: 12),
-            LoreCallout(
-              icon: Icons.travel_explore_rounded,
-              text: settingDescription,
-            ),
-          ],
-          const SizedBox(height: 14),
-          _buildLoreTextField(
-            controller: _customSettingController,
-            label: context.l10n.forgeCustomSettingLabel,
-            hintText: context.l10n.forgeCustomSettingHint,
-            minLines: 2,
-            maxLines: 4,
-          ),
         ],
       ),
     );
@@ -688,8 +745,9 @@ extension on _CampaignBuilderPageState {
     required List<String> options,
     required ValueChanged<String?> onChanged,
   }) {
-    final normalizedValue =
-        options.contains(value) ? value : (options.isNotEmpty ? options.first : null);
+    final normalizedValue = options.contains(value)
+        ? value
+        : (options.isNotEmpty ? options.first : null);
     return DropdownButtonFormField<String>(
       initialValue: normalizedValue,
       isExpanded: true,

@@ -3,7 +3,11 @@ part of 'campaign_builder_page.dart';
 extension on _CampaignBuilderPageState {
   Widget _buildParchmentStage(CampaignOptions options) {
     final atmosphere = _currentAtmosphere(options);
-    return ParchmentRoutePage(
+    final isTouchPlatform = const {
+      TargetPlatform.android,
+      TargetPlatform.iOS,
+    }.contains(defaultTargetPlatform);
+    final page = ParchmentRoutePage(
       atmosphere: atmosphere,
       errorBanner: _errorMessage == null
           ? null
@@ -18,6 +22,25 @@ extension on _CampaignBuilderPageState {
         child: _buildParchmentSidebar(),
       ),
     );
+
+    if (!isTouchPlatform) {
+      return page;
+    }
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onHorizontalDragEnd: _onParchmentStageSwipe,
+      child: page,
+    );
+  }
+
+  void _onParchmentStageSwipe(DragEndDetails details) {
+    const double threshold = 300;
+    final dx = details.velocity.pixelsPerSecond.dx;
+
+    if (dx > threshold) {
+      _goToStage(_AppStage.forge);
+    }
   }
 
   Widget _buildParchmentSidebar() {
