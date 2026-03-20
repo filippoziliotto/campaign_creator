@@ -241,6 +241,7 @@ extension on _CampaignBuilderPageState {
           title: context.l10n.forgeWorldSectionTitle,
           subtitle: context.l10n.forgeWorldSectionSubtitle,
           density: FrameDensity.featured,
+          emphasis: PanelEmphasis.primary,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -257,6 +258,7 @@ extension on _CampaignBuilderPageState {
           title: context.l10n.forgePresetSectionTitle,
           subtitle: context.l10n.forgePresetSectionSubtitle,
           density: FrameDensity.featured,
+          emphasis: PanelEmphasis.secondary,
           child: _buildPresetsPanel(
             presets,
             effectiveSelectedPreset,
@@ -280,6 +282,7 @@ extension on _CampaignBuilderPageState {
       subtitle: context.l10n.forgeFoundationSubtitle,
       icon: Icons.public_rounded,
       density: FrameDensity.featured,
+      emphasis: PanelEmphasis.primary,
       showDivider: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -328,7 +331,7 @@ extension on _CampaignBuilderPageState {
       subtitle: context.l10n.forgePresetPanelSubtitle,
       icon: Icons.bolt_rounded,
       density: FrameDensity.featured,
-      showDivider: true,
+      emphasis: PanelEmphasis.secondary,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -355,10 +358,12 @@ extension on _CampaignBuilderPageState {
                       FilledButton(
                         style: FilledButton.styleFrom(
                           visualDensity: VisualDensity.compact,
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 8),
                         ),
-                        onPressed:
-                            effectiveSelectedPreset == null ? null : _applyPreset,
+                        onPressed: effectiveSelectedPreset == null
+                            ? null
+                            : _applyPreset,
                         child: Text(context.l10n.forgeApplyPreset),
                       ),
                     ],
@@ -387,7 +392,8 @@ extension on _CampaignBuilderPageState {
                     FilledButton(
                       style: FilledButton.styleFrom(
                         visualDensity: VisualDensity.compact,
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 8),
                       ),
                       onPressed:
                           effectiveSelectedPreset == null ? null : _applyPreset,
@@ -413,6 +419,7 @@ extension on _CampaignBuilderPageState {
   Widget _buildWorldTwistPanel(CampaignOptions options) {
     return ControlRoomPanel(
       title: context.l10n.forgeTwistTitle,
+      emphasis: PanelEmphasis.tertiary,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -442,6 +449,7 @@ extension on _CampaignBuilderPageState {
   Widget _buildCreativeDirectionPanel(CampaignOptions options) {
     return ControlRoomPanel(
       title: context.l10n.forgeCreativeTitle,
+      emphasis: PanelEmphasis.secondary,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -529,6 +537,7 @@ extension on _CampaignBuilderPageState {
       title: context.l10n.forgePartySectionTitle,
       subtitle: context.l10n.forgePartySectionSubtitle,
       density: FrameDensity.featured,
+      emphasis: PanelEmphasis.primary,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -556,6 +565,7 @@ extension on _CampaignBuilderPageState {
           const SizedBox(height: 18),
           ControlRoomPanel(
             title: context.l10n.forgePartyInfoTitle,
+            emphasis: PanelEmphasis.tertiary,
             child: Column(
               children: [
                 _buildLoreTextField(
@@ -587,6 +597,7 @@ extension on _CampaignBuilderPageState {
       title: context.l10n.forgeScaleTitle,
       icon: Icons.tune_rounded,
       density: FrameDensity.featured,
+      emphasis: PanelEmphasis.primary,
       showDivider: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -634,6 +645,7 @@ extension on _CampaignBuilderPageState {
     return ControlRoomPanel(
       title: context.l10n.forgePartyArchetypesTitle,
       subtitle: context.l10n.forgePartyArchetypesSubtitle(_partySize),
+      emphasis: PanelEmphasis.secondary,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -669,6 +681,7 @@ extension on _CampaignBuilderPageState {
       title: context.l10n.forgeNarrativeSectionTitle,
       subtitle: context.l10n.forgeNarrativeSectionSubtitle,
       density: FrameDensity.featured,
+      emphasis: PanelEmphasis.primary,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -676,6 +689,7 @@ extension on _CampaignBuilderPageState {
             title: context.l10n.forgeNarrativePanelTitle,
             icon: Icons.hub_rounded,
             density: FrameDensity.featured,
+            emphasis: PanelEmphasis.primary,
             showDivider: true,
             child: Column(
               children: [
@@ -716,6 +730,7 @@ extension on _CampaignBuilderPageState {
           const SizedBox(height: 18),
           ControlRoomPanel(
             title: context.l10n.forgeContentConstraintsTitle,
+            emphasis: PanelEmphasis.secondary,
             child: Column(
               children: [
                 ToggleTile(

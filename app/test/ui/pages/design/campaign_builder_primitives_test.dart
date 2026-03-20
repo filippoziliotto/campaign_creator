@@ -222,6 +222,94 @@ void main() {
       expect(find.byType(RuneDivider), findsNothing);
     },
   );
+
+  testWidgets(
+    'SectionFrame defaults to primary emphasis and ControlRoomPanel defaults to secondary emphasis',
+    (tester) async {
+      await tester.pumpWidget(
+        _localizedTestApp(
+          child: Column(
+            children: const [
+              SectionFrame(
+                title: 'Sezione primaria',
+                child: Text('Contenuto sezione'),
+              ),
+              ControlRoomPanel(
+                title: 'Pannello secondario',
+                child: Text('Contenuto pannello'),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      await tester.pump();
+
+      expect(
+        tester.widget<SectionFrame>(find.byType(SectionFrame)),
+        isA<SectionFrame>().having(
+          (widget) => widget.emphasis,
+          'emphasis',
+          PanelEmphasis.primary,
+        ),
+      );
+      expect(
+        tester.widget<ControlRoomPanel>(find.byType(ControlRoomPanel)),
+        isA<ControlRoomPanel>().having(
+          (widget) => widget.emphasis,
+          'emphasis',
+          PanelEmphasis.secondary,
+        ),
+      );
+    },
+  );
+
+  testWidgets(
+    'ControlRoomPanel emphasis reduces visual weight from primary to tertiary',
+    (tester) async {
+      await tester.pumpWidget(
+        _localizedTestApp(
+          child: Column(
+            children: const [
+              ControlRoomPanel(
+                title: 'Primario',
+                emphasis: PanelEmphasis.primary,
+                child: Text('A'),
+              ),
+              ControlRoomPanel(
+                title: 'Secondario',
+                emphasis: PanelEmphasis.secondary,
+                child: Text('B'),
+              ),
+              ControlRoomPanel(
+                title: 'Terziario',
+                emphasis: PanelEmphasis.tertiary,
+                child: Text('C'),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      await tester.pump();
+
+      final primary = _panelBackgroundAlpha(
+        tester,
+        find.widgetWithText(ControlRoomPanel, 'Primario'),
+      );
+      final secondary = _panelBackgroundAlpha(
+        tester,
+        find.widgetWithText(ControlRoomPanel, 'Secondario'),
+      );
+      final tertiary = _panelBackgroundAlpha(
+        tester,
+        find.widgetWithText(ControlRoomPanel, 'Terziario'),
+      );
+
+      expect(primary, greaterThan(secondary));
+      expect(secondary, greaterThan(tertiary));
+    },
+  );
 }
 
 Widget _localizedTestApp({required Widget child}) {
@@ -232,4 +320,20 @@ Widget _localizedTestApp({required Widget child}) {
     supportedLocales: AppLocalizations.supportedLocales,
     home: Scaffold(body: child),
   );
+}
+
+int _panelBackgroundAlpha(WidgetTester tester, Finder finder) {
+  final container = tester.widget<Container>(
+    find
+        .descendant(
+          of: finder,
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is Container && widget.decoration is BoxDecoration,
+          ),
+        )
+        .first,
+  );
+  final decoration = container.decoration! as BoxDecoration;
+  return (decoration.color!.a * 255.0).round().clamp(0, 255);
 }

@@ -10,6 +10,8 @@ import 'campaign_builder_motion.dart';
 
 enum FrameDensity { compact, featured }
 
+enum PanelEmphasis { primary, secondary, tertiary }
+
 class CampaignStagePage extends Page<void> {
   const CampaignStagePage({
     required this.child,
@@ -289,227 +291,225 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
         : const Duration(milliseconds: 220);
 
     Widget cardBody = GestureDetector(
-        onTapDown: (_) {
-          if (!reducedMotion) {
-            setState(() {
-              _pressed = true;
-            });
-          }
-        },
-        onTapUp: (_) {
-          if (!reducedMotion) {
-            setState(() {
-              _pressed = false;
-            });
-          }
-        },
-        onTapCancel: () {
-          if (!reducedMotion) {
-            setState(() {
-              _pressed = false;
-            });
-          }
-        },
-        child: TweenAnimationBuilder<double>(
-          tween: Tween<double>(begin: 0, end: targetProgress),
-          duration: motionDuration,
-          curve: Curves.easeOutCubic,
-          builder: (context, value, child) {
-            final lift = widget.atmosphere.cardHoverLift * value;
-            final tiltX =
-                -_hoverVector.dy * widget.atmosphere.cardHoverTilt * value;
-            final tiltY =
-                _hoverVector.dx * widget.atmosphere.cardHoverTilt * value;
-            final scale = 1 - (_pressed ? 0.016 * value : 0.0);
+      onTapDown: (_) {
+        if (!reducedMotion) {
+          setState(() {
+            _pressed = true;
+          });
+        }
+      },
+      onTapUp: (_) {
+        if (!reducedMotion) {
+          setState(() {
+            _pressed = false;
+          });
+        }
+      },
+      onTapCancel: () {
+        if (!reducedMotion) {
+          setState(() {
+            _pressed = false;
+          });
+        }
+      },
+      child: TweenAnimationBuilder<double>(
+        tween: Tween<double>(begin: 0, end: targetProgress),
+        duration: motionDuration,
+        curve: Curves.easeOutCubic,
+        builder: (context, value, child) {
+          final lift = widget.atmosphere.cardHoverLift * value;
+          final tiltX =
+              -_hoverVector.dy * widget.atmosphere.cardHoverTilt * value;
+          final tiltY =
+              _hoverVector.dx * widget.atmosphere.cardHoverTilt * value;
+          final scale = 1 - (_pressed ? 0.016 * value : 0.0);
 
-            return Transform.translate(
-              offset: Offset(0, -lift),
-              child: Transform(
-                alignment: Alignment.center,
-                transform: Matrix4.identity()
-                  ..setEntry(3, 2, 0.001)
-                  ..rotateX(tiltX)
-                  ..rotateY(tiltY),
-                child: Transform.scale(
-                  scale: scale,
-                  child: child,
-                ),
+          return Transform.translate(
+            offset: Offset(0, -lift),
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, 0.001)
+                ..rotateX(tiltX)
+                ..rotateY(tiltY),
+              child: Transform.scale(
+                scale: scale,
+                child: child,
               ),
-            );
-          },
-          child: InkWell(
-            onTap: widget.onTap,
-            borderRadius: borderRadius,
-            child: AnimatedContainer(
-              duration: motionDuration,
-              curve: Curves.easeOutCubic,
-              decoration: BoxDecoration(
-                borderRadius: borderRadius,
-                border: Border.all(
-                  color: widget.selected
-                      ? widget.atmosphere.highlight
-                      : FantasyPalette.outline.withValues(alpha: 0.22),
-                  width: widget.selected ? 1.4 : 1,
-                ),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: widget.atmosphere.glow.withValues(
-                      alpha: widget.selected ? 0.2 : (_hovered ? 0.1 : 0.05),
-                    ),
-                    blurRadius: widget.selected ? 24 : (_hovered ? 16 : 10),
-                    offset: const Offset(0, 10),
+            ),
+          );
+        },
+        child: InkWell(
+          onTap: widget.onTap,
+          borderRadius: borderRadius,
+          child: AnimatedContainer(
+            duration: motionDuration,
+            curve: Curves.easeOutCubic,
+            decoration: BoxDecoration(
+              borderRadius: borderRadius,
+              border: Border.all(
+                color: widget.selected
+                    ? widget.atmosphere.highlight
+                    : FantasyPalette.outline.withValues(alpha: 0.22),
+                width: widget.selected ? 1.4 : 1,
+              ),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: widget.atmosphere.glow.withValues(
+                    alpha: widget.selected ? 0.2 : (_hovered ? 0.1 : 0.05),
                   ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: borderRadius,
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: _CampaignCardArtwork(
-                        artAsset: widget.artAsset,
-                        fallbackColor:
-                            widget.colors.last.withValues(alpha: 0.9),
-                      ),
+                  blurRadius: widget.selected ? 24 : (_hovered ? 16 : 10),
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: borderRadius,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: _CampaignCardArtwork(
+                      artAsset: widget.artAsset,
+                      fallbackColor: widget.colors.last.withValues(alpha: 0.9),
                     ),
-                    Positioned.fill(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: <Color>[
-                              widget.colors.first.withValues(alpha: 0.22),
-                              widget.colors.last.withValues(alpha: 0.42),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned.fill(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: <Color>[
-                              Colors.black.withValues(alpha: 0.12),
-                              Colors.black.withValues(alpha: 0.30),
-                              Colors.black.withValues(alpha: 0.86),
-                            ],
-                            stops: const <double>[0.0, 0.46, 1.0],
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 180,
-                      child: Padding(
-                        padding: const EdgeInsets.all(14),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: FantasyPalette.abyss
-                                        .withValues(alpha: 0.42),
-                                    border: Border.all(
-                                      color:
-                                          FantasyPalette.parchment.withValues(
-                                        alpha: 0.14,
-                                      ),
-                                    ),
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
-                                  child: Icon(
-                                    widget.icon,
-                                    color: FantasyPalette.parchment,
-                                    size: 20,
-                                  ),
-                                ),
-                                const Spacer(),
-                                if (widget.selected)
-                                  Container(
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: BoxDecoration(
-                                      color: FantasyPalette.abyss
-                                          .withValues(alpha: 0.52),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(
-                                      Icons.check_circle_rounded,
-                                      color: widget.atmosphere.highlight,
-                                      size: 18,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                            const Spacer(),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: FantasyPalette.abyss
-                                    .withValues(alpha: 0.34),
-                                borderRadius: BorderRadius.circular(999),
-                                border: Border.all(
-                                  color: widget.atmosphere.highlight.withValues(
-                                    alpha: 0.18,
-                                  ),
-                                ),
-                              ),
-                              child: Text(
-                                widget.badge,
-                                style: Theme.of(context).textTheme.labelMedium,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              widget.title,
-                              style: titleStyle,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              widget.description,
-                              style: descriptionStyle,
-                              maxLines: (compactCopy || showCallToAction) ? 1 : 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            if (showCallToAction) ...[
-                              const SizedBox(height: 6),
-                              Row(
-                                children: [
-                                  Text(
-                                    context.l10n.entryOpenForge,
-                                    style: Theme.of(context).textTheme.labelLarge,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Icon(
-                                    Icons.arrow_forward_rounded,
-                                    size: 16,
-                                    color: widget.atmosphere.highlight,
-                                  ),
-                                ],
-                              ),
-                            ],
+                  ),
+                  Positioned.fill(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: <Color>[
+                            widget.colors.first.withValues(alpha: 0.22),
+                            widget.colors.last.withValues(alpha: 0.42),
                           ],
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Positioned.fill(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: <Color>[
+                            Colors.black.withValues(alpha: 0.12),
+                            Colors.black.withValues(alpha: 0.30),
+                            Colors.black.withValues(alpha: 0.86),
+                          ],
+                          stops: const <double>[0.0, 0.46, 1.0],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 180,
+                    child: Padding(
+                      padding: const EdgeInsets.all(14),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: FantasyPalette.abyss
+                                      .withValues(alpha: 0.42),
+                                  border: Border.all(
+                                    color: FantasyPalette.parchment.withValues(
+                                      alpha: 0.14,
+                                    ),
+                                  ),
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Icon(
+                                  widget.icon,
+                                  color: FantasyPalette.parchment,
+                                  size: 20,
+                                ),
+                              ),
+                              const Spacer(),
+                              if (widget.selected)
+                                Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: FantasyPalette.abyss
+                                        .withValues(alpha: 0.52),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.check_circle_rounded,
+                                    color: widget.atmosphere.highlight,
+                                    size: 18,
+                                  ),
+                                ),
+                            ],
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color:
+                                  FantasyPalette.abyss.withValues(alpha: 0.34),
+                              borderRadius: BorderRadius.circular(999),
+                              border: Border.all(
+                                color: widget.atmosphere.highlight.withValues(
+                                  alpha: 0.18,
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              widget.badge,
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            widget.title,
+                            style: titleStyle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            widget.description,
+                            style: descriptionStyle,
+                            maxLines: (compactCopy || showCallToAction) ? 1 : 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          if (showCallToAction) ...[
+                            const SizedBox(height: 6),
+                            Row(
+                              children: [
+                                Text(
+                                  context.l10n.entryOpenForge,
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
+                                const SizedBox(width: 4),
+                                Icon(
+                                  Icons.arrow_forward_rounded,
+                                  size: 16,
+                                  color: widget.atmosphere.highlight,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
+      ),
     );
 
     if (isTouch) return cardBody;
@@ -648,7 +648,7 @@ class StagePill extends StatelessWidget {
                 '$index',
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: indexTextColor,
-                ),
+                    ),
               ),
             ),
             const SizedBox(width: 6),
@@ -745,6 +745,7 @@ class SectionFrame extends StatelessWidget {
     this.subtitle,
     this.icon,
     this.density = FrameDensity.compact,
+    this.emphasis = PanelEmphasis.primary,
     this.showDivider = false,
   });
 
@@ -754,29 +755,57 @@ class SectionFrame extends StatelessWidget {
   final IconData? icon;
   final Widget child;
   final FrameDensity density;
+  final PanelEmphasis emphasis;
   final bool showDivider;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final featured = density == FrameDensity.featured;
+    final prominent = emphasis == PanelEmphasis.primary;
     final padding = featured ? 22.0 : 18.0;
-    final iconBoxSize = featured ? 48.0 : 38.0;
+    final iconBoxSize = switch (emphasis) {
+      PanelEmphasis.primary => featured ? 48.0 : 38.0,
+      PanelEmphasis.secondary => featured ? 44.0 : 36.0,
+      PanelEmphasis.tertiary => featured ? 40.0 : 34.0,
+    };
     final headerSpacing = featured ? 16.0 : 12.0;
-    final sectionTitleStyle = featured
-        ? Theme.of(context).textTheme.titleLarge
-        : Theme.of(context).textTheme.titleMedium;
-    final hasHeaderMeta =
-        eyebrow != null || subtitle != null || icon != null;
+    final sectionTitleStyle = switch (emphasis) {
+      PanelEmphasis.primary => featured
+          ? Theme.of(context).textTheme.titleLarge
+          : Theme.of(context).textTheme.titleMedium,
+      PanelEmphasis.secondary => Theme.of(context).textTheme.titleMedium,
+      PanelEmphasis.tertiary => Theme.of(context).textTheme.titleMedium,
+    };
+    final hasHeaderMeta = eyebrow != null || subtitle != null || icon != null;
+    final frameColorAlpha = switch (emphasis) {
+      PanelEmphasis.primary => featured ? 0.78 : 0.66,
+      PanelEmphasis.secondary => featured ? 0.68 : 0.58,
+      PanelEmphasis.tertiary => featured ? 0.56 : 0.48,
+    };
+    final borderAlpha = switch (emphasis) {
+      PanelEmphasis.primary => featured ? 0.28 : 0.18,
+      PanelEmphasis.secondary => featured ? 0.18 : 0.14,
+      PanelEmphasis.tertiary => featured ? 0.10 : 0.08,
+    };
+    final iconFillAlpha = switch (emphasis) {
+      PanelEmphasis.primary => featured ? 0.14 : 0.10,
+      PanelEmphasis.secondary => 0.08,
+      PanelEmphasis.tertiary => 0.05,
+    };
+    final iconBorderAlpha = switch (emphasis) {
+      PanelEmphasis.primary => 0.18,
+      PanelEmphasis.secondary => 0.12,
+      PanelEmphasis.tertiary => 0.08,
+    };
+    final resolvedShowDivider = showDivider && prominent;
 
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(featured ? 24 : 22),
-        color: colorScheme.surface.withValues(alpha: featured ? 0.78 : 0.66),
+        color: colorScheme.surface.withValues(alpha: frameColorAlpha),
         border: Border.all(
-          color: colorScheme.outline.withValues(
-            alpha: featured ? 0.28 : 0.18,
-          ),
+          color: colorScheme.outline.withValues(alpha: borderAlpha),
         ),
       ),
       child: Padding(
@@ -795,15 +824,21 @@ class SectionFrame extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(featured ? 14 : 12),
                         color: colorScheme.primary.withValues(
-                          alpha: featured ? 0.14 : 0.1,
+                          alpha: iconFillAlpha,
                         ),
                         border: Border.all(
-                          color: colorScheme.primary.withValues(alpha: 0.18),
+                          color: colorScheme.primary.withValues(
+                            alpha: iconBorderAlpha,
+                          ),
                         ),
                       ),
                       child: Icon(
                         icon,
-                        size: featured ? 22 : 18,
+                        size: switch (emphasis) {
+                          PanelEmphasis.primary => featured ? 22.0 : 18.0,
+                          PanelEmphasis.secondary => featured ? 20.0 : 17.0,
+                          PanelEmphasis.tertiary => featured ? 18.0 : 16.0,
+                        },
                         color: colorScheme.primary,
                       ),
                     ),
@@ -835,11 +870,11 @@ class SectionFrame extends StatelessWidget {
               ),
             ] else
               Text(title, style: sectionTitleStyle),
-            if (showDivider) ...[
+            if (resolvedShowDivider) ...[
               SizedBox(height: headerSpacing),
               const RuneDivider(),
             ],
-            SizedBox(height: showDivider ? headerSpacing : 12),
+            SizedBox(height: resolvedShowDivider ? headerSpacing : 12),
             child,
           ],
         ),
@@ -858,6 +893,7 @@ class ControlRoomPanel extends StatelessWidget {
     this.icon,
     this.trailing,
     this.density = FrameDensity.compact,
+    this.emphasis = PanelEmphasis.secondary,
     this.showDivider = false,
   });
 
@@ -868,24 +904,42 @@ class ControlRoomPanel extends StatelessWidget {
   final Widget child;
   final Widget? trailing;
   final FrameDensity density;
+  final PanelEmphasis emphasis;
   final bool showDivider;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final featured = density == FrameDensity.featured;
+    final prominent = emphasis == PanelEmphasis.primary;
     final padding = featured ? 18.0 : 16.0;
     final showHeaderMeta =
         label != null || subtitle != null || icon != null || trailing != null;
+    final borderAlpha = switch (emphasis) {
+      PanelEmphasis.primary => featured ? 0.28 : 0.22,
+      PanelEmphasis.secondary => featured ? 0.24 : 0.18,
+      PanelEmphasis.tertiary => featured ? 0.12 : 0.10,
+    };
+    final fillAlpha = switch (emphasis) {
+      PanelEmphasis.primary => featured ? 0.56 : 0.40,
+      PanelEmphasis.secondary => featured ? 0.44 : 0.32,
+      PanelEmphasis.tertiary => featured ? 0.28 : 0.20,
+    };
+    final iconFillAlpha = switch (emphasis) {
+      PanelEmphasis.primary => 0.14,
+      PanelEmphasis.secondary => 0.12,
+      PanelEmphasis.tertiary => 0.06,
+    };
+    final resolvedShowDivider = showDivider && prominent;
 
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(featured ? 22 : 20),
         border: Border.all(
-          color: colorScheme.outline.withValues(alpha: featured ? 0.24 : 0.18),
+          color: colorScheme.outline.withValues(alpha: borderAlpha),
         ),
         color: colorScheme.surfaceContainerHighest.withValues(
-          alpha: featured ? 0.44 : 0.32,
+          alpha: fillAlpha,
         ),
       ),
       child: Padding(
@@ -903,9 +957,18 @@ class ControlRoomPanel extends StatelessWidget {
                       height: featured ? 40 : 34,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: colorScheme.primary.withValues(alpha: 0.12),
+                        color: colorScheme.primary
+                            .withValues(alpha: iconFillAlpha),
                       ),
-                      child: Icon(icon, color: colorScheme.primary, size: 18),
+                      child: Icon(
+                        icon,
+                        color: colorScheme.primary,
+                        size: switch (emphasis) {
+                          PanelEmphasis.primary => 18.0,
+                          PanelEmphasis.secondary => 18.0,
+                          PanelEmphasis.tertiary => 16.0,
+                        },
+                      ),
                     ),
                     const SizedBox(width: 10),
                   ],
@@ -922,9 +985,16 @@ class ControlRoomPanel extends StatelessWidget {
                         ],
                         Text(
                           title,
-                          style: featured
-                              ? Theme.of(context).textTheme.titleMedium
-                              : Theme.of(context).textTheme.titleSmall,
+                          style: switch (emphasis) {
+                            PanelEmphasis.primary => featured
+                                ? Theme.of(context).textTheme.titleMedium
+                                : Theme.of(context).textTheme.titleSmall,
+                            PanelEmphasis.secondary => featured
+                                ? Theme.of(context).textTheme.titleMedium
+                                : Theme.of(context).textTheme.titleSmall,
+                            PanelEmphasis.tertiary =>
+                              Theme.of(context).textTheme.titleSmall,
+                          },
                         ),
                         if (subtitle != null) ...[
                           const SizedBox(height: 4),
@@ -942,7 +1012,7 @@ class ControlRoomPanel extends StatelessWidget {
                   ],
                 ],
               ),
-              if (showDivider) ...[
+              if (resolvedShowDivider) ...[
                 const SizedBox(height: 14),
                 Container(
                   height: 1,
@@ -1341,10 +1411,12 @@ class ForgeActionStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final showParchmentRow = parchmentReady || hasUnsavedChanges;
-    final parchmentStatusIcon =
-        parchmentReady && !hasUnsavedChanges ? Icons.check_circle_outline : Icons.refresh_rounded;
-    final parchmentStatusColor =
-        parchmentReady && !hasUnsavedChanges ? colorScheme.secondary : colorScheme.primary;
+    final parchmentStatusIcon = parchmentReady && !hasUnsavedChanges
+        ? Icons.check_circle_outline
+        : Icons.refresh_rounded;
+    final parchmentStatusColor = parchmentReady && !hasUnsavedChanges
+        ? colorScheme.secondary
+        : colorScheme.primary;
     final parchmentStatusText = parchmentReady
         ? (hasUnsavedChanges
             ? context.l10n.forgeParchmentDirty
@@ -1373,7 +1445,8 @@ class ForgeActionStrip extends StatelessWidget {
                   icon: primaryIcon,
                   isLoading: isGenerating,
                   shouldPulse: isPrimaryEnabled,
-                  onPressed: (isGenerating || !isPrimaryEnabled) ? null : onAdvance,
+                  onPressed:
+                      (isGenerating || !isPrimaryEnabled) ? null : onAdvance,
                 );
                 if (compact) {
                   return Column(
@@ -1419,7 +1492,8 @@ class ForgeActionStrip extends StatelessWidget {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Icon(parchmentStatusIcon, size: 16, color: parchmentStatusColor),
+                  Icon(parchmentStatusIcon,
+                      size: 16, color: parchmentStatusColor),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
@@ -1427,17 +1501,19 @@ class ForgeActionStrip extends StatelessWidget {
                       children: [
                         Text(
                           parchmentStatusText,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: parchmentStatusColor,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: parchmentStatusColor,
+                                  ),
                         ),
                         if (savedDraftLabel != null) ...[
                           const SizedBox(height: 2),
                           Text(
                             savedDraftLabel!,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
                           ),
                         ],
                       ],

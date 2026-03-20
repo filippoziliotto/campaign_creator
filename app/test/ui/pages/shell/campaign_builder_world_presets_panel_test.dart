@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:campaign_creator_flutter/src/services/backend_api.dart';
+import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_primitives.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -89,6 +90,65 @@ void main() {
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets('world forge panels use descending visual emphasis',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1200, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          api: _buildTestApi(),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await tester.tap(find.text('Apri la forgia'));
+    await _pumpUi(tester);
+
+    final worldFrame =
+        find.widgetWithText(SectionFrame, 'Costruzione del Mondo');
+    final presetFrame = find.widgetWithText(SectionFrame, 'Scegli un preset');
+    final foundationPanel =
+        find.widgetWithText(ControlRoomPanel, 'Impostazioni base');
+    final creativePanel =
+        find.widgetWithText(ControlRoomPanel, 'Temi, tono e stile');
+    final twistPanel = find.widgetWithText(ControlRoomPanel, 'Twist iniziale');
+
+    expect(
+      tester.widget<SectionFrame>(worldFrame).emphasis,
+      PanelEmphasis.primary,
+    );
+    expect(
+      tester.widget<SectionFrame>(presetFrame).emphasis,
+      PanelEmphasis.secondary,
+    );
+    expect(
+      tester.widget<ControlRoomPanel>(foundationPanel).emphasis,
+      PanelEmphasis.primary,
+    );
+    expect(
+      tester.widget<ControlRoomPanel>(creativePanel).emphasis,
+      PanelEmphasis.secondary,
+    );
+    expect(
+      tester.widget<ControlRoomPanel>(twistPanel).emphasis,
+      PanelEmphasis.tertiary,
+    );
+
+    expect(_backgroundAlpha(tester, worldFrame),
+        greaterThan(_backgroundAlpha(tester, presetFrame)));
+    expect(_backgroundAlpha(tester, foundationPanel),
+        greaterThan(_backgroundAlpha(tester, creativePanel)));
+    expect(_backgroundAlpha(tester, creativePanel),
+        greaterThan(_backgroundAlpha(tester, twistPanel)));
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
 }
 
 BackendApi _buildTestApi() {
@@ -158,4 +218,20 @@ class _TestApp extends StatelessWidget {
 Future<void> _pumpUi(WidgetTester tester) async {
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 800));
+}
+
+int _backgroundAlpha(WidgetTester tester, Finder finder) {
+  final container = tester.widget<Container>(
+    find
+        .descendant(
+          of: finder,
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is Container && widget.decoration is BoxDecoration,
+          ),
+        )
+        .first,
+  );
+  final decoration = container.decoration! as BoxDecoration;
+  return (decoration.color!.a * 255.0).round().clamp(0, 255);
 }
