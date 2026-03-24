@@ -13,7 +13,8 @@ void main() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
-  testWidgets('forge section ribbon hides segment icons on narrow screens', (
+  testWidgets(
+      'forge section ribbon keeps segment icons visible on narrow screens', (
     tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(360, 800));
@@ -47,21 +48,21 @@ void main() {
         of: ribbon,
         matching: find.byIcon(Icons.public_rounded),
       ),
-      findsNothing,
+      findsOneWidget,
     );
     expect(
       find.descendant(
         of: ribbon,
         matching: find.byIcon(Icons.groups_rounded),
       ),
-      findsNothing,
+      findsOneWidget,
     );
     expect(
       find.descendant(
         of: ribbon,
         matching: find.byIcon(Icons.auto_stories_rounded),
       ),
-      findsNothing,
+      findsOneWidget,
     );
   },
       variant: const TargetPlatformVariant(

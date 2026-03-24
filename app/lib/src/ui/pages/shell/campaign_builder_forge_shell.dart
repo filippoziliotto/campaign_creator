@@ -81,6 +81,7 @@ extension on _CampaignBuilderPageState {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isCompactRibbon = constraints.maxWidth < 420;
+          final iconSize = isCompactRibbon ? 16.0 : 18.0;
           final segments = _ForgeSection.values.map((section) {
             final index = _ForgeSection.values.indexOf(section);
             final completed =
@@ -92,11 +93,9 @@ extension on _CampaignBuilderPageState {
                 overflow: TextOverflow.fade,
                 softWrap: false,
               ),
-              icon: isCompactRibbon
-                  ? null
-                  : completed
-                      ? const Icon(Icons.check_circle_rounded, size: 18)
-                      : Icon(_forgeSectionIcon(section), size: 18),
+              icon: completed
+                  ? Icon(Icons.check_circle_rounded, size: iconSize)
+                  : Icon(_forgeSectionIcon(section), size: iconSize),
             );
           }).toList();
           final button = SegmentedButton<_ForgeSection>(
@@ -105,17 +104,17 @@ extension on _CampaignBuilderPageState {
             segments: segments,
             style: ButtonStyle(
               visualDensity: isCompactRibbon
-                  ? const VisualDensity(horizontal: -2, vertical: -2)
+                  ? const VisualDensity(horizontal: -3, vertical: -2)
                   : VisualDensity.compact,
               padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
                 EdgeInsets.symmetric(
-                  horizontal: isCompactRibbon ? 16 : 12,
+                  horizontal: isCompactRibbon ? 8 : 12,
                   vertical: isCompactRibbon ? 6 : 10,
                 ),
               ),
               textStyle: WidgetStatePropertyAll<TextStyle?>(
                 theme.textTheme.labelMedium?.copyWith(
-                  fontSize: isCompactRibbon ? 12 : null,
+                  fontSize: isCompactRibbon ? 11.5 : null,
                   letterSpacing: isCompactRibbon ? 0.2 : null,
                 ),
               ),
