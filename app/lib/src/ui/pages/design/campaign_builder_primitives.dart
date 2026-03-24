@@ -272,8 +272,7 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
     final viewportWidth = MediaQuery.sizeOf(context).width;
     final cardHeight = viewportWidth < 640 ? 208.0 : 192.0;
     final borderRadius = BorderRadius.circular(24);
-    final compactCopy = MediaQuery.sizeOf(context).width < 960;
-    final descriptionMaxLines = compactCopy ? 2 : 3;
+    final descriptionMaxLines = 3;
     final titleStyle = Theme.of(
       context,
     ).textTheme.titleLarge?.copyWith(color: palette.onArtwork);
@@ -614,8 +613,8 @@ class _CampaignCardMedallion extends StatelessWidget {
     return AnimatedContainer(
       duration: duration,
       curve: Curves.easeOutCubic,
-      width: 48,
-      height: 48,
+      width: 40,
+      height: 40,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: LinearGradient(

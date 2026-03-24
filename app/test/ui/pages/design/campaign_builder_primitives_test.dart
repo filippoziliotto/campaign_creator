@@ -143,7 +143,7 @@ void main() {
       expect(tester.takeException(), isNull);
       expect(
         tester.widget<Text>(find.text(description)).maxLines,
-        2,
+        3,
       );
     },
   );
