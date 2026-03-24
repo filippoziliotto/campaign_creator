@@ -32,9 +32,7 @@ void main() {
     await _pumpUi(tester);
     await _openForgeFromEntry(tester);
 
-    final ribbon = find.byWidgetPredicate(
-      (widget) => widget.runtimeType.toString().startsWith('SegmentedButton<'),
-    );
+    final ribbon = find.byKey(const ValueKey<String>('forge-section-ribbon'));
     expect(ribbon, findsOneWidget);
 
     expect(find.descendant(of: ribbon, matching: find.text('Mondo')),

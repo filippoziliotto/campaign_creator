@@ -1642,20 +1642,16 @@ class _InfoButton extends StatelessWidget {
   }
 
   void _showSettingsSheet(BuildContext context) {
-    final theme = Theme.of(context);
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: false,
       enableDrag: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => Theme(
-        data: theme,
-        child: _SettingsSheet(
-          currentLocale: currentLocale,
-          onLocaleChanged: onLocaleChanged,
-          currentThemeMode: currentThemeMode,
-          onThemeModeChanged: onThemeModeChanged,
-        ),
+      builder: (_) => _SettingsSheet(
+        currentLocale: currentLocale,
+        onLocaleChanged: onLocaleChanged,
+        currentThemeMode: currentThemeMode,
+        onThemeModeChanged: onThemeModeChanged,
       ),
     );
   }
@@ -1712,225 +1708,231 @@ class _SettingsSheetState extends State<_SettingsSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final palette = context.fantasy;
-    final textTheme = Theme.of(context).textTheme;
+    final sheetTheme = _selectedThemeMode == ThemeMode.light
+        ? buildFantasyLightTheme()
+        : buildFantasyTheme();
+    final palette = sheetTheme.fantasy;
+    final textTheme = sheetTheme.textTheme;
     final bodyStyle =
         textTheme.bodySmall?.copyWith(color: palette.foregroundMuted);
 
-    return Container(
-      key: const ValueKey<String>('settings-sheet'),
-      decoration: BoxDecoration(
-        color: palette.card,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        border: Border(
-          top: BorderSide(color: palette.outline, width: 1.5),
-          left: BorderSide(color: palette.outline, width: 1.5),
-          right: BorderSide(color: palette.outline, width: 1.5),
+    return Theme(
+      data: sheetTheme,
+      child: Container(
+        key: const ValueKey<String>('settings-sheet'),
+        decoration: BoxDecoration(
+          color: palette.card,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          border: Border(
+            top: BorderSide(color: palette.outline, width: 1.5),
+            left: BorderSide(color: palette.outline, width: 1.5),
+            right: BorderSide(color: palette.outline, width: 1.5),
+          ),
         ),
-      ),
-      child: SafeArea(
-        top: false,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: palette.outline,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 16, 24, 4),
-                child: Text(
-                  context.l10n.settingsTitle,
-                  style: textTheme.titleLarge?.copyWith(
-                    color: palette.foreground,
-                    letterSpacing: 0.8,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 8, 24, 4),
-                child: Text(
-                  context.l10n.settingsLanguageLabel,
-                  style: textTheme.labelSmall?.copyWith(
-                    color: palette.foregroundMuted,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
-                child: SegmentedButton<String>(
-                  key: const ValueKey<String>('settings-language-control'),
-                  showSelectedIcon: false,
-                  segments: <ButtonSegment<String>>[
-                    ButtonSegment<String>(
-                      value: 'en',
-                      label: Text(context.l10n.settingsLanguageEnglish),
-                    ),
-                    ButtonSegment<String>(
-                      value: 'it',
-                      label: Text(context.l10n.settingsLanguageItalian),
-                    ),
-                  ],
-                  selected: <String>{widget.currentLocale.languageCode},
-                  style: ButtonStyle(
-                    visualDensity: VisualDensity.compact,
-                    padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
-                      EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                    ),
-                    backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-                      (states) {
-                        if (states.contains(WidgetState.selected)) {
-                          return palette.cardSoft;
-                        }
-                        return palette.card.withValues(alpha: 0.82);
-                      },
-                    ),
-                    foregroundColor: WidgetStateProperty.resolveWith<Color?>(
-                      (states) {
-                        if (states.contains(WidgetState.selected)) {
-                          return palette.accent;
-                        }
-                        return palette.foreground;
-                      },
-                    ),
-                    side: WidgetStatePropertyAll<BorderSide>(
-                      BorderSide(
-                        color: palette.outline.withValues(alpha: 0.7),
+        child: SafeArea(
+          top: false,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: palette.outline,
+                        borderRadius: BorderRadius.circular(2),
                       ),
                     ),
                   ),
-                  onSelectionChanged: (selection) =>
-                      _handleLanguageSelection(selection.first),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 8, 24, 4),
-                child: Text(
-                  context.l10n.settingsThemeLabel,
-                  style: textTheme.labelSmall?.copyWith(
-                    color: palette.foregroundMuted,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 16, 24, 4),
+                  child: Text(
+                    context.l10n.settingsTitle,
+                    style: textTheme.titleLarge?.copyWith(
+                      color: palette.foreground,
+                      letterSpacing: 0.8,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
-                child: SegmentedButton<ThemeMode>(
-                  key: const ValueKey<String>('settings-theme-control'),
-                  showSelectedIcon: false,
-                  segments: const <ButtonSegment<ThemeMode>>[
-                    ButtonSegment<ThemeMode>(
-                      value: ThemeMode.dark,
-                      icon: Icon(Icons.nightlight_round, size: 18),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 4),
+                  child: Text(
+                    context.l10n.settingsLanguageLabel,
+                    style: textTheme.labelSmall?.copyWith(
+                      color: palette.foregroundMuted,
                     ),
-                    ButtonSegment<ThemeMode>(
-                      value: ThemeMode.light,
-                      icon: Icon(Icons.wb_sunny_rounded, size: 18),
-                    ),
-                  ],
-                  selected: <ThemeMode>{_selectedThemeMode},
-                  style: ButtonStyle(
-                    visualDensity: VisualDensity.compact,
-                    padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
-                      EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                    ),
-                    backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-                      (states) {
-                        if (states.contains(WidgetState.selected)) {
-                          return palette.cardSoft;
-                        }
-                        return palette.card.withValues(alpha: 0.82);
-                      },
-                    ),
-                    foregroundColor: WidgetStateProperty.resolveWith<Color?>(
-                      (states) {
-                        if (states.contains(WidgetState.selected)) {
-                          return palette.accent;
-                        }
-                        return palette.foreground;
-                      },
-                    ),
-                    side: WidgetStatePropertyAll<BorderSide>(
-                      BorderSide(
-                        color: palette.outline.withValues(alpha: 0.7),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
+                  child: SegmentedButton<String>(
+                    key: const ValueKey<String>('settings-language-control'),
+                    showSelectedIcon: false,
+                    segments: <ButtonSegment<String>>[
+                      ButtonSegment<String>(
+                        value: 'en',
+                        label: Text(context.l10n.settingsLanguageEnglish),
+                      ),
+                      ButtonSegment<String>(
+                        value: 'it',
+                        label: Text(context.l10n.settingsLanguageItalian),
+                      ),
+                    ],
+                    selected: <String>{widget.currentLocale.languageCode},
+                    style: ButtonStyle(
+                      visualDensity: VisualDensity.compact,
+                      padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
+                        EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      ),
+                      backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                        (states) {
+                          if (states.contains(WidgetState.selected)) {
+                            return palette.cardSoft;
+                          }
+                          return palette.card.withValues(alpha: 0.82);
+                        },
+                      ),
+                      foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+                        (states) {
+                          if (states.contains(WidgetState.selected)) {
+                            return palette.accent;
+                          }
+                          return palette.foreground;
+                        },
+                      ),
+                      side: WidgetStatePropertyAll<BorderSide>(
+                        BorderSide(
+                          color: palette.outline.withValues(alpha: 0.7),
+                        ),
                       ),
                     ),
-                  ),
-                  onSelectionChanged: (selection) =>
-                      _handleThemeSelection(selection.first),
-                ),
-              ),
-              ListTile(
-                key: const ValueKey<String>('settings-review-row'),
-                leading: Icon(Icons.star_outline, color: palette.accent),
-                title: Text(
-                  context.l10n.settingsLeaveReview,
-                  style:
-                      textTheme.bodyLarge?.copyWith(color: palette.foreground),
-                ),
-                onTap: () => _launchReview(context),
-              ),
-              ListTile(
-                key: const ValueKey<String>('settings-share-row'),
-                leading: Icon(Icons.share, color: palette.accent),
-                title: Text(
-                  context.l10n.settingsShareApp,
-                  style:
-                      textTheme.bodyLarge?.copyWith(color: palette.foreground),
-                ),
-                onTap: () => _shareApp(context),
-              ),
-              Divider(
-                color: palette.outline.withValues(alpha: 0.4),
-                indent: 24,
-                endIndent: 24,
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
-                child: Text(
-                  context.l10n.settingsInfoLabel,
-                  style: textTheme.labelSmall?.copyWith(
-                    color: palette.foregroundMuted,
+                    onSelectionChanged: (selection) =>
+                        _handleLanguageSelection(selection.first),
                   ),
                 ),
-              ),
-              FutureBuilder<PackageInfo>(
-                future: PackageInfo.fromPlatform(),
-                builder: (context, snapshot) {
-                  final version = snapshot.data?.version ?? '—';
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 6, 24, 0),
-                    child: Text(
-                      key: const ValueKey<String>('settings-version-text'),
-                      '${context.l10n.settingsVersion} $version',
-                      style: bodyStyle,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 4),
+                  child: Text(
+                    context.l10n.settingsThemeLabel,
+                    style: textTheme.labelSmall?.copyWith(
+                      color: palette.foregroundMuted,
                     ),
-                  );
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 4, 24, 0),
-                child: Text(context.l10n.infoDialogLine1, style: bodyStyle),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 4, 24, 0),
-                child: Text(context.l10n.infoDialogLine2, style: bodyStyle),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 4, 24, 16),
-                child: Text(context.l10n.infoDialogLine3, style: bodyStyle),
-              ),
-            ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
+                  child: SegmentedButton<ThemeMode>(
+                    key: const ValueKey<String>('settings-theme-control'),
+                    showSelectedIcon: false,
+                    segments: const <ButtonSegment<ThemeMode>>[
+                      ButtonSegment<ThemeMode>(
+                        value: ThemeMode.dark,
+                        icon: Icon(Icons.nightlight_round, size: 18),
+                      ),
+                      ButtonSegment<ThemeMode>(
+                        value: ThemeMode.light,
+                        icon: Icon(Icons.wb_sunny_rounded, size: 18),
+                      ),
+                    ],
+                    selected: <ThemeMode>{_selectedThemeMode},
+                    style: ButtonStyle(
+                      visualDensity: VisualDensity.compact,
+                      padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
+                        EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      ),
+                      backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                        (states) {
+                          if (states.contains(WidgetState.selected)) {
+                            return palette.cardSoft;
+                          }
+                          return palette.card.withValues(alpha: 0.82);
+                        },
+                      ),
+                      foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+                        (states) {
+                          if (states.contains(WidgetState.selected)) {
+                            return palette.accent;
+                          }
+                          return palette.foreground;
+                        },
+                      ),
+                      side: WidgetStatePropertyAll<BorderSide>(
+                        BorderSide(
+                          color: palette.outline.withValues(alpha: 0.7),
+                        ),
+                      ),
+                    ),
+                    onSelectionChanged: (selection) =>
+                        _handleThemeSelection(selection.first),
+                  ),
+                ),
+                ListTile(
+                  key: const ValueKey<String>('settings-review-row'),
+                  leading: Icon(Icons.star_outline, color: palette.accent),
+                  title: Text(
+                    context.l10n.settingsLeaveReview,
+                    style: textTheme.bodyLarge
+                        ?.copyWith(color: palette.foreground),
+                  ),
+                  onTap: () => _launchReview(context),
+                ),
+                ListTile(
+                  key: const ValueKey<String>('settings-share-row'),
+                  leading: Icon(Icons.share, color: palette.accent),
+                  title: Text(
+                    context.l10n.settingsShareApp,
+                    style: textTheme.bodyLarge
+                        ?.copyWith(color: palette.foreground),
+                  ),
+                  onTap: () => _shareApp(context),
+                ),
+                Divider(
+                  color: palette.outline.withValues(alpha: 0.4),
+                  indent: 24,
+                  endIndent: 24,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                  child: Text(
+                    context.l10n.settingsInfoLabel,
+                    style: textTheme.labelSmall?.copyWith(
+                      color: palette.foregroundMuted,
+                    ),
+                  ),
+                ),
+                FutureBuilder<PackageInfo>(
+                  future: PackageInfo.fromPlatform(),
+                  builder: (context, snapshot) {
+                    final version = snapshot.data?.version ?? '—';
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 6, 24, 0),
+                      child: Text(
+                        key: const ValueKey<String>('settings-version-text'),
+                        '${context.l10n.settingsVersion} $version',
+                        style: bodyStyle,
+                      ),
+                    );
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 4, 24, 0),
+                  child: Text(context.l10n.infoDialogLine1, style: bodyStyle),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 4, 24, 0),
+                  child: Text(context.l10n.infoDialogLine2, style: bodyStyle),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 4, 24, 16),
+                  child: Text(context.l10n.infoDialogLine3, style: bodyStyle),
+                ),
+              ],
+            ),
           ),
         ),
       ),

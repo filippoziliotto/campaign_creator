@@ -92,12 +92,15 @@ extension on _CampaignBuilderPageState {
                 overflow: TextOverflow.fade,
                 softWrap: false,
               ),
-              icon: completed
-                  ? const Icon(Icons.check_circle_rounded, size: 18)
-                  : Icon(_forgeSectionIcon(section), size: 18),
+              icon: isCompactRibbon
+                  ? null
+                  : completed
+                      ? const Icon(Icons.check_circle_rounded, size: 18)
+                      : Icon(_forgeSectionIcon(section), size: 18),
             );
           }).toList();
           final button = SegmentedButton<_ForgeSection>(
+            key: const ValueKey<String>('forge-section-ribbon'),
             showSelectedIcon: false,
             segments: segments,
             style: ButtonStyle(

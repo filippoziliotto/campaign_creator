@@ -1,4 +1,5 @@
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
+import 'package:campaign_creator_flutter/src/theme/fantasy_theme.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -88,10 +89,22 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Tema'), findsOneWidget);
-    expect(find.text('Scuro'), findsOneWidget);
-    expect(find.text('Chiaro'), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-theme-control')),
         findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('settings-theme-control')),
+        matching: find.byIcon(Icons.nightlight_round),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('settings-theme-control')),
+        matching: find.byIcon(Icons.wb_sunny_rounded),
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('settings sheet shows language segmented control',
@@ -136,7 +149,12 @@ void main() {
         .tap(find.byKey(const ValueKey<String>('info-settings-button')));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Chiaro'));
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('settings-theme-control')),
+        matching: find.byIcon(Icons.wb_sunny_rounded),
+      ),
+    );
     await tester.pumpAndSettle();
 
     expect(selectedTheme, ThemeMode.light);
@@ -194,6 +212,37 @@ void main() {
 
     expect(find.byKey(const ValueKey<String>('settings-sheet')), findsNothing);
   });
+
+  testWidgets('settings sheet updates its own theme immediately',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(const _ThemeReactiveTestApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    final settingsSheet = find.byKey(const ValueKey<String>('settings-sheet'));
+
+    Color sheetColor() {
+      final container = tester.widget<Container>(settingsSheet);
+      final decoration = container.decoration! as BoxDecoration;
+      return decoration.color!;
+    }
+
+    expect(sheetColor(), FantasyThemeColors.dark.card);
+
+    await tester.tap(find.byIcon(Icons.wb_sunny_rounded));
+    await tester.pumpAndSettle();
+
+    expect(
+        find.byKey(const ValueKey<String>('settings-sheet')), findsOneWidget);
+    expect(sheetColor(), FantasyThemeColors.light.card);
+  });
 }
 
 Widget _testApp({
@@ -214,3 +263,37 @@ Widget _testApp({
         onThemeModeChanged: onThemeModeChanged,
       ),
     );
+
+class _ThemeReactiveTestApp extends StatefulWidget {
+  const _ThemeReactiveTestApp();
+
+  @override
+  State<_ThemeReactiveTestApp> createState() => _ThemeReactiveTestAppState();
+}
+
+class _ThemeReactiveTestAppState extends State<_ThemeReactiveTestApp> {
+  ThemeMode _themeMode = ThemeMode.dark;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: buildFantasyLightTheme(),
+      darkTheme: buildFantasyTheme(),
+      themeMode: _themeMode,
+      locale: const Locale('it'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: CampaignBuilderPage(
+        service: FakeCampaignService(minimalOptions()),
+        currentLocale: const Locale('it'),
+        onLocaleChanged: (_) {},
+        currentThemeMode: _themeMode,
+        onThemeModeChanged: (themeMode) {
+          setState(() {
+            _themeMode = themeMode;
+          });
+        },
+      ),
+    );
+  }
+}
