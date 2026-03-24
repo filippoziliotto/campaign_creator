@@ -1,4 +1,4 @@
-package com.filippoziliotto.campaignforge
+package com.fzlabs.campaignforge
 
 import io.flutter.embedding.android.FlutterActivity
 

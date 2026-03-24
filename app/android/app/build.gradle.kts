@@ -15,7 +15,7 @@ if (keyPropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.filippoziliotto.campaignforge"
+    namespace = "com.fzlabs.campaignforge"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -24,12 +24,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        }
     }
 
     defaultConfig {
-        applicationId = "com.filippoziliotto.campaignforge"
+        applicationId = "com.fzlabs.campaignforge"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -38,10 +40,10 @@ android {
 
     signingConfigs {
         create("release") {
-            keyAlias = keyProperties["keyAlias"] as String? ?: ""
-            keyPassword = keyProperties["keyPassword"] as String? ?: ""
-            storeFile = (keyProperties["storeFile"] as String?)?.let { file(it) }
-            storePassword = keyProperties["storePassword"] as String? ?: ""
+            keyAlias = keyProperties["keyAlias"] as String?
+            keyPassword = keyProperties["keyPassword"] as String?
+            storeFile = keyProperties["storeFile"]?.let { file(it) }
+            storePassword = keyProperties["storePassword"] as String?
         }
     }
 

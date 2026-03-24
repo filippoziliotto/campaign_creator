@@ -252,9 +252,13 @@
   "atmosphereDungeon": "Torch vault",
   "parchmentSeal": "SEAL",
   "parchmentSealAndCopy": "Seal and copy",
-  "infoDialogTitle": "Campaign Forge",
   "infoDialogLine1": "This app is a prompt generator inspired by fantasy role-playing games.",
-  "infoDialogLine2": "It is not affiliated with Dungeons & Dragons or ChatGPT.",
+  "infoDialogLine2": "It is not affiliated with Dungeons & Dragons or any AI language tool.",
   "infoDialogLine3": "You can use the prompts with AI tools to create your own stories.",
-  "commonClose": "Close"
+  "settingsTitle": "Settings",
+  "settingsLeaveReview": "Leave a review",
+  "settingsShareApp": "Share the app",
+  "settingsShareText": "Discover Campaign Forge, the D&D campaign generator: ",
+  "settingsInfoLabel": "Info",
+  "settingsVersion": "Version"
 }

@@ -252,9 +252,13 @@
   "atmosphereDungeon": "Volta di torce",
   "parchmentSeal": "SIGILLA",
   "parchmentSealAndCopy": "Sigilla e copia",
-  "infoDialogTitle": "Campaign Forge",
   "infoDialogLine1": "Questa app è un generatore di prompt ispirato ai giochi di ruolo fantasy.",
-  "infoDialogLine2": "Non è affiliata a Dungeons & Dragons né a ChatGPT.",
+  "infoDialogLine2": "Non è affiliata a Dungeons & Dragons né a nessun altro Tool di AI.",
   "infoDialogLine3": "Puoi usare i prompt con strumenti di AI per creare le tue storie.",
-  "commonClose": "Chiudi"
+  "settingsTitle": "Impostazioni",
+  "settingsLeaveReview": "Lascia una recensione",
+  "settingsShareApp": "Condividi l'app",
+  "settingsShareText": "Scopri Campaign Forge, il generatore di campagne D&D: ",
+  "settingsInfoLabel": "Info",
+  "settingsVersion": "Versione"
 }

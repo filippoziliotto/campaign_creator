@@ -8,3 +8,5 @@ coverage/
 .flutter-plugins
 .flutter-plugins-dependencies
 .pub-cache/
+
+app/android/key.properties

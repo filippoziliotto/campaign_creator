@@ -65,3 +65,6 @@ Thumbs.db
 .claude
 CLAUDE.md
 docs/superpowers/
+docs/.superpowers/
+
+app/android/key.properties

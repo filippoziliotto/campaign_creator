@@ -1,7 +1,7 @@
 # Privacy Policy — Campaign Forge
 
 **App name:** Campaign Forge
-**Developer:** Filippo Ziliotto
+**Developer:** FZ Labs
 **Last updated:** March 2026
 
 ## Overview
@@ -50,4 +50,4 @@ If this policy changes, the updated version will be published at the same URL wi
 
 ## Contact
 
-Questions about this policy can be directed to Filippo Ziliotto via the app's store listing contact information.
+Questions about this policy can be directed to FZ Labs via the app's store listing contact information.

@@ -3,10 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../config/app_config.dart';
 import '../../../l10n_extension.dart';
 import '../../../models/campaign_models.dart';
 import '../../../services/campaign_service.dart';
@@ -1698,88 +1700,152 @@ class _InfoButton extends StatelessWidget {
         ),
       ),
       icon: const Icon(Icons.settings, size: 20),
-      onPressed: () => _showInfoDialog(context),
+      onPressed: () => _showSettingsSheet(context),
     );
   }
 
-  void _showInfoDialog(BuildContext context) {
-    showDialog<void>(
+  void _showSettingsSheet(BuildContext context) {
+    showModalBottomSheet<void>(
       context: context,
-      builder: (_) => const _InfoDialog(),
+      isScrollControlled: false,
+      enableDrag: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => const _SettingsSheet(),
     );
   }
 }
 
-class _InfoDialog extends StatelessWidget {
-  const _InfoDialog();
+class _SettingsSheet extends StatelessWidget {
+  const _SettingsSheet();
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Dialog(
-      key: const ValueKey<String>('info-dialog'),
-      backgroundColor: FantasyPalette.card,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-        side: const BorderSide(color: FantasyPalette.outline, width: 1.5),
+    final bodyStyle = textTheme.bodySmall?.copyWith(color: FantasyPalette.mist);
+
+    return Container(
+      key: const ValueKey<String>('settings-sheet'),
+      decoration: const BoxDecoration(
+        color: FantasyPalette.card,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        border: Border(
+          top: BorderSide(color: FantasyPalette.outline, width: 1.5),
+          left: BorderSide(color: FantasyPalette.outline, width: 1.5),
+          right: BorderSide(color: FantasyPalette.outline, width: 1.5),
+        ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+      child: SafeArea(
+        top: false,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              context.l10n.infoDialogTitle,
-              style: textTheme.titleLarge?.copyWith(
-                color: FantasyPalette.parchment,
-                letterSpacing: 0.8,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              context.l10n.infoDialogLine1,
-              style: textTheme.bodyMedium?.copyWith(
-                color: FantasyPalette.parchment,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              context.l10n.infoDialogLine2,
-              style: textTheme.bodyMedium?.copyWith(
-                color: FantasyPalette.parchment,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              context.l10n.infoDialogLine3,
-              style: textTheme.bodyMedium?.copyWith(
-                color: FantasyPalette.parchment,
-              ),
-            ),
-            const SizedBox(height: 24),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                key: const ValueKey<String>('info-dialog-close'),
-                style: TextButton.styleFrom(
-                  foregroundColor: FantasyPalette.bronze,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
-                  side: const BorderSide(color: FantasyPalette.outline),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(999),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: FantasyPalette.outline,
+                    borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(context.l10n.commonClose),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 16, 24, 4),
+              child: Text(
+                context.l10n.settingsTitle,
+                style: textTheme.titleLarge?.copyWith(
+                  color: FantasyPalette.parchment,
+                  letterSpacing: 0.8,
+                ),
+              ),
+            ),
+            ListTile(
+              key: const ValueKey<String>('settings-review-row'),
+              leading:
+                  const Icon(Icons.star_outline, color: FantasyPalette.bronze),
+              title: Text(
+                context.l10n.settingsLeaveReview,
+                style:
+                    textTheme.bodyLarge?.copyWith(color: FantasyPalette.parchment),
+              ),
+              onTap: () => _launchReview(context),
+            ),
+            ListTile(
+              key: const ValueKey<String>('settings-share-row'),
+              leading: const Icon(Icons.share, color: FantasyPalette.bronze),
+              title: Text(
+                context.l10n.settingsShareApp,
+                style:
+                    textTheme.bodyLarge?.copyWith(color: FantasyPalette.parchment),
+              ),
+              onTap: () => _shareApp(context),
+            ),
+            Divider(
+              color: FantasyPalette.outline.withValues(alpha: 0.4),
+              indent: 24,
+              endIndent: 24,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+              child: Text(
+                context.l10n.settingsInfoLabel,
+                style: textTheme.labelSmall?.copyWith(
+                  color: FantasyPalette.mist,
+                ),
+              ),
+            ),
+            FutureBuilder<PackageInfo>(
+              future: PackageInfo.fromPlatform(),
+              builder: (context, snapshot) {
+                final version = snapshot.data?.version ?? '—';
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 6, 24, 0),
+                  child: Text(
+                    key: const ValueKey<String>('settings-version-text'),
+                    '${context.l10n.settingsVersion} $version',
+                    style: bodyStyle,
+                  ),
+                );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 4, 24, 0),
+              child: Text(context.l10n.infoDialogLine1, style: bodyStyle),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 4, 24, 0),
+              child: Text(context.l10n.infoDialogLine2, style: bodyStyle),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 4, 24, 16),
+              child: Text(context.l10n.infoDialogLine3, style: bodyStyle),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _launchReview(BuildContext context) async {
+    final url = defaultTargetPlatform == TargetPlatform.iOS
+        ? AppConfig.appStoreUrl
+        : AppConfig.playStoreUrl;
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> _shareApp(BuildContext context) async {
+    final url = defaultTargetPlatform == TargetPlatform.iOS
+        ? AppConfig.appStoreUrl
+        : AppConfig.playStoreUrl;
+    await SharePlus.instance.share(
+      ShareParams(text: context.l10n.settingsShareText + url),
     );
   }
 }
