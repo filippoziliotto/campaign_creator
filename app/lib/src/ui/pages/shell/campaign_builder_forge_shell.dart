@@ -92,11 +92,9 @@ extension on _CampaignBuilderPageState {
                 overflow: TextOverflow.fade,
                 softWrap: false,
               ),
-              icon: isCompactRibbon
-                  ? null
-                  : completed
-                      ? const Icon(Icons.check_circle_rounded, size: 18)
-                      : Icon(_forgeSectionIcon(section), size: 18),
+              icon: completed
+                  ? const Icon(Icons.check_circle_rounded, size: 18)
+                  : Icon(_forgeSectionIcon(section), size: 18),
             );
           }).toList();
           final button = SegmentedButton<_ForgeSection>(
@@ -104,12 +102,12 @@ extension on _CampaignBuilderPageState {
             segments: segments,
             style: ButtonStyle(
               visualDensity: isCompactRibbon
-                  ? const VisualDensity(horizontal: -1, vertical: -1)
+                  ? const VisualDensity(horizontal: -2, vertical: -2)
                   : VisualDensity.compact,
               padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
                 EdgeInsets.symmetric(
-                  horizontal: isCompactRibbon ? 8 : 12,
-                  vertical: isCompactRibbon ? 8 : 10,
+                  horizontal: isCompactRibbon ? 16 : 12,
+                  vertical: isCompactRibbon ? 6 : 10,
                 ),
               ),
               textStyle: WidgetStatePropertyAll<TextStyle?>(
@@ -344,7 +342,6 @@ extension on _CampaignBuilderPageState {
     return ControlRoomPanel(
       label: context.l10n.forgePresetPanelLabel,
       title: context.l10n.forgePresetPanelTitle,
-      subtitle: context.l10n.forgePresetPanelSubtitle,
       icon: Icons.bolt_rounded,
       density: FrameDensity.featured,
       emphasis: PanelEmphasis.secondary,
