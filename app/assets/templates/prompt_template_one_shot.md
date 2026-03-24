@@ -14,7 +14,9 @@ Sei un progettista narrativo senior per D&D 5e. Crei materiale **immediatamente 
 | Livello party | {{ party_level }} |
 | Dimensione party | {{ party_size }} PG |
 | Composizione party | {{ party_archetypes }} |
+{% if has_twist %}
 | Twist | {{ twist }} |
+{% endif %}
 
 {% if has_additional_user_inputs %}
 ## INPUT UTENTE AGGIUNTIVI
@@ -116,4 +118,4 @@ Ogni finale deve essere raggiungibile nel tempo reale di una sessione.
 
 ---
 
-> **Nota per il DM:** tutto ciò che non è nella scaletta è suggerimento, non obbligo. Cambia nomi, luoghi e PNG liberamente. Se non è stato selezionato un twist, conserva comunque un punto di svolta netto: è il cuore della storia.
+> **Nota per il DM:** tutto ciò che non è nella scaletta è suggerimento, non obbligo. Cambia nomi, luoghi e PNG liberamente. Conserva comunque un punto di svolta netto: è il cuore della storia.

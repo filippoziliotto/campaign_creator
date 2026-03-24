@@ -9,7 +9,9 @@ Scrivi una proposta campagna pronta da portare al tavolo.
 - Livello party: {{ party_level }}
 - Numero personaggi: {{ party_size }}
 - Composizione del party (classi/ruoli dei PG): {{ party_archetypes }}
+{% if has_twist %}
 - Twist: {{ twist }}
+{% endif %}
 - Nota: questi ruoli rappresentano i personaggi giocanti del party, non PNG generici.
 
 {% if has_additional_user_inputs %}

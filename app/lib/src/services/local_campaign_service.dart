@@ -100,11 +100,7 @@ class LocalCampaignService implements CampaignService {
         : isEnglish
             ? 'Not specified by the user.'
             : "Non specificata dall'utente.";
-    final twistDisplay = hasTwist
-        ? normalizedTwist
-        : isEnglish
-            ? 'No twist requested'
-            : 'Nessuno richiesto';
+    final twistDisplay = normalizedTwist;
     final twistReference = hasTwist
         ? isEnglish
             ? 'the twist "$normalizedTwist"'
@@ -151,8 +147,8 @@ class LocalCampaignService implements CampaignService {
             : 'Se mancano note di safety, evita contenuti sensibili non richiesti e resta entro limiti impliciti ragionevoli.',
       if (!hasTwist)
         isEnglish
-            ? 'No twist is selected: build around a strong reveal, reversal, or escalation pivot instead of forcing a twist.'
-            : 'Nessun twist selezionato: costruisci invece un reveal forte, una reversione o un punto di escalation senza forzare un twist.',
+            ? 'Build around a strong reveal, reversal, or escalation pivot.'
+            : 'Costruisci la storia attorno a un reveal forte, una svolta o un punto di escalation.',
     ];
 
     final qualityRules = <String>[

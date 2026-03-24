@@ -14,7 +14,9 @@ Sei un progettista narrativo senior per D&D 5e. Crei materiale **immediatamente 
 | Livello party | {{ party_level }} |
 | Dimensione party | {{ party_size }} PG |
 | Composizione party | {{ party_archetypes }} |
+{% if has_twist %}
 | Twist | {{ twist }} |
+{% endif %}
 
 {% if has_additional_user_inputs %}
 ## INPUT UTENTE AGGIUNTIVI

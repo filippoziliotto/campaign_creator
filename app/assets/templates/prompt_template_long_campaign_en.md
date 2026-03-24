@@ -14,7 +14,9 @@ You are a senior narrative designer for D&D 5e. You create **immediately playabl
 | Starting party level | {{ party_level }} |
 | Party size | {{ party_size }} PCs |
 | Party composition | {{ party_archetypes }} |
+{% if has_twist %}
 | Twist | {{ twist }} |
+{% endif %}
 
 {% if has_additional_user_inputs %}
 ## ADDITIONAL USER INPUT

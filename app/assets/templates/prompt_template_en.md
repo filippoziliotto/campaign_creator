@@ -9,7 +9,9 @@ Write a campaign proposal ready to bring to the table.
 - Party level: {{ party_level }}
 - Number of characters: {{ party_size }}
 - Party composition (PC classes/roles): {{ party_archetypes }}
+{% if has_twist %}
 - Twist: {{ twist }}
+{% endif %}
 - Note: these roles represent the player characters in the party, not generic NPCs.
 
 {% if has_additional_user_inputs %}

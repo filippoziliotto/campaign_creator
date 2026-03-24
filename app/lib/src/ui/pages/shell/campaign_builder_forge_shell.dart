@@ -74,34 +74,51 @@ extension on _CampaignBuilderPageState {
   }
 
   Widget _buildForgeSectionRibbon() {
-    final segments = _ForgeSection.values.map((section) {
-      final index = _ForgeSection.values.indexOf(section);
-      final completed = index < _ForgeSection.values.indexOf(_forgeSection);
-      return ButtonSegment<_ForgeSection>(
-        value: section,
-        label: Text(_forgeSectionLabel(section)),
-        icon: completed
-            ? const Icon(Icons.check_circle_rounded)
-            : Icon(_forgeSectionIcon(section)),
-      );
-    }).toList();
+    final theme = _resolvedAtmosphereTheme();
 
     return Theme(
-      data: _resolvedAtmosphereTheme().copyWith(
-        segmentedButtonTheme: SegmentedButtonThemeData(
-          style: ButtonStyle(
-            visualDensity: VisualDensity.compact,
-            padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
-              EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            ),
-          ),
-        ),
-      ),
+      data: theme,
       child: LayoutBuilder(
         builder: (context, constraints) {
+          final isCompactRibbon = constraints.maxWidth < 420;
+          final segments = _ForgeSection.values.map((section) {
+            final index = _ForgeSection.values.indexOf(section);
+            final completed =
+                index < _ForgeSection.values.indexOf(_forgeSection);
+            return ButtonSegment<_ForgeSection>(
+              value: section,
+              label: Text(
+                _forgeSectionLabel(section),
+                overflow: TextOverflow.fade,
+                softWrap: false,
+              ),
+              icon: isCompactRibbon
+                  ? null
+                  : completed
+                      ? const Icon(Icons.check_circle_rounded, size: 18)
+                      : Icon(_forgeSectionIcon(section), size: 18),
+            );
+          }).toList();
           final button = SegmentedButton<_ForgeSection>(
             showSelectedIcon: false,
             segments: segments,
+            style: ButtonStyle(
+              visualDensity: isCompactRibbon
+                  ? const VisualDensity(horizontal: -1, vertical: -1)
+                  : VisualDensity.compact,
+              padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
+                EdgeInsets.symmetric(
+                  horizontal: isCompactRibbon ? 8 : 12,
+                  vertical: isCompactRibbon ? 8 : 10,
+                ),
+              ),
+              textStyle: WidgetStatePropertyAll<TextStyle?>(
+                theme.textTheme.labelMedium?.copyWith(
+                  fontSize: isCompactRibbon ? 12 : null,
+                  letterSpacing: isCompactRibbon ? 0.2 : null,
+                ),
+              ),
+            ),
             selected: {_forgeSection},
             onSelectionChanged: (selection) {
               _applyShellState(() {

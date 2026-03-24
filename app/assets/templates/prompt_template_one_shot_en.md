@@ -14,7 +14,9 @@ You are a senior narrative designer for D&D 5e. You create **immediately playabl
 | Party level | {{ party_level }} |
 | Party size | {{ party_size }} PCs |
 | Party composition | {{ party_archetypes }} |
+{% if has_twist %}
 | Twist | {{ twist }} |
+{% endif %}
 
 {% if has_additional_user_inputs %}
 ## ADDITIONAL USER INPUT
@@ -116,4 +118,4 @@ Each ending must be reachable within the real-time length of a single session.
 
 ---
 
-> **DM note:** everything outside the outline is a suggestion, not an obligation. Change names, places, and NPCs freely. If no twist was selected, keep a sharp turning point anyway: that pivot is the heart of the story.
+> **DM note:** everything outside the outline is a suggestion, not an obligation. Change names, places, and NPCs freely. Keep a sharp turning point anyway: that pivot is the heart of the story.

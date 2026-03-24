@@ -129,8 +129,12 @@ void main() {
 
         expect(prompt, contains('## IF INPUTS ARE MISSING'));
         expect(prompt, contains('If narrative hooks are missing'));
-        expect(prompt, isNot(contains('**Requested hooks:** If the field is empty')));
-        expect(prompt, isNot(contains('**Character notes:** No character notes provided')));
+        expect(prompt,
+            isNot(contains('**Requested hooks:** If the field is empty')));
+        expect(
+            prompt,
+            isNot(
+                contains('**Character notes:** No character notes provided')));
         expect(prompt, isNot(contains('**Factions:** Not specified')));
       });
 
@@ -143,7 +147,8 @@ void main() {
           language: 'English',
         ));
 
-        expect(prompt, contains('| Party composition | Not specified by the user. |'));
+        expect(prompt,
+            contains('| Party composition | Not specified by the user. |'));
         expect(
           prompt,
           isNot(contains(
@@ -183,10 +188,12 @@ void main() {
 
         expect(prompt, contains('- Ganci richiesti: funerale interrotto'));
         expect(prompt, contains('- Note personaggi: uno dei PG perde memoria'));
-        expect(prompt, isNot(contains('funerale interrotto**Note personaggi:**')));
+        expect(
+            prompt, isNot(contains('funerale interrotto**Note personaggi:**')));
       });
 
-      test('no-twist selections are normalized and do not force a fake twist',
+      test(
+          'Italian prompts hide the twist row and avoid twist wording when none is selected',
           () async {
         final service = LocalCampaignService();
 
@@ -196,9 +203,29 @@ void main() {
           twist: 'Nessun colpo di scena',
         ));
 
-        expect(prompt, contains('| Twist | Nessuno richiesto |'));
+        expect(prompt, isNot(contains('| Twist |')));
         expect(prompt, isNot(contains('`Nessun colpo di scena`')));
+        expect(prompt, isNot(contains('Nessun twist selezionato')));
+        expect(prompt, isNot(contains('twist')));
         expect(prompt, contains('punto di svolta principale'));
+      });
+
+      test(
+          'English prompts hide the twist row and avoid twist wording when none is selected',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          campaignType: 'One-Shot',
+          language: 'English',
+          twist: 'No twist',
+        ));
+
+        expect(prompt, isNot(contains('| Twist |')));
+        expect(prompt, isNot(contains('No twist requested')));
+        expect(prompt, isNot(contains('No twist is selected')));
+        expect(prompt, isNot(contains('twist')));
+        expect(prompt, contains('main turning point'));
       });
 
       test('one-shot template is selected for One-Shot campaign type',
