@@ -41,7 +41,11 @@ void main() {
     );
 
     await _pumpUi(tester);
-    await _openSavedParchment(tester);
+    await _openSavedParchment(
+      tester,
+      resumeLabel: 'Riprendi la forgia',
+      parchmentLabel: 'Pergamena',
+    );
 
     final shareButton = find.text('Condividi');
     await tester.ensureVisible(shareButton);
@@ -74,7 +78,11 @@ void main() {
     );
 
     await _pumpUi(tester);
-    await _openSavedParchment(tester);
+    await _openSavedParchment(
+      tester,
+      resumeLabel: 'Riprendi la forgia',
+      parchmentLabel: 'Pergamena',
+    );
 
     final shareButton = find.text('Condividi');
     await tester.ensureVisible(shareButton);
@@ -108,7 +116,11 @@ void main() {
     );
 
     await _pumpUi(tester);
-    await _openSavedParchment(tester);
+    await _openSavedParchment(
+      tester,
+      resumeLabel: 'Riprendi la forgia',
+      parchmentLabel: 'Pergamena',
+    );
 
     final shareButton = find.text('Condividi');
     await tester.ensureVisible(shareButton);
@@ -183,17 +195,87 @@ void main() {
   },
       variant:
           const TargetPlatformVariant(<TargetPlatform>{TargetPlatform.iOS}));
+
+  testWidgets('parchment action subtitles are localized in Spanish', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(430, 932));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('es'),
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('es'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openSavedParchment(
+      tester,
+      resumeLabel: 'Reanudar forja',
+      parchmentLabel: 'Pergamino',
+    );
+
+    expect(find.text('Envía el prompt al portapapeles.'), findsOneWidget);
+    expect(find.text('Abre el menú de compartir.'), findsOneWidget);
+    expect(find.text('Abre ChatGPT en una nueva pestaña.'), findsOneWidget);
+    expect(
+      find.text('Guarda el prompt localmente para usarlo más tarde.'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('parchment action subtitles are localized in French', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(430, 932));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('fr'),
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('fr'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openSavedParchment(
+      tester,
+      resumeLabel: 'Reprendre la forge',
+      parchmentLabel: 'Parchemin',
+    );
+
+    expect(find.text('Envoie le prompt dans le presse-papiers.'), findsOneWidget);
+    expect(find.text('Ouvre le menu de partage.'), findsOneWidget);
+    expect(find.text('Ouvre ChatGPT dans un nouvel onglet.'), findsOneWidget);
+    expect(
+      find.text('Enregistre le prompt localement pour plus tard.'),
+      findsOneWidget,
+    );
+  });
 }
 
 class _TestApp extends StatelessWidget {
-  const _TestApp({required this.child});
+  const _TestApp({
+    required this.child,
+    this.locale = const Locale('it'),
+  });
 
   final Widget child;
+  final Locale locale;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      locale: const Locale('it'),
+      locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       builder: (context, child) {
@@ -205,13 +287,17 @@ class _TestApp extends StatelessWidget {
   }
 }
 
-Future<void> _openSavedParchment(WidgetTester tester) async {
-  final resumeButton = find.text('Riprendi la forgia');
+Future<void> _openSavedParchment(
+  WidgetTester tester, {
+  required String resumeLabel,
+  required String parchmentLabel,
+}) async {
+  final resumeButton = find.text(resumeLabel);
   await tester.ensureVisible(resumeButton);
   await tester.tap(resumeButton);
   await _pumpUi(tester);
 
-  final parchmentStage = find.text('Pergamena');
+  final parchmentStage = find.text(parchmentLabel);
   await tester.ensureVisible(parchmentStage);
   await tester.tap(parchmentStage);
   await _pumpUi(tester);

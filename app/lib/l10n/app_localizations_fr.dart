@@ -99,15 +99,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get appSnackNoParchmentToShare =>
-      'There is no parchment to share yet.';
+      'Il n\'y a pas encore de parchemin à partager.';
 
   @override
   String get appSnackShareUnavailableOnDevice =>
-      'Sharing is not available on this device.';
+      'Le partage n\'est pas disponible sur cet appareil.';
 
   @override
   String appSnackShareUnavailable(String error) {
-    return 'Sharing unavailable: $error';
+    return 'Partage indisponible : $error';
   }
 
   @override
@@ -116,29 +116,30 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get appSnackChatGptOpened =>
-      'ChatGPT opened. The prompt is already in the clipboard.';
+      'ChatGPT a été ouvert. Le prompt est déjà dans le presse-papiers.';
 
   @override
   String get appSnackChatGptCopiedOnly =>
-      'Unable to open ChatGPT, but the prompt was copied.';
+      'Impossible d\'ouvrir ChatGPT, mais le prompt a été copié.';
 
   @override
   String get appSnackNoParchmentToSave => 'There is no parchment to save.';
 
   @override
-  String get appSnackDraftSaved => 'Parchment draft saved locally.';
+  String get appSnackDraftSaved =>
+      'Brouillon du parchemin enregistré localement.';
 
   @override
   String get appSnackDraftMemoryOnly =>
-      'Draft saved in memory only. Fully restart the app to enable local persistence.';
+      'Brouillon enregistré uniquement en mémoire. Redémarrez complètement l\'application pour activer la persistance locale.';
 
   @override
   String get appSnackSealedSavedAndCopied =>
-      'Parchment sealed: draft saved and prompt copied.';
+      'Parchemin scellé : brouillon enregistré et prompt copié.';
 
   @override
   String get appSnackSealedCopiedOnlyMemory =>
-      'Parchment sealed: prompt copied. Fully restart the app to enable local saving.';
+      'Parchemin scellé : prompt copié. Redémarrez complètement l\'application pour activer l\'enregistrement local.';
 
   @override
   String get appSnackLocalSaveUnavailable =>
@@ -146,16 +147,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get appDraftMemoryOnly =>
-      'Draft kept in memory only. Fully restart the app to reactivate local saving.';
+      'Brouillon conservé uniquement en mémoire. Redémarrez complètement l\'application pour réactiver l\'enregistrement local.';
 
   @override
   String appDraftAligned(String dateTime) {
-    return 'Local draft aligned on $dateTime.';
+    return 'Brouillon local synchronisé le $dateTime.';
   }
 
   @override
   String appDraftLastSaved(String dateTime) {
-    return 'Last draft saved on $dateTime.';
+    return 'Dernier brouillon enregistré le $dateTime.';
   }
 
   @override
@@ -509,11 +510,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get parchmentReadySubtitleStale =>
-      'You changed the forge: the copied prompt is no longer up to date.';
+      'Vous avez modifié la forge : le prompt copié n\'est plus à jour.';
 
   @override
   String get parchmentReadySubtitleAligned =>
-      'The copied prompt is aligned with the current forge state.';
+      'Le prompt copié est aligné avec l\'état actuel de la forge.';
 
   @override
   String get parchmentQuickActionsTitle => 'Actions rapides';
@@ -522,51 +523,54 @@ class AppLocalizationsFr extends AppLocalizations {
   String get parchmentCopyPromptTitle => 'Copier le prompt';
 
   @override
-  String get parchmentCopyPromptSubtitle => 'Send the prompt to the clipboard.';
+  String get parchmentCopyPromptSubtitle =>
+      'Envoie le prompt dans le presse-papiers.';
 
   @override
   String get parchmentShareTitle => 'Partager';
 
   @override
-  String get parchmentShareSubtitle => 'Opens the sharing menu.';
+  String get parchmentShareSubtitle => 'Ouvre le menu de partage.';
 
   @override
   String get parchmentOpenChatGptTitle => 'Ouvrir dans ChatGPT';
 
   @override
-  String get parchmentOpenChatGptSubtitle => 'Opens ChatGPT in a new tab.';
+  String get parchmentOpenChatGptSubtitle =>
+      'Ouvre ChatGPT dans un nouvel onglet.';
 
   @override
-  String get parchmentDraftUpdatedTitle => 'Draft updated';
+  String get parchmentDraftUpdatedTitle => 'Brouillon mis à jour';
 
   @override
   String get parchmentSaveDraftTitle => 'Enregistrer le brouillon';
 
   @override
-  String get parchmentSaveDraftSubtitle => 'Save the prompt locally for later.';
+  String get parchmentSaveDraftSubtitle =>
+      'Enregistre le prompt localement pour plus tard.';
 
   @override
   String get parchmentPromptCopied => 'Prompt copié';
 
   @override
   String get parchmentCopiedStaleBanner =>
-      'You changed the forge after the last generation. Regenerate to refresh the copied prompt.';
+      'Vous avez modifié la forge après la dernière génération. Régénérez pour actualiser le prompt copié.';
 
   @override
   String get parchmentCopiedSuccessBody =>
-      'The parchment was forged successfully. Use the rituals on the right to share it, save it, or open it in ChatGPT.';
+      'Le parchemin a été forgé avec succès. Utilisez les rituels à droite pour le partager, l\'enregistrer ou l\'ouvrir dans ChatGPT.';
 
   @override
-  String get atmosphereOneShot => 'Crimson urgency';
+  String get atmosphereOneShot => 'Urgence cramoisie';
 
   @override
-  String get atmosphereMiniCampaign => 'Golden road';
+  String get atmosphereMiniCampaign => 'Route dorée';
 
   @override
-  String get atmosphereLongCampaign => 'Green atlas';
+  String get atmosphereLongCampaign => 'Atlas vert';
 
   @override
-  String get atmosphereDungeon => 'Torch vault';
+  String get atmosphereDungeon => 'Voûte aux torches';
 
   @override
   String get parchmentSeal => 'SCELLER';
@@ -576,15 +580,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get infoDialogLine1 =>
-      'This app is a prompt generator inspired by fantasy role-playing games.';
+      'Cette application est un générateur de prompts inspiré des jeux de rôle fantasy.';
 
   @override
   String get infoDialogLine2 =>
-      'It is not affiliated with Dungeons & Dragons or any AI language tool.';
+      'Elle n\'est affiliée ni à Dungeons & Dragons ni à un outil d\'IA.';
 
   @override
   String get infoDialogLine3 =>
-      'You can use the prompts with AI tools to create your own stories.';
+      'Vous pouvez utiliser les prompts avec des outils d\'IA pour créer vos propres histoires.';
 
   @override
   String get settingsTitle => 'Réglages';
