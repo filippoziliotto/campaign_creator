@@ -65,34 +65,40 @@ ThemeData buildCampaignAtmosphereTheme(
   ThemeData baseTheme,
   CampaignAtmosphereData atmosphere,
 ) {
+  final palette = baseTheme.fantasy;
+  final isDark = baseTheme.brightness == Brightness.dark;
   final colorScheme = baseTheme.colorScheme.copyWith(
     primary: atmosphere.primary,
     secondary: atmosphere.secondary,
     outline: atmosphere.linework,
-    outlineVariant: Color.lerp(atmosphere.linework, FantasyPalette.mist, 0.45),
+    outlineVariant: Color.lerp(
+      atmosphere.linework,
+      palette.foregroundMuted,
+      0.45,
+    ),
     primaryContainer: Color.lerp(
-      FantasyPalette.cardSoft,
+      palette.cardSoft,
       atmosphere.cardTint,
       0.68,
     ),
     secondaryContainer: Color.lerp(
-      FantasyPalette.card,
+      palette.card,
       atmosphere.glow,
       0.34,
     ),
     tertiary: atmosphere.highlight,
     tertiaryContainer: Color.lerp(
-      FantasyPalette.cardSoft,
+      palette.cardSoft,
       atmosphere.highlight,
       0.16,
     ),
     surfaceContainerHighest: Color.lerp(
-      FantasyPalette.cardSoft,
+      palette.cardSoft,
       atmosphere.cardTint,
       0.44,
     ),
     onSurfaceVariant: Color.lerp(
-      FantasyPalette.mist,
+      palette.foregroundMuted,
       atmosphere.highlight,
       0.24,
     ),
@@ -103,7 +109,7 @@ ThemeData buildCampaignAtmosphereTheme(
     colorScheme: colorScheme,
     cardTheme: CardThemeData(
       color: Color.lerp(
-        FantasyPalette.card,
+        palette.card,
         atmosphere.cardTint,
         0.14,
       )?.withValues(alpha: 0.95),
@@ -121,9 +127,9 @@ ThemeData buildCampaignAtmosphereTheme(
     dividerColor: atmosphere.linework.withValues(alpha: 0.42),
     inputDecorationTheme: baseTheme.inputDecorationTheme.copyWith(
       fillColor: Color.lerp(
-        FantasyPalette.parchment,
+        isDark ? palette.paper : palette.cardSoft,
         atmosphere.cardTint,
-        0.16,
+        isDark ? 0.16 : 0.08,
       )?.withValues(alpha: 0.12),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(18),
@@ -140,7 +146,7 @@ ThemeData buildCampaignAtmosphereTheme(
       ),
       labelStyle: GoogleFonts.cinzel(
         color: Color.lerp(
-          FantasyPalette.parchmentDeep,
+          isDark ? palette.paperDeep : palette.foregroundMuted,
           atmosphere.highlight,
           0.28,
         ),
@@ -150,7 +156,7 @@ ThemeData buildCampaignAtmosphereTheme(
       ),
       hintStyle: GoogleFonts.crimsonText(
         color: Color.lerp(
-          FantasyPalette.mist,
+          palette.foregroundMuted,
           atmosphere.highlight,
           0.16,
         )?.withValues(alpha: 0.84),
@@ -167,7 +173,7 @@ ThemeData buildCampaignAtmosphereTheme(
         if (states.contains(WidgetState.selected)) {
           return atmosphere.highlight;
         }
-        return FantasyPalette.mist;
+        return palette.foregroundMuted;
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
@@ -179,9 +185,9 @@ ThemeData buildCampaignAtmosphereTheme(
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         backgroundColor: atmosphere.primary,
-        foregroundColor: FantasyPalette.parchment,
+        foregroundColor: palette.onArtwork,
         disabledBackgroundColor: colorScheme.surfaceContainerHighest,
-        disabledForegroundColor: FantasyPalette.mist,
+        disabledForegroundColor: palette.foregroundMuted,
         padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),
@@ -195,7 +201,7 @@ ThemeData buildCampaignAtmosphereTheme(
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: FantasyPalette.parchment,
+        foregroundColor: isDark ? palette.onArtwork : palette.foreground,
         side: BorderSide(
           color: atmosphere.primary.withValues(alpha: 0.62),
         ),
@@ -212,7 +218,7 @@ ThemeData buildCampaignAtmosphereTheme(
     ),
     snackBarTheme: baseTheme.snackBarTheme.copyWith(
       backgroundColor: Color.lerp(
-        FantasyPalette.cardSoft,
+        palette.cardSoft,
         atmosphere.cardTint,
         0.22,
       ),

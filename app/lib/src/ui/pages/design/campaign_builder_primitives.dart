@@ -105,6 +105,8 @@ class HeroFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.fantasy;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
@@ -122,9 +124,9 @@ class HeroFrame extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: <Color>[
-            Color.lerp(FantasyPalette.shadow, atmosphere.cardTint, 0.22)!,
-            Color.lerp(FantasyPalette.card, atmosphere.cardTint, 0.32)!,
-            Color.lerp(FantasyPalette.cardSoft, atmosphere.primary, 0.18)!,
+            Color.lerp(palette.canvasAlt, atmosphere.cardTint, 0.22)!,
+            Color.lerp(palette.card, atmosphere.cardTint, 0.32)!,
+            Color.lerp(palette.cardSoft, atmosphere.primary, 0.18)!,
           ],
         ),
       ),
@@ -260,6 +262,7 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.fantasy;
     final reducedMotion =
         MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     final isTouch = const {TargetPlatform.android, TargetPlatform.iOS}
@@ -270,9 +273,9 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
     final compactCopy = MediaQuery.sizeOf(context).width < 960;
     final titleStyle = Theme.of(
       context,
-    ).textTheme.titleLarge?.copyWith(color: FantasyPalette.parchment);
+    ).textTheme.titleLarge?.copyWith(color: palette.onArtwork);
     final descriptionStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: FantasyPalette.parchment.withValues(alpha: 0.84),
+          color: palette.onArtworkMuted.withValues(alpha: 0.84),
         );
     final showCallToAction = widget.selected || _hovered;
     final targetProgress = (reducedMotion || isTouch)
@@ -347,7 +350,7 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
                 border: Border.all(
                   color: widget.selected
                       ? widget.atmosphere.highlight
-                      : FantasyPalette.outline.withValues(alpha: 0.22),
+                      : palette.onArtwork.withValues(alpha: 0.18),
                   width: widget.selected ? 1.8 : 1,
                 ),
                 boxShadow: <BoxShadow>[
@@ -419,8 +422,7 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
                                     color: FantasyPalette.abyss
                                         .withValues(alpha: 0.42),
                                     border: Border.all(
-                                      color:
-                                          FantasyPalette.parchment.withValues(
+                                      color: palette.onArtwork.withValues(
                                         alpha: 0.14,
                                       ),
                                     ),
@@ -428,7 +430,7 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
                                   ),
                                   child: Icon(
                                     widget.icon,
-                                    color: FantasyPalette.parchment,
+                                    color: palette.onArtwork,
                                     size: 20,
                                   ),
                                 ),
@@ -1554,6 +1556,9 @@ class FantasyBackdrop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.fantasy;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return IgnorePointer(
       child: Stack(
         children: [
@@ -1564,10 +1569,13 @@ class FantasyBackdrop extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: <Color>[
-                    Color.lerp(FantasyPalette.abyss, atmosphere.cardTint, 0.2)!,
+                    Color.lerp(palette.canvas, atmosphere.cardTint, 0.2)!,
+                    Color.lerp(palette.canvasAlt, atmosphere.cardTint, 0.32)!,
                     Color.lerp(
-                        FantasyPalette.shadow, atmosphere.cardTint, 0.32)!,
-                    Color.lerp(FantasyPalette.abyss, Colors.black, 0.1)!,
+                      palette.canvas,
+                      Colors.black,
+                      isDark ? 0.1 : 0.04,
+                    )!,
                   ],
                 ),
               ),

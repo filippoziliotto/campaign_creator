@@ -244,6 +244,7 @@ class PremiumParchmentSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final highlightChapters = chapters.take(3).toList(growable: false);
+    final palette = context.fantasy;
     final words = prompt
         .split(RegExp(r'\s+'))
         .where((token) => token.trim().isNotEmpty)
@@ -273,9 +274,9 @@ class PremiumParchmentSheet extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: <Color>[
-              Color.lerp(FantasyPalette.card, atmosphere.cardTint, 0.12)!
+              Color.lerp(palette.card, atmosphere.cardTint, 0.12)!
                   .withValues(alpha: 0.98),
-              Color.lerp(FantasyPalette.cardSoft, atmosphere.cardTint, 0.2)!
+              Color.lerp(palette.cardSoft, atmosphere.cardTint, 0.2)!
                   .withValues(alpha: 0.98),
             ],
           ),
@@ -608,6 +609,8 @@ class ForgedParchmentSuccessSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.fantasy;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
@@ -632,9 +635,9 @@ class ForgedParchmentSuccessSheet extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: <Color>[
-              Color.lerp(FantasyPalette.card, atmosphere.cardTint, 0.12)!
+              Color.lerp(palette.card, atmosphere.cardTint, 0.12)!
                   .withValues(alpha: 0.98),
-              Color.lerp(FantasyPalette.cardSoft, atmosphere.cardTint, 0.2)!
+              Color.lerp(palette.cardSoft, atmosphere.cardTint, 0.2)!
                   .withValues(alpha: 0.98),
             ],
           ),
@@ -952,12 +955,14 @@ class _ParchmentHighlightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.fantasy;
+
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(22),
         color: Color.lerp(
-          FantasyPalette.cardSoft,
+          palette.cardSoft,
           atmosphere.primary,
           0.16,
         )!
@@ -1524,6 +1529,7 @@ class _ActionRailTileState extends State<_ActionRailTile> {
   Widget build(BuildContext context) {
     final active = _hovered || _focused || _pressed;
     final atmosphere = widget.atmosphere;
+    final palette = context.fantasy;
     final duration = _reducedMotion
         ? const Duration(milliseconds: 120)
         : const Duration(milliseconds: 180);
@@ -1594,11 +1600,15 @@ class _ActionRailTileState extends State<_ActionRailTile> {
                     height: 42,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14),
-                      color: atmosphere.primary
-                          .withValues(alpha: active ? 0.2 : 0.12),
+                      color: Color.lerp(
+                        palette.canvasAlt,
+                        atmosphere.primary,
+                        active ? 0.42 : 0.32,
+                      )!
+                          .withValues(alpha: active ? 0.94 : 0.88),
                       border: Border.all(
                         color: atmosphere.highlight
-                            .withValues(alpha: active ? 0.16 : 0.08),
+                            .withValues(alpha: active ? 0.3 : 0.14),
                       ),
                     ),
                     child: Icon(
@@ -1643,8 +1653,12 @@ class _ActionRailTileState extends State<_ActionRailTile> {
                     height: 28,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: atmosphere.primary
-                          .withValues(alpha: active ? 0.16 : 0.08),
+                      color: Color.lerp(
+                        palette.canvasAlt,
+                        atmosphere.primary,
+                        active ? 0.36 : 0.26,
+                      )!
+                          .withValues(alpha: active ? 0.84 : 0.76),
                     ),
                     alignment: Alignment.center,
                     child: Icon(

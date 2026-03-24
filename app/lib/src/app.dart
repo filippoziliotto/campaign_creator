@@ -9,7 +9,11 @@ import 'theme/fantasy_theme.dart';
 import 'ui/pages/shell/campaign_builder_page.dart';
 
 typedef CampaignCreatorHomeBuilder = Widget Function(
-    Locale locale, ValueChanged<Locale> onLocaleChanged);
+  Locale locale,
+  ValueChanged<Locale> onLocaleChanged,
+  ThemeMode themeMode,
+  ValueChanged<ThemeMode> onThemeModeChanged,
+);
 
 class CampaignCreatorApp extends StatefulWidget {
   const CampaignCreatorApp({
@@ -25,6 +29,7 @@ class CampaignCreatorApp extends StatefulWidget {
 
 class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
   static const String _localePreferenceKey = 'app.locale_code';
+  static const String _themePreferenceKey = 'app.theme_mode';
   static const Locale _fallbackLocale = Locale('en');
   static const List<Locale> _supportedLocales = <Locale>[
     Locale('it'),
@@ -32,12 +37,14 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
   ];
 
   late Locale _locale;
+  ThemeMode _themeMode = ThemeMode.dark;
 
   @override
   void initState() {
     super.initState();
     _locale = _resolveDeviceLocale();
     _restoreSavedLocale();
+    _restoreSavedThemeMode();
   }
 
   Future<void> _restoreSavedLocale() async {
@@ -54,6 +61,29 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
       }
       setState(() {
         _locale = restoredLocale;
+      });
+    } on MissingPluginException {
+      return;
+    } on PlatformException {
+      return;
+    }
+  }
+
+  Future<void> _restoreSavedThemeMode() async {
+    try {
+      final preferences = await SharedPreferences.getInstance();
+      final savedTheme = preferences.getString(_themePreferenceKey);
+      if (savedTheme == null) {
+        return;
+      }
+
+      final restoredThemeMode = _resolveThemeMode(savedTheme);
+      if (!mounted || restoredThemeMode == _themeMode) {
+        return;
+      }
+
+      setState(() {
+        _themeMode = restoredThemeMode;
       });
     } on MissingPluginException {
       return;
@@ -81,6 +111,16 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
     );
   }
 
+  ThemeMode _resolveThemeMode(String? themeModeName) {
+    switch (themeModeName) {
+      case 'light':
+        return ThemeMode.light;
+      case 'dark':
+      default:
+        return ThemeMode.dark;
+    }
+  }
+
   Future<void> _setLocale(Locale locale) async {
     final resolvedLocale = _resolveSupportedLocale(locale.languageCode);
     if (resolvedLocale == _locale) {
@@ -104,11 +144,32 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
     }
   }
 
+  Future<void> _setThemeMode(ThemeMode themeMode) async {
+    if (themeMode == _themeMode) {
+      return;
+    }
+
+    setState(() {
+      _themeMode = themeMode;
+    });
+
+    try {
+      final preferences = await SharedPreferences.getInstance();
+      await preferences.setString(_themePreferenceKey, themeMode.name);
+    } on MissingPluginException {
+      return;
+    } on PlatformException {
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: buildFantasyTheme(),
+      theme: buildFantasyLightTheme(),
+      darkTheme: buildFantasyTheme(),
+      themeMode: _themeMode,
       locale: _locale,
       onGenerateTitle: (context) => context.l10n.appTitle,
       localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
@@ -118,10 +179,17 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: _supportedLocales,
-      home: widget.homeBuilder?.call(_locale, _setLocale) ??
+      home: widget.homeBuilder?.call(
+            _locale,
+            _setLocale,
+            _themeMode,
+            _setThemeMode,
+          ) ??
           CampaignBuilderPage(
             currentLocale: _locale,
             onLocaleChanged: _setLocale,
+            currentThemeMode: _themeMode,
+            onThemeModeChanged: _setThemeMode,
           ),
     );
   }

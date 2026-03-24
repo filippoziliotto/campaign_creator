@@ -35,6 +35,7 @@ extension on _CampaignBuilderPageState {
   Widget _buildEntryHero() {
     final atmosphere = _defaultCampaignMeta.atmosphere;
     final theme = _resolvedAtmosphereTheme();
+    final palette = theme.fantasy;
 
     return LayoutBuilder(
       key: const ValueKey<String>('entry-hero'),
@@ -57,8 +58,8 @@ extension on _CampaignBuilderPageState {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: <Color>[
-                Color.lerp(FantasyPalette.shadow, atmosphere.cardTint, 0.08)!,
-                Color.lerp(FantasyPalette.card, atmosphere.cardTint, 0.14)!,
+                Color.lerp(palette.canvasAlt, atmosphere.cardTint, 0.08)!,
+                Color.lerp(palette.card, atmosphere.cardTint, 0.14)!,
               ],
             ),
           ),
@@ -72,7 +73,7 @@ extension on _CampaignBuilderPageState {
                 child: Text(
                   context.l10n.entryHeroWelcomeBody,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: FantasyPalette.parchment.withValues(alpha: 0.88),
+                    color: palette.foreground.withValues(alpha: 0.88),
                     height: 1.45,
                   ),
                 ),
@@ -91,7 +92,8 @@ extension on _CampaignBuilderPageState {
       return Text(title, style: titleStyle);
     }
 
-    final resolvedStyle = titleStyle ?? _resolvedAtmosphereTheme().textTheme.displayMedium;
+    final resolvedStyle =
+        titleStyle ?? _resolvedAtmosphereTheme().textTheme.displayMedium;
     return Semantics(
       label: title,
       child: ExcludeSemantics(
@@ -114,7 +116,8 @@ extension on _CampaignBuilderPageState {
   }
 
   Widget _buildLinkedOo(TextStyle? style) {
-    final resolvedStyle = style ?? _resolvedAtmosphereTheme().textTheme.displayMedium;
+    final resolvedStyle =
+        style ?? _resolvedAtmosphereTheme().textTheme.displayMedium;
     final fontSize = resolvedStyle?.fontSize ?? 48;
     final overlap = fontSize * 0.10;
     final letterWidth = fontSize * 0.56;

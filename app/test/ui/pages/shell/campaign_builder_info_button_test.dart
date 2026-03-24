@@ -36,7 +36,8 @@ void main() {
     await tester.tap(btn);
     await tester.pumpAndSettle();
 
-    expect(find.byKey(const ValueKey<String>('settings-sheet')), findsOneWidget);
+    expect(
+        find.byKey(const ValueKey<String>('settings-sheet')), findsOneWidget);
     expect(find.textContaining('generatore di prompt'), findsOneWidget);
   });
 
@@ -48,13 +49,14 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 800));
 
-    await tester.tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
     await tester.pumpAndSettle();
 
-    expect(
-        find.byKey(const ValueKey<String>('settings-review-row')), findsOneWidget);
-    expect(
-        find.byKey(const ValueKey<String>('settings-share-row')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-review-row')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-share-row')),
+        findsOneWidget);
   });
 
   testWidgets('settings sheet shows version text', (tester) async {
@@ -65,11 +67,61 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 800));
 
-    await tester.tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
     await tester.pumpAndSettle();
 
+    expect(find.byKey(const ValueKey<String>('settings-version-text')),
+        findsOneWidget);
+  });
+
+  testWidgets('settings sheet shows theme segmented control', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Tema'), findsOneWidget);
+    expect(find.text('Scuro'), findsOneWidget);
+    expect(find.text('Chiaro'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-theme-control')),
+        findsOneWidget);
+  });
+
+  testWidgets('settings sheet theme control triggers callback and stays open',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    ThemeMode? selectedTheme;
+
+    await tester.pumpWidget(
+      _testApp(
+        currentThemeMode: ThemeMode.dark,
+        onThemeModeChanged: (mode) {
+          selectedTheme = mode;
+        },
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Chiaro'));
+    await tester.pumpAndSettle();
+
+    expect(selectedTheme, ThemeMode.light);
     expect(
-        find.byKey(const ValueKey<String>('settings-version-text')), findsOneWidget);
+        find.byKey(const ValueKey<String>('settings-sheet')), findsOneWidget);
   });
 
   testWidgets('settings sheet is dismissed by tapping outside', (tester) async {
@@ -80,10 +132,12 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 800));
 
-    await tester.tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(const ValueKey<String>('settings-sheet')), findsOneWidget);
+    expect(
+        find.byKey(const ValueKey<String>('settings-sheet')), findsOneWidget);
 
     await tester.tapAt(Offset.zero);
     await tester.pumpAndSettle();
@@ -92,7 +146,11 @@ void main() {
   });
 }
 
-Widget _testApp() => MaterialApp(
+Widget _testApp({
+  ThemeMode currentThemeMode = ThemeMode.dark,
+  ValueChanged<ThemeMode>? onThemeModeChanged,
+}) =>
+    MaterialApp(
       locale: const Locale('it'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -100,5 +158,7 @@ Widget _testApp() => MaterialApp(
         service: FakeCampaignService(minimalOptions()),
         currentLocale: const Locale('it'),
         onLocaleChanged: (_) {},
+        currentThemeMode: currentThemeMode,
+        onThemeModeChanged: onThemeModeChanged,
       ),
     );

@@ -20,8 +20,11 @@ void main() {
 
     await tester.pumpWidget(
       CampaignCreatorApp(
-        homeBuilder: (_, onLocaleChanged) => _LocaleProbe(
+        homeBuilder: (_, onLocaleChanged, themeMode, onThemeModeChanged) =>
+            _AppProbe(
           onLocaleChanged: onLocaleChanged,
+          themeMode: themeMode,
+          onThemeModeChanged: onThemeModeChanged,
         ),
       ),
     );
@@ -30,6 +33,7 @@ void main() {
 
     expect(find.text('Creatore Campagne D&D'), findsOneWidget);
     expect(find.text('locale:it'), findsOneWidget);
+    expect(find.text('theme:dark'), findsOneWidget);
     expect(find.text('IT | EN'), findsOneWidget);
     expect(find.text('free-format:Scegli formato'), findsOneWidget);
     expect(find.text('seal:Forgia pergamena'), findsOneWidget);
@@ -50,8 +54,11 @@ void main() {
 
     await tester.pumpWidget(
       CampaignCreatorApp(
-        homeBuilder: (_, onLocaleChanged) => _LocaleProbe(
+        homeBuilder: (_, onLocaleChanged, themeMode, onThemeModeChanged) =>
+            _AppProbe(
           onLocaleChanged: onLocaleChanged,
+          themeMode: themeMode,
+          onThemeModeChanged: onThemeModeChanged,
         ),
       ),
     );
@@ -60,6 +67,7 @@ void main() {
 
     expect(find.text('D&D Campaign Creator'), findsOneWidget);
     expect(find.text('locale:en'), findsOneWidget);
+    expect(find.text('theme:dark'), findsOneWidget);
     expect(find.text('free-format:Choose format'), findsOneWidget);
     expect(find.text('seal:Seal parchment'), findsOneWidget);
     expect(find.text('entry-description:Campaign format ready on device.'),
@@ -71,8 +79,11 @@ void main() {
   ) async {
     await tester.pumpWidget(
       CampaignCreatorApp(
-        homeBuilder: (_, onLocaleChanged) => _LocaleProbe(
+        homeBuilder: (_, onLocaleChanged, themeMode, onThemeModeChanged) =>
+            _AppProbe(
           onLocaleChanged: onLocaleChanged,
+          themeMode: themeMode,
+          onThemeModeChanged: onThemeModeChanged,
         ),
       ),
     );
@@ -83,6 +94,7 @@ void main() {
 
     expect(find.text('D&D Campaign Creator'), findsOneWidget);
     expect(find.text('locale:en'), findsOneWidget);
+    expect(find.text('theme:dark'), findsOneWidget);
     expect(find.text('free-format:Choose format'), findsOneWidget);
     expect(find.text('seal:Seal parchment'), findsOneWidget);
     expect(find.text('entry-description:Campaign format ready on device.'),
@@ -103,8 +115,11 @@ void main() {
 
     await tester.pumpWidget(
       CampaignCreatorApp(
-        homeBuilder: (_, onLocaleChanged) => _LocaleProbe(
+        homeBuilder: (_, onLocaleChanged, themeMode, onThemeModeChanged) =>
+            _AppProbe(
           onLocaleChanged: onLocaleChanged,
+          themeMode: themeMode,
+          onThemeModeChanged: onThemeModeChanged,
         ),
       ),
     );
@@ -113,19 +128,99 @@ void main() {
 
     expect(find.text('D&D Campaign Creator'), findsOneWidget);
     expect(find.text('locale:en'), findsOneWidget);
+    expect(find.text('theme:dark'), findsOneWidget);
     expect(find.text('free-format:Choose format'), findsOneWidget);
     expect(find.text('seal:Seal parchment'), findsOneWidget);
     expect(find.text('entry-description:Campaign format ready on device.'),
         findsOneWidget);
   });
+
+  testWidgets('CampaignCreatorApp defaults to dark theme on first launch', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      CampaignCreatorApp(
+        homeBuilder: (_, onLocaleChanged, themeMode, onThemeModeChanged) =>
+            _AppProbe(
+          onLocaleChanged: onLocaleChanged,
+          themeMode: themeMode,
+          onThemeModeChanged: onThemeModeChanged,
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    expect(find.text('theme:dark'), findsOneWidget);
+    expect(
+      tester.widget<MaterialApp>(find.byType(MaterialApp)).themeMode,
+      ThemeMode.dark,
+    );
+  });
+
+  testWidgets('CampaignCreatorApp restores the saved theme on startup', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      'app.theme_mode': 'light',
+    });
+
+    await tester.pumpWidget(
+      CampaignCreatorApp(
+        homeBuilder: (_, onLocaleChanged, themeMode, onThemeModeChanged) =>
+            _AppProbe(
+          onLocaleChanged: onLocaleChanged,
+          themeMode: themeMode,
+          onThemeModeChanged: onThemeModeChanged,
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    expect(find.text('theme:light'), findsOneWidget);
+    expect(
+      tester.widget<MaterialApp>(find.byType(MaterialApp)).themeMode,
+      ThemeMode.light,
+    );
+  });
+
+  testWidgets('CampaignCreatorApp switches theme at runtime without restart', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      CampaignCreatorApp(
+        homeBuilder: (_, onLocaleChanged, themeMode, onThemeModeChanged) =>
+            _AppProbe(
+          onLocaleChanged: onLocaleChanged,
+          themeMode: themeMode,
+          onThemeModeChanged: onThemeModeChanged,
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('switch-light')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('theme:light'), findsOneWidget);
+    expect(
+      tester.widget<MaterialApp>(find.byType(MaterialApp)).themeMode,
+      ThemeMode.light,
+    );
+  });
 }
 
-class _LocaleProbe extends StatelessWidget {
-  const _LocaleProbe({
+class _AppProbe extends StatelessWidget {
+  const _AppProbe({
     required this.onLocaleChanged,
+    required this.themeMode,
+    required this.onThemeModeChanged,
   });
 
   final ValueChanged<Locale> onLocaleChanged;
+  final ThemeMode themeMode;
+  final ValueChanged<ThemeMode> onThemeModeChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +233,7 @@ class _LocaleProbe extends StatelessWidget {
           children: [
             Text(context.l10n.appTitle),
             Text('locale:$localeCode'),
+            Text('theme:${themeMode.name}'),
             Text('free-format:${context.l10n.appFreeFormat}'),
             Text('seal:${context.l10n.appSealParchment}'),
             Text('entry-description:${context.l10n.entryDescriptionDefault}'),
@@ -154,6 +250,16 @@ class _LocaleProbe extends StatelessWidget {
               key: const Key('switch-en'),
               onPressed: () => onLocaleChanged(const Locale('en')),
               child: const Text('EN'),
+            ),
+            TextButton(
+              key: const Key('switch-dark'),
+              onPressed: () => onThemeModeChanged(ThemeMode.dark),
+              child: const Text('Dark'),
+            ),
+            TextButton(
+              key: const Key('switch-light'),
+              onPressed: () => onThemeModeChanged(ThemeMode.light),
+              child: const Text('Light'),
             ),
           ],
         ),

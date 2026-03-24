@@ -259,6 +259,9 @@
   "settingsLeaveReview": "Leave a review",
   "settingsShareApp": "Share the app",
   "settingsShareText": "Discover Campaign Forge, the D&D campaign generator: ",
+  "settingsThemeLabel": "Theme",
+  "settingsThemeDark": "Dark",
+  "settingsThemeLight": "Light",
   "settingsInfoLabel": "Info",
   "settingsVersion": "Version"
 }

@@ -259,6 +259,9 @@
   "settingsLeaveReview": "Lascia una recensione",
   "settingsShareApp": "Condividi l'app",
   "settingsShareText": "Scopri Campaign Forge, il generatore di campagne D&D: ",
+  "settingsThemeLabel": "Tema",
+  "settingsThemeDark": "Scuro",
+  "settingsThemeLight": "Chiaro",
   "settingsInfoLabel": "Info",
   "settingsVersion": "Versione"
 }
