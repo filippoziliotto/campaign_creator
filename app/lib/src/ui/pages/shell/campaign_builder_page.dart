@@ -1305,6 +1305,13 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                   ],
                 ),
               ),
+            const Positioned(
+              left: 20,
+              bottom: 24,
+              child: SafeArea(
+                child: _InfoButton(),
+              ),
+            ),
           ],
         ),
       ),
@@ -1665,6 +1672,111 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
               child: Text(context.l10n.commonRetry),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _InfoButton extends StatelessWidget {
+  const _InfoButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton.filled(
+      key: const ValueKey<String>('info-settings-button'),
+      style: IconButton.styleFrom(
+        backgroundColor: const Color(0xFF241814),
+        foregroundColor: const Color(0xFFC9994B),
+        side: const BorderSide(color: Color(0xFF6A4A2A), width: 1.5),
+        minimumSize: const Size(44, 44),
+        shape: const CircleBorder(),
+      ).copyWith(
+        overlayColor: WidgetStatePropertyAll(
+          const Color(0xFFC9994B).withValues(alpha: 0.12),
+        ),
+      ),
+      icon: const Icon(Icons.settings, size: 20),
+      onPressed: () => _showInfoDialog(context),
+    );
+  }
+
+  void _showInfoDialog(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (_) => const _InfoDialog(),
+    );
+  }
+}
+
+class _InfoDialog extends StatelessWidget {
+  const _InfoDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return Dialog(
+      key: const ValueKey<String>('info-dialog'),
+      backgroundColor: const Color(0xFF1B120E),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+        side: const BorderSide(color: Color(0xFF6A4A2A), width: 1.5),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Campaign Forge',
+              style: textTheme.titleLarge?.copyWith(
+                color: const Color(0xFFF4E7C8),
+                letterSpacing: 0.8,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Questa app è un generatore di prompt ispirato ai giochi di ruolo fantasy.',
+              style: textTheme.bodyMedium?.copyWith(
+                color: const Color(0xFFF4E7C8),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Non è affiliata a Dungeons & Dragons né a ChatGPT.',
+              style: textTheme.bodyMedium?.copyWith(
+                color: const Color(0xFFF4E7C8),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Puoi usare i prompt con strumenti di AI per creare le tue storie.',
+              style: textTheme.bodyMedium?.copyWith(
+                color: const Color(0xFFF4E7C8),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                key: const ValueKey<String>('info-dialog-close'),
+                style: TextButton.styleFrom(
+                  foregroundColor: const Color(0xFFC9994B),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
+                  side: const BorderSide(color: Color(0xFF6A4A2A)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Chiudi'),
+              ),
+            ),
+          ],
         ),
       ),
     );
