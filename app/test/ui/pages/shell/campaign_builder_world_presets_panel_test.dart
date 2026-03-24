@@ -1,4 +1,5 @@
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
+import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_primitives.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
@@ -183,6 +184,55 @@ void main() {
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets('twist selector uses a bottom sheet for long readable options',
+      (tester) async {
+    const longTwist =
+        'Il mentore del gruppo guida in segreto la missione verso il sacrificio di un alleato.';
+
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(longTwistOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final twistField =
+        find.byKey(const ValueKey<String>('twist-selector-field'));
+
+    await tester.ensureVisible(twistField);
+    await tester.tap(twistField);
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('twist-selector-sheet')),
+      findsOneWidget,
+    );
+    expect(find.text(longTwist), findsWidgets);
+
+    await tester.tap(find.text(longTwist).last);
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('twist-selector-sheet')),
+      findsNothing,
+    );
+    expect(
+      find.descendant(of: twistField, matching: find.text(longTwist)),
+      findsOneWidget,
+    );
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
 }
 
 class _TestApp extends StatelessWidget {
@@ -234,4 +284,23 @@ int _backgroundAlpha(WidgetTester tester, Finder finder) {
   );
   final decoration = container.decoration! as BoxDecoration;
   return (decoration.color!.a * 255.0).round().clamp(0, 255);
+}
+
+CampaignOptions longTwistOptions() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms'],
+    campaignTypes: const ['One-Shot'],
+    themes: const ['Intrigo'],
+    tones: const ['Epico'],
+    styles: const ['Lineare'],
+    partyArchetypes: const ['Tank'],
+    twists: const [
+      'Il mentore del gruppo guida in segreto la missione verso il sacrificio di un alleato.',
+      'La reliquia recuperata sta lentamente riscrivendo la memoria della citta e degli eroi.',
+    ],
+    presets: const {},
+    settingDescriptions: const {'Forgotten Realms': 'Classico high fantasy.'},
+    presetDescriptions: const {},
+    presetNames: const {},
+  );
 }

@@ -436,7 +436,7 @@ extension on _CampaignBuilderPageState {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildStringDropdown(
+          _buildTwistSelector(
             label: context.l10n.forgeTwistLabel,
             value: _selectedTwist,
             options: options.twists,
@@ -456,6 +456,162 @@ extension on _CampaignBuilderPageState {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildTwistSelector({
+    required String label,
+    required String? value,
+    required List<String> options,
+    required ValueChanged<String?> onChanged,
+  }) {
+    final normalizedValue = options.contains(value)
+        ? value
+        : (options.isNotEmpty ? options.first : null);
+    final summary = normalizedValue ?? context.l10n.appTwistPending;
+
+    return InkWell(
+      key: const ValueKey<String>('twist-selector-field'),
+      onTap: options.isEmpty
+          ? null
+          : () async {
+              FocusScope.of(context).unfocus();
+              final selected = await _showTwistPicker(
+                title: context.l10n.forgeTwistTitle,
+                label: label,
+                currentValue: normalizedValue,
+                options: options,
+              );
+              if (selected != null) {
+                onChanged(selected);
+              }
+            },
+      borderRadius: BorderRadius.circular(12),
+      child: InputDecorator(
+        isEmpty: normalizedValue == null,
+        decoration: InputDecoration(
+          labelText: label,
+          suffixIcon: const Icon(Icons.unfold_more_rounded),
+        ),
+        child: Text(
+          summary,
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    );
+  }
+
+  Future<String?> _showTwistPicker({
+    required String title,
+    required String label,
+    required String? currentValue,
+    required List<String> options,
+  }) {
+    final theme = _resolvedAtmosphereTheme();
+
+    return showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) {
+        final colorScheme = theme.colorScheme;
+        final bottomInset = MediaQuery.viewInsetsOf(sheetContext).bottom;
+        final maxHeight = MediaQuery.sizeOf(sheetContext).height * 0.72;
+
+        return Theme(
+          data: theme,
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(12, 12, 12, bottomInset + 12),
+              child: Container(
+                key: const ValueKey<String>('twist-selector-sheet'),
+                constraints: BoxConstraints(maxHeight: maxHeight),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(28),
+                  border: Border.all(
+                    color: colorScheme.outline.withValues(alpha: 0.18),
+                  ),
+                  color: colorScheme.surface,
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.18),
+                      blurRadius: 24,
+                      offset: const Offset(0, 12),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    Center(
+                      child: Container(
+                        width: 42,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(999),
+                          color: colorScheme.outlineVariant,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 18, 20, 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(title, style: theme.textTheme.titleLarge),
+                          const SizedBox(height: 4),
+                          Text(
+                            label,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Flexible(
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                        itemCount: options.length,
+                        separatorBuilder: (context, index) => Divider(
+                          height: 1,
+                          color: colorScheme.outline.withValues(alpha: 0.12),
+                        ),
+                        itemBuilder: (context, index) {
+                          final option = options[index];
+                          final isSelected = option == currentValue;
+
+                          return ListTile(
+                            key: ValueKey<String>(
+                              'twist-selector-option-$index',
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            title: Text(option),
+                            trailing: isSelected
+                                ? Icon(
+                                    Icons.check_circle_rounded,
+                                    color: colorScheme.primary,
+                                  )
+                                : null,
+                            onTap: () => Navigator.of(sheetContext).pop(option),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
