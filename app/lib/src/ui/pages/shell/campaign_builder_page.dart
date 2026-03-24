@@ -40,6 +40,32 @@ abstract class AppReviewPrompter {
   Future<void> requestReview();
 }
 
+enum ReviewPromptOutcome {
+  skipped,
+  belowThreshold,
+  thresholdReachedUnavailable,
+  thresholdReachedRequested,
+}
+
+String? reviewPromptDebugMessage(
+  ReviewPromptOutcome outcome, {
+  bool enableDebugMessages = kDebugMode,
+}) {
+  if (!enableDebugMessages) {
+    return null;
+  }
+
+  return switch (outcome) {
+    ReviewPromptOutcome.thresholdReachedRequested =>
+      'Debug: review threshold reached. Requested native in-app review; '
+          'Android may still suppress the dialog.',
+    ReviewPromptOutcome.thresholdReachedUnavailable =>
+      'Debug: review threshold reached, but in-app review is unavailable on '
+          'this build/device.',
+    ReviewPromptOutcome.skipped || ReviewPromptOutcome.belowThreshold => null,
+  };
+}
+
 class DefaultAppReviewPrompter implements AppReviewPrompter {
   DefaultAppReviewPrompter({InAppReview? inAppReview})
       : _inAppReview = inAppReview ?? InAppReview.instance;
@@ -70,47 +96,48 @@ class ReviewPromptCoordinator {
 
   bool _promptInFlight = false;
 
-  Future<void> recordSuccessfulGeneration({
+  Future<ReviewPromptOutcome> recordSuccessfulGeneration({
     required SharedPreferences preferences,
     required bool Function() isMounted,
   }) async {
     if (_promptInFlight) {
-      return;
+      return ReviewPromptOutcome.skipped;
     }
 
     final alreadyPrompted = preferences.getBool(reviewPromptedKey) ?? false;
     if (alreadyPrompted) {
-      return;
+      return ReviewPromptOutcome.skipped;
     }
 
     final onboardingCompleted =
         preferences.getBool(onboardingCompletedKey) ?? true;
     if (!onboardingCompleted) {
-      return;
+      return ReviewPromptOutcome.skipped;
     }
 
     final generationCount = (preferences.getInt(generationCountKey) ?? 0) + 1;
     await preferences.setInt(generationCountKey, generationCount);
 
     if (generationCount < 5) {
-      return;
+      return ReviewPromptOutcome.belowThreshold;
     }
 
     final reviewAvailable = await _reviewPrompter.isAvailable();
     if (!reviewAvailable) {
-      return;
+      return ReviewPromptOutcome.thresholdReachedUnavailable;
     }
 
     _promptInFlight = true;
     try {
       await Future<void>.delayed(promptDelay);
       if (!isMounted()) {
-        return;
+        return ReviewPromptOutcome.skipped;
       }
       await _reviewPrompter.requestReview();
       await preferences.setBool(reviewPromptedKey, true);
+      return ReviewPromptOutcome.thresholdReachedRequested;
     } catch (_) {
-      return;
+      return ReviewPromptOutcome.thresholdReachedUnavailable;
     } finally {
       _promptInFlight = false;
     }
@@ -957,10 +984,15 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     if (preferences == null) {
       return;
     }
-    await _reviewPromptCoordinator.recordSuccessfulGeneration(
+    final outcome = await _reviewPromptCoordinator.recordSuccessfulGeneration(
       preferences: preferences,
       isMounted: () => mounted,
     );
+    final debugMessage = reviewPromptDebugMessage(outcome);
+    if (!mounted || debugMessage == null) {
+      return;
+    }
+    _showSnackBar(debugMessage);
   }
 
   Future<SharedPreferences?> _resolvePreferences({

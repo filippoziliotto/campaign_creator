@@ -144,6 +144,41 @@ void main() {
     expect(preferences.getInt('app.generation_count'), 5);
     expect(reviewPrompter.requestReviewCallCount, 1);
   });
+
+  test('review prompt exposes a requested outcome at the threshold', () async {
+    SharedPreferences.setMockInitialValues(const <String, Object>{
+      'app.onboarding_completed': true,
+      'app.generation_count': 4,
+    });
+    final reviewPrompter = _FakeAppReviewPrompter();
+    final preferences = await SharedPreferences.getInstance();
+    final coordinator = ReviewPromptCoordinator(
+      reviewPrompter: reviewPrompter,
+      promptDelay: Duration.zero,
+    );
+
+    final outcome = await coordinator.recordSuccessfulGeneration(
+      preferences: preferences,
+      isMounted: () => true,
+    );
+
+    expect(outcome, ReviewPromptOutcome.thresholdReachedRequested);
+    expect(reviewPrompter.requestReviewCallCount, 1);
+    expect(
+      reviewPromptDebugMessage(outcome, enableDebugMessages: true),
+      contains('Debug: review threshold reached'),
+    );
+  });
+
+  test('review prompt debug message is null below the threshold', () {
+    expect(
+      reviewPromptDebugMessage(
+        ReviewPromptOutcome.belowThreshold,
+        enableDebugMessages: true,
+      ),
+      isNull,
+    );
+  });
 }
 
 final List<String> _recordedHaptics = <String>[];
