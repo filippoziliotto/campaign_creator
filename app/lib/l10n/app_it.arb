@@ -251,5 +251,10 @@
   "atmosphereLongCampaign": "Atlante verde",
   "atmosphereDungeon": "Volta di torce",
   "parchmentSeal": "SIGILLA",
-  "parchmentSealAndCopy": "Sigilla e copia"
+  "parchmentSealAndCopy": "Sigilla e copia",
+  "infoDialogTitle": "Campaign Forge",
+  "infoDialogLine1": "Questa app è un generatore di prompt ispirato ai giochi di ruolo fantasy.",
+  "infoDialogLine2": "Non è affiliata a Dungeons & Dragons né a ChatGPT.",
+  "infoDialogLine3": "Puoi usare i prompt con strumenti di AI per creare le tue storie.",
+  "commonClose": "Chiudi"
 }

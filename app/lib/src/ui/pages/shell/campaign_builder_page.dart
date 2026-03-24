@@ -1305,13 +1305,14 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                   ],
                 ),
               ),
-            const Positioned(
-              left: 20,
-              bottom: 24,
-              child: SafeArea(
-                child: _InfoButton(),
+            if (options != null)
+              const Positioned(
+                left: 20,
+                bottom: 24,
+                child: SafeArea(
+                  child: _InfoButton(),
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -1686,14 +1687,14 @@ class _InfoButton extends StatelessWidget {
     return IconButton.filled(
       key: const ValueKey<String>('info-settings-button'),
       style: IconButton.styleFrom(
-        backgroundColor: const Color(0xFF241814),
-        foregroundColor: const Color(0xFFC9994B),
-        side: const BorderSide(color: Color(0xFF6A4A2A), width: 1.5),
+        backgroundColor: FantasyPalette.cardSoft,
+        foregroundColor: FantasyPalette.bronze,
+        side: const BorderSide(color: FantasyPalette.outline, width: 1.5),
         minimumSize: const Size(44, 44),
         shape: const CircleBorder(),
       ).copyWith(
         overlayColor: WidgetStatePropertyAll(
-          const Color(0xFFC9994B).withValues(alpha: 0.12),
+          FantasyPalette.bronze.withValues(alpha: 0.12),
         ),
       ),
       icon: const Icon(Icons.settings, size: 20),
@@ -1717,10 +1718,10 @@ class _InfoDialog extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Dialog(
       key: const ValueKey<String>('info-dialog'),
-      backgroundColor: const Color(0xFF1B120E),
+      backgroundColor: FantasyPalette.card,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),
-        side: const BorderSide(color: Color(0xFF6A4A2A), width: 1.5),
+        side: const BorderSide(color: FantasyPalette.outline, width: 1.5),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
@@ -1729,31 +1730,31 @@ class _InfoDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Campaign Forge',
+              context.l10n.infoDialogTitle,
               style: textTheme.titleLarge?.copyWith(
-                color: const Color(0xFFF4E7C8),
+                color: FantasyPalette.parchment,
                 letterSpacing: 0.8,
               ),
             ),
             const SizedBox(height: 16),
             Text(
-              'Questa app è un generatore di prompt ispirato ai giochi di ruolo fantasy.',
+              context.l10n.infoDialogLine1,
               style: textTheme.bodyMedium?.copyWith(
-                color: const Color(0xFFF4E7C8),
+                color: FantasyPalette.parchment,
               ),
             ),
             const SizedBox(height: 10),
             Text(
-              'Non è affiliata a Dungeons & Dragons né a ChatGPT.',
+              context.l10n.infoDialogLine2,
               style: textTheme.bodyMedium?.copyWith(
-                color: const Color(0xFFF4E7C8),
+                color: FantasyPalette.parchment,
               ),
             ),
             const SizedBox(height: 10),
             Text(
-              'Puoi usare i prompt con strumenti di AI per creare le tue storie.',
+              context.l10n.infoDialogLine3,
               style: textTheme.bodyMedium?.copyWith(
-                color: const Color(0xFFF4E7C8),
+                color: FantasyPalette.parchment,
               ),
             ),
             const SizedBox(height: 24),
@@ -1762,18 +1763,18 @@ class _InfoDialog extends StatelessWidget {
               child: TextButton(
                 key: const ValueKey<String>('info-dialog-close'),
                 style: TextButton.styleFrom(
-                  foregroundColor: const Color(0xFFC9994B),
+                  foregroundColor: FantasyPalette.bronze,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 10,
                   ),
-                  side: const BorderSide(color: Color(0xFF6A4A2A)),
+                  side: const BorderSide(color: FantasyPalette.outline),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(999),
                   ),
                 ),
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Chiudi'),
+                child: Text(context.l10n.commonClose),
               ),
             ),
           ],
