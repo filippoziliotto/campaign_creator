@@ -2074,11 +2074,14 @@ class _SettingsSheetState extends State<_SettingsSheet>
     with SingleTickerProviderStateMixin {
   static const Duration _contentTransitionDuration =
       Duration(milliseconds: 260);
+  static const double _dismissDragThreshold = 22;
+  static const double _dismissFlingVelocity = 220;
   late ThemeMode _selectedThemeMode;
   late final AnimationController _contentController;
   late final Animation<double> _contentOpacity;
   late final Animation<double> _contentSlide;
   bool _contentAnimationConfigured = false;
+  double _dragHandleDistance = 0;
 
   @override
   void initState() {
@@ -2154,6 +2157,33 @@ class _SettingsSheetState extends State<_SettingsSheet>
     }
   }
 
+  void _dismissSheet() {
+    if (!mounted) {
+      return;
+    }
+    Navigator.of(context).maybePop();
+  }
+
+  void _handleDragStart(DragStartDetails details) {
+    _dragHandleDistance = 0;
+  }
+
+  void _handleDragUpdate(DragUpdateDetails details) {
+    _dragHandleDistance += details.delta.dy;
+    if (_dragHandleDistance >= _dismissDragThreshold) {
+      _dragHandleDistance = 0;
+      _dismissSheet();
+    }
+  }
+
+  void _handleDragEnd(DragEndDetails details) {
+    final velocity = details.primaryVelocity ?? 0;
+    _dragHandleDistance = 0;
+    if (velocity >= _dismissFlingVelocity) {
+      _dismissSheet();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final sheetTheme = _selectedThemeMode == ThemeMode.light
@@ -2193,14 +2223,23 @@ class _SettingsSheetState extends State<_SettingsSheet>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 12),
-                        child: Container(
-                          width: 40,
-                          height: 4,
-                          decoration: BoxDecoration(
-                            color: palette.outline,
-                            borderRadius: BorderRadius.circular(2),
+                      child: GestureDetector(
+                        key: const ValueKey<String>(
+                          'settings-sheet-drag-handle',
+                        ),
+                        behavior: HitTestBehavior.opaque,
+                        onVerticalDragStart: _handleDragStart,
+                        onVerticalDragUpdate: _handleDragUpdate,
+                        onVerticalDragEnd: _handleDragEnd,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(24, 12, 24, 6),
+                          child: Container(
+                            width: 40,
+                            height: 4,
+                            decoration: BoxDecoration(
+                              color: palette.outline,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
                           ),
                         ),
                       ),
@@ -2572,7 +2611,8 @@ class _LanguageMark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (badgeText, backgroundColor, foregroundColor) = switch (languageCode) {
+    final (badgeText, backgroundColor, foregroundColor) =
+        switch (languageCode) {
       'it' => (
           'IT',
           const Color(0xFF1F8B4C),

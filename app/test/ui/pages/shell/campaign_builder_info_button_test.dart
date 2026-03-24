@@ -305,6 +305,33 @@ void main() {
     expect(find.byKey(const ValueKey<String>('settings-sheet')), findsNothing);
   });
 
+  testWidgets(
+      'settings sheet is dismissed by dragging down from the top handle',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    final settingsSheet = find.byKey(const ValueKey<String>('settings-sheet'));
+    final handle =
+        find.byKey(const ValueKey<String>('settings-sheet-drag-handle'));
+    expect(settingsSheet, findsOneWidget);
+    expect(handle, findsOneWidget);
+
+    final dragStart = tester.getRect(handle).center;
+    await tester.dragFrom(dragStart, const Offset(0, 220));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('settings-sheet')), findsNothing);
+  });
+
   testWidgets('settings sheet updates its own theme immediately',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
