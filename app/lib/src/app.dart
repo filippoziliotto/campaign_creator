@@ -32,8 +32,10 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
   static const String _themePreferenceKey = 'app.theme_mode';
   static const Locale _fallbackLocale = Locale('en');
   static const List<Locale> _supportedLocales = <Locale>[
-    Locale('it'),
     Locale('en'),
+    Locale('it'),
+    Locale('es'),
+    Locale('fr'),
   ];
 
   late Locale _locale;

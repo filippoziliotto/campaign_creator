@@ -37,6 +37,14 @@ enum _AppStage { entry, forge, parchment }
 
 enum _ForgeSection { world, party, narrative }
 
+enum _CampaignTypeKind {
+  oneShot,
+  miniCampaign,
+  longCampaign,
+  dungeon,
+  custom,
+}
+
 typedef SharePromptCallback = Future<ShareResult> Function(ShareParams params);
 
 abstract class AppReviewPrompter {
@@ -269,51 +277,67 @@ const _CampaignTypeMeta _defaultCampaignMeta = _CampaignTypeMeta(
   atmosphere: _miniCampaignAtmosphere,
 );
 
-const Map<String, _CampaignTypeMeta> _campaignTypeMeta =
-    <String, _CampaignTypeMeta>{
-  'One-Shot': _CampaignTypeMeta(
-    icon: Icons.bolt_rounded,
-    colors: <Color>[Color(0xFFB03A2E), Color(0xFF6D2018)],
-    artAsset: 'assets/entry_cards/one_shot.jpg',
-    atmosphere: _oneShotAtmosphere,
-  ),
-  'Mini-campagna': _CampaignTypeMeta(
-    icon: Icons.hiking_rounded,
-    colors: <Color>[Color(0xFF9A6A2F), Color(0xFF5A3318)],
-    artAsset: 'assets/entry_cards/campagna_corta.jpg',
-    atmosphere: _miniCampaignAtmosphere,
-  ),
-  'Mini-campaign': _CampaignTypeMeta(
-    icon: Icons.hiking_rounded,
-    colors: <Color>[Color(0xFF9A6A2F), Color(0xFF5A3318)],
-    artAsset: 'assets/entry_cards/campagna_corta.jpg',
-    atmosphere: _miniCampaignAtmosphere,
-  ),
-  'Campagna lunga': _CampaignTypeMeta(
-    icon: Icons.auto_stories_rounded,
-    colors: <Color>[Color(0xFF47644A), Color(0xFF1E2E22)],
-    artAsset: 'assets/entry_cards/campagna_lunga.jpg',
-    atmosphere: _longCampaignAtmosphere,
-  ),
-  'Long campaign': _CampaignTypeMeta(
-    icon: Icons.auto_stories_rounded,
-    colors: <Color>[Color(0xFF47644A), Color(0xFF1E2E22)],
-    artAsset: 'assets/entry_cards/campagna_lunga.jpg',
-    atmosphere: _longCampaignAtmosphere,
-  ),
-  'Esplorazione dungeon': _CampaignTypeMeta(
-    icon: Icons.layers_rounded,
-    colors: <Color>[Color(0xFF5E4C80), Color(0xFF292036)],
-    artAsset: 'assets/entry_cards/dungeon.jpg',
-    atmosphere: _dungeonAtmosphere,
-  ),
-  'Dungeon crawl': _CampaignTypeMeta(
-    icon: Icons.layers_rounded,
-    colors: <Color>[Color(0xFF5E4C80), Color(0xFF292036)],
-    artAsset: 'assets/entry_cards/dungeon.jpg',
-    atmosphere: _dungeonAtmosphere,
-  ),
-};
+const _CampaignTypeMeta _oneShotCampaignMeta = _CampaignTypeMeta(
+  icon: Icons.bolt_rounded,
+  colors: <Color>[Color(0xFFB03A2E), Color(0xFF6D2018)],
+  artAsset: 'assets/entry_cards/one_shot.jpg',
+  atmosphere: _oneShotAtmosphere,
+);
+
+const _CampaignTypeMeta _miniCampaignMeta = _CampaignTypeMeta(
+  icon: Icons.hiking_rounded,
+  colors: <Color>[Color(0xFF9A6A2F), Color(0xFF5A3318)],
+  artAsset: 'assets/entry_cards/campagna_corta.jpg',
+  atmosphere: _miniCampaignAtmosphere,
+);
+
+const _CampaignTypeMeta _longCampaignMeta = _CampaignTypeMeta(
+  icon: Icons.auto_stories_rounded,
+  colors: <Color>[Color(0xFF47644A), Color(0xFF1E2E22)],
+  artAsset: 'assets/entry_cards/campagna_lunga.jpg',
+  atmosphere: _longCampaignAtmosphere,
+);
+
+const _CampaignTypeMeta _dungeonCampaignMeta = _CampaignTypeMeta(
+  icon: Icons.layers_rounded,
+  colors: <Color>[Color(0xFF5E4C80), Color(0xFF292036)],
+  artAsset: 'assets/entry_cards/dungeon.jpg',
+  atmosphere: _dungeonAtmosphere,
+);
+
+_CampaignTypeKind _campaignTypeKindFor(String? campaignType) {
+  switch (campaignType) {
+    case 'One-Shot':
+      return _CampaignTypeKind.oneShot;
+    case 'Mini-campagna':
+    case 'Mini-campaign':
+    case 'Mini-campaña':
+    case 'Mini-campagne':
+      return _CampaignTypeKind.miniCampaign;
+    case 'Campagna lunga':
+    case 'Long campaign':
+    case 'Campaña larga':
+    case 'Longue campagne':
+      return _CampaignTypeKind.longCampaign;
+    case 'Esplorazione dungeon':
+    case 'Dungeon crawl':
+    case 'Exploración de mazmorra':
+    case 'Exploration de donjon':
+      return _CampaignTypeKind.dungeon;
+    default:
+      return _CampaignTypeKind.custom;
+  }
+}
+
+_CampaignTypeMeta _campaignTypeMetaFor(String? campaignType) {
+  return switch (_campaignTypeKindFor(campaignType)) {
+    _CampaignTypeKind.oneShot => _oneShotCampaignMeta,
+    _CampaignTypeKind.miniCampaign => _miniCampaignMeta,
+    _CampaignTypeKind.longCampaign => _longCampaignMeta,
+    _CampaignTypeKind.dungeon => _dungeonCampaignMeta,
+    _CampaignTypeKind.custom => _defaultCampaignMeta,
+  };
+}
 
 class CampaignBuilderPage extends StatefulWidget {
   const CampaignBuilderPage({
@@ -528,8 +552,9 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     });
 
     try {
-      final options =
-          await _service.getOptions(lang: widget.currentLocale.languageCode);
+      final options = await _service.getOptions(
+        localeCode: widget.currentLocale.languageCode,
+      );
       if (!mounted) {
         return;
       }
@@ -763,8 +788,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       safetyNotes: _safetyNotesController.text.trim(),
       includeNpcs: _includeNpcs,
       includeEncounters: _includeEncounters,
-      language:
-          widget.currentLocale.languageCode == 'en' ? 'English' : 'Italiano',
+      localeCode: widget.currentLocale.languageCode,
     );
   }
 
@@ -1044,8 +1068,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   Future<void> _restoreMonetizationState() async {
     final preferences = await _resolvePreferences();
     if (preferences == null) return;
-    final adFree =
-        _monetizationCoordinator.restoreCachedEntitlement(
+    final adFree = _monetizationCoordinator.restoreCachedEntitlement(
       preferences: preferences,
     );
     if (mounted) {
@@ -1397,8 +1420,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   _CampaignTypeMeta _currentCampaignMeta([CampaignOptions? options]) {
     final selectedType = _selectedCampaignType;
     if (selectedType != null) {
-      final selectedMeta = _campaignTypeMeta[selectedType];
-      if (selectedMeta != null) {
+      final selectedMeta = _campaignTypeMetaFor(selectedType);
+      if (selectedMeta != _defaultCampaignMeta) {
         return selectedMeta;
       }
     }
@@ -1406,8 +1429,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     final availableOptions = options ?? _options;
     if (availableOptions != null && availableOptions.campaignTypes.isNotEmpty) {
       final fallbackType = availableOptions.campaignTypes.first;
-      final fallbackMeta = _campaignTypeMeta[fallbackType];
-      if (fallbackMeta != null) {
+      final fallbackMeta = _campaignTypeMetaFor(fallbackType);
+      if (fallbackMeta != _defaultCampaignMeta) {
         return fallbackMeta;
       }
     }
@@ -1416,37 +1439,31 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   }
 
   String _localizedCampaignBadge(String? campaignType) {
-    switch (campaignType) {
-      case 'One-Shot':
+    switch (_campaignTypeKindFor(campaignType)) {
+      case _CampaignTypeKind.oneShot:
         return context.l10n.entryBadgeOneShot;
-      case 'Mini-campagna':
-      case 'Mini-campaign':
+      case _CampaignTypeKind.miniCampaign:
         return context.l10n.entryBadgeMiniCampaign;
-      case 'Campagna lunga':
-      case 'Long campaign':
+      case _CampaignTypeKind.longCampaign:
         return context.l10n.entryBadgeLongCampaign;
-      case 'Esplorazione dungeon':
-      case 'Dungeon crawl':
+      case _CampaignTypeKind.dungeon:
         return context.l10n.entryBadgeDungeon;
-      default:
+      case _CampaignTypeKind.custom:
         return context.l10n.entryBadgeDefault;
     }
   }
 
   String _localizedCampaignDescription(String? campaignType) {
-    switch (campaignType) {
-      case 'One-Shot':
+    switch (_campaignTypeKindFor(campaignType)) {
+      case _CampaignTypeKind.oneShot:
         return context.l10n.entryDescriptionOneShot;
-      case 'Mini-campagna':
-      case 'Mini-campaign':
+      case _CampaignTypeKind.miniCampaign:
         return context.l10n.entryDescriptionMiniCampaign;
-      case 'Campagna lunga':
-      case 'Long campaign':
+      case _CampaignTypeKind.longCampaign:
         return context.l10n.entryDescriptionLongCampaign;
-      case 'Esplorazione dungeon':
-      case 'Dungeon crawl':
+      case _CampaignTypeKind.dungeon:
         return context.l10n.entryDescriptionDungeon;
-      default:
+      case _CampaignTypeKind.custom:
         return context.l10n.entryDescriptionDefault;
     }
   }
@@ -2216,13 +2233,47 @@ class _SettingsSheetState extends State<_SettingsSheet>
                         segments: <ButtonSegment<String>>[
                           ButtonSegment<String>(
                             value: 'en',
-                            label: Text(
-                                '\u{1F1EC}\u{1F1E7} ${context.l10n.languageEnglishShort}'),
+                            label: _LanguageSegmentLabel(
+                              key: const ValueKey<String>(
+                                  'settings-language-segment-en'),
+                              languageCode: 'en',
+                              shortLabel: context.l10n.languageEnglishShort,
+                              outlineColor:
+                                  palette.outline.withValues(alpha: 0.72),
+                            ),
                           ),
                           ButtonSegment<String>(
                             value: 'it',
-                            label: Text(
-                                '\u{1F1EE}\u{1F1F9} ${context.l10n.languageItalianShort}'),
+                            label: _LanguageSegmentLabel(
+                              key: const ValueKey<String>(
+                                  'settings-language-segment-it'),
+                              languageCode: 'it',
+                              shortLabel: context.l10n.languageItalianShort,
+                              outlineColor:
+                                  palette.outline.withValues(alpha: 0.72),
+                            ),
+                          ),
+                          ButtonSegment<String>(
+                            value: 'es',
+                            label: _LanguageSegmentLabel(
+                              key: const ValueKey<String>(
+                                  'settings-language-segment-es'),
+                              languageCode: 'es',
+                              shortLabel: context.l10n.languageSpanishShort,
+                              outlineColor:
+                                  palette.outline.withValues(alpha: 0.72),
+                            ),
+                          ),
+                          ButtonSegment<String>(
+                            value: 'fr',
+                            label: _LanguageSegmentLabel(
+                              key: const ValueKey<String>(
+                                  'settings-language-segment-fr'),
+                              languageCode: 'fr',
+                              shortLabel: context.l10n.languageFrenchShort,
+                              outlineColor:
+                                  palette.outline.withValues(alpha: 0.72),
+                            ),
                           ),
                         ],
                         selected: <String>{widget.currentLocale.languageCode},
@@ -2356,13 +2407,12 @@ class _SettingsSheetState extends State<_SettingsSheet>
                       ),
                       ListTile(
                         key: const ValueKey<String>('settings-go-ad-free-row'),
-                        leading: Icon(Icons.block_rounded,
-                            color: palette.accent),
+                        leading:
+                            Icon(Icons.block_rounded, color: palette.accent),
                         title: Text(
                           widget.adFreePrice != null
-                              ? context.l10n
-                                  .settingsGoAdFreePriceWithAmount(
-                                      widget.adFreePrice!)
+                              ? context.l10n.settingsGoAdFreePriceWithAmount(
+                                  widget.adFreePrice!)
                               : context.l10n.settingsGoAdFreePrice,
                           style: textTheme.bodyLarge
                               ?.copyWith(color: palette.foreground),
@@ -2376,8 +2426,8 @@ class _SettingsSheetState extends State<_SettingsSheet>
                       ListTile(
                         key: const ValueKey<String>(
                             'settings-restore-purchases-row'),
-                        leading: Icon(Icons.restore_rounded,
-                            color: palette.accent),
+                        leading:
+                            Icon(Icons.restore_rounded, color: palette.accent),
                         title: Text(
                           context.l10n.settingsRestorePurchases,
                           style: textTheme.bodyLarge
@@ -2472,6 +2522,99 @@ class _SettingsSheetState extends State<_SettingsSheet>
         : AppConfig.playStoreUrl;
     await SharePlus.instance.share(
       ShareParams(text: context.l10n.settingsShareText + url),
+    );
+  }
+}
+
+class _LanguageSegmentLabel extends StatelessWidget {
+  const _LanguageSegmentLabel({
+    super.key,
+    required this.languageCode,
+    required this.shortLabel,
+    required this.outlineColor,
+  });
+
+  final String languageCode;
+  final String shortLabel;
+  final Color outlineColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final labelStyle = DefaultTextStyle.of(context).style.copyWith(
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.4,
+        );
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _LanguageMark(
+          key: ValueKey<String>('settings-language-mark-$languageCode'),
+          languageCode: languageCode,
+          outlineColor: outlineColor,
+        ),
+        const SizedBox(width: 8),
+        Text(shortLabel, style: labelStyle),
+      ],
+    );
+  }
+}
+
+class _LanguageMark extends StatelessWidget {
+  const _LanguageMark({
+    super.key,
+    required this.languageCode,
+    required this.outlineColor,
+  });
+
+  final String languageCode;
+  final Color outlineColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final (badgeText, backgroundColor, foregroundColor) = switch (languageCode) {
+      'it' => (
+          'IT',
+          const Color(0xFF1F8B4C),
+          const Color(0xFFF7F4EA),
+        ),
+      'es' => (
+          'ES',
+          const Color(0xFFF1C94A),
+          const Color(0xFF7A1F1F),
+        ),
+      'fr' => (
+          'FR',
+          const Color(0xFF2A58A5),
+          const Color(0xFFF7F4EA),
+        ),
+      _ => (
+          'GB',
+          const Color(0xFF1E3D8F),
+          const Color(0xFFF7F4EA),
+        ),
+    };
+
+    return Container(
+      width: 22,
+      height: 14,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: outlineColor, width: 0.9),
+      ),
+      child: Center(
+        child: Text(
+          badgeText,
+          style: TextStyle(
+            color: foregroundColor,
+            fontSize: 7.5,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.3,
+            height: 1,
+          ),
+        ),
+      ),
     );
   }
 }

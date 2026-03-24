@@ -7,7 +7,8 @@ class FakeCampaignService implements CampaignService {
   final CampaignOptions _options;
 
   @override
-  Future<CampaignOptions> getOptions({String lang = 'it'}) async => _options;
+  Future<CampaignOptions> getOptions({String localeCode = 'it'}) async =>
+      _options;
 
   @override
   Future<String> generatePrompt(CampaignGenerateRequest req) async =>

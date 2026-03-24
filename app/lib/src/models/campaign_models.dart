@@ -125,7 +125,7 @@ class CampaignGenerateRequest {
     required this.safetyNotes,
     required this.includeNpcs,
     required this.includeEncounters,
-    this.language = 'Italiano',
+    this.localeCode = 'it',
   });
 
   final String setting;
@@ -146,7 +146,7 @@ class CampaignGenerateRequest {
   final String safetyNotes;
   final bool includeNpcs;
   final bool includeEncounters;
-  final String language;
+  final String localeCode;
 }
 
 List<String> _stringList(dynamic raw) {

@@ -34,7 +34,7 @@ void main() {
     expect(find.text('Creatore Campagne D&D'), findsOneWidget);
     expect(find.text('locale:it'), findsOneWidget);
     expect(find.text('theme:dark'), findsOneWidget);
-    expect(find.text('IT | EN'), findsOneWidget);
+    expect(find.text('IT | EN | ES | FR'), findsOneWidget);
     expect(find.text('free-format:Scegli formato'), findsOneWidget);
     expect(find.text('seal:Forgia pergamena'), findsOneWidget);
     expect(
@@ -48,7 +48,7 @@ void main() {
     tester,
   ) async {
     tester.binding.platformDispatcher.localesTestValue = const <Locale>[
-      Locale('fr'),
+      Locale('de'),
     ];
     addTearDown(tester.binding.platformDispatcher.clearLocalesTestValue);
 
@@ -72,6 +72,50 @@ void main() {
     expect(find.text('seal:Seal parchment'), findsOneWidget);
     expect(find.text('entry-description:Campaign format ready on device.'),
         findsOneWidget);
+  });
+
+  testWidgets(
+      'CampaignCreatorApp follows supported Spanish and French device locales on first launch',
+      (tester) async {
+    Future<void> pumpForLocale(Locale locale) async {
+      tester.binding.platformDispatcher.localesTestValue = <Locale>[locale];
+      addTearDown(tester.binding.platformDispatcher.clearLocalesTestValue);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+
+      await tester.pumpWidget(
+        CampaignCreatorApp(
+          key: ValueKey<String>('app-${locale.languageCode}'),
+          homeBuilder: (_, onLocaleChanged, themeMode, onThemeModeChanged) =>
+              _AppProbe(
+            onLocaleChanged: onLocaleChanged,
+            themeMode: themeMode,
+            onThemeModeChanged: onThemeModeChanged,
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+    }
+
+    await pumpForLocale(const Locale('es'));
+    expect(find.text('locale:es'), findsOneWidget);
+    expect(find.text('Creador de Campañas D&D'), findsOneWidget);
+    expect(find.text('free-format:Elige formato'), findsOneWidget);
+    expect(find.text('seal:Sellar pergamino'), findsOneWidget);
+    expect(find.text('entry-description:Formato de campaña listo en el dispositivo.'),
+        findsOneWidget);
+    expect(find.text('IT | EN | ES | FR'), findsOneWidget);
+
+    await pumpForLocale(const Locale('fr'));
+    expect(find.text('locale:fr'), findsOneWidget);
+    expect(find.text('Créateur de campagnes D&D'), findsOneWidget);
+    expect(find.text('free-format:Choisir le format'), findsOneWidget);
+    expect(find.text('seal:Sceller le parchemin'), findsOneWidget);
+    expect(find.text('entry-description:Format de campagne prêt sur l’appareil.'),
+        findsOneWidget);
+    expect(find.text('IT | EN | ES | FR'), findsOneWidget);
   });
 
   testWidgets('CampaignCreatorApp switches locale at runtime without restart', (
@@ -99,6 +143,20 @@ void main() {
     expect(find.text('seal:Seal parchment'), findsOneWidget);
     expect(find.text('entry-description:Campaign format ready on device.'),
         findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('switch-es')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Creador de Campañas D&D'), findsOneWidget);
+    expect(find.text('locale:es'), findsOneWidget);
+    expect(find.text('free-format:Elige formato'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('switch-fr')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Créateur de campagnes D&D'), findsOneWidget);
+    expect(find.text('locale:fr'), findsOneWidget);
+    expect(find.text('free-format:Choisir le format'), findsOneWidget);
   });
 
   testWidgets('CampaignCreatorApp restores the saved locale on startup', (
@@ -238,7 +296,7 @@ class _AppProbe extends StatelessWidget {
             Text('seal:${context.l10n.appSealParchment}'),
             Text('entry-description:${context.l10n.entryDescriptionDefault}'),
             Text(
-              '${context.l10n.languageItalianShort} | ${context.l10n.languageEnglishShort}',
+              '${context.l10n.languageItalianShort} | ${context.l10n.languageEnglishShort} | ${context.l10n.languageSpanishShort} | ${context.l10n.languageFrenchShort}',
             ),
             const SizedBox(height: 12),
             TextButton(
@@ -250,6 +308,16 @@ class _AppProbe extends StatelessWidget {
               key: const Key('switch-en'),
               onPressed: () => onLocaleChanged(const Locale('en')),
               child: const Text('EN'),
+            ),
+            TextButton(
+              key: const Key('switch-es'),
+              onPressed: () => onLocaleChanged(const Locale('es')),
+              child: const Text('ES'),
+            ),
+            TextButton(
+              key: const Key('switch-fr'),
+              onPressed: () => onLocaleChanged(const Locale('fr')),
+              child: const Text('FR'),
             ),
             TextButton(
               key: const Key('switch-dark'),

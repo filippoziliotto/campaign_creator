@@ -40,17 +40,35 @@ flutter:
     - assets/icon/
     - assets/google_fonts/
     - assets/data/options.yaml
+    - assets/data/options_it.yaml
     - assets/data/options_en.yaml
+    - assets/data/options_es.yaml
+    - assets/data/options_fr.yaml
     - assets/templates/prompt_template.md
+    - assets/templates/prompt_template_it.md
     - assets/templates/prompt_template_en.md
+    - assets/templates/prompt_template_es.md
+    - assets/templates/prompt_template_fr.md
     - assets/templates/prompt_template_one_shot.md
+    - assets/templates/prompt_template_one_shot_it.md
     - assets/templates/prompt_template_one_shot_en.md
+    - assets/templates/prompt_template_one_shot_es.md
+    - assets/templates/prompt_template_one_shot_fr.md
     - assets/templates/prompt_template_mini_campaign.md
+    - assets/templates/prompt_template_mini_campaign_it.md
     - assets/templates/prompt_template_mini_campaign_en.md
+    - assets/templates/prompt_template_mini_campaign_es.md
+    - assets/templates/prompt_template_mini_campaign_fr.md
     - assets/templates/prompt_template_long_campaign.md
+    - assets/templates/prompt_template_long_campaign_it.md
     - assets/templates/prompt_template_long_campaign_en.md
+    - assets/templates/prompt_template_long_campaign_es.md
+    - assets/templates/prompt_template_long_campaign_fr.md
     - assets/templates/prompt_template_dungeon_exploration.md
+    - assets/templates/prompt_template_dungeon_exploration_it.md
     - assets/templates/prompt_template_dungeon_exploration_en.md
+    - assets/templates/prompt_template_dungeon_exploration_es.md
+    - assets/templates/prompt_template_dungeon_exploration_fr.md
 
 flutter_launcher_icons:
   android: true

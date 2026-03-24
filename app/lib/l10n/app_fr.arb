@@ -1,0 +1,290 @@
+{
+  "@@locale": "fr",
+  "appTitle": "Créateur de campagnes D&D",
+  "appNameShort": "Créateur de campagnes",
+  "languageItalianShort": "IT",
+  "languageEnglishShort": "EN",
+  "languageSpanishShort": "ES",
+  "languageFrenchShort": "FR",
+  "commonRetry": "Réessayer",
+  "commonOpen": "Ouvrir",
+  "appFreeFormat": "Choisir le format",
+  "appSettingPending": "Cadre à définir",
+  "appTwistPending": "Rebondissement à définir",
+  "appStageEntry": "Choix",
+  "appStageForge": "Forge",
+  "appStageParchment": "Parchemin",
+  "appOpenParchment": "Ouvrir le parchemin",
+  "appSealParchment": "Sceller le parchemin",
+  "appSummaryLevel": "Lvl {level}",
+  "@appSummaryLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "appSummaryPartySize": "{size} PCs",
+  "@appSummaryPartySize": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "appSummaryPreset": "Preset: {name}",
+  "@appSummaryPreset": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "appLoadOptionsError": "Unable to load options: {error}",
+  "@appLoadOptionsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appGenerationFailedError": "Generation failed: {error}",
+  "@appGenerationFailedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appInvalidArchetypeSelection": "You selected {count} archetypes, but the party is set to {size} PCs.",
+  "@appInvalidArchetypeSelection": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "appSnackForgedAndCopied": "Parchemin forgé et prompt copié dans le presse-papiers.",
+  "appSnackGenerationFailed": "La génération a échoué. Vérifiez le message affiché à l’écran.",
+  "appSnackPromptCopied": "Prompt copié dans le presse-papiers.",
+  "appSnackNoParchmentToShare": "There is no parchment to share yet.",
+  "appSnackShareUnavailableOnDevice": "Sharing is not available on this device.",
+  "appSnackShareUnavailable": "Sharing unavailable: {error}",
+  "@appSnackShareUnavailable": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appSnackGenerateFirst": "Générez d’abord un parchemin avant de l’envoyer.",
+  "appSnackChatGptOpened": "ChatGPT opened. The prompt is already in the clipboard.",
+  "appSnackChatGptCopiedOnly": "Unable to open ChatGPT, but the prompt was copied.",
+  "appSnackNoParchmentToSave": "There is no parchment to save.",
+  "appSnackDraftSaved": "Parchment draft saved locally.",
+  "appSnackDraftMemoryOnly": "Draft saved in memory only. Fully restart the app to enable local persistence.",
+  "appSnackSealedSavedAndCopied": "Parchment sealed: draft saved and prompt copied.",
+  "appSnackSealedCopiedOnlyMemory": "Parchment sealed: prompt copied. Fully restart the app to enable local saving.",
+  "appSnackLocalSaveUnavailable": "Local saving is unavailable in this session. Close and relaunch the app to register the plugin.",
+  "appDraftMemoryOnly": "Draft kept in memory only. Fully restart the app to reactivate local saving.",
+  "appDraftAligned": "Local draft aligned on {dateTime}.",
+  "@appDraftAligned": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "appDraftLastSaved": "Last draft saved on {dateTime}.",
+  "@appDraftLastSaved": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "appErrorEyebrow": "Rituel interrompu",
+  "appErrorTitle": "Le grimoire ne répond pas",
+  "appErrorUnknownLoad": "Erreur inconnue lors du chargement des options.",
+  "entryCampaignTypesTitle": "Types de campagne",
+  "entryResumeTitle": "Reprendre la session",
+  "entryResumeSubtitle": "Vous avez déjà un brouillon actif. Revenez immédiatement au bon endroit.",
+  "entryResumeForge": "Reprendre la forge",
+  "entryOpenForge": "Ouvrir la forge",
+  "entryHeroWelcomeTitle": "Choisissez votre campagne",
+  "entryHeroWelcomeBody": "Forgez le prompt de votre campagne, puis donnez-lui vie avec votre IA de confiance.",
+  "entryHeroChooseRitual": "Sélectionnez un format pour commencer.",
+  "entryResetDraft": "Nouvelle session",
+  "entryResetDraftConfirm": "Brouillon supprimé.",
+  "entryBadgeDefault": "Format",
+  "entryDescriptionDefault": "Format de campagne prêt sur l’appareil.",
+  "entryBadgeOneShot": "Rapide",
+  "entryDescriptionOneShot": "Une mission à fort impact pensée pour une seule séance, avec un payoff immédiat et un rebondissement précis.",
+  "entryBadgeMiniCampaign": "Arc court",
+  "entryDescriptionMiniCampaign": "Une histoire condensée en quelques séances, avec une progression forte, une montée en tension et une finale nette.",
+  "entryBadgeLongCampaign": "Grande saga",
+  "entryDescriptionLongCampaign": "Factions, équilibres mouvants et intrigues persistantes pour une campagne qui grandit dans la durée.",
+  "entryBadgeDungeon": "Profondeurs",
+  "entryDescriptionDungeon": "Une descente structurée entre cartes, risque, attrition et découvertes en couches.",
+  "forgeSectionWorld": "Monde",
+  "forgeSectionParty": "Groupe",
+  "forgeSectionNarrative": "Histoire",
+  "forgeButtonForging": "Forge en cours...",
+  "forgeNextParty": "Aller au groupe",
+  "forgeNextNarrative": "Aller à l’histoire",
+  "forgeReforgeParchment": "Reforger le parchemin",
+  "forgeForgeParchment": "Forger le parchemin",
+  "forgeAdvanceBlockedWorld": "Define at least tone, style, or themes before moving to the party.",
+  "forgeAdvanceBlockedParty": "Check party level, size, and archetypes before continuing.",
+  "forgeAdvanceBlockedNarrative": "Add at least one narrative detail before forging the parchment.",
+  "forgeReadinessWorldReady": "You can move on to the party.",
+  "forgeReadinessWorldPending": "Choose format, setting, and key signals.",
+  "forgeReadinessPartyReady": "You can open the story.",
+  "forgeReadinessPartyPending": "Define level, size, and group roles.",
+  "forgeReadinessNarrativeReady": "You can forge the parchment.",
+  "forgeReadinessNarrativePending": "Add at least one narrative hook.",
+  "forgeWorldSectionTitle": "Construction du monde",
+  "forgeWorldSectionSubtitle": "Format, cadre et signaux initiaux de la campagne.",
+  "forgeFoundationLabel": "Fondation",
+  "forgeFoundationTitle": "Configuration de base",
+  "forgeFoundationSubtitle": "Cadre et scénario.",
+  "forgePresetSectionTitle": "Choisir un préréglage",
+  "forgePresetSectionSubtitle": "Appliquez un préréglage pour configurer rapidement votre campagne.",
+  "forgePresetPanelLabel": "Presets",
+  "forgePresetPanelTitle": "Quick presets",
+  "forgeQuickPresetLabel": "Quick preset",
+  "forgeApplyPreset": "Apply preset",
+  "forgeApply": "Apply",
+  "forgeSettingLabel": "Cadre",
+  "forgeCustomSettingLabel": "Cadre personnalisé",
+  "forgeCustomSettingHint": "Ex. royaume en guerre, ville verticale",
+  "forgeTwistTitle": "Rebondissement initial",
+  "forgeTwistLabel": "Rebondissement",
+  "forgeCustomTwistLabel": "Rebondissement personnalisé",
+  "forgeCustomTwistHint": "Un allié ment, le donjon est vivant, la mission est un piège...",
+  "forgeCreativeTitle": "Thèmes, ton et style",
+  "forgeThemesTitle": "Thèmes",
+  "forgeCustomThemesLabel": "Thèmes personnalisés",
+  "forgeCustomThemesHint": "Ex. steampunk, horreur cosmique",
+  "forgeToneTitle": "Ton",
+  "forgeStyleTitle": "Style",
+  "forgeToneStyleOverrideLabel": "Ton et style personnalisés",
+  "forgeToneStyleOverrideHint": "Ex. Ton : sombre ; Style : âpre",
+  "forgePartySectionTitle": "Groupe et échelle de jeu",
+  "forgePartySectionSubtitle": "Niveau, taille et rôles principaux du groupe.",
+  "forgeScaleLabel": "Scale",
+  "forgeScaleTitle": "Level and size",
+  "forgePartyLevel": "Party level: {level}",
+  "@forgePartyLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartySize": "Number of characters: {size}",
+  "@forgePartySize": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartyArchetypesTitle": "Archétypes du groupe",
+  "forgePartyArchetypesSubtitle": "Select up to {size} archetypes.",
+  "@forgePartyArchetypesSubtitle": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartyArchetypesMaxReached": "You reached the maximum archetypes selectable for the current party.",
+  "forgePartyInfoTitle": "Useful information",
+  "forgeCharacterNotesLabel": "Notes de personnage",
+  "forgeCharacterNotesHint": "Secrets, bonds, fears, important backstory...",
+  "forgeConstraintsLabel": "Contraintes",
+  "forgeConstraintsHint": "Short duration, no planar travel, mandatory final boss...",
+  "forgeNarrativeSectionTitle": "Pression narrative",
+  "forgeNarrativeSectionSubtitle": "Accroches, factions, rencontres et limites de contenu.",
+  "forgeNarrativePanelTitle": "Story and forces in play",
+  "forgeNarrativeHooksLabel": "Accroches narratives",
+  "forgeNarrativeHooksHint": "Opening mission, threat, mystery, countdown...",
+  "forgeFactionsLabel": "Factions et puissances",
+  "forgeFactionsHint": "Guilds, cults, noble houses, antagonists, unstable allies...",
+  "forgeNpcFocusLabel": "PNJ clés",
+  "forgeNpcFocusHint": "Ambiguous mentor, rival, patron, traitor...",
+  "forgeEncounterFocusLabel": "Rencontres souhaitées",
+  "forgeEncounterFocusHint": "Siege, social investigation, chase, final boss...",
+  "forgeContentConstraintsTitle": "Contraintes de contenu",
+  "forgeIncludeNpcsLabel": "Inclure des PNJ",
+  "forgeIncludeNpcsSubtitle": "Le prompt inclura des personnages non joueurs pertinents.",
+  "forgeIncludeEncountersLabel": "Inclure des rencontres",
+  "forgeIncludeEncountersSubtitle": "Le prompt proposera des scènes et des combats.",
+  "forgeSafetyNotesLabel": "Notes de sécurité",
+  "forgeSafetyNotesHint": "Sujets à éviter, lignes et voiles, limites de ton...",
+  "forgeParchmentDirty": "Configuration modifiée : régénérer.",
+  "forgeParchmentReady": "Parchemin à jour.",
+  "forgeParchmentIncomplete": "Complétez l’histoire pour générer.",
+  "statusReady": "Prêt",
+  "statusNeedsPolish": "À peaufiner",
+  "parchmentReadyTitle": "Parchemin prêt",
+  "parchmentReadySubtitleStale": "You changed the forge: the copied prompt is no longer up to date.",
+  "parchmentReadySubtitleAligned": "The copied prompt is aligned with the current forge state.",
+  "parchmentQuickActionsTitle": "Actions rapides",
+  "parchmentCopyPromptTitle": "Copier le prompt",
+  "parchmentCopyPromptSubtitle": "Send the prompt to the clipboard.",
+  "parchmentShareTitle": "Partager",
+  "parchmentShareSubtitle": "Opens the sharing menu.",
+  "parchmentOpenChatGptTitle": "Ouvrir dans ChatGPT",
+  "parchmentOpenChatGptSubtitle": "Opens ChatGPT in a new tab.",
+  "parchmentDraftUpdatedTitle": "Draft updated",
+  "parchmentSaveDraftTitle": "Enregistrer le brouillon",
+  "parchmentSaveDraftSubtitle": "Save the prompt locally for later.",
+  "parchmentPromptCopied": "Prompt copié",
+  "parchmentCopiedStaleBanner": "You changed the forge after the last generation. Regenerate to refresh the copied prompt.",
+  "parchmentCopiedSuccessBody": "The parchment was forged successfully. Use the rituals on the right to share it, save it, or open it in ChatGPT.",
+  "atmosphereOneShot": "Crimson urgency",
+  "atmosphereMiniCampaign": "Golden road",
+  "atmosphereLongCampaign": "Green atlas",
+  "atmosphereDungeon": "Torch vault",
+  "parchmentSeal": "SCELLER",
+  "parchmentSealAndCopy": "Sceller et copier",
+  "infoDialogLine1": "This app is a prompt generator inspired by fantasy role-playing games.",
+  "infoDialogLine2": "It is not affiliated with Dungeons & Dragons or any AI language tool.",
+  "infoDialogLine3": "You can use the prompts with AI tools to create your own stories.",
+  "settingsTitle": "Réglages",
+  "settingsLeaveReview": "Laisser un avis",
+  "settingsShareApp": "Partager l’app",
+  "settingsShareText": "Découvrez Campaign Forge, le générateur de campagnes D&D : ",
+  "settingsLanguageLabel": "Langue",
+  "settingsLanguageEnglish": "English",
+  "settingsLanguageItalian": "Italiano",
+  "settingsThemeLabel": "Thème",
+  "settingsThemeDark": "Sombre",
+  "settingsThemeLight": "Clair",
+  "settingsInfoLabel": "Info",
+  "settingsVersion": "Version",
+  "settingsGoAdFree": "Publicités",
+  "settingsGoAdFreePrice": "Supprimer les pubs",
+  "settingsGoAdFreePriceWithAmount": "Supprimer les pubs — {price}",
+  "@settingsGoAdFreePriceWithAmount": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsRestorePurchases": "Restaurer les achats",
+  "settingsRestorePurchasesStarted": "Restauration des achats…",
+  "settingsRestorePurchasesComplete": "Achats restaurés avec succès.",
+  "settingsAdFreeActive": "Publicités supprimées",
+  "settingsIapUnavailable": "Les achats intégrés ne sont pas disponibles sur cet appareil.",
+  "settingsIapProductNotFound": "Produit introuvable. Réessayez plus tard.",
+  "settingsPurchasePending": "Achat en cours…",
+  "settingsPurchaseCancelled": "Achat annulé.",
+  "settingsPurchaseFailed": "Échec de l’achat. Veuillez réessayer."
+}

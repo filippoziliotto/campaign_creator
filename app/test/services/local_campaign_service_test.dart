@@ -8,7 +8,7 @@ void main() {
   group('LocalCampaignService', () {
     CampaignGenerateRequest buildRequest({
       String campaignType = 'One-Shot',
-      String language = 'Italiano',
+      String localeCode = 'it',
       String twist = '',
       List<String> themePreferences = const [],
       List<String> tonePreferences = const [],
@@ -34,14 +34,14 @@ void main() {
         safetyNotes: '',
         includeNpcs: includeNpcs,
         includeEncounters: includeEncounters,
-        language: language,
+        localeCode: localeCode,
       );
     }
 
     test('loads bundled Italian options from assets', () async {
       final service = LocalCampaignService();
 
-      final options = await service.getOptions(lang: 'it');
+      final options = await service.getOptions(localeCode: 'it');
 
       expect(options.settings, isNotEmpty);
       expect(options.settings, contains('Forgotten Realms'));
@@ -52,7 +52,7 @@ void main() {
     test('loads bundled English options from assets', () async {
       final service = LocalCampaignService();
 
-      final options = await service.getOptions(lang: 'en');
+      final options = await service.getOptions(localeCode: 'en');
 
       expect(options.settings, isNotEmpty);
       expect(options.settings, contains('Forgotten Realms'));
@@ -60,15 +60,42 @@ void main() {
       expect(options.presets, isNotEmpty);
     });
 
-    test('bundled assets include long campaign presets in Italian and English',
+    test('loads bundled Spanish options from assets', () async {
+      final service = LocalCampaignService();
+
+      final options = await service.getOptions(localeCode: 'es');
+
+      expect(options.settings, isNotEmpty);
+      expect(options.settings, contains('Forgotten Realms'));
+      expect(options.campaignTypes, contains('Campaña larga'));
+      expect(options.presets, isNotEmpty);
+    });
+
+    test('loads bundled French options from assets', () async {
+      final service = LocalCampaignService();
+
+      final options = await service.getOptions(localeCode: 'fr');
+
+      expect(options.settings, isNotEmpty);
+      expect(options.settings, contains('Forgotten Realms'));
+      expect(options.campaignTypes, contains('Longue campagne'));
+      expect(options.presets, isNotEmpty);
+    });
+
+    test(
+        'bundled assets include long campaign presets in Italian, English, Spanish, and French',
         () async {
       final service = LocalCampaignService();
 
-      final itOptions = await service.getOptions(lang: 'it');
-      final enOptions = await service.getOptions(lang: 'en');
+      final itOptions = await service.getOptions(localeCode: 'it');
+      final enOptions = await service.getOptions(localeCode: 'en');
+      final esOptions = await service.getOptions(localeCode: 'es');
+      final frOptions = await service.getOptions(localeCode: 'fr');
 
       expect(itOptions.presetsForCampaignType('Campagna lunga'), isNotEmpty);
       expect(enOptions.presetsForCampaignType('Long campaign'), isNotEmpty);
+      expect(esOptions.presetsForCampaignType('Campaña larga'), isNotEmpty);
+      expect(frOptions.presetsForCampaignType('Longue campagne'), isNotEmpty);
     });
 
     group('generatePrompt', () {
@@ -96,18 +123,20 @@ void main() {
               safetyNotes: '',
               includeNpcs: true,
               includeEncounters: true,
+              localeCode: 'it',
             ),
           ),
           throwsA(isA<ArgumentError>()),
         );
       });
 
-      test('constraint augmentation: gothic horror adds gore line', () async {
+      test('constraint augmentation: Italian gothic horror adds gore line',
+          () async {
         final service = LocalCampaignService();
 
         final prompt = await service.generatePrompt(buildRequest(
           campaignType: 'One-Shot',
-          themePreferences: const ['Horror Gotico'],
+          themePreferences: const ['Horror gotico'],
           includeNpcs: false,
           includeEncounters: false,
         ));
@@ -115,7 +144,8 @@ void main() {
         expect(prompt, contains('gore'));
       });
 
-      test('constraint augmentation: dark tone adds agency line', () async {
+      test('constraint augmentation: Italian dark tone adds agency line',
+          () async {
         final service = LocalCampaignService();
 
         final prompt = await service.generatePrompt(buildRequest(
@@ -135,7 +165,7 @@ void main() {
 
         final prompt = await service.generatePrompt(buildRequest(
           campaignType: 'Mini-campaign',
-          language: 'English',
+          localeCode: 'en',
         ));
 
         expect(prompt, contains('## IF INPUTS ARE MISSING'));
@@ -155,7 +185,7 @@ void main() {
 
         final prompt = await service.generatePrompt(buildRequest(
           campaignType: 'Mini-campaign',
-          language: 'English',
+          localeCode: 'en',
         ));
 
         expect(prompt,
@@ -177,13 +207,13 @@ void main() {
           CampaignGenerateRequest(
             setting: 'Ravenloft',
             campaignType: 'One-Shot',
-            themePreferences: const ['Horror Gotico'],
+            themePreferences: const ['Horror gotico'],
             tonePreferences: const ['Cupo'],
             stylePreferences: const ['Investigativo'],
             partyLevel: 4,
             partySize: 4,
             partyArchetypes: const ['Guerriero', 'Mago'],
-            twist: "I PG sono già morti e non lo sanno",
+            twist: 'I PG sono già morti e non lo sanno',
             narrativeHooks: 'funerale interrotto',
             characterNotes: 'uno dei PG perde memoria',
             constraints: '',
@@ -193,14 +223,13 @@ void main() {
             safetyNotes: 'evitare body horror dettagliato',
             includeNpcs: true,
             includeEncounters: true,
-            language: 'Italiano',
+            localeCode: 'it',
           ),
         );
 
         expect(prompt, contains('- Ganci richiesti: funerale interrotto'));
         expect(prompt, contains('- Note personaggi: uno dei PG perde memoria'));
-        expect(
-            prompt, isNot(contains('funerale interrotto**Note personaggi:**')));
+        expect(prompt, isNot(contains('funerale interrotto**Note personaggi:**')));
       });
 
       test(
@@ -210,14 +239,12 @@ void main() {
 
         final prompt = await service.generatePrompt(buildRequest(
           campaignType: 'One-Shot',
-          language: 'Italiano',
+          localeCode: 'it',
           twist: 'Nessun colpo di scena',
         ));
 
         expect(prompt, isNot(contains('| Twist |')));
-        expect(prompt, isNot(contains('`Nessun colpo di scena`')));
-        expect(prompt, isNot(contains('Nessun twist selezionato')));
-        expect(prompt, isNot(contains('twist')));
+        expect(prompt, isNot(contains('Nessun colpo di scena')));
         expect(prompt, contains('punto di svolta principale'));
       });
 
@@ -228,15 +255,45 @@ void main() {
 
         final prompt = await service.generatePrompt(buildRequest(
           campaignType: 'One-Shot',
-          language: 'English',
+          localeCode: 'en',
           twist: 'No twist',
         ));
 
         expect(prompt, isNot(contains('| Twist |')));
         expect(prompt, isNot(contains('No twist requested')));
-        expect(prompt, isNot(contains('No twist is selected')));
-        expect(prompt, isNot(contains('twist')));
         expect(prompt, contains('main turning point'));
+      });
+
+      test(
+          'Spanish prompts hide the twist row and avoid twist wording when none is selected',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          campaignType: 'One-Shot',
+          localeCode: 'es',
+          twist: 'Sin giro',
+        ));
+
+        expect(prompt, isNot(contains('| Giro |')));
+        expect(prompt, isNot(contains('Sin giro solicitado')));
+        expect(prompt, contains('punto de giro principal'));
+      });
+
+      test(
+          'French prompts hide the twist row and avoid twist wording when none is selected',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          campaignType: 'One-Shot',
+          localeCode: 'fr',
+          twist: 'Sans rebondissement',
+        ));
+
+        expect(prompt, isNot(contains('| Rebondissement |')));
+        expect(prompt, isNot(contains('Sans rebondissement demandé')));
+        expect(prompt, contains('point de bascule principal'));
       });
 
       test('one-shot template is selected for One-Shot campaign type',
@@ -245,7 +302,6 @@ void main() {
 
         final prompt = await service.generatePrompt(buildRequest());
 
-        // One-shot template contains this section header
         expect(prompt, contains('CINQUE CONCEPT'));
       });
 
@@ -255,7 +311,7 @@ void main() {
 
         final prompt = await service.generatePrompt(buildRequest(
           campaignType: 'Custom Arc',
-          language: 'English',
+          localeCode: 'en',
         ));
 
         expect(prompt, contains('# Role'));
@@ -268,7 +324,7 @@ void main() {
         final service = LocalCampaignService();
 
         final prompt = await service.generatePrompt(buildRequest(
-          language: 'English',
+          localeCode: 'en',
         ));
 
         expect(prompt, contains('PHASE 1 — FIVE CONCEPTS'));
@@ -279,11 +335,173 @@ void main() {
         final service = LocalCampaignService();
 
         final prompt = await service.generatePrompt(buildRequest(
-          language: 'Italiano',
+          localeCode: 'it',
         ));
 
         expect(prompt, contains('FASE 1 — CINQUE CONCEPT'));
         expect(prompt, isNot(contains('PHASE 1 — FIVE CONCEPTS')));
+      });
+
+      test('Spanish generic requests use the Spanish generic template',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          campaignType: 'Arco personalizado',
+          localeCode: 'es',
+        ));
+
+        expect(prompt, contains('# Rol'));
+        expect(prompt, contains('## Formato de salida'));
+        expect(prompt, isNot(contains('## Output format')));
+      });
+
+      test('Spanish One-Shot requests use the Spanish one-shot template',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          localeCode: 'es',
+        ));
+
+        expect(prompt, contains('FASE 1 — CINCO CONCEPTOS'));
+        expect(prompt, isNot(contains('PHASE 1 — FIVE CONCEPTS')));
+      });
+
+      test('French generic requests use the French generic template',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          campaignType: 'Arc personnalisé',
+          localeCode: 'fr',
+        ));
+
+        expect(prompt, contains('# Role'));
+        expect(prompt, contains('## Format de sortie'));
+        expect(prompt, isNot(contains('## Output format')));
+      });
+
+      test('French One-Shot requests use the French one-shot template',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          localeCode: 'fr',
+        ));
+
+        expect(prompt, contains('PHASE 1 — CINQ CONCEPTS'));
+        expect(prompt, isNot(contains('PHASE 1 — FIVE CONCEPTS')));
+      });
+
+      test('Spanish horror prompts add the gore guidance line', () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          campaignType: 'One-Shot',
+          localeCode: 'es',
+          themePreferences: const ['Horror gótico'],
+          includeNpcs: false,
+          includeEncounters: false,
+        ));
+
+        expect(prompt, contains('gore'));
+      });
+
+      test('French dark tone prompts add the agency guidance line', () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          campaignType: 'One-Shot',
+          localeCode: 'fr',
+          tonePreferences: const ['Sombre'],
+          includeNpcs: false,
+          includeEncounters: false,
+        ));
+
+        expect(prompt, contains('libre arbitre'));
+      });
+
+      test(
+          'Spanish localized campaign templates do not leak English instructions',
+          () async {
+        final service = LocalCampaignService();
+        const campaignTypes = <String>[
+          'Mini-campaña',
+          'Campaña larga',
+          'Exploración de mazmorra',
+        ];
+        const englishMarkers = <String>[
+          'You are a senior narrative designer',
+          'Requested hooks:',
+          'Premise and stakes',
+          'Game world',
+          'NPCs and event timeline',
+          'Three entry hooks',
+          'DM note:',
+          'Mini-campaign (3-6 sessions)',
+          'Long campaign (10-25+ sessions)',
+          'Dungeon exploration (multi-session)',
+          '**NPCs:**',
+          '**Encounters:**',
+        ];
+
+        for (final campaignType in campaignTypes) {
+          final prompt = await service.generatePrompt(buildRequest(
+            campaignType: campaignType,
+            localeCode: 'es',
+          ));
+
+          for (final marker in englishMarkers) {
+            expect(
+              prompt,
+              isNot(contains(marker)),
+              reason:
+                  'Spanish prompt for "$campaignType" still contains English marker "$marker".',
+            );
+          }
+        }
+      });
+
+      test(
+          'French localized campaign templates do not leak English instructions',
+          () async {
+        final service = LocalCampaignService();
+        const campaignTypes = <String>[
+          'Mini-campagne',
+          'Longue campagne',
+          'Exploration de donjon',
+        ];
+        const englishMarkers = <String>[
+          'You are a senior narrative designer',
+          'Requested hooks:',
+          'Premise and stakes',
+          'Game world',
+          'NPCs and event timeline',
+          'Three entry hooks',
+          'DM note:',
+          'Mini-campaign (3-6 sessions)',
+          'Long campaign (10-25+ sessions)',
+          'Dungeon exploration (multi-session)',
+          '**NPCs:**',
+          '**Encounters:**',
+        ];
+
+        for (final campaignType in campaignTypes) {
+          final prompt = await service.generatePrompt(buildRequest(
+            campaignType: campaignType,
+            localeCode: 'fr',
+          ));
+
+          for (final marker in englishMarkers) {
+            expect(
+              prompt,
+              isNot(contains(marker)),
+              reason:
+                  'French prompt for "$campaignType" still contains English marker "$marker".',
+            );
+          }
+        }
       });
 
       test(

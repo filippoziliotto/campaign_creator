@@ -160,8 +160,7 @@ extension on _CampaignBuilderPageState {
             spacing: spacing,
             runSpacing: spacing,
             children: options.campaignTypes.map((campaignType) {
-              final meta =
-                  _campaignTypeMeta[campaignType] ?? _defaultCampaignMeta;
+              final meta = _campaignTypeMetaFor(campaignType);
 
               return SizedBox(
                 width: cardWidth,

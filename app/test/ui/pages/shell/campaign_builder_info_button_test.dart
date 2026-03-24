@@ -1,4 +1,5 @@
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
+import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
 import 'package:campaign_creator_flutter/src/theme/fantasy_theme.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
@@ -121,10 +122,52 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Lingua'), findsOneWidget);
-    expect(find.text('English'), findsOneWidget);
-    expect(find.text('Italiano'), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-control')),
         findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-segment-en')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-segment-it')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-segment-es')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-segment-fr')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-mark-en')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-mark-it')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-mark-es')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-mark-fr')),
+        findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('settings-language-mark-en')),
+        matching: find.text('GB'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('settings-language-mark-it')),
+        matching: find.text('IT'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('settings-language-mark-es')),
+        matching: find.text('ES'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('settings-language-mark-fr')),
+        matching: find.text('FR'),
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('settings sheet theme control triggers callback and stays open',
@@ -185,11 +228,60 @@ void main() {
         .tap(find.byKey(const ValueKey<String>('info-settings-button')));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('English'));
+    await tester.tap(
+      find.ancestor(
+        of: find.byKey(
+          const ValueKey<String>('settings-language-segment-en'),
+        ),
+        matching: find.byType(TextButton),
+      ),
+    );
     await tester.pumpAndSettle();
 
     expect(selectedLocale, const Locale('en'));
     expect(find.byKey(const ValueKey<String>('settings-sheet')), findsNothing);
+  });
+
+  testWidgets(
+      'changing locale resets localized selections and reloads localized options',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1200, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(const _LocaleReactiveTestApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester.tap(
+      find.byKey(const ValueKey<String>('entry-campaign-card-Mini-campagna')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Mini-campagna'), findsWidgets);
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+      find.ancestor(
+        of: find.byKey(
+          const ValueKey<String>('settings-language-segment-en'),
+        ),
+        matching: find.byType(TextButton),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Choose format'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey<String>('entry-campaign-card-Mini-campaign')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('entry-campaign-card-Mini-campagna')),
+      findsNothing,
+    );
   });
 
   testWidgets('settings sheet is dismissed by tapping outside', (tester) async {
@@ -347,5 +439,80 @@ class _ThemeReactiveTestAppState extends State<_ThemeReactiveTestApp> {
         },
       ),
     );
+  }
+}
+
+class _LocaleReactiveTestApp extends StatefulWidget {
+  const _LocaleReactiveTestApp();
+
+  @override
+  State<_LocaleReactiveTestApp> createState() => _LocaleReactiveTestAppState();
+}
+
+class _LocaleReactiveTestAppState extends State<_LocaleReactiveTestApp> {
+  Locale _locale = const Locale('it');
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      locale: _locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: CampaignBuilderPage(
+        service: _LocaleAwareFakeCampaignService(),
+        currentLocale: _locale,
+        onLocaleChanged: (locale) {
+          setState(() {
+            _locale = locale;
+          });
+        },
+      ),
+    );
+  }
+}
+
+class _LocaleAwareFakeCampaignService extends FakeCampaignService {
+  _LocaleAwareFakeCampaignService() : super(_localeAwareOptions('it'));
+
+  @override
+  Future<CampaignOptions> getOptions({String localeCode = 'it'}) async {
+    return _localeAwareOptions(localeCode);
+  }
+}
+
+CampaignOptions _localeAwareOptions(String localeCode) {
+  switch (localeCode) {
+    case 'en':
+      return CampaignOptions(
+        settings: const ['Forgotten Realms'],
+        campaignTypes: const ['One-Shot', 'Mini-campaign'],
+        themes: const ['Intrigue'],
+        tones: const ['Epic'],
+        styles: const ['Linear'],
+        partyArchetypes: const ['Tank'],
+        twists: const ['Betrayal'],
+        presets: const {},
+        settingDescriptions: const {
+          'Forgotten Realms': 'Classic high fantasy.',
+        },
+        presetDescriptions: const {},
+        presetNames: const {},
+      );
+    default:
+      return CampaignOptions(
+        settings: const ['Forgotten Realms'],
+        campaignTypes: const ['One-Shot', 'Mini-campagna'],
+        themes: const ['Intrigo'],
+        tones: const ['Epico'],
+        styles: const ['Lineare'],
+        partyArchetypes: const ['Tank'],
+        twists: const ['Tradimento'],
+        presets: const {},
+        settingDescriptions: const {
+          'Forgotten Realms': 'Classico high fantasy.',
+        },
+        presetDescriptions: const {},
+        presetNames: const {},
+      );
   }
 }

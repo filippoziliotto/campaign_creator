@@ -165,6 +165,56 @@ void main() {
         findsOneWidget);
     expect(find.bySemanticsLabel('Choose your Campaign'), findsOneWidget);
   });
+
+  testWidgets('entry cards use Spanish localized badges for campaign types', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('es'),
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(_entryOptionsEs()),
+          currentLocale: const Locale('es'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    expect(find.text('Arco breve'), findsOneWidget);
+    expect(find.text('Saga amplia'), findsOneWidget);
+    expect(find.text('Profundidades'), findsOneWidget);
+    expect(find.text('Formato'), findsNothing);
+  });
+
+  testWidgets('entry cards use French localized badges for campaign types', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('fr'),
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(_entryOptionsFr()),
+          currentLocale: const Locale('fr'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    expect(find.text('Arc court'), findsOneWidget);
+    expect(find.text('Grande saga'), findsOneWidget);
+    expect(find.text('Profondeurs'), findsOneWidget);
+    expect(find.text('Format'), findsNothing);
+  });
 }
 
 CampaignOptions _entryOptions() {
@@ -183,6 +233,48 @@ CampaignOptions _entryOptions() {
     twists: const ['Tradimento'],
     presets: const {},
     settingDescriptions: const {'Forgotten Realms': 'Classico high fantasy.'},
+    presetDescriptions: const {},
+    presetNames: const {},
+  );
+}
+
+CampaignOptions _entryOptionsEs() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms'],
+    campaignTypes: const [
+      'One-Shot',
+      'Mini-campaña',
+      'Campaña larga',
+      'Exploración de mazmorra',
+    ],
+    themes: const ['Intriga'],
+    tones: const ['Épico'],
+    styles: const ['Lineal'],
+    partyArchetypes: const ['Tanque'],
+    twists: const ['Traición'],
+    presets: const {},
+    settingDescriptions: const {'Forgotten Realms': 'Alta fantasía clásica.'},
+    presetDescriptions: const {},
+    presetNames: const {},
+  );
+}
+
+CampaignOptions _entryOptionsFr() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms'],
+    campaignTypes: const [
+      'One-Shot',
+      'Mini-campagne',
+      'Longue campagne',
+      'Exploration de donjon',
+    ],
+    themes: const ['Intrigue'],
+    tones: const ['Épique'],
+    styles: const ['Linéaire'],
+    partyArchetypes: const ['Tank'],
+    twists: const ['Trahison'],
+    presets: const {},
+    settingDescriptions: const {'Forgotten Realms': 'High fantasy classique.'},
     presetDescriptions: const {},
     presetNames: const {},
   );
