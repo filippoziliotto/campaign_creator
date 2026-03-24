@@ -18,7 +18,7 @@ void main() {
   });
 
   testWidgets(
-      'parchment top bar keeps a vertical language toggle without top bar actions',
+      'parchment top bar no longer shows a language toggle or top bar actions',
       (
     tester,
   ) async {
@@ -47,9 +47,6 @@ void main() {
     await tester.tap(parchmentStage);
     await _pumpUi(tester);
 
-    final languageSwitch = find.byKey(
-      const ValueKey<String>('top-bar-language-switch'),
-    );
     final topBar = find.byKey(const ValueKey<String>('persistent-top-bar'));
     final topBarForgeAction = find.descendant(
       of: topBar,
@@ -61,24 +58,12 @@ void main() {
     );
 
     expect(topBar, findsOneWidget);
-    expect(languageSwitch, findsOneWidget);
+    expect(
+      find.byKey(const ValueKey<String>('top-bar-language-switch')),
+      findsNothing,
+    );
     expect(topBarForgeAction, findsNothing);
     expect(topBarOpenAction, findsNothing);
-
-    final switchRect = tester.getRect(languageSwitch);
-    final enCenter = tester.getCenter(find.descendant(
-      of: languageSwitch,
-      matching: find.text('EN'),
-    ));
-    final itCenter = tester.getCenter(find.descendant(
-      of: languageSwitch,
-      matching: find.text('IT'),
-    ));
-
-    expect(switchRect.height, greaterThan(switchRect.width));
-    expect(switchRect.width, lessThan(54));
-    expect(enCenter.dx, closeTo(switchRect.center.dx, 2));
-    expect(itCenter.dx, closeTo(switchRect.center.dx, 2));
     expect(tester.takeException(), isNull);
   });
 }

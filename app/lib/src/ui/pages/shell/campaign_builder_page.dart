@@ -1317,6 +1317,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                 bottom: 24,
                 child: SafeArea(
                   child: _InfoButton(
+                    currentLocale: widget.currentLocale,
+                    onLocaleChanged: widget.onLocaleChanged,
                     currentThemeMode: widget.currentThemeMode,
                     onThemeModeChanged: widget.onThemeModeChanged,
                   ),
@@ -1490,26 +1492,16 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         builder: (context, constraints) {
           final compact = constraints.maxWidth < 980;
           final padding = compact ? 12.0 : 20.0;
-          final languageSwitch = _buildLanguageSwitch();
 
           if (compact) {
             return Padding(
               padding: EdgeInsets.all(padding),
-              child: Row(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        header,
-                        const SizedBox(height: 6),
-                        stageSummary,
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  languageSwitch,
+                  header,
+                  const SizedBox(height: 6),
+                  stageSummary,
                 ],
               ),
             );
@@ -1524,86 +1516,12 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                 const SizedBox(width: 16),
                 ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 560),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      languageSwitch,
-                      const SizedBox(height: 6),
-                      stageSummary,
-                    ],
-                  ),
+                  child: stageSummary,
                 ),
               ],
             ),
           );
         },
-      ),
-    );
-  }
-
-  Widget _buildLanguageSwitch() {
-    final selectedCode = widget.currentLocale.languageCode;
-    final theme = _resolvedAtmosphereTheme();
-    final colorScheme = theme.colorScheme;
-
-    Widget buildSegment({
-      required String code,
-      required String label,
-    }) {
-      final selected = code == selectedCode;
-      return Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(18),
-          onTap: selected ? null : () => widget.onLocaleChanged(Locale(code)),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 180),
-            curve: Curves.easeOut,
-            width: 35,
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              color: selected
-                  ? colorScheme.primary.withValues(alpha: 0.18)
-                  : Colors.transparent,
-            ),
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: selected
-                    ? colorScheme.onSurface
-                    : colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
-    return Container(
-      key: const ValueKey<String>('top-bar-language-switch'),
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: colorScheme.outline.withValues(alpha: 0.28),
-        ),
-        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.42),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          buildSegment(
-            code: 'en',
-            label: context.l10n.languageEnglishShort,
-          ),
-          buildSegment(
-            code: 'it',
-            label: context.l10n.languageItalianShort,
-          ),
-        ],
       ),
     );
   }
@@ -1690,10 +1608,14 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
 class _InfoButton extends StatelessWidget {
   const _InfoButton({
+    required this.currentLocale,
+    required this.onLocaleChanged,
     required this.currentThemeMode,
     required this.onThemeModeChanged,
   });
 
+  final Locale currentLocale;
+  final ValueChanged<Locale> onLocaleChanged;
   final ThemeMode currentThemeMode;
   final ValueChanged<ThemeMode>? onThemeModeChanged;
 
@@ -1720,14 +1642,20 @@ class _InfoButton extends StatelessWidget {
   }
 
   void _showSettingsSheet(BuildContext context) {
+    final theme = Theme.of(context);
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: false,
       enableDrag: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => _SettingsSheet(
-        currentThemeMode: currentThemeMode,
-        onThemeModeChanged: onThemeModeChanged,
+      builder: (_) => Theme(
+        data: theme,
+        child: _SettingsSheet(
+          currentLocale: currentLocale,
+          onLocaleChanged: onLocaleChanged,
+          currentThemeMode: currentThemeMode,
+          onThemeModeChanged: onThemeModeChanged,
+        ),
       ),
     );
   }
@@ -1735,10 +1663,14 @@ class _InfoButton extends StatelessWidget {
 
 class _SettingsSheet extends StatefulWidget {
   const _SettingsSheet({
+    required this.currentLocale,
+    required this.onLocaleChanged,
     required this.currentThemeMode,
     required this.onThemeModeChanged,
   });
 
+  final Locale currentLocale;
+  final ValueChanged<Locale> onLocaleChanged;
   final ThemeMode currentThemeMode;
   final ValueChanged<ThemeMode>? onThemeModeChanged;
 
@@ -1764,6 +1696,18 @@ class _SettingsSheetState extends State<_SettingsSheet> {
       _selectedThemeMode = themeMode;
     });
     widget.onThemeModeChanged?.call(themeMode);
+  }
+
+  void _handleLanguageSelection(String languageCode) {
+    if (languageCode == widget.currentLocale.languageCode) {
+      return;
+    }
+
+    final navigator = Navigator.of(context);
+    widget.onLocaleChanged(Locale(languageCode));
+    if (mounted) {
+      navigator.pop();
+    }
   }
 
   @override
@@ -1817,6 +1761,62 @@ class _SettingsSheetState extends State<_SettingsSheet> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 8, 24, 4),
                 child: Text(
+                  context.l10n.settingsLanguageLabel,
+                  style: textTheme.labelSmall?.copyWith(
+                    color: palette.foregroundMuted,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
+                child: SegmentedButton<String>(
+                  key: const ValueKey<String>('settings-language-control'),
+                  showSelectedIcon: false,
+                  segments: <ButtonSegment<String>>[
+                    ButtonSegment<String>(
+                      value: 'en',
+                      label: Text(context.l10n.settingsLanguageEnglish),
+                    ),
+                    ButtonSegment<String>(
+                      value: 'it',
+                      label: Text(context.l10n.settingsLanguageItalian),
+                    ),
+                  ],
+                  selected: <String>{widget.currentLocale.languageCode},
+                  style: ButtonStyle(
+                    visualDensity: VisualDensity.compact,
+                    padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
+                      EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    ),
+                    backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                      (states) {
+                        if (states.contains(WidgetState.selected)) {
+                          return palette.cardSoft;
+                        }
+                        return palette.card.withValues(alpha: 0.82);
+                      },
+                    ),
+                    foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+                      (states) {
+                        if (states.contains(WidgetState.selected)) {
+                          return palette.accent;
+                        }
+                        return palette.foreground;
+                      },
+                    ),
+                    side: WidgetStatePropertyAll<BorderSide>(
+                      BorderSide(
+                        color: palette.outline.withValues(alpha: 0.7),
+                      ),
+                    ),
+                  ),
+                  onSelectionChanged: (selection) =>
+                      _handleLanguageSelection(selection.first),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 8, 24, 4),
+                child: Text(
                   context.l10n.settingsThemeLabel,
                   style: textTheme.labelSmall?.copyWith(
                     color: palette.foregroundMuted,
@@ -1828,14 +1828,14 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                 child: SegmentedButton<ThemeMode>(
                   key: const ValueKey<String>('settings-theme-control'),
                   showSelectedIcon: false,
-                  segments: <ButtonSegment<ThemeMode>>[
+                  segments: const <ButtonSegment<ThemeMode>>[
                     ButtonSegment<ThemeMode>(
                       value: ThemeMode.dark,
-                      label: Text(context.l10n.settingsThemeDark),
+                      icon: Icon(Icons.nightlight_round, size: 18),
                     ),
                     ButtonSegment<ThemeMode>(
                       value: ThemeMode.light,
-                      label: Text(context.l10n.settingsThemeLight),
+                      icon: Icon(Icons.wb_sunny_rounded, size: 18),
                     ),
                   ],
                   selected: <ThemeMode>{_selectedThemeMode},

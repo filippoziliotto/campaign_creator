@@ -94,6 +94,26 @@ void main() {
         findsOneWidget);
   });
 
+  testWidgets('settings sheet shows language segmented control',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Lingua'), findsOneWidget);
+    expect(find.text('English'), findsOneWidget);
+    expect(find.text('Italiano'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-control')),
+        findsOneWidget);
+  });
+
   testWidgets('settings sheet theme control triggers callback and stays open',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
@@ -124,6 +144,36 @@ void main() {
         find.byKey(const ValueKey<String>('settings-sheet')), findsOneWidget);
   });
 
+  testWidgets(
+      'settings sheet language control triggers callback and closes sheet',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    Locale? selectedLocale;
+
+    await tester.pumpWidget(
+      _testApp(
+        currentLocale: const Locale('it'),
+        onLocaleChanged: (locale) {
+          selectedLocale = locale;
+        },
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('English'));
+    await tester.pumpAndSettle();
+
+    expect(selectedLocale, const Locale('en'));
+    expect(find.byKey(const ValueKey<String>('settings-sheet')), findsNothing);
+  });
+
   testWidgets('settings sheet is dismissed by tapping outside', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -147,17 +197,19 @@ void main() {
 }
 
 Widget _testApp({
+  Locale currentLocale = const Locale('it'),
+  ValueChanged<Locale>? onLocaleChanged,
   ThemeMode currentThemeMode = ThemeMode.dark,
   ValueChanged<ThemeMode>? onThemeModeChanged,
 }) =>
     MaterialApp(
-      locale: const Locale('it'),
+      locale: currentLocale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: CampaignBuilderPage(
         service: FakeCampaignService(minimalOptions()),
-        currentLocale: const Locale('it'),
-        onLocaleChanged: (_) {},
+        currentLocale: currentLocale,
+        onLocaleChanged: onLocaleChanged ?? (_) {},
         currentThemeMode: currentThemeMode,
         onThemeModeChanged: onThemeModeChanged,
       ),

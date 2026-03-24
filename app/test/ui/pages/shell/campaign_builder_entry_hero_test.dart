@@ -56,8 +56,7 @@ void main() {
     expect(cardRect.bottom, lessThan(resumeRect.top));
   });
 
-  testWidgets('entry hero stays static after selecting a campaign type',
-      (
+  testWidgets('entry hero stays static after selecting a campaign type', (
     tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
@@ -137,7 +136,7 @@ void main() {
 
     expect(
       find.byKey(const ValueKey<String>('top-bar-language-switch')),
-      findsOneWidget,
+      findsNothing,
     );
     expect(find.text('Scelta'), findsOneWidget);
     expect(tester.takeException(), isNull);
@@ -162,7 +161,8 @@ void main() {
 
     await _pumpUi(tester);
 
-    expect(find.byKey(const ValueKey<String>('entry-hero-linked-oo')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('entry-hero-linked-oo')),
+        findsOneWidget);
     expect(find.bySemanticsLabel('Choose your Campaign'), findsOneWidget);
   });
 }
