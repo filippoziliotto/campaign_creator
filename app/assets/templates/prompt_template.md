@@ -9,12 +9,34 @@ Scrivi una proposta campagna pronta da portare al tavolo.
 - Livello party: {{ party_level }}
 - Numero personaggi: {{ party_size }}
 - Composizione del party (classi/ruoli dei PG): {{ party_archetypes }}
+- Twist: {{ twist }}
 - Nota: questi ruoli rappresentano i personaggi giocanti del party, non PNG generici.
+
+{% if has_additional_user_inputs %}
+## Input Aggiuntivi Forniti Dall'Utente
+{% if narrative_hooks %}- Ganci narrativi desiderati: {{ narrative_hooks }}{% endif %}
+{% if character_notes %}- Note personaggi: {{ character_notes }}{% endif %}
+{% if factions %}- Fazioni da includere: {{ factions }}{% endif %}
+{% if npc_focus %}- Focus NPC: {{ npc_focus }}{% endif %}
+{% if encounter_focus %}- Focus incontri: {{ encounter_focus }}{% endif %}
+{% if safety_notes %}- Safety e limiti sensibili: {{ safety_notes }}{% endif %}
+{% endif %}
+
+{% if has_missing_input_rules %}
+## Se Mancano Input
+{% for item in missing_input_rules %}
+- {{ item }}
+{% endfor %}
+{% endif %}
+
+## Regole Di Qualita
+{% for item in quality_rules %}
+- {{ item }}
+{% endfor %}
 
 ## Vincoli e tono
 - Toni preferiti: {{ tone_preferences }}
 - Stili narrativi preferiti: {{ style_preferences }}
-- Colpo di scena richiesto: {{ twist }}
 - Vincoli hard:
 {% for item in constraints_list %}
   - {{ item }}
@@ -22,16 +44,6 @@ Scrivi una proposta campagna pronta da portare al tavolo.
 
 ## Struttura richiesta
 {{ structure_instructions }}
-
-## Input liberi utente
-- Note personaggi: {{ character_notes }}
-- Ganci narrativi desiderati: {{ narrative_hooks }}
-
-## Indicazioni avanzate
-- Fazioni da includere: {{ factions }}
-- Focus NPC: {{ npc_focus }}
-- Focus incontri: {{ encounter_focus }}
-- Safety e limiti sensibili: {{ safety_notes }}
 
 ## Focus di design
 - {{ npc_instructions }}

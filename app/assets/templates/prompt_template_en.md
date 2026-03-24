@@ -9,12 +9,34 @@ Write a campaign proposal ready to bring to the table.
 - Party level: {{ party_level }}
 - Number of characters: {{ party_size }}
 - Party composition (PC classes/roles): {{ party_archetypes }}
+- Twist: {{ twist }}
 - Note: these roles represent the player characters in the party, not generic NPCs.
+
+{% if has_additional_user_inputs %}
+## Additional User Input
+{% if narrative_hooks %}- Desired narrative hooks: {{ narrative_hooks }}{% endif %}
+{% if character_notes %}- Character notes: {{ character_notes }}{% endif %}
+{% if factions %}- Factions to include: {{ factions }}{% endif %}
+{% if npc_focus %}- NPC focus: {{ npc_focus }}{% endif %}
+{% if encounter_focus %}- Encounter focus: {{ encounter_focus }}{% endif %}
+{% if safety_notes %}- Safety and sensitive boundaries: {{ safety_notes }}{% endif %}
+{% endif %}
+
+{% if has_missing_input_rules %}
+## If Inputs Are Missing
+{% for item in missing_input_rules %}
+- {{ item }}
+{% endfor %}
+{% endif %}
+
+## Quality Rules
+{% for item in quality_rules %}
+- {{ item }}
+{% endfor %}
 
 ## Constraints and tone
 - Preferred tones: {{ tone_preferences }}
 - Preferred narrative styles: {{ style_preferences }}
-- Requested twist: {{ twist }}
 - Hard constraints:
 {% for item in constraints_list %}
   - {{ item }}
@@ -22,16 +44,6 @@ Write a campaign proposal ready to bring to the table.
 
 ## Requested structure
 {{ structure_instructions }}
-
-## Freeform user input
-- Character notes: {{ character_notes }}
-- Desired narrative hooks: {{ narrative_hooks }}
-
-## Advanced guidance
-- Factions to include: {{ factions }}
-- NPC focus: {{ npc_focus }}
-- Encounter focus: {{ encounter_focus }}
-- Safety and sensitive boundaries: {{ safety_notes }}
 
 ## Design focus
 - {{ npc_instructions }}

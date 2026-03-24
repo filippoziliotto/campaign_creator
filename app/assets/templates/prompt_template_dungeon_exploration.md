@@ -16,12 +16,27 @@ Sei un progettista narrativo senior per D&D 5e. Crei materiale **immediatamente 
 | Composizione party | {{ party_archetypes }} |
 | Twist | {{ twist }} |
 
-{% if narrative_hooks %}**Ganci richiesti:** {{ narrative_hooks }}{% endif %}
-{% if character_notes %}**Note personaggi:** {{ character_notes }}{% endif %}
-{% if factions %}**Fazioni:** {{ factions }}{% endif %}
-{% if npc_focus %}**Focus PNG:** {{ npc_focus }}{% endif %}
-{% if encounter_focus %}**Focus incontri:** {{ encounter_focus }}{% endif %}
-{% if safety_notes %}**Safety:** {{ safety_notes }}{% endif %}
+{% if has_additional_user_inputs %}
+## INPUT UTENTE AGGIUNTIVI
+{% if narrative_hooks %}- Ganci richiesti: {{ narrative_hooks }}{% endif %}
+{% if character_notes %}- Note personaggi: {{ character_notes }}{% endif %}
+{% if factions %}- Fazioni: {{ factions }}{% endif %}
+{% if npc_focus %}- Focus PNG: {{ npc_focus }}{% endif %}
+{% if encounter_focus %}- Focus incontri: {{ encounter_focus }}{% endif %}
+{% if safety_notes %}- Safety: {{ safety_notes }}{% endif %}
+{% endif %}
+
+{% if has_missing_input_rules %}
+## SE MANCANO INPUT
+{% for item in missing_input_rules %}
+- {{ item }}
+{% endfor %}
+{% endif %}
+
+## REGOLE DI QUALITA
+{% for item in quality_rules %}
+- {{ item }}
+{% endfor %}
 
 **Vincoli** (rispettali ovunque):
 {% for item in constraints_list %}
@@ -41,10 +56,10 @@ Per ciascuno, scrivi in forma libera (8–10 righe):
 - Chi ha costruito questo dungeon, perché esiste, cosa è andato storto?
 - Qual è la meccanica speciale che cambia come ci si muove, riposa o combatte qui?
 - Chi o cosa governa il dungeon adesso — e perché è pericoloso in modo diverso dai soliti mostri?
-- Come si inserisce il twist `{{ twist }}` — ribalta la comprensione del luogo o della minaccia? (se nessun twist viene inserito skippa questo passaggio)
+- Come si inserisce {{ twist_reference }} — ribalta la comprensione del luogo o della minaccia?
 - Qual è la stanza che i giocatori si ricorderanno?
 
-> Se i dati ti suggeriscono qualcosa di più interessante rispetto alle impostazioni, proponilo — segnala cosa hai cambiato.
+> Non ignorare i dati selezionati. Se intravedi una variante piu forte, usala solo se resta coerente con gli input scelti e spiega perche migliora l'esplorazione.
 
 ---
 
@@ -55,7 +70,7 @@ Sviluppa il concept che meglio sfrutta i dati e ha il maggiore potenziale esplor
 ---
 
 ### 1. Premessa e posta in gioco
-4–5 righe. Cos'è questo dungeon? Perché i PG devono entrarci? Cosa perdono se non lo fanno o falliscono? Dove e come si rivela il twist `{{ twist }}`?
+4–5 righe. Cos'è questo dungeon? Perché i PG devono entrarci? Cosa perdono se non lo fanno o falliscono? Dove e come si rivela {{ twist_reference }}?
 
 ---
 
@@ -76,7 +91,7 @@ Pericolo distintivo: una minaccia unica — non solo mostri
 Ingressi / uscite (min 2): come si entra, come si esce
 Shortcut / loop: collegamento non ovvio con un altro livello
 Revelation: cosa scoprono che cambia la comprensione del dungeon
-Indizi per il twist: [solo nel livello pertinente — 2 indizi ambientali specifici, non dialogati]
+Indizi per il punto di svolta: [solo nel livello pertinente — 2 indizi ambientali specifici, non dialogati]
 Evento dinamico: cosa cambia se il party torna dopo un riposo lungo
 ```
 
@@ -109,7 +124,7 @@ Se falliscono: come avanza la storia senza bloccarsi
 Fazione: [se applicabile]
 ```
 
-Marca con ★ le stanze che contengono indizi per il twist.
+Marca con ★ le stanze che contengono indizi per il punto di svolta.
 
 ---
 

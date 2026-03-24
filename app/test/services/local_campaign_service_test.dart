@@ -9,6 +9,7 @@ void main() {
     CampaignGenerateRequest buildRequest({
       String campaignType = 'One-Shot',
       String language = 'Italiano',
+      String twist = '',
       List<String> themePreferences = const [],
       List<String> tonePreferences = const [],
       bool includeNpcs = true,
@@ -23,7 +24,7 @@ void main() {
         partyLevel: 5,
         partySize: 4,
         partyArchetypes: const [],
-        twist: '',
+        twist: twist,
         narrativeHooks: '',
         characterNotes: '',
         constraints: '',
@@ -116,13 +117,88 @@ void main() {
         expect(prompt, contains('agenzia'));
       });
 
-      test('empty optional fields use fallback text', () async {
+      test(
+          'empty optional fields are moved into a dedicated missing-input guidance section',
+          () async {
         final service = LocalCampaignService();
 
-        final prompt = await service.generatePrompt(buildRequest());
+        final prompt = await service.generatePrompt(buildRequest(
+          campaignType: 'Mini-campaign',
+          language: 'English',
+        ));
 
-        // Empty narrative hooks → fallback text
-        expect(prompt, contains('ganci iniziali'));
+        expect(prompt, contains('## IF INPUTS ARE MISSING'));
+        expect(prompt, contains('If narrative hooks are missing'));
+        expect(prompt, isNot(contains('**Requested hooks:** If the field is empty')));
+        expect(prompt, isNot(contains('**Character notes:** No character notes provided')));
+        expect(prompt, isNot(contains('**Factions:** Not specified')));
+      });
+
+      test('empty party archetypes are shown as not specified by the user',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          campaignType: 'Mini-campaign',
+          language: 'English',
+        ));
+
+        expect(prompt, contains('| Party composition | Not specified by the user. |'));
+        expect(
+          prompt,
+          isNot(contains(
+            'Not specified: propose a coherent composition of classes and roles for the PCs.',
+          )),
+        );
+      });
+
+      test(
+          'multiple optional user inputs render as separate lines instead of concatenated markdown',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(
+          CampaignGenerateRequest(
+            setting: 'Ravenloft',
+            campaignType: 'One-Shot',
+            themePreferences: const ['Horror Gotico'],
+            tonePreferences: const ['Cupo'],
+            stylePreferences: const ['Investigativo'],
+            partyLevel: 4,
+            partySize: 4,
+            partyArchetypes: const ['Guerriero', 'Mago'],
+            twist: "I PG sono già morti e non lo sanno",
+            narrativeHooks: 'funerale interrotto',
+            characterNotes: 'uno dei PG perde memoria',
+            constraints: '',
+            factions: 'casata decaduta',
+            npcFocus: 'vedova inquieta',
+            encounterFocus: 'indagine sociale',
+            safetyNotes: 'evitare body horror dettagliato',
+            includeNpcs: true,
+            includeEncounters: true,
+            language: 'Italiano',
+          ),
+        );
+
+        expect(prompt, contains('- Ganci richiesti: funerale interrotto'));
+        expect(prompt, contains('- Note personaggi: uno dei PG perde memoria'));
+        expect(prompt, isNot(contains('funerale interrotto**Note personaggi:**')));
+      });
+
+      test('no-twist selections are normalized and do not force a fake twist',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          campaignType: 'One-Shot',
+          language: 'Italiano',
+          twist: 'Nessun colpo di scena',
+        ));
+
+        expect(prompt, contains('| Twist | Nessuno richiesto |'));
+        expect(prompt, isNot(contains('`Nessun colpo di scena`')));
+        expect(prompt, contains('punto di svolta principale'));
       });
 
       test('one-shot template is selected for One-Shot campaign type',

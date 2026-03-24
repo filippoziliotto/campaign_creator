@@ -16,12 +16,27 @@ Sei un progettista narrativo senior per D&D 5e. Crei materiale **immediatamente 
 | Composizione party | {{ party_archetypes }} |
 | Twist | {{ twist }} |
 
-{% if narrative_hooks %}**Ganci richiesti:** {{ narrative_hooks }}{% endif %}
-{% if character_notes %}**Note personaggi:** {{ character_notes }}{% endif %}
-{% if factions %}**Fazioni:** {{ factions }}{% endif %}
-{% if npc_focus %}**Focus PNG:** {{ npc_focus }}{% endif %}
-{% if encounter_focus %}**Focus incontri:** {{ encounter_focus }}{% endif %}
-{% if safety_notes %}**Safety:** {{ safety_notes }}{% endif %}
+{% if has_additional_user_inputs %}
+## INPUT UTENTE AGGIUNTIVI
+{% if narrative_hooks %}- Ganci richiesti: {{ narrative_hooks }}{% endif %}
+{% if character_notes %}- Note personaggi: {{ character_notes }}{% endif %}
+{% if factions %}- Fazioni: {{ factions }}{% endif %}
+{% if npc_focus %}- Focus PNG: {{ npc_focus }}{% endif %}
+{% if encounter_focus %}- Focus incontri: {{ encounter_focus }}{% endif %}
+{% if safety_notes %}- Safety: {{ safety_notes }}{% endif %}
+{% endif %}
+
+{% if has_missing_input_rules %}
+## SE MANCANO INPUT
+{% for item in missing_input_rules %}
+- {{ item }}
+{% endfor %}
+{% endif %}
+
+## REGOLE DI QUALITA
+{% for item in quality_rules %}
+- {{ item }}
+{% endfor %}
 
 **Vincoli** (rispettali ovunque):
 {% for item in constraints_list %}
@@ -41,10 +56,10 @@ Per ciascuno, scrivi in forma libera (8–10 righe):
 - Qual è la situazione di partenza e cosa spinge il party ad agire?
 - Come si distribuisce l'arco in 3–6 sessioni — dove si alza la posta, dove si rompe tutto?
 - Come cambia il mondo (o il party) dalla sessione 1 alla fine?
-- Come si inserisce il twist `{{ twist }}` — è una rivelazione di metà arco, un climax, o qualcosa di più lento? (se nessun twist viene inserito skippa questo passaggio)
+- Come si inserisce {{ twist_reference }} — è una rivelazione di metà arco, un climax, o qualcosa di più lento?
 - Qual è il momento che i giocatori ricorderanno dopo?
 
-> Se i dati forniti ti suggeriscono qualcosa di più forte rispetto alle impostazioni, proponilo — segnala cosa hai modificato e perché.
+> Non ignorare i dati selezionati. Se intravedi una variante piu forte, usala solo se resta coerente con gli input scelti e spiega perche migliora la proposta.
 
 ---
 
@@ -99,7 +114,7 @@ Scena clou: momento centrale (3–4 righe masterabili senza prep extra)
 Complicazione: cosa si complica — specifica, non generica
 Indizi: almeno 2 cose che i PG scoprono (sul mistero principale + una sottorama)
 Cliffhanger: come si chiude (solo se non è l'ultima sessione)
-Twist: [solo nella sessione pertinente]
+Punto di svolta: [solo nella sessione pertinente]
 ```
 
 I cliffhanger devono collegarsi all'apertura della sessione successiva.

@@ -16,12 +16,27 @@ You are a senior narrative designer for D&D 5e. You create **immediately playabl
 | Party composition | {{ party_archetypes }} |
 | Twist | {{ twist }} |
 
-{% if narrative_hooks %}**Requested hooks:** {{ narrative_hooks }}{% endif %}
-{% if character_notes %}**Character notes:** {{ character_notes }}{% endif %}
-{% if factions %}**Factions:** {{ factions }}{% endif %}
-{% if npc_focus %}**NPC focus:** {{ npc_focus }}{% endif %}
-{% if encounter_focus %}**Encounter focus:** {{ encounter_focus }}{% endif %}
-{% if safety_notes %}**Safety:** {{ safety_notes }}{% endif %}
+{% if has_additional_user_inputs %}
+## ADDITIONAL USER INPUT
+{% if narrative_hooks %}- Requested hooks: {{ narrative_hooks }}{% endif %}
+{% if character_notes %}- Character notes: {{ character_notes }}{% endif %}
+{% if factions %}- Factions: {{ factions }}{% endif %}
+{% if npc_focus %}- NPC focus: {{ npc_focus }}{% endif %}
+{% if encounter_focus %}- Encounter focus: {{ encounter_focus }}{% endif %}
+{% if safety_notes %}- Safety: {{ safety_notes }}{% endif %}
+{% endif %}
+
+{% if has_missing_input_rules %}
+## IF INPUTS ARE MISSING
+{% for item in missing_input_rules %}
+- {{ item }}
+{% endfor %}
+{% endif %}
+
+## QUALITY RULES
+{% for item in quality_rules %}
+- {{ item }}
+{% endfor %}
 
 **Constraints** (respect them throughout):
 {% for item in constraints_list %}
@@ -39,10 +54,10 @@ Propose five genuinely different plot concepts for this one-shot. All five must 
 For each one, write freely (8-10 lines):
 - What is the story about?
 - What is the starting situation, and what pushes the party to act?
-- How does the twist `{{ twist }}` fit in, and at what moment does it change everything? (if no twist is provided, skip this point)
+- How does {{ twist_reference }} fit in, and at what moment does it change everything?
 - Why does it work within a single 3-5 hour session?
 
-> If the inputs suggest something more interesting than the stated setup, feel free to say so and propose the stronger variant.
+> Do not ignore the selected inputs. If you see a stronger variant, use it only if it stays faithful to the chosen data and explain why it is stronger.
 
 ---
 
@@ -53,7 +68,7 @@ Develop the concept that best uses the provided inputs and has the strongest tab
 ---
 
 ### 1. Playable premise
-3-5 lines. What is happening when the PCs enter the scene? What are the immediate stakes? How does everything change with the twist `{{ twist }}`?
+3-5 lines. What is happening when the PCs enter the scene? What are the immediate stakes? How does everything change with {{ twist_reference }}?
 
 ---
 
@@ -73,7 +88,7 @@ If it goes badly: ... (the story must not stall — show how it continues)
 What the PCs carry away: clue, object, information, or cost
 ```
 
-**Constraint:** at least one scene must foreshadow the twist with an environmental clue — not spoken dialogue. Mark it with ★.
+**Constraint:** at least one scene must foreshadow {{ twist_reference }} with an environmental clue — not spoken dialogue. Mark it with ★.
 
 ---
 
@@ -101,4 +116,4 @@ Each ending must be reachable within the real-time length of a single session.
 
 ---
 
-> **DM note:** everything outside the outline is a suggestion, not an obligation. Change names, places, and NPCs freely. The twist is the only structural element we ask you not to remove — it is the heart of the story.
+> **DM note:** everything outside the outline is a suggestion, not an obligation. Change names, places, and NPCs freely. If no twist was selected, keep a sharp turning point anyway: that pivot is the heart of the story.

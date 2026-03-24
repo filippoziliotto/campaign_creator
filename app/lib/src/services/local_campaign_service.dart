@@ -63,6 +63,8 @@ class LocalCampaignService implements CampaignService {
 
   static Map<String, Object> _buildContext(CampaignGenerateRequest req) {
     final isEnglish = _isEnglishLanguage(req.language);
+    final normalizedTwist = _normalizeTwist(req.twist, isEnglish);
+    final hasTwist = normalizedTwist.isNotEmpty;
 
     final structureRules = isEnglish ? _structureRulesEn : _structureRulesIt;
 
@@ -90,30 +92,86 @@ class LocalCampaignService implements CampaignService {
     final styleFallback = isEnglish
         ? 'No strong preference (free mix).'
         : 'Nessuna preferenza forte (mix libero).';
-    final partyArchetypesFallback = isEnglish
-        ? 'Not specified: propose a coherent composition of classes and roles for the PCs.'
-        : 'Non specificata: proponi una composizione coerente di classi/ruoli per i PG.';
-    final narrativeHooksFallback = isEnglish
-        ? 'If the field is empty, propose 3 alternative opening hooks to choose from.'
-        : 'Se il campo e vuoto, proponi 3 ganci iniziali alternativi da cui scegliere.';
-    final characterNotesFallback = isEnglish
-        ? 'No character notes provided: create possible ties to the game world.'
-        : 'Nessuna nota personaggi fornita: crea legami possibili con il mondo di gioco.';
-    final factionsFallback = isEnglish
-        ? 'Not specified: propose 2-3 factions coherent with the setting and the main conflict.'
-        : 'Non specificate: proponi 2-3 fazioni coerenti con ambientazione e conflitto principale.';
-    final npcFocusFallback = isEnglish
-        ? 'No specific focus: vary NPCs between allies, rivals, and ambiguous neutrals.'
-        : 'Nessun focus specifico: varia i PNG tra alleati, rivali e neutrali ambigui.';
-    final encounterFocusFallback = isEnglish
-        ? 'Balance social, exploration, and combat encounters according to the campaign rhythm.'
-        : 'Bilancia incontro sociale, esplorazione e combattimento in base al ritmo della campagna.';
-    final safetyNotesFallback = isEnglish
-        ? 'Respect the boundaries already provided; avoid potentially sensitive content that was not requested.'
-        : 'Rispetta i limiti gia indicati; evita contenuti potenzialmente sensibili non richiesti.';
     final defaultStructure = isEnglish
         ? 'Design a modular campaign with a strong opening, escalation, and final payoff.'
         : 'Progetta una campagna modulare con inizio forte, escalation e payoff finale.';
+    final partyArchetypesDisplay = req.partyArchetypes.isNotEmpty
+        ? req.partyArchetypes.join(', ')
+        : isEnglish
+            ? 'Not specified by the user.'
+            : "Non specificata dall'utente.";
+    final twistDisplay = hasTwist
+        ? normalizedTwist
+        : isEnglish
+            ? 'No twist requested'
+            : 'Nessuno richiesto';
+    final twistReference = hasTwist
+        ? isEnglish
+            ? 'the twist "$normalizedTwist"'
+            : 'il twist "$normalizedTwist"'
+        : isEnglish
+            ? 'the main turning point'
+            : 'il punto di svolta principale';
+
+    final hasAdditionalUserInputs = req.narrativeHooks.trim().isNotEmpty ||
+        req.characterNotes.trim().isNotEmpty ||
+        req.factions.trim().isNotEmpty ||
+        req.npcFocus.trim().isNotEmpty ||
+        req.encounterFocus.trim().isNotEmpty ||
+        req.safetyNotes.trim().isNotEmpty;
+
+    final missingInputRules = <String>[
+      if (req.partyArchetypes.isEmpty)
+        isEnglish
+            ? 'If party composition is missing, propose a coherent combination of PC classes and roles.'
+            : 'Se la composizione del party manca, proponi una combinazione coerente di classi e ruoli per i PG.',
+      if (req.narrativeHooks.trim().isEmpty)
+        isEnglish
+            ? 'If narrative hooks are missing, propose 3 alternative opening hooks.'
+            : 'Se i ganci narrativi mancano, proponi 3 agganci iniziali alternativi.',
+      if (req.characterNotes.trim().isEmpty)
+        isEnglish
+            ? 'If character notes are missing, create plausible ties between the PCs and the world.'
+            : 'Se mancano note personaggi, crea legami plausibili tra i PG e il mondo.',
+      if (req.factions.trim().isEmpty)
+        isEnglish
+            ? 'If factions are missing, propose 2-3 factions coherent with the setting and central conflict.'
+            : 'Se mancano fazioni, proponi 2-3 fazioni coerenti con ambientazione e conflitto centrale.',
+      if (req.npcFocus.trim().isEmpty)
+        isEnglish
+            ? 'If NPC focus is missing, vary NPCs between allies, rivals, and ambiguous neutrals.'
+            : 'Se manca un focus PNG, varia i PNG tra alleati, rivali e neutrali ambigui.',
+      if (req.encounterFocus.trim().isEmpty)
+        isEnglish
+            ? 'If encounter focus is missing, balance social, exploration, and combat scenes according to the campaign rhythm.'
+            : 'Se manca un focus incontri, bilancia scene sociali, esplorazione e combattimento in base al ritmo della campagna.',
+      if (req.safetyNotes.trim().isEmpty)
+        isEnglish
+            ? 'If safety notes are missing, avoid unrequested sensitive content and stay within reasonable implied boundaries.'
+            : 'Se mancano note di safety, evita contenuti sensibili non richiesti e resta entro limiti impliciti ragionevoli.',
+      if (!hasTwist)
+        isEnglish
+            ? 'No twist is selected: build around a strong reveal, reversal, or escalation pivot instead of forcing a twist.'
+            : 'Nessun twist selezionato: costruisci invece un reveal forte, una reversione o un punto di escalation senza forzare un twist.',
+    ];
+
+    final qualityRules = <String>[
+      isEnglish
+          ? 'Respect the selected inputs. Do not replace setting, themes, tone, or style with easier alternatives.'
+          : 'Rispetta gli input selezionati. Non sostituire ambientazione, temi, tono o stile con alternative piu facili.',
+      isEnglish
+          ? 'If two inputs are in tension, resolve them creatively without ignoring either one.'
+          : 'Se due input sono in tensione, risolvili creativamente senza ignorarne nessuno.',
+      isEnglish
+          ? 'Avoid generic fantasy placeholders unless they are made specific through concrete detail.'
+          : 'Evita placeholder fantasy generici se non vengono resi specifici con dettagli concreti.',
+      isEnglish
+          ? 'Every NPC, faction, location, and encounter must have at least one memorable and table-usable differentiator.'
+          : 'Ogni PNG, fazione, luogo e incontro deve avere almeno un tratto distintivo memorabile e usabile al tavolo.',
+      isEnglish
+          ? 'Prefer visible table consequences over abstract lore or backstory that never enters play.'
+          : 'Preferisci conseguenze percepibili al tavolo rispetto a lore astratto o backstory che non entra mai in gioco.',
+    ];
 
     // Constraint list with augmentation — port of prompt_builder.py._build_constraint_list
     final constraints = req.constraints
@@ -151,8 +209,6 @@ class LocalCampaignService implements CampaignService {
       );
     }
 
-    String orFallback(String s, String f) => s.trim().isEmpty ? f : s.trim();
-
     return {
       'setting': req.setting,
       'campaign_type': req.campaignType,
@@ -167,16 +223,20 @@ class LocalCampaignService implements CampaignService {
           : styleFallback,
       'party_level': req.partyLevel,
       'party_size': req.partySize,
-      'party_archetypes': req.partyArchetypes.isNotEmpty
-          ? req.partyArchetypes.join(', ')
-          : partyArchetypesFallback,
-      'twist': req.twist,
-      'narrative_hooks': orFallback(req.narrativeHooks, narrativeHooksFallback),
-      'character_notes': orFallback(req.characterNotes, characterNotesFallback),
-      'factions': orFallback(req.factions, factionsFallback),
-      'npc_focus': orFallback(req.npcFocus, npcFocusFallback),
-      'encounter_focus': orFallback(req.encounterFocus, encounterFocusFallback),
-      'safety_notes': orFallback(req.safetyNotes, safetyNotesFallback),
+      'party_archetypes': partyArchetypesDisplay,
+      'twist': twistDisplay,
+      'has_twist': hasTwist,
+      'twist_reference': twistReference,
+      'narrative_hooks': req.narrativeHooks.trim(),
+      'character_notes': req.characterNotes.trim(),
+      'factions': req.factions.trim(),
+      'npc_focus': req.npcFocus.trim(),
+      'encounter_focus': req.encounterFocus.trim(),
+      'safety_notes': req.safetyNotes.trim(),
+      'has_additional_user_inputs': hasAdditionalUserInputs,
+      'missing_input_rules': missingInputRules,
+      'has_missing_input_rules': missingInputRules.isNotEmpty,
+      'quality_rules': qualityRules,
       'constraints_list': constraints,
       'structure_instructions':
           structureRules[req.campaignType] ?? defaultStructure,
@@ -188,6 +248,25 @@ class LocalCampaignService implements CampaignService {
 
   static bool _isEnglishLanguage(String language) =>
       language.trim().toLowerCase() == 'english';
+
+  static String _normalizeTwist(String twist, bool isEnglish) {
+    final trimmed = twist.trim();
+    final normalized = trimmed.toLowerCase();
+    final noTwistValues = <String>{
+      '',
+      'nessun colpo di scena',
+      'nessun twist',
+      'no twist',
+      'no twist requested',
+      'none',
+    };
+
+    if (noTwistValues.contains(normalized)) {
+      return '';
+    }
+
+    return trimmed;
+  }
 
   static const _structureRulesIt = <String, String>{
     'Avventura singola':
@@ -261,9 +340,14 @@ class LocalCampaignService implements CampaignService {
         final key = m.group(1)!;
         final body = m.group(2)!;
         final val = ctx[key];
-        final truthy =
-            val is String ? val.isNotEmpty : val != null && val != false;
-        return truthy ? body : '';
+        final truthy = switch (val) {
+          String() => val.isNotEmpty,
+          Iterable() => val.isNotEmpty,
+          Map() => val.isNotEmpty,
+          bool() => val,
+          _ => val != null,
+        };
+        return truthy ? '${body.trimRight()}\n' : '';
       },
     );
 

@@ -16,12 +16,27 @@ You are a senior narrative designer for D&D 5e. You create **immediately playabl
 | Party composition | {{ party_archetypes }} |
 | Twist | {{ twist }} |
 
-{% if narrative_hooks %}**Requested hooks:** {{ narrative_hooks }}{% endif %}
-{% if character_notes %}**Character notes:** {{ character_notes }}{% endif %}
-{% if factions %}**Factions:** {{ factions }}{% endif %}
-{% if npc_focus %}**NPC focus:** {{ npc_focus }}{% endif %}
-{% if encounter_focus %}**Encounter focus:** {{ encounter_focus }}{% endif %}
-{% if safety_notes %}**Safety:** {{ safety_notes }}{% endif %}
+{% if has_additional_user_inputs %}
+## ADDITIONAL USER INPUT
+{% if narrative_hooks %}- Requested hooks: {{ narrative_hooks }}{% endif %}
+{% if character_notes %}- Character notes: {{ character_notes }}{% endif %}
+{% if factions %}- Factions: {{ factions }}{% endif %}
+{% if npc_focus %}- NPC focus: {{ npc_focus }}{% endif %}
+{% if encounter_focus %}- Encounter focus: {{ encounter_focus }}{% endif %}
+{% if safety_notes %}- Safety: {{ safety_notes }}{% endif %}
+{% endif %}
+
+{% if has_missing_input_rules %}
+## IF INPUTS ARE MISSING
+{% for item in missing_input_rules %}
+- {{ item }}
+{% endfor %}
+{% endif %}
+
+## QUALITY RULES
+{% for item in quality_rules %}
+- {{ item }}
+{% endfor %}
 
 **Constraints** (respect them throughout):
 {% for item in constraints_list %}
@@ -41,10 +56,10 @@ For each one, write freely (8-10 lines):
 - What is the starting situation, and what pushes the party to act?
 - How is the arc distributed across 3-6 sessions — where do the stakes rise, and where does everything break?
 - How does the world (or the party) change from session 1 to the end?
-- How does the twist `{{ twist }}` fit in — is it a mid-arc reveal, a climax turn, or something slower? (if no twist is provided, skip this point)
+- How does {{ twist_reference }} fit in — is it a mid-arc reveal, a climax turn, or something slower?
 - What is the moment the players will remember afterward?
 
-> If the provided inputs suggest something stronger than the stated setup, propose it — make clear what you changed and why.
+> Do not ignore the selected inputs. If you see a stronger variant, use it only if it stays faithful to the chosen data and explain why it improves the proposal.
 
 ---
 
@@ -99,7 +114,7 @@ Spotlight scene: central moment (3-4 lines the DM can run without extra prep)
 Complication: what gets harder — specific, not generic
 Clues: at least 2 things the PCs learn (about the main mystery + one subplot)
 Cliffhanger: how it ends (only if it is not the last session)
-Twist: [only in the relevant session]
+Turning point: [only in the relevant session]
 ```
 
 The cliffhangers must connect directly to the opening of the next session.

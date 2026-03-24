@@ -16,12 +16,27 @@ Sei un progettista narrativo senior per D&D 5e. Crei materiale **immediatamente 
 | Composizione party | {{ party_archetypes }} |
 | Twist | {{ twist }} |
 
-{% if narrative_hooks %}**Ganci richiesti:** {{ narrative_hooks }}{% endif %}
-{% if character_notes %}**Note personaggi:** {{ character_notes }}{% endif %}
-{% if factions %}**Fazioni:** {{ factions }}{% endif %}
-{% if npc_focus %}**Focus PNG:** {{ npc_focus }}{% endif %}
-{% if encounter_focus %}**Focus incontri:** {{ encounter_focus }}{% endif %}
-{% if safety_notes %}**Safety:** {{ safety_notes }}{% endif %}
+{% if has_additional_user_inputs %}
+## INPUT UTENTE AGGIUNTIVI
+{% if narrative_hooks %}- Ganci richiesti: {{ narrative_hooks }}{% endif %}
+{% if character_notes %}- Note personaggi: {{ character_notes }}{% endif %}
+{% if factions %}- Fazioni: {{ factions }}{% endif %}
+{% if npc_focus %}- Focus PNG: {{ npc_focus }}{% endif %}
+{% if encounter_focus %}- Focus incontri: {{ encounter_focus }}{% endif %}
+{% if safety_notes %}- Safety: {{ safety_notes }}{% endif %}
+{% endif %}
+
+{% if has_missing_input_rules %}
+## SE MANCANO INPUT
+{% for item in missing_input_rules %}
+- {{ item }}
+{% endfor %}
+{% endif %}
+
+## REGOLE DI QUALITA
+{% for item in quality_rules %}
+- {{ item }}
+{% endfor %}
 
 **Vincoli** (rispettali ovunque):
 {% for item in constraints_list %}
@@ -41,10 +56,10 @@ Per ciascuno, scrivi in forma libera (8–10 righe):
 - Come si distribuisce la storia in 3 macro-archi? Cosa succede, cosa si ribalta, come si chiude?
 - Chi è l'antagonista — e cosa lo rende interessante al di là dell'essere "il cattivo"?
 - Come cambia il mondo tra la sessione 1 e la sessione finale?
-- Come si inserisce il twist `{{ twist }}` — e come cambia ciò che il party credeva di sapere?
+- Come si inserisce {{ twist_reference }} — e come cambia ciò che il party credeva di sapere?
 - Qual è la scena che nessun giocatore dimenticherà?
 
-> Se i dati ti suggeriscono qualcosa di più forte rispetto alle impostazioni, proponilo — segnala cosa hai modificato.
+> Non ignorare i dati selezionati. Se intravedi una variante piu forte, usala solo se resta coerente con gli input scelti e spiega perche migliora la campagna.
 
 ---
 
@@ -98,7 +113,7 @@ Per ogni sessione:
 
 - **Antagonista:** chi è, cosa vuole, perché agisce adesso — e cosa lo rende più di un semplice ostacolo
 - **Clock di escalation (5–7 step):** cosa succede nel mondo se i PG non intervengono. Ogni step deve essere percepibile al tavolo: un evento concreto, un PNG che scompare, un luogo che cambia.
-- **Inserimento del twist `{{ twist }}`:** in quale step cambia la natura della minaccia — ed elenca 2–3 indizi seminati negli step precedenti
+- **Inserimento di {{ twist_reference }}:** in quale step cambia la natura della minaccia — ed elenca 2–3 indizi seminati negli step precedenti
 
 ---
 
@@ -115,7 +130,7 @@ Quando: arco X / se i PG non agiscono entro la sessione Y
 Chi è coinvolto: ...
 Cosa cambia nel mondo: ...
 Come i PG possono scoprirlo o influenzarlo: ...
-Connessione al twist: [solo se pertinente]
+Connessione al punto di svolta: [solo se pertinente]
 ```
 
 ---
@@ -131,7 +146,7 @@ Rivelazione chiave: cosa scoprono che cambia la comprensione
 Set-piece centrale: scena ad alto impatto (3–4 righe)
 Stato fazioni: come reagiscono le fazioni alle azioni del party
 Esito: cosa cambia nel mondo se i PG hanno successo
-Indizi per il twist: [solo negli archi pertinenti]
+Indizi per il punto di svolta: [solo negli archi pertinenti]
 ```
 
 ---
