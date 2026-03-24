@@ -5,6 +5,7 @@ import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_at
 import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_primitives.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 const CampaignAtmosphereData _testAtmosphere = CampaignAtmosphereData(
   id: 'test',
@@ -46,7 +47,8 @@ void main() {
                 badge: 'Saga ampia',
                 description:
                     'Fazioni, cambi di equilibrio e sottotrame persistenti per una campagna da far crescere nel tempo.',
-                icon: Icons.account_tree_rounded,
+                emblemAsset: 'assets/entry_cards/long_campaign_emblem.svg',
+                fallbackIcon: Icons.account_tree_rounded,
                 colors: const <Color>[
                   Color(0xFF47644A),
                   Color(0xFF1E2E22),
@@ -81,7 +83,8 @@ void main() {
                 title: 'One-Shot',
                 badge: 'Singola',
                 description: 'Una missione ad alto impatto.',
-                icon: Icons.bolt_rounded,
+                emblemAsset: 'assets/entry_cards/one_shot_emblem.svg',
+                fallbackIcon: Icons.bolt_rounded,
                 colors: const <Color>[
                   Color(0xFFB03A2E),
                   Color(0xFF6D2018),
@@ -98,6 +101,127 @@ void main() {
       await tester.pump();
 
       expect(find.text('Apri la forgia'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'CampaignModeCard allows entry descriptions to wrap on compact layouts',
+    (tester) async {
+      const description =
+          'Una missione ad alto impatto con fronti, pressioni e svolte che devono respirare anche su schermi compatti.';
+
+      await tester.binding.setSurfaceSize(const Size(390, 844));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(
+        _localizedTestApp(
+          child: Center(
+            child: SizedBox(
+              width: 358,
+              child: CampaignModeCard(
+                atmosphere: _testAtmosphere,
+                title: 'One-Shot',
+                badge: 'Singola',
+                description: description,
+                emblemAsset: 'assets/entry_cards/one_shot_emblem.svg',
+                fallbackIcon: Icons.bolt_rounded,
+                colors: const <Color>[
+                  Color(0xFFB03A2E),
+                  Color(0xFF6D2018),
+                ],
+                artAsset: 'assets/entry_cards/one_shot.jpg',
+                selected: false,
+                onTap: () {},
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+      expect(
+        tester.widget<Text>(find.text(description)).maxLines,
+        2,
+      );
+    },
+  );
+
+  testWidgets(
+    'CampaignModeCard renders a heraldic SVG emblem without overflow',
+    (tester) async {
+      await tester.pumpWidget(
+        _localizedTestApp(
+          child: Center(
+            child: SizedBox(
+              width: 399.2,
+              child: CampaignModeCard(
+                atmosphere: _testAtmosphere,
+                title: 'Mini-campagna',
+                badge: 'Arco breve',
+                description: 'Viaggio, bussola e tappe ravvicinate.',
+                emblemAsset: 'assets/entry_cards/mini_campaign_emblem.svg',
+                fallbackIcon: Icons.hiking_rounded,
+                colors: const <Color>[
+                  Color(0xFF9A6A2F),
+                  Color(0xFF5A3318),
+                ],
+                artAsset: 'assets/entry_cards/campagna_corta.jpg',
+                selected: false,
+                onTap: () {},
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(SvgPicture), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey<String>('campaign-mode-card-fallback-icon')),
+        findsNothing,
+      );
+    },
+  );
+
+  testWidgets(
+    'CampaignModeCard falls back to the icon when emblem asset is missing',
+    (tester) async {
+      await tester.pumpWidget(
+        _localizedTestApp(
+          child: Center(
+            child: SizedBox(
+              width: 399.2,
+              child: CampaignModeCard(
+                atmosphere: _testAtmosphere,
+                title: 'Dungeon crawl',
+                badge: 'Profondita',
+                description: 'Torce, discese e sale infestate.',
+                emblemAsset: 'assets/entry_cards/missing_emblem.svg',
+                fallbackIcon: Icons.layers_rounded,
+                colors: const <Color>[
+                  Color(0xFF5E4C80),
+                  Color(0xFF292036),
+                ],
+                artAsset: 'assets/entry_cards/dungeon.jpg',
+                selected: true,
+                onTap: () {},
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byKey(const ValueKey<String>('campaign-mode-card-fallback-icon')),
+        findsOneWidget,
+      );
+      expect(find.byType(SvgPicture), findsOneWidget);
     },
   );
 

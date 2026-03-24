@@ -158,13 +158,15 @@ class ReviewPromptCoordinator {
 
 class _CampaignTypeMeta {
   const _CampaignTypeMeta({
-    required this.icon,
+    required this.emblemAsset,
+    required this.fallbackIcon,
     required this.colors,
     required this.artAsset,
     required this.atmosphere,
   });
 
-  final IconData icon;
+  final String emblemAsset;
+  final IconData fallbackIcon;
   final List<Color> colors;
   final String artAsset;
   final CampaignAtmosphereData atmosphere;
@@ -271,35 +273,40 @@ const CampaignAtmosphereData _dungeonAtmosphere = CampaignAtmosphereData(
 );
 
 const _CampaignTypeMeta _defaultCampaignMeta = _CampaignTypeMeta(
-  icon: Icons.bolt_rounded,
+  emblemAsset: 'assets/entry_cards/one_shot_emblem.svg',
+  fallbackIcon: Icons.bolt_rounded,
   colors: <Color>[FantasyPalette.ember, FantasyPalette.cardSoft],
   artAsset: 'assets/entry_cards/one_shot.jpg',
   atmosphere: _miniCampaignAtmosphere,
 );
 
 const _CampaignTypeMeta _oneShotCampaignMeta = _CampaignTypeMeta(
-  icon: Icons.bolt_rounded,
+  emblemAsset: 'assets/entry_cards/one_shot_emblem.svg',
+  fallbackIcon: Icons.bolt_rounded,
   colors: <Color>[Color(0xFFB03A2E), Color(0xFF6D2018)],
   artAsset: 'assets/entry_cards/one_shot.jpg',
   atmosphere: _oneShotAtmosphere,
 );
 
 const _CampaignTypeMeta _miniCampaignMeta = _CampaignTypeMeta(
-  icon: Icons.hiking_rounded,
+  emblemAsset: 'assets/entry_cards/mini_campaign_emblem.svg',
+  fallbackIcon: Icons.hiking_rounded,
   colors: <Color>[Color(0xFF9A6A2F), Color(0xFF5A3318)],
   artAsset: 'assets/entry_cards/campagna_corta.jpg',
   atmosphere: _miniCampaignAtmosphere,
 );
 
 const _CampaignTypeMeta _longCampaignMeta = _CampaignTypeMeta(
-  icon: Icons.auto_stories_rounded,
+  emblemAsset: 'assets/entry_cards/long_campaign_emblem.svg',
+  fallbackIcon: Icons.auto_stories_rounded,
   colors: <Color>[Color(0xFF47644A), Color(0xFF1E2E22)],
   artAsset: 'assets/entry_cards/campagna_lunga.jpg',
   atmosphere: _longCampaignAtmosphere,
 );
 
 const _CampaignTypeMeta _dungeonCampaignMeta = _CampaignTypeMeta(
-  icon: Icons.layers_rounded,
+  emblemAsset: 'assets/entry_cards/dungeon_emblem.svg',
+  fallbackIcon: Icons.layers_rounded,
   colors: <Color>[Color(0xFF5E4C80), Color(0xFF292036)],
   artAsset: 'assets/entry_cards/dungeon.jpg',
   atmosphere: _dungeonAtmosphere,
@@ -1743,7 +1750,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
             ),
           ),
           child: Icon(
-            _currentCampaignMeta().icon,
+            _currentCampaignMeta().fallbackIcon,
             color: atmosphere.highlight,
             size: 17,
           ),

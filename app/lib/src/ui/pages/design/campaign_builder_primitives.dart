@@ -234,7 +234,8 @@ class CampaignModeCard extends StatefulWidget {
     required this.title,
     required this.badge,
     required this.description,
-    required this.icon,
+    required this.emblemAsset,
+    required this.fallbackIcon,
     required this.colors,
     required this.artAsset,
     required this.selected,
@@ -245,7 +246,8 @@ class CampaignModeCard extends StatefulWidget {
   final String title;
   final String badge;
   final String description;
-  final IconData icon;
+  final String emblemAsset;
+  final IconData fallbackIcon;
   final List<Color> colors;
   final String artAsset;
   final bool selected;
@@ -271,6 +273,7 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
     final cardHeight = viewportWidth < 640 ? 208.0 : 192.0;
     final borderRadius = BorderRadius.circular(24);
     final compactCopy = MediaQuery.sizeOf(context).width < 960;
+    final descriptionMaxLines = compactCopy ? 2 : 3;
     final titleStyle = Theme.of(
       context,
     ).textTheme.titleLarge?.copyWith(color: palette.onArtwork);
@@ -415,24 +418,15 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
                           children: [
                             Row(
                               children: [
-                                Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: FantasyPalette.abyss
-                                        .withValues(alpha: 0.42),
-                                    border: Border.all(
-                                      color: palette.onArtwork.withValues(
-                                        alpha: 0.14,
-                                      ),
-                                    ),
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
-                                  child: Icon(
-                                    widget.icon,
-                                    color: palette.onArtwork,
-                                    size: 20,
-                                  ),
+                                _CampaignCardMedallion(
+                                  atmosphere: widget.atmosphere,
+                                  colors: widget.colors,
+                                  emblemAsset: widget.emblemAsset,
+                                  fallbackIcon: widget.fallbackIcon,
+                                  selected: widget.selected,
+                                  hovered: _hovered,
+                                  pressed: _pressed,
+                                  duration: motionDuration,
                                 ),
                                 const Spacer(),
                                 if (widget.selected)
@@ -485,7 +479,7 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
                               widget.description,
                               style: descriptionStyle,
                               maxLines:
-                                  (compactCopy || showCallToAction) ? 1 : 2,
+                                  showCallToAction ? 1 : descriptionMaxLines,
                               overflow: TextOverflow.ellipsis,
                             ),
                             if (showCallToAction) ...[
@@ -550,6 +544,178 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
         });
       },
       child: cardBody,
+    );
+  }
+}
+
+class _CampaignCardMedallion extends StatelessWidget {
+  const _CampaignCardMedallion({
+    required this.atmosphere,
+    required this.colors,
+    required this.emblemAsset,
+    required this.fallbackIcon,
+    required this.selected,
+    required this.hovered,
+    required this.pressed,
+    required this.duration,
+  });
+
+  final CampaignAtmosphereData atmosphere;
+  final List<Color> colors;
+  final String emblemAsset;
+  final IconData fallbackIcon;
+  final bool selected;
+  final bool hovered;
+  final bool pressed;
+  final Duration duration;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.fantasy;
+    final emphasis = selected ? 1.0 : (hovered ? 0.55 : 0.0);
+    final compression = pressed ? 1.0 : 0.0;
+    final rimHighlight = Color.lerp(
+      atmosphere.highlight,
+      colors.first,
+      0.32 + (compression * 0.1),
+    )!;
+    final rimMid = Color.lerp(
+      colors.first,
+      colors.last,
+      0.55 + (compression * 0.08),
+    )!;
+    final rimShadow = Color.lerp(colors.last, Colors.black, 0.28)!;
+    final plateTop = Color.lerp(
+      palette.cardSoft,
+      atmosphere.cardTint,
+      0.56 + (compression * 0.06),
+    )!;
+    final plateBottom = Color.lerp(
+      atmosphere.cardTint,
+      colors.last,
+      0.58 + (compression * 0.08),
+    )!;
+    final emblemColor = Color.lerp(
+      palette.onArtwork,
+      atmosphere.highlight,
+      0.34 + (emphasis * 0.44),
+    )!;
+    final rimBorderColor = Color.lerp(
+      palette.onArtwork.withValues(alpha: 0.28),
+      atmosphere.highlight.withValues(alpha: 0.92),
+      emphasis,
+    )!;
+    final plateBorderColor = Color.lerp(
+      palette.onArtwork.withValues(alpha: 0.12),
+      atmosphere.highlight.withValues(alpha: 0.26),
+      0.4 + (emphasis * 0.5),
+    )!;
+
+    return AnimatedContainer(
+      duration: duration,
+      curve: Curves.easeOutCubic,
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[
+            rimHighlight,
+            rimMid,
+            rimShadow,
+          ],
+        ),
+        border: Border.all(color: rimBorderColor, width: 1.2),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: atmosphere.glow.withValues(
+              alpha: 0.1 + (emphasis * 0.16),
+            ),
+            blurRadius: 18 + (emphasis * 10),
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(3),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: plateBorderColor, width: 1),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[
+                plateTop,
+                plateBottom,
+              ],
+            ),
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: atmosphere.highlight.withValues(
+                        alpha: 0.12 + (emphasis * 0.16),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: SvgPicture.asset(
+                    emblemAsset,
+                    key: const ValueKey<String>('campaign-mode-card-emblem'),
+                    fit: BoxFit.contain,
+                    colorFilter: ColorFilter.mode(
+                      emblemColor,
+                      BlendMode.srcIn,
+                    ),
+                    placeholderBuilder: (context) => _CampaignCardFallbackIcon(
+                      icon: fallbackIcon,
+                      color: emblemColor.withValues(alpha: 0.7),
+                    ),
+                    errorBuilder: (context, error, stackTrace) =>
+                        _CampaignCardFallbackIcon(
+                      icon: fallbackIcon,
+                      color: emblemColor,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CampaignCardFallbackIcon extends StatelessWidget {
+  const _CampaignCardFallbackIcon({
+    required this.icon,
+    required this.color,
+  });
+
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      icon,
+      key: const ValueKey<String>('campaign-mode-card-fallback-icon'),
+      color: color,
+      size: 20,
     );
   }
 }

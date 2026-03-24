@@ -7,5 +7,6 @@ We should have this in 2/3 lines such that is not truncated.
 After selecting the campaing type and doing stuff and turning back to the entry page
 there is a "strange" right arrow on the selected campaing type
 Inside the entry on the bottom part of the image
-We should get rid of this.
+We should get rid of this. 
+Maybe is the arrow next to open-forge, so we can leave it but we have to make sure that is alwyas visibile both open-forge and the arrow if they are present.
 
