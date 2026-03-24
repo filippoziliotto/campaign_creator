@@ -65,3 +65,37 @@ CampaignOptions presetsOptions() {
     },
   );
 }
+
+CampaignOptions longCampaignPresetsOptions() {
+  return CampaignOptions(
+    settings: const ['Ravenloft', 'Forgotten Realms'],
+    campaignTypes: const ['Campagna lunga'],
+    themes: const ['Intrigo'],
+    tones: const ['Tragico'],
+    styles: const ['Investigativo'],
+    partyArchetypes: const ['Tank'],
+    twists: const ['Tradimento', 'Portale'],
+    presets: const {
+      'Echi del Trono': {
+        'campaign_type': 'Campagna lunga',
+        'setting': 'Ravenloft',
+        'twist': 'Tradimento',
+        'theme': 'Intrigo',
+        'tone': 'Tragico',
+        'style': 'Investigativo',
+        'party_level': 6,
+        'party_size': 4,
+      },
+    },
+    settingDescriptions: const {
+      'Ravenloft': "L'impero crolla dall'interno.",
+      'Forgotten Realms': 'Classico high fantasy.',
+    },
+    presetDescriptions: const {
+      'Echi del Trono': 'Una dinastia spezzata alimenta una guerra di ombre.',
+    },
+    presetNames: const {
+      'Echi del Trono': 'Echi del Trono',
+    },
+  );
+}

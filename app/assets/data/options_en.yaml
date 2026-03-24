@@ -317,6 +317,108 @@ presets:
     party_size: 4
     twist: The party is unknowingly serving the villain
 
+  # ── LONG CAMPAIGN (10) ───────────────────────────────────────────────────────
+
+  CORONA DI CENERE:
+    setting: Dragonlance
+    campaign_type: Long campaign
+    theme: Classic fantasy
+    tone: Tragic
+    style: Epic
+    party_level: 4
+    party_size: 4
+    twist: The trusted ally is the traitor
+
+  PATTO DELLE MAREE:
+    setting: Exandria
+    campaign_type: Long campaign
+    theme: Nautical adventure
+    tone: Mysterious
+    style: Sandbox
+    party_level: 5
+    party_size: 5
+    twist: The party shares a forgotten origin
+
+  ARCHIVIO DEI SANTI:
+    setting: Eberron
+    campaign_type: Long campaign
+    theme: Political intrigue
+    tone: Noir
+    style: Investigative
+    party_level: 5
+    party_size: 4
+    twist: The true threat is a benevolent institution (church, guild, academy)
+
+  INVERNO SENZA EREDI:
+    setting: Ravenloft
+    campaign_type: Long campaign
+    theme: Gothic horror
+    tone: Tragic
+    style: Realistic
+    party_level: 4
+    party_size: 4
+    twist: The prophecy is false
+
+  LEGGI DELLA POLVERE:
+    setting: Dark Sun
+    campaign_type: Long campaign
+    theme: Wilderness
+    tone: Dark
+    style: Gritty
+    party_level: 3
+    party_size: 5
+    twist: The villain has already won and the mission is damage control
+
+  OSSA DELLA CITTA:
+    setting: Ravnica
+    campaign_type: Long campaign
+    theme: Faction war
+    tone: Noir
+    style: Cinematic
+    party_level: 6
+    party_size: 4
+    twist: The main artifact is sentient and manipulative
+
+  ALTARE DELLA COMETA:
+    setting: Forgotten Realms
+    campaign_type: Long campaign
+    theme: Planar journey
+    tone: Epic
+    style: Investigative
+    party_level: 7
+    party_size: 5
+    twist: The entire region is a magical simulation or the dream of a sleeping god
+
+  TRONO SOMMERSO:
+    setting: Wildemount
+    campaign_type: Long campaign
+    theme: Faction war
+    tone: Mysterious
+    style: Sandbox
+    party_level: 5
+    party_size: 4
+    twist: The antagonist is trying to prevent a worse catastrophe
+
+  RE DEL VETRO:
+    setting: Homebrew continent
+    campaign_type: Long campaign
+    theme: Political intrigue
+    tone: Bizarre
+    style: Fairytale
+    party_level: 6
+    party_size: 4
+    twist: The world is trapped in a subtle time loop
+
+  LANTERNE NELLA NEBBIA:
+    setting: Spelljammer
+    campaign_type: Long campaign
+    theme: Nautical adventure
+    tone: Ironic
+    style: Cinematic
+    party_level: 5
+    party_size: 5
+    twist: The mission target doesn't want to be saved
+
   # ── DUNGEON CRAWL (10) ────────────────────────────────────────────────────────
 
   TOMBA RESPIRANTE:
@@ -441,6 +543,16 @@ preset_names:
   POLVERE E SILENZIO: Dust and Silence
   SETTIMANA DI VETRO: Glass Week
   CERCHIO CHIUSO: Closed Circle
+  CORONA DI CENERE: Crown of Ash
+  PATTO DELLE MAREE: Tidebound Pact
+  ARCHIVIO DEI SANTI: Archive of Saints
+  INVERNO SENZA EREDI: Winter Without Heirs
+  LEGGI DELLA POLVERE: Laws of Dust
+  OSSA DELLA CITTA: City of Bones
+  ALTARE DELLA COMETA: Comet Altar
+  TRONO SOMMERSO: Drowned Throne
+  RE DEL VETRO: Glass King
+  LANTERNE NELLA NEBBIA: Lanterns in the Fog
   TOMBA RESPIRANTE: The Breathing Tomb
   PALUDE SENZA RITORNO: Swamp of No Return
   FUGA DAL PROFONDO: Escape from the Deep
@@ -577,6 +689,68 @@ preset_descriptions:
     A cult does no harm — officially. Former members disappear.
     The party infiltrates and finds a truth worse than suspected.
     Layered escalation, double identities, impossible choices at the finale.
+
+  # ── LONG CAMPAIGN ────────────────────────────────────────────────────────────
+
+  CORONA DI CENERE: |
+    Long campaign · Dragonlance · Classic fantasy
+    A crown resurfaces just as the kingdom is too weak to bear its weight.
+    Noble houses, knightly orders, and war veterans all claim the same symbol of legitimacy.
+    The traitor does not wait at the end of the story; they grow alongside the party.
+
+  PATTO DELLE MAREE: |
+    Long campaign · Exandria · Nautical adventure
+    Broken routes, vanishing islands, and an oath engraved beneath the sea.
+    Every port opens a different arc: politics, mystery, war, or cult intrigue.
+    The party's shared past is the key that binds the entire saga together.
+
+  ARCHIVIO DEI SANTI: |
+    Long campaign · Eberron · Political intrigue
+    A sacred archive holds evidence that could redraw entire nations.
+    Churches, guilds, and academies all seem to compete for the truth, but only one institution truly wants it buried.
+    A slow-burn campaign of fragile alliances, layered revelations, and respectable power gone rotten.
+
+  INVERNO SENZA EREDI: |
+    Long campaign · Ravenloft · Gothic horror
+    A dynasty is dying, yet the castle still demands an heir.
+    Every claimant carries a truth that contradicts the official history of the domain.
+    The prophecy sustaining the realm is false, and someone has known for generations.
+
+  LEGGI DELLA POLVERE: |
+    Long campaign · Dark Sun · Wilderness
+    The world cannot be saved; it can only be crossed long enough to decide what deserves to survive.
+    The city-states fall one by one, and every victory comes too late for someone.
+    The villain has already won, so the real arc is what can still be taken back from ruin.
+
+  OSSA DELLA CITTA: |
+    Long campaign · Ravnica · Faction war
+    Beneath the city lies a second conflict, older and hungrier than the first.
+    The guilds believe they are fighting for the present, but they are feeding something far more ancient.
+    The artifact everyone wants is not a weapon. It is an adviser with an appetite for empire.
+
+  ALTARE DELLA COMETA: |
+    Long campaign · Forgotten Realms · Planar journey
+    A returning comet tears open wounds in the sky on an impossible cycle.
+    Each arc pushes the party farther from the world they thought they understood.
+    The central revelation does not just threaten the region; it challenges the nature of reality itself.
+
+  TRONO SOMMERSO: |
+    Long campaign · Wildemount · Faction war
+    A drowned kingdom returns to the center of surface politics.
+    Ships, spies, and relics drag the party into a war no faction truly understands.
+    The apparent antagonist looks like the engine of chaos, but is really trying to stop something worse.
+
+  RE DEL VETRO: |
+    Long campaign · Homebrew continent · Political intrigue
+    An elegant court rewrites the continent's memory with almost fairy-tale grace.
+    Every alliance the party secures leaves behind a new fracture in reality.
+    The time loop is never obvious; it lives in the details, the mistakes, and the faces that remember too much.
+
+  LANTERNE NELLA NEBBIA: |
+    Long campaign · Spelljammer · Nautical adventure
+    A flotilla of minor worlds vanishes behind a fog that does not belong to space.
+    The party chases someone who needs saving and has excellent reasons not to return.
+    Lighter in tone, but ideal for cosmic escalation and late-stage revelation.
 
   # ── DUNGEON CRAWL ─────────────────────────────────────────────────────────
 

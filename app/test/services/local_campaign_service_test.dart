@@ -60,6 +60,17 @@ void main() {
       expect(options.presets, isNotEmpty);
     });
 
+    test('bundled assets include long campaign presets in Italian and English',
+        () async {
+      final service = LocalCampaignService();
+
+      final itOptions = await service.getOptions(lang: 'it');
+      final enOptions = await service.getOptions(lang: 'en');
+
+      expect(itOptions.presetsForCampaignType('Campagna lunga'), isNotEmpty);
+      expect(enOptions.presetsForCampaignType('Long campaign'), isNotEmpty);
+    });
+
     group('generatePrompt', () {
       test('validation: throws when archetypes exceed party size', () async {
         final service = LocalCampaignService();

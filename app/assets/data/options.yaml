@@ -319,6 +319,108 @@ presets:
     party_size: 4
     twist: Il party è inconsapevolmente al servizio del villain
 
+  # ── CAMPAGNA LUNGA (10) ──────────────────────────────────────────────────────
+
+  CORONA DI CENERE:
+    setting: Dragonlance
+    campaign_type: Campagna lunga
+    theme: Fantasy classico
+    tone: Tragico
+    style: Epico
+    party_level: 4
+    party_size: 4
+    twist: L'alleato fidato è il traditore
+
+  PATTO DELLE MAREE:
+    setting: Exandria
+    campaign_type: Campagna lunga
+    theme: Avventura nautica
+    tone: Misterioso
+    style: Sandbox
+    party_level: 5
+    party_size: 5
+    twist: Il party condivide un'origine dimenticata
+
+  ARCHIVIO DEI SANTI:
+    setting: Eberron
+    campaign_type: Campagna lunga
+    theme: Intrigo politico
+    tone: Noir
+    style: Investigativo
+    party_level: 5
+    party_size: 4
+    twist: La vera minaccia è un'istituzione benefica (chiesa, gilda, accademia)
+
+  INVERNO SENZA EREDI:
+    setting: Ravenloft
+    campaign_type: Campagna lunga
+    theme: Horror gotico
+    tone: Tragico
+    style: Realistico
+    party_level: 4
+    party_size: 4
+    twist: La profezia è falsa
+
+  LEGGI DELLA POLVERE:
+    setting: Dark Sun
+    campaign_type: Campagna lunga
+    theme: Sopravvivenza
+    tone: Cupo
+    style: Crudo
+    party_level: 3
+    party_size: 5
+    twist: Il villain ha già vinto e la missione è limitare i danni
+
+  OSSA DELLA CITTA:
+    setting: Ravnica
+    campaign_type: Campagna lunga
+    theme: Guerra tra fazioni
+    tone: Noir
+    style: Cinematografico
+    party_level: 6
+    party_size: 4
+    twist: Il manufatto principale è senziente e manipolatore
+
+  ALTARE DELLA COMETA:
+    setting: Forgotten Realms
+    campaign_type: Campagna lunga
+    theme: Viaggio planare
+    tone: Epico
+    style: Investigativo
+    party_level: 7
+    party_size: 5
+    twist: L'intera regione è una simulazione magica o il sogno di un dio dormiente
+
+  TRONO SOMMERSO:
+    setting: Wildemount
+    campaign_type: Campagna lunga
+    theme: Guerra tra fazioni
+    tone: Misterioso
+    style: Sandbox
+    party_level: 5
+    party_size: 4
+    twist: L'antagonista vuole evitare una catastrofe peggiore
+
+  RE DEL VETRO:
+    setting: Continente homebrew
+    campaign_type: Campagna lunga
+    theme: Intrigo politico
+    tone: Bizzaro
+    style: Fiabesco
+    party_level: 6
+    party_size: 4
+    twist: Il mondo è bloccato in un sottile loop temporale
+
+  LANTERNE NELLA NEBBIA:
+    setting: Spelljammer
+    campaign_type: Campagna lunga
+    theme: Avventura nautica
+    tone: Ironico
+    style: Cinematografico
+    party_level: 5
+    party_size: 5
+    twist: L'obiettivo della missione è una persona che non vuole essere salvata
+
   # ── ESPLORAZIONE DUNGEON (10) ────────────────────────────────────────────────
 
   TOMBA RESPIRANTE:
@@ -443,6 +545,16 @@ preset_names:
   POLVERE E SILENZIO: Polvere e silenzio
   SETTIMANA DI VETRO: Settimana di vetro
   CERCHIO CHIUSO: Cerchio chiuso
+  CORONA DI CENERE: Corona di cenere
+  PATTO DELLE MAREE: Patto delle maree
+  ARCHIVIO DEI SANTI: Archivio dei santi
+  INVERNO SENZA EREDI: Inverno senza eredi
+  LEGGI DELLA POLVERE: Leggi della polvere
+  OSSA DELLA CITTA: Ossa della citta
+  ALTARE DELLA COMETA: Altare della cometa
+  TRONO SOMMERSO: Trono sommerso
+  RE DEL VETRO: Re del vetro
+  LANTERNE NELLA NEBBIA: Lanterne nella nebbia
   TOMBA RESPIRANTE: Tomba respirante
   PALUDE SENZA RITORNO: Palude senza ritorno
   FUGA DAL PROFONDO: Fuga dal profondo
@@ -579,6 +691,68 @@ preset_descriptions:
     Una setta non fa del male — ufficialmente. Gli ex-membri scompaiono.
     Il party si infiltra e trova una verità peggio del sospettato.
     Escalation a strati, identità doppie, scelte impossibili al finale.
+
+  # ── CAMPAGNA LUNGA ───────────────────────────────────────────────────────────
+
+  CORONA DI CENERE: |
+    Campagna lunga · Dragonlance · Fantasy classico
+    Una corona riemerge quando il regno è troppo debole per sostenerne il peso.
+    Casate, ordini e veterani di guerra reclamano lo stesso simbolo di legittimita.
+    Il traditore non aspetta alla fine della storia: cresce accanto al party.
+
+  PATTO DELLE MAREE: |
+    Campagna lunga · Exandria · Avventura nautica
+    Rotte spezzate, isole che compaiono e spariscono, un giuramento inciso sotto il mare.
+    Ogni approdo apre un arco diverso: politica, mistero, guerra o culto.
+    Il passato condiviso del party e la chiave che tiene insieme l'intera saga.
+
+  ARCHIVIO DEI SANTI: |
+    Campagna lunga · Eberron · Intrigo politico
+    Un archivio sacro custodisce prove capaci di ridisegnare intere nazioni.
+    Chiese, gilde e accademie sembrano contendersi la verita, ma una sola istituzione vuole davvero seppellirla.
+    Campagna di rivelazioni lente, alleanze fragili e potere rispettabile che marcisce.
+
+  INVERNO SENZA EREDI: |
+    Campagna lunga · Ravenloft · Horror gotico
+    Una dinastia si spegne, ma il castello continua a pretendere un erede.
+    Ogni pretendente porta una verita incompatibile con la storia ufficiale del dominio.
+    La profezia che regge il regno e falsa, e qualcuno lo sa da generazioni.
+
+  LEGGI DELLA POLVERE: |
+    Campagna lunga · Dark Sun · Sopravvivenza
+    Il mondo non va salvato: va attraversato abbastanza a lungo da capire cosa merita di restare vivo.
+    Le citta-stato crollano una per volta, e ogni vittoria del party arriva troppo tardi per qualcuno.
+    Il villain ha gia vinto; l'arco riguarda cosa si puo ancora strappare alla rovina.
+
+  OSSA DELLA CITTA: |
+    Campagna lunga · Ravnica · Guerra tra fazioni
+    Sotto la citta c'e un secondo conflitto, piu antico e piu affamato del primo.
+    Le gilde credono di combattere per il presente, ma stanno nutrendo qualcosa di molto piu vecchio.
+    Il manufatto che tutti vogliono non e un'arma: e un consigliere con fame di impero.
+
+  ALTARE DELLA COMETA: |
+    Campagna lunga · Forgotten Realms · Viaggio planare
+    Una cometa ritorna a intervalli impossibili e apre ferite nel cielo.
+    Ogni arco porta il party sempre piu lontano dal mondo che credeva di conoscere.
+    La rivelazione centrale non minaccia solo la regione: mette in dubbio la natura stessa della realta.
+
+  TRONO SOMMERSO: |
+    Campagna lunga · Wildemount · Guerra tra fazioni
+    Un regno perduto sotto il mare torna al centro della politica di superficie.
+    Navi, spie e reliquie trascinano il party dentro una guerra che nessuna fazione comprende davvero.
+    L'antagonista sembra il motore del caos, ma sta cercando di fermare qualcosa di peggiore.
+
+  RE DEL VETRO: |
+    Campagna lunga · Continente homebrew · Intrigo politico
+    Una corte elegante riscrive la memoria del continente con grazia quasi fiabesca.
+    Ogni alleanza ottenuta dal party lascia dietro di se una nuova crepa nella realta.
+    Il loop temporale vive nei dettagli, negli errori e nei volti che ricordano troppo.
+
+  LANTERNE NELLA NEBBIA: |
+    Campagna lunga · Spelljammer · Avventura nautica
+    Una flottiglia di mondi minori scompare dietro una nebbia che non appartiene allo spazio.
+    Il party insegue un bersaglio da salvare che ha ottimi motivi per non voler tornare.
+    Saga piu leggera nel tono, ma ideale per escalation cosmica e rivelazioni tardive.
 
   # ── ESPLORAZIONE DUNGEON ─────────────────────────────────────────────────────
 

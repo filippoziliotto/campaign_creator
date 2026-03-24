@@ -86,6 +86,46 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
+  testWidgets('applying a long campaign preset updates the world controls',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1200, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(longCampaignPresetsOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(
+      tester,
+      const ValueKey<String>('entry-campaign-card-Campagna lunga'),
+    );
+
+    final presetDropdown = find.byWidgetPredicate(
+      (widget) =>
+          widget is DropdownButtonFormField<String> &&
+          widget.decoration.labelText == 'Preset rapido',
+    );
+
+    await tester.tap(presetDropdown);
+    await _pumpUi(tester);
+    await tester.tap(find.text('Echi del Trono').last);
+    await _pumpUi(tester);
+    await tester.tap(find.widgetWithText(FilledButton, 'Applica'));
+    await _pumpUi(tester);
+
+    expect(find.text('Ravenloft'), findsWidgets);
+    expect(find.text("L'impero crolla dall'interno."), findsOneWidget);
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
   testWidgets('world forge panels use descending visual emphasis',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
@@ -170,12 +210,13 @@ Future<void> _pumpUi(WidgetTester tester) async {
   await tester.pump(const Duration(milliseconds: 800));
 }
 
-Future<void> _openForgeFromEntry(WidgetTester tester) async {
-  final oneShotCard = find.byKey(
-    const ValueKey<String>('entry-campaign-card-One-Shot'),
-  );
-  await tester.ensureVisible(oneShotCard);
-  await tester.tap(oneShotCard);
+Future<void> _openForgeFromEntry(
+  WidgetTester tester, [
+  ValueKey<String> cardKey = const ValueKey<String>('entry-campaign-card-One-Shot'),
+]) async {
+  final card = find.byKey(cardKey);
+  await tester.ensureVisible(card);
+  await tester.tap(card);
   await _pumpUi(tester);
 }
 
