@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:animations/animations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
@@ -31,6 +34,88 @@ enum _AppStage { entry, forge, parchment }
 enum _ForgeSection { world, party, narrative }
 
 typedef SharePromptCallback = Future<ShareResult> Function(ShareParams params);
+
+abstract class AppReviewPrompter {
+  Future<bool> isAvailable();
+  Future<void> requestReview();
+}
+
+class DefaultAppReviewPrompter implements AppReviewPrompter {
+  DefaultAppReviewPrompter({InAppReview? inAppReview})
+      : _inAppReview = inAppReview ?? InAppReview.instance;
+
+  final InAppReview _inAppReview;
+
+  @override
+  Future<bool> isAvailable() => _inAppReview.isAvailable();
+
+  @override
+  Future<void> requestReview() => _inAppReview.requestReview();
+}
+
+class ReviewPromptCoordinator {
+  ReviewPromptCoordinator({
+    required AppReviewPrompter reviewPrompter,
+    this.promptDelay = const Duration(seconds: 2),
+    this.generationCountKey = 'app.generation_count',
+    this.reviewPromptedKey = 'app.review_prompted',
+    this.onboardingCompletedKey = 'app.onboarding_completed',
+  }) : _reviewPrompter = reviewPrompter;
+
+  final AppReviewPrompter _reviewPrompter;
+  final Duration promptDelay;
+  final String generationCountKey;
+  final String reviewPromptedKey;
+  final String onboardingCompletedKey;
+
+  bool _promptInFlight = false;
+
+  Future<void> recordSuccessfulGeneration({
+    required SharedPreferences preferences,
+    required bool Function() isMounted,
+  }) async {
+    if (_promptInFlight) {
+      return;
+    }
+
+    final alreadyPrompted = preferences.getBool(reviewPromptedKey) ?? false;
+    if (alreadyPrompted) {
+      return;
+    }
+
+    final onboardingCompleted =
+        preferences.getBool(onboardingCompletedKey) ?? true;
+    if (!onboardingCompleted) {
+      return;
+    }
+
+    final generationCount = (preferences.getInt(generationCountKey) ?? 0) + 1;
+    await preferences.setInt(generationCountKey, generationCount);
+
+    if (generationCount < 5) {
+      return;
+    }
+
+    final reviewAvailable = await _reviewPrompter.isAvailable();
+    if (!reviewAvailable) {
+      return;
+    }
+
+    _promptInFlight = true;
+    try {
+      await Future<void>.delayed(promptDelay);
+      if (!isMounted()) {
+        return;
+      }
+      await _reviewPrompter.requestReview();
+      await preferences.setBool(reviewPromptedKey, true);
+    } catch (_) {
+      return;
+    } finally {
+      _promptInFlight = false;
+    }
+  }
+}
 
 class _CampaignTypeMeta {
   const _CampaignTypeMeta({
@@ -204,6 +289,7 @@ class CampaignBuilderPage extends StatefulWidget {
     super.key,
     this.service,
     this.sharePrompt,
+    this.reviewPrompter,
     required this.currentLocale,
     required this.onLocaleChanged,
     this.currentThemeMode = ThemeMode.dark,
@@ -212,6 +298,7 @@ class CampaignBuilderPage extends StatefulWidget {
 
   final CampaignService? service;
   final SharePromptCallback? sharePrompt;
+  final AppReviewPrompter? reviewPrompter;
   final Locale currentLocale;
   final ValueChanged<Locale> onLocaleChanged;
   final ThemeMode currentThemeMode;
@@ -231,6 +318,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
   late final CampaignService _service;
   late final SharePromptCallback _sharePromptCallback;
+  late final AppReviewPrompter _reviewPrompter;
+  late final ReviewPromptCoordinator _reviewPromptCoordinator;
   late final List<TextEditingController> _textControllers;
   final ScrollController _entryScrollController = ScrollController();
   final ScrollController _forgeScrollController = ScrollController();
@@ -291,6 +380,9 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     super.initState();
     _service = widget.service ?? LocalCampaignService();
     _sharePromptCallback = widget.sharePrompt ?? SharePlus.instance.share;
+    _reviewPrompter = widget.reviewPrompter ?? DefaultAppReviewPrompter();
+    _reviewPromptCoordinator =
+        ReviewPromptCoordinator(reviewPrompter: _reviewPrompter);
     _textControllers = <TextEditingController>[
       _customSettingController,
       _customThemeController,
@@ -655,11 +747,13 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         _hasUnsavedChanges = false;
         _setAppStage(_AppStage.parchment);
       });
+      _triggerMediumImpact();
       await _copyPrompt(showFeedback: false);
       if (!mounted) {
         return;
       }
       _showSnackBar(context.l10n.appSnackForgedAndCopied);
+      unawaited(_maybePromptReview());
     } catch (exc) {
       if (!mounted) {
         return;
@@ -687,6 +781,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     if (!mounted || !showFeedback) {
       return;
     }
+    _triggerLightImpact();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(context.l10n.appSnackPromptCopied)),
     );
@@ -849,10 +944,22 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     if (!mounted) {
       return;
     }
+    _triggerMediumImpact();
     _showSnackBar(
       persisted
           ? context.l10n.appSnackSealedSavedAndCopied
           : context.l10n.appSnackSealedCopiedOnlyMemory,
+    );
+  }
+
+  Future<void> _maybePromptReview() async {
+    final preferences = await _resolvePreferences();
+    if (preferences == null) {
+      return;
+    }
+    await _reviewPromptCoordinator.recordSuccessfulGeneration(
+      preferences: preferences,
+      isMounted: () => mounted,
     );
   }
 
@@ -926,6 +1033,17 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     _scrollToTop(_forgeScrollController);
   }
 
+  void _selectForgeSectionFromRibbon(_ForgeSection section) {
+    if (_forgeSection == section) {
+      return;
+    }
+
+    setState(() {
+      _setForgeSection(section);
+    });
+    _triggerLightImpact();
+  }
+
   void _selectCampaignType(String campaignType) {
     final hasChanged = campaignType != _selectedCampaignType;
     setState(() {
@@ -938,6 +1056,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         _hasUnsavedChanges = true;
       }
     });
+    _triggerLightImpact();
   }
 
   void _goToStage(_AppStage stage) {
@@ -1006,16 +1125,26 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         setState(() {
           _setForgeSection(_ForgeSection.party);
         });
+        _triggerLightImpact();
         return;
       case _ForgeSection.party:
         setState(() {
           _setForgeSection(_ForgeSection.narrative);
         });
+        _triggerLightImpact();
         return;
       case _ForgeSection.narrative:
         _generatePrompt();
         return;
     }
+  }
+
+  void _triggerLightImpact() {
+    HapticFeedback.lightImpact();
+  }
+
+  void _triggerMediumImpact() {
+    HapticFeedback.mediumImpact();
   }
 
   void _retreatForge() {

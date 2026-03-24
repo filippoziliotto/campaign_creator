@@ -121,9 +121,7 @@ extension on _CampaignBuilderPageState {
             ),
             selected: {_forgeSection},
             onSelectionChanged: (selection) {
-              _applyShellState(() {
-                _setForgeSection(selection.first);
-              });
+              _selectForgeSectionFromRibbon(selection.first);
             },
           );
 
