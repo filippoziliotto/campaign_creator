@@ -265,5 +265,24 @@
   "settingsThemeDark": "Dark",
   "settingsThemeLight": "Light",
   "settingsInfoLabel": "Info",
-  "settingsVersion": "Version"
+  "settingsVersion": "Version",
+  "settingsGoAdFree": "Ads",
+  "settingsGoAdFreePrice": "Go Ad-Free",
+  "settingsGoAdFreePriceWithAmount": "Go Ad-Free — {price}",
+  "@settingsGoAdFreePriceWithAmount": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsRestorePurchases": "Restore purchases",
+  "settingsRestorePurchasesStarted": "Restoring purchases…",
+  "settingsRestorePurchasesComplete": "Purchases restored successfully.",
+  "settingsAdFreeActive": "Ads removed",
+  "settingsIapUnavailable": "In-app purchases unavailable on this device.",
+  "settingsIapProductNotFound": "Product not found. Try again later.",
+  "settingsPurchasePending": "Purchase processing…",
+  "settingsPurchaseCancelled": "Purchase cancelled.",
+  "settingsPurchaseFailed": "Purchase failed. Please try again."
 }

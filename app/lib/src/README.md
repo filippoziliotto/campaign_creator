@@ -27,15 +27,17 @@ L'app segue una pipeline semplice ma esplicita:
 - `services/`: caricamento asset locali e generazione del prompt on-device.
 - `theme/`: design system dell'app. Palette, tipografia e temi dei componenti Material.
 - `ui/`: shell, route page e widget della flow utente.
+- `monetization/`: modulo di monetizzazione. Ad unit ID, servizi wrapper per ads e acquisti in-app, preferenze, coordinatore policy.
 
 ## Regole di dipendenza
 
 Per mantenere il codice leggibile e facile da evolvere:
 
-- `ui/` puo dipendere da `theme/`, `services/` e `models/`.
+- `ui/` puo dipendere da `theme/`, `services/`, `models/` e `monetization/`.
 - `services/` puo dipendere da `models/`.
-- `models/` non deve dipendere da `ui/` o `services/`.
+- `models/` non deve dipendere da `ui/`, `services/` o `monetization/`.
 - `theme/` non deve conoscere la logica di caricamento dati o i dettagli del prompt engine.
+- `monetization/` non deve dipendere da `ui/`, `theme/` o `services/`. Puo dipendere da `shared_preferences` e dai plugin di ads/acquisti.
 
 ## Dove intervenire
 

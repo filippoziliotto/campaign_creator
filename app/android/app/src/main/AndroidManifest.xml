@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.android.vending.BILLING"/>
     <application
         android:label="Campaign Forge"
         android:name="${applicationName}"
@@ -28,6 +29,11 @@
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+        <!-- AdMob app ID: test ID below, override for production builds via
+             app/build.gradle manifestPlaceholders or a release-specific manifest. -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="${admobAppId}"/>
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

@@ -265,5 +265,24 @@
   "settingsThemeDark": "Scuro",
   "settingsThemeLight": "Chiaro",
   "settingsInfoLabel": "Info",
-  "settingsVersion": "Versione"
+  "settingsVersion": "Versione",
+  "settingsGoAdFree": "Pubblicità",
+  "settingsGoAdFreePrice": "Rimuovi le pubblicità",
+  "settingsGoAdFreePriceWithAmount": "Rimuovi le pubblicità — {price}",
+  "@settingsGoAdFreePriceWithAmount": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsRestorePurchases": "Ripristina acquisti",
+  "settingsRestorePurchasesStarted": "Ripristino acquisti in corso…",
+  "settingsRestorePurchasesComplete": "Acquisti ripristinati con successo.",
+  "settingsAdFreeActive": "Pubblicità rimosse",
+  "settingsIapUnavailable": "Acquisti in-app non disponibili su questo dispositivo.",
+  "settingsIapProductNotFound": "Prodotto non trovato. Riprova più tardi.",
+  "settingsPurchasePending": "Acquisto in elaborazione…",
+  "settingsPurchaseCancelled": "Acquisto annullato.",
+  "settingsPurchaseFailed": "Acquisto non riuscito. Riprova."
 }

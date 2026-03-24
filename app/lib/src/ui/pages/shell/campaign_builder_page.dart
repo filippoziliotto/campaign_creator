@@ -14,6 +14,10 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../config/app_config.dart';
 import '../../../l10n_extension.dart';
 import '../../../models/campaign_models.dart';
+import '../../../monetization/interstitial_ad_service.dart';
+import '../../../monetization/monetization_coordinator.dart';
+import '../../../monetization/monetization_prefs.dart';
+import '../../../monetization/purchase_service.dart';
 import '../../../services/campaign_service.dart';
 import '../../../services/local_campaign_service.dart';
 import '../../../theme/fantasy_theme.dart';
@@ -317,6 +321,8 @@ class CampaignBuilderPage extends StatefulWidget {
     this.service,
     this.sharePrompt,
     this.reviewPrompter,
+    this.interstitialAdService,
+    this.purchaseService,
     required this.currentLocale,
     required this.onLocaleChanged,
     this.currentThemeMode = ThemeMode.dark,
@@ -326,6 +332,8 @@ class CampaignBuilderPage extends StatefulWidget {
   final CampaignService? service;
   final SharePromptCallback? sharePrompt;
   final AppReviewPrompter? reviewPrompter;
+  final InterstitialAdService? interstitialAdService;
+  final PurchaseService? purchaseService;
   final Locale currentLocale;
   final ValueChanged<Locale> onLocaleChanged;
   final ThemeMode currentThemeMode;
@@ -347,6 +355,13 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   late final SharePromptCallback _sharePromptCallback;
   late final AppReviewPrompter _reviewPrompter;
   late final ReviewPromptCoordinator _reviewPromptCoordinator;
+  late final InterstitialAdService _interstitialAdService;
+  late final PurchaseService _purchaseService;
+  late final MonetizationCoordinator _monetizationCoordinator;
+  StreamSubscription<List<NormalizedPurchaseUpdate>>? _purchaseSubscription;
+  bool _isAdFree = false;
+  bool _isPurchaseBusy = false;
+  String? _adFreePrice;
   late final List<TextEditingController> _textControllers;
   final ScrollController _entryScrollController = ScrollController();
   final ScrollController _forgeScrollController = ScrollController();
@@ -410,6 +425,18 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     _reviewPrompter = widget.reviewPrompter ?? DefaultAppReviewPrompter();
     _reviewPromptCoordinator =
         ReviewPromptCoordinator(reviewPrompter: _reviewPrompter);
+    _interstitialAdService =
+        widget.interstitialAdService ?? DefaultInterstitialAdService();
+    _purchaseService = widget.purchaseService ?? DefaultPurchaseService();
+    _monetizationCoordinator = MonetizationCoordinator(
+      adService: _interstitialAdService,
+      purchaseService: _purchaseService,
+      prefs: MonetizationPrefs(),
+    );
+    unawaited(_interstitialAdService.preload());
+    unawaited(_restoreMonetizationState());
+    _purchaseSubscription =
+        _purchaseService.purchaseStream.listen(_handlePurchaseUpdates);
     _textControllers = <TextEditingController>[
       _customSettingController,
       _customThemeController,
@@ -436,6 +463,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       controller.removeListener(_handleDraftInputChanged);
       controller.dispose();
     }
+    _purchaseSubscription?.cancel();
+    _interstitialAdService.dispose();
     _entryScrollController.dispose();
     _forgeScrollController.dispose();
     _parchmentScrollController.dispose();
@@ -780,7 +809,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         return;
       }
       _showSnackBar(context.l10n.appSnackForgedAndCopied);
-      unawaited(_maybePromptReview());
+      unawaited(_handlePostGenerationMonetization());
     } catch (exc) {
       if (!mounted) {
         return;
@@ -993,6 +1022,132 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       return;
     }
     _showSnackBar(debugMessage);
+  }
+
+  Future<void> _handlePostGenerationMonetization() async {
+    final adOutcome = await _maybeShowInterstitialAd();
+    if (adOutcome != InterstitialAdOutcome.adShown) {
+      await _maybePromptReview();
+    }
+  }
+
+  Future<InterstitialAdOutcome> _maybeShowInterstitialAd() async {
+    final preferences = await _resolvePreferences();
+    if (preferences == null) {
+      return InterstitialAdOutcome.skipped;
+    }
+    return _monetizationCoordinator.recordSuccessfulGeneration(
+      preferences: preferences,
+    );
+  }
+
+  Future<void> _restoreMonetizationState() async {
+    final preferences = await _resolvePreferences();
+    if (preferences == null) return;
+    final adFree =
+        _monetizationCoordinator.restoreCachedEntitlement(
+      preferences: preferences,
+    );
+    if (mounted) {
+      setState(() {
+        _isAdFree = adFree;
+      });
+    }
+    if (!adFree) {
+      final price = await _purchaseService.queryAdFreePrice();
+      if (mounted && price != null) {
+        setState(() {
+          _adFreePrice = price;
+        });
+      }
+    }
+  }
+
+  Future<void> _handlePurchaseUpdates(
+    List<NormalizedPurchaseUpdate> updates,
+  ) async {
+    final preferences = await _resolvePreferences();
+    if (preferences == null) return;
+    final event = await _monetizationCoordinator.handlePurchaseUpdates(
+      updates: updates,
+      preferences: preferences,
+    );
+    if (!mounted) return;
+    switch (event) {
+      case PurchaseEntitlementEvent.granted:
+        setState(() {
+          _isAdFree = true;
+          _isPurchaseBusy = false;
+        });
+        _showSnackBar(context.l10n.settingsAdFreeActive);
+      case PurchaseEntitlementEvent.restored:
+        setState(() {
+          _isAdFree = true;
+          _isPurchaseBusy = false;
+        });
+        _showSnackBar(context.l10n.settingsRestorePurchasesComplete);
+      case PurchaseEntitlementEvent.pending:
+        setState(() {
+          _isPurchaseBusy = true;
+        });
+      case PurchaseEntitlementEvent.cancelled:
+        setState(() {
+          _isPurchaseBusy = false;
+        });
+      case PurchaseEntitlementEvent.error:
+        setState(() {
+          _isPurchaseBusy = false;
+        });
+        _showSnackBar(context.l10n.settingsPurchaseFailed);
+      case PurchaseEntitlementEvent.none:
+        break;
+    }
+  }
+
+  Future<void> _handleGoAdFree() async {
+    setState(() {
+      _isPurchaseBusy = true;
+    });
+    final result = await _monetizationCoordinator.startAdFreePurchase();
+    if (!mounted) return;
+    switch (result) {
+      case PurchaseStartResult.started:
+        break;
+      case PurchaseStartResult.unavailable:
+        setState(() {
+          _isPurchaseBusy = false;
+        });
+        _showSnackBar(context.l10n.settingsIapUnavailable);
+      case PurchaseStartResult.productNotFound:
+        setState(() {
+          _isPurchaseBusy = false;
+        });
+        _showSnackBar(context.l10n.settingsIapProductNotFound);
+      case PurchaseStartResult.error:
+        setState(() {
+          _isPurchaseBusy = false;
+        });
+        _showSnackBar(context.l10n.settingsPurchaseFailed);
+    }
+  }
+
+  Future<void> _handleRestorePurchases() async {
+    setState(() {
+      _isPurchaseBusy = true;
+    });
+    await _monetizationCoordinator.restorePurchases();
+    if (mounted) {
+      _showSnackBar(context.l10n.settingsRestorePurchasesStarted);
+    }
+    // Safety timeout: if no purchase update clears _isPurchaseBusy within 15s,
+    // reset it so the UI doesn't get stuck.
+    Future<void>.delayed(const Duration(seconds: 15), () {
+      if (mounted && _isPurchaseBusy) {
+        setState(() {
+          _isPurchaseBusy = false;
+        });
+      }
+    });
   }
 
   Future<SharedPreferences?> _resolvePreferences({
@@ -1482,6 +1637,11 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                     onLocaleChanged: widget.onLocaleChanged,
                     currentThemeMode: widget.currentThemeMode,
                     onThemeModeChanged: widget.onThemeModeChanged,
+                    isAdFree: _isAdFree,
+                    isPurchaseBusy: _isPurchaseBusy,
+                    adFreePrice: _adFreePrice,
+                    onGoAdFreeTapped: _handleGoAdFree,
+                    onRestorePurchasesTapped: _handleRestorePurchases,
                   ),
                 ),
               ),
@@ -1773,12 +1933,22 @@ class _InfoButton extends StatefulWidget {
     required this.onLocaleChanged,
     required this.currentThemeMode,
     required this.onThemeModeChanged,
+    required this.isAdFree,
+    required this.isPurchaseBusy,
+    this.adFreePrice,
+    required this.onGoAdFreeTapped,
+    required this.onRestorePurchasesTapped,
   });
 
   final Locale currentLocale;
   final ValueChanged<Locale> onLocaleChanged;
   final ThemeMode currentThemeMode;
   final ValueChanged<ThemeMode>? onThemeModeChanged;
+  final bool isAdFree;
+  final bool isPurchaseBusy;
+  final String? adFreePrice;
+  final VoidCallback onGoAdFreeTapped;
+  final VoidCallback onRestorePurchasesTapped;
 
   @override
   State<_InfoButton> createState() => _InfoButtonState();
@@ -1846,6 +2016,11 @@ class _InfoButtonState extends State<_InfoButton>
         onLocaleChanged: widget.onLocaleChanged,
         currentThemeMode: widget.currentThemeMode,
         onThemeModeChanged: widget.onThemeModeChanged,
+        isAdFree: widget.isAdFree,
+        isPurchaseBusy: widget.isPurchaseBusy,
+        adFreePrice: widget.adFreePrice,
+        onGoAdFreeTapped: widget.onGoAdFreeTapped,
+        onRestorePurchasesTapped: widget.onRestorePurchasesTapped,
       ),
     );
   }
@@ -1857,12 +2032,22 @@ class _SettingsSheet extends StatefulWidget {
     required this.onLocaleChanged,
     required this.currentThemeMode,
     required this.onThemeModeChanged,
+    required this.isAdFree,
+    required this.isPurchaseBusy,
+    this.adFreePrice,
+    required this.onGoAdFreeTapped,
+    required this.onRestorePurchasesTapped,
   });
 
   final Locale currentLocale;
   final ValueChanged<Locale> onLocaleChanged;
   final ThemeMode currentThemeMode;
   final ValueChanged<ThemeMode>? onThemeModeChanged;
+  final bool isAdFree;
+  final bool isPurchaseBusy;
+  final String? adFreePrice;
+  final VoidCallback onGoAdFreeTapped;
+  final VoidCallback onRestorePurchasesTapped;
 
   @override
   State<_SettingsSheet> createState() => _SettingsSheetState();
@@ -2132,6 +2317,11 @@ class _SettingsSheetState extends State<_SettingsSheet>
                             _handleThemeSelection(selection.first),
                       ),
                     ),
+                    Divider(
+                      color: palette.outline.withValues(alpha: 0.4),
+                      indent: 24,
+                      endIndent: 24,
+                    ),
                     ListTile(
                       key: const ValueKey<String>('settings-review-row'),
                       leading: Icon(Icons.star_outline, color: palette.accent),
@@ -2152,6 +2342,64 @@ class _SettingsSheetState extends State<_SettingsSheet>
                       ),
                       onTap: () => _shareApp(context),
                     ),
+                    if (!widget.isAdFree) ...[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 8, 24, 4),
+                        child: Text(
+                          context.l10n.settingsGoAdFree,
+                          style: textTheme.labelSmall?.copyWith(
+                            color: palette.foregroundMuted,
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        key: const ValueKey<String>('settings-go-ad-free-row'),
+                        leading: Icon(Icons.block_rounded,
+                            color: palette.accent),
+                        title: Text(
+                          widget.adFreePrice != null
+                              ? context.l10n
+                                  .settingsGoAdFreePriceWithAmount(
+                                      widget.adFreePrice!)
+                              : context.l10n.settingsGoAdFreePrice,
+                          style: textTheme.bodyLarge
+                              ?.copyWith(color: palette.foreground),
+                        ),
+                        enabled: !widget.isPurchaseBusy,
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          widget.onGoAdFreeTapped();
+                        },
+                      ),
+                      ListTile(
+                        key: const ValueKey<String>(
+                            'settings-restore-purchases-row'),
+                        leading: Icon(Icons.restore_rounded,
+                            color: palette.accent),
+                        title: Text(
+                          context.l10n.settingsRestorePurchases,
+                          style: textTheme.bodyLarge
+                              ?.copyWith(color: palette.foreground),
+                        ),
+                        enabled: !widget.isPurchaseBusy,
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          widget.onRestorePurchasesTapped();
+                        },
+                      ),
+                    ] else ...[
+                      ListTile(
+                        key: const ValueKey<String>(
+                            'settings-ad-free-active-row'),
+                        leading: Icon(Icons.check_circle_rounded,
+                            color: palette.accent),
+                        title: Text(
+                          context.l10n.settingsAdFreeActive,
+                          style: textTheme.bodyLarge
+                              ?.copyWith(color: palette.foreground),
+                        ),
+                      ),
+                    ],
                     Divider(
                       color: palette.outline.withValues(alpha: 0.4),
                       indent: 24,

@@ -36,6 +36,11 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // AdMob app ID: defaults to Google test ID.
+        // Override in key.properties with admobAppId=ca-app-pub-YOUR_REAL_ID for production.
+        manifestPlaceholders["admobAppId"] =
+            keyProperties.getProperty("admobAppId", "ca-app-pub-3940256099942544~3347511713")
     }
 
     signingConfigs {

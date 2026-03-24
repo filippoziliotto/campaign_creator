@@ -68,5 +68,16 @@
 		</array>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<!-- AdMob app ID: test ID below. Override for production by setting
+		     ADMOB_APP_ID in Xcode build settings or via --dart-define. -->
+		<key>GADApplicationIdentifier</key>
+		<string>ca-app-pub-3940256099942544~1458002511</string>
+		<key>SKAdNetworkItems</key>
+		<array>
+			<dict>
+				<key>SKAdNetworkIdentifier</key>
+				<string>cstr6suwn9.skadnetwork</string>
+			</dict>
+		</array>
 	</dict>
 </plist>
