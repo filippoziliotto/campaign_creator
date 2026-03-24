@@ -2216,11 +2216,13 @@ class _SettingsSheetState extends State<_SettingsSheet>
                         segments: <ButtonSegment<String>>[
                           ButtonSegment<String>(
                             value: 'en',
-                            label: Text(context.l10n.settingsLanguageEnglish),
+                            label: Text(
+                                '\u{1F1EC}\u{1F1E7} ${context.l10n.languageEnglishShort}'),
                           ),
                           ButtonSegment<String>(
                             value: 'it',
-                            label: Text(context.l10n.settingsLanguageItalian),
+                            label: Text(
+                                '\u{1F1EE}\u{1F1F9} ${context.l10n.languageItalianShort}'),
                           ),
                         ],
                         selected: <String>{widget.currentLocale.languageCode},
