@@ -21,6 +21,9 @@ const Curve _premiumSharedAxisSecondaryReverseCurve = Interval(
   curve: Cubic(0.3, 0.0, 0.22, 1.0),
 );
 
+/// Public alias of the premium deceleration curve used by sheet content.
+const Curve premiumDecelerationCurve = _premiumSharedAxisForwardCurve;
+
 Widget buildCampaignSharedAxisTransition({
   required Animation<double> animation,
   required Animation<double> secondaryAnimation,

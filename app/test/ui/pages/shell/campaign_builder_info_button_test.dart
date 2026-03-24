@@ -243,6 +243,52 @@ void main() {
         find.byKey(const ValueKey<String>('settings-sheet')), findsOneWidget);
     expect(sheetColor(), FantasyThemeColors.light.card);
   });
+
+  testWidgets('settings sheet animates its content with a fade transition',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('settings-sheet')),
+        matching: find.byType(FadeTransition),
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets(
+      'settings sheet content is immediately visible with reduced motion',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp(disableAnimations: true));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pump();
+
+    final fadeTransition = tester.widget<FadeTransition>(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('settings-sheet')),
+        matching: find.byType(FadeTransition),
+      ),
+    );
+
+    expect(fadeTransition.opacity.value, 1);
+  });
 }
 
 Widget _testApp({
@@ -250,11 +296,17 @@ Widget _testApp({
   ValueChanged<Locale>? onLocaleChanged,
   ThemeMode currentThemeMode = ThemeMode.dark,
   ValueChanged<ThemeMode>? onThemeModeChanged,
+  bool disableAnimations = false,
 }) =>
     MaterialApp(
       locale: currentLocale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      builder: (context, child) {
+        final mediaQuery = MediaQuery.of(context)
+            .copyWith(disableAnimations: disableAnimations);
+        return MediaQuery(data: mediaQuery, child: child!);
+      },
       home: CampaignBuilderPage(
         service: FakeCampaignService(minimalOptions()),
         currentLocale: currentLocale,
