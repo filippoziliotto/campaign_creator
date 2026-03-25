@@ -235,7 +235,6 @@ class CampaignModeCard extends StatefulWidget {
     super.key,
     required this.atmosphere,
     required this.title,
-    required this.badge,
     required this.description,
     required this.emblemAsset,
     required this.fallbackIcon,
@@ -247,7 +246,6 @@ class CampaignModeCard extends StatefulWidget {
 
   final CampaignAtmosphereData atmosphere;
   final String title;
-  final String badge;
   final String description;
   final String emblemAsset;
   final IconData fallbackIcon;
@@ -274,7 +272,9 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
         .contains(defaultTargetPlatform);
     final viewportWidth = MediaQuery.sizeOf(context).width;
     final cardHeight = viewportWidth < 640 ? 208.0 : 192.0;
-    final borderRadius = BorderRadius.circular(24);
+    final framePadding = 2.5;
+    final outerBorderRadius = BorderRadius.circular(24);
+    final innerBorderRadius = BorderRadius.circular(24 - framePadding);
     final descriptionMaxLines = 3;
     final titleStyle = Theme.of(
       context,
@@ -344,169 +344,161 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
           scale: selectedScale,
           duration: motionDuration,
           curve: Curves.easeOutCubic,
-          child: InkWell(
-            onTap: widget.onTap,
-            borderRadius: borderRadius,
-            child: AnimatedContainer(
-              duration: motionDuration,
-              curve: Curves.easeOutCubic,
-              decoration: BoxDecoration(
-                borderRadius: borderRadius,
-                border: Border.all(
-                  color: widget.selected
-                      ? widget.atmosphere.highlight
-                      : palette.onArtwork.withValues(alpha: 0.18),
-                  width: widget.selected ? 1.8 : 1,
-                ),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: widget.atmosphere.glow.withValues(
-                      alpha: widget.selected ? 0.28 : (_hovered ? 0.1 : 0.05),
-                    ),
-                    blurRadius: widget.selected ? 30 : (_hovered ? 16 : 10),
-                    offset: const Offset(0, 10),
+          child: AnimatedContainer(
+            duration: motionDuration,
+            curve: Curves.easeOutCubic,
+            padding: EdgeInsets.all(framePadding),
+            decoration: BoxDecoration(
+              borderRadius: outerBorderRadius,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: <Color>[
+                  widget.atmosphere.highlight.withValues(
+                    alpha: widget.selected
+                        ? 0.95
+                        : (_hovered ? 0.7 : 0.55),
+                  ),
+                  widget.atmosphere.primary.withValues(
+                    alpha: widget.selected
+                        ? 1.0
+                        : (_hovered ? 0.88 : 0.8),
+                  ),
+                  widget.atmosphere.secondary.withValues(
+                    alpha: widget.selected
+                        ? 0.85
+                        : (_hovered ? 0.62 : 0.5),
+                  ),
+                  widget.atmosphere.highlight.withValues(
+                    alpha: widget.selected
+                        ? 0.7
+                        : (_hovered ? 0.44 : 0.35),
                   ),
                 ],
+                stops: const <double>[0.0, 0.35, 0.65, 1.0],
               ),
-              child: ClipRRect(
-                borderRadius: borderRadius,
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: _CampaignCardArtwork(
-                        artAsset: widget.artAsset,
-                        fallbackColor:
-                            widget.colors.last.withValues(alpha: 0.9),
-                      ),
-                    ),
-                    Positioned.fill(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: <Color>[
-                              widget.colors.first.withValues(alpha: 0.22),
-                              widget.colors.last.withValues(alpha: 0.42),
-                            ],
-                          ),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: widget.atmosphere.glow.withValues(
+                    alpha: widget.selected ? 0.28 : (_hovered ? 0.1 : 0.05),
+                  ),
+                  blurRadius: widget.selected ? 30 : (_hovered ? 16 : 10),
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: InkWell(
+              onTap: widget.onTap,
+              borderRadius: innerBorderRadius,
+              child: AnimatedContainer(
+                duration: motionDuration,
+                curve: Curves.easeOutCubic,
+                decoration: BoxDecoration(
+                  borderRadius: innerBorderRadius,
+                ),
+                child: ClipRRect(
+                  borderRadius: innerBorderRadius,
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: _CampaignCardArtwork(
+                          artAsset: widget.artAsset,
+                          fallbackColor:
+                              widget.colors.last.withValues(alpha: 0.9),
                         ),
                       ),
-                    ),
-                    Positioned.fill(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: <Color>[
-                              Colors.black.withValues(alpha: 0.12),
-                              Colors.black.withValues(alpha: 0.30),
-                              Colors.black.withValues(
-                                alpha: widget.selected ? 0.74 : 0.86,
-                              ),
-                            ],
-                            stops: const <double>[0.0, 0.46, 1.0],
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: cardHeight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(14),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                _CampaignCardMedallion(
-                                  atmosphere: widget.atmosphere,
-                                  colors: widget.colors,
-                                  emblemAsset: widget.emblemAsset,
-                                  fallbackIcon: widget.fallbackIcon,
-                                  selected: widget.selected,
-                                  hovered: _hovered,
-                                  pressed: _pressed,
-                                  duration: motionDuration,
-                                ),
-                                const Spacer(),
-                                if (widget.selected)
-                                  Container(
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: BoxDecoration(
-                                      color: FantasyPalette.abyss
-                                          .withValues(alpha: 0.68),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(
-                                      Icons.check_circle_rounded,
-                                      color: widget.atmosphere.highlight,
-                                      size: 18,
-                                    ),
-                                  ),
+                      Positioned.fill(
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: <Color>[
+                                widget.colors.first.withValues(alpha: 0.22),
+                                widget.colors.last.withValues(alpha: 0.42),
                               ],
                             ),
-                            const Spacer(),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: FantasyPalette.abyss.withValues(
-                                  alpha: widget.selected ? 0.48 : 0.34,
+                          ),
+                        ),
+                      ),
+                      Positioned.fill(
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: <Color>[
+                                Colors.black.withValues(alpha: 0.12),
+                                Colors.black.withValues(alpha: 0.30),
+                                Colors.black.withValues(
+                                  alpha: widget.selected ? 0.74 : 0.86,
                                 ),
-                                borderRadius: BorderRadius.circular(999),
-                                border: Border.all(
-                                  color: widget.atmosphere.highlight.withValues(
-                                    alpha: widget.selected ? 0.30 : 0.18,
-                                  ),
-                                ),
-                              ),
-                              child: Text(
-                                widget.badge,
-                                style: Theme.of(context).textTheme.labelMedium,
-                              ),
+                              ],
+                              stops: const <double>[0.0, 0.46, 1.0],
                             ),
-                            const SizedBox(height: 6),
-                            Text(
-                              widget.title,
-                              style: titleStyle,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              widget.description,
-                              style: descriptionStyle,
-                              maxLines:
-                                  showCallToAction ? 1 : descriptionMaxLines,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            if (showCallToAction) ...[
-                              const SizedBox(height: 6),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: cardHeight,
+                        child: Padding(
+                          padding: const EdgeInsets.all(14),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                               Row(
                                 children: [
-                                  Text(
-                                    context.l10n.entryOpenForge,
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Icon(
-                                    Icons.arrow_forward_rounded,
-                                    size: 16,
-                                    color: widget.atmosphere.highlight,
+                                  _CampaignCardMedallion(
+                                    atmosphere: widget.atmosphere,
+                                    colors: widget.colors,
+                                    emblemAsset: widget.emblemAsset,
+                                    fallbackIcon: widget.fallbackIcon,
+                                    selected: widget.selected,
+                                    hovered: _hovered,
+                                    pressed: _pressed,
+                                    duration: motionDuration,
                                   ),
                                 ],
                               ),
+                              const Spacer(),
+                              Text(
+                                widget.title,
+                                style: titleStyle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                widget.description,
+                                style: descriptionStyle,
+                                maxLines:
+                                    showCallToAction ? 1 : descriptionMaxLines,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              if (showCallToAction) ...[
+                                const SizedBox(height: 6),
+                                Row(
+                                  children: [
+                                    Text(
+                                      context.l10n.entryOpenForge,
+                                      style:
+                                          Theme.of(context).textTheme.labelLarge,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Icon(
+                                      Icons.arrow_forward_rounded,
+                                      size: 16,
+                                      color: widget.atmosphere.highlight,
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ],
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -573,128 +565,36 @@ class _CampaignCardMedallion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final palette = context.fantasy;
     final emphasis = selected ? 1.0 : (hovered ? 0.55 : 0.0);
-    final compression = pressed ? 1.0 : 0.0;
-    final rimHighlight = Color.lerp(
-      atmosphere.highlight,
-      colors.first,
-      0.32 + (compression * 0.1),
-    )!;
-    final rimMid = Color.lerp(
-      colors.first,
-      colors.last,
-      0.55 + (compression * 0.08),
-    )!;
-    final rimShadow = Color.lerp(colors.last, Colors.black, 0.28)!;
-    final plateTop = Color.lerp(
-      palette.cardSoft,
-      atmosphere.cardTint,
-      0.56 + (compression * 0.06),
-    )!;
-    final plateBottom = Color.lerp(
-      atmosphere.cardTint,
-      colors.last,
-      0.58 + (compression * 0.08),
-    )!;
     final emblemColor = Color.lerp(
-      palette.onArtwork,
+      context.fantasy.onArtwork,
       atmosphere.highlight,
       0.34 + (emphasis * 0.44),
-    )!;
-    final rimBorderColor = Color.lerp(
-      palette.onArtwork.withValues(alpha: 0.28),
-      atmosphere.highlight.withValues(alpha: 0.92),
-      emphasis,
-    )!;
-    final plateBorderColor = Color.lerp(
-      palette.onArtwork.withValues(alpha: 0.12),
-      atmosphere.highlight.withValues(alpha: 0.26),
-      0.4 + (emphasis * 0.5),
     )!;
 
     return AnimatedContainer(
       duration: duration,
       curve: Curves.easeOutCubic,
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[
-            rimHighlight,
-            rimMid,
-            rimShadow,
-          ],
-        ),
-        border: Border.all(color: rimBorderColor, width: 1.2),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: atmosphere.glow.withValues(
-              alpha: 0.1 + (emphasis * 0.16),
-            ),
-            blurRadius: 18 + (emphasis * 10),
-            offset: const Offset(0, 8),
+      width: 32,
+      height: 32,
+      child: Transform.scale(
+        scale: pressed ? 0.96 : 1.0,
+        child: SvgPicture.asset(
+          emblemAsset,
+          key: const ValueKey<String>('campaign-mode-card-emblem'),
+          fit: BoxFit.contain,
+          colorFilter: ColorFilter.mode(
+            emblemColor,
+            BlendMode.srcIn,
           ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(3),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: plateBorderColor, width: 1),
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: <Color>[
-                plateTop,
-                plateBottom,
-              ],
-            ),
+          placeholderBuilder: (context) => _CampaignCardFallbackIcon(
+            icon: fallbackIcon,
+            color: emblemColor.withValues(alpha: 0.7),
           ),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(4),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: atmosphere.highlight.withValues(
-                        alpha: 0.12 + (emphasis * 0.16),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SvgPicture.asset(
-                    emblemAsset,
-                    key: const ValueKey<String>('campaign-mode-card-emblem'),
-                    fit: BoxFit.contain,
-                    colorFilter: ColorFilter.mode(
-                      emblemColor,
-                      BlendMode.srcIn,
-                    ),
-                    placeholderBuilder: (context) => _CampaignCardFallbackIcon(
-                      icon: fallbackIcon,
-                      color: emblemColor.withValues(alpha: 0.7),
-                    ),
-                    errorBuilder: (context, error, stackTrace) =>
-                        _CampaignCardFallbackIcon(
-                      icon: fallbackIcon,
-                      color: emblemColor,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          errorBuilder: (context, error, stackTrace) =>
+              _CampaignCardFallbackIcon(
+            icon: fallbackIcon,
+            color: emblemColor,
           ),
         ),
       ),

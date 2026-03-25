@@ -294,7 +294,7 @@ void main() {
     expect(find.bySemanticsLabel('Choose your Campaign'), findsOneWidget);
   });
 
-  testWidgets('entry cards use Spanish localized badges for campaign types', (
+  testWidgets('entry cards use Spanish localized descriptions for campaign types', (
     tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
@@ -313,13 +313,27 @@ void main() {
 
     await _pumpUi(tester);
 
-    expect(find.text('Arco breve'), findsOneWidget);
-    expect(find.text('Saga amplia'), findsOneWidget);
-    expect(find.text('Profundidades'), findsOneWidget);
-    expect(find.text('Formato'), findsNothing);
+    expect(
+      find.text(
+        'Una historia condensada en pocas sesiones, con progresión fuerte, escalada y un final nítido.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Facciones, equilibrios cambiantes y subtramas persistentes para una campaña que crece con el tiempo.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Un descenso estructurado entre mapas, riesgo, desgaste y descubrimientos por capas.',
+      ),
+      findsOneWidget,
+    );
   });
 
-  testWidgets('entry cards use French localized badges for campaign types', (
+  testWidgets('entry cards use French localized descriptions for campaign types', (
     tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
@@ -338,10 +352,24 @@ void main() {
 
     await _pumpUi(tester);
 
-    expect(find.text('Arc court'), findsOneWidget);
-    expect(find.text('Grande saga'), findsOneWidget);
-    expect(find.text('Profondeurs'), findsOneWidget);
-    expect(find.text('Format'), findsNothing);
+    expect(
+      find.text(
+        'Une histoire condensée en quelques séances, avec une progression forte, une montée en tension et une finale nette.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Factions, équilibres mouvants et intrigues persistantes pour une campagne qui grandit dans la durée.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Une descente structurée entre cartes, risque, attrition et découvertes en couches.',
+      ),
+      findsOneWidget,
+    );
   });
 }
 

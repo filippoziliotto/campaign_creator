@@ -1,5 +1,6 @@
 # 3
 app/lib/src/ui/pages/parchment
+app/lib/src/ui/pages/shell/campaign_builder_page.dart
 Fix this huge files and maybe make multiple files to reduce the lenght.
 Apply this fix to all files that are above 1000 lines if possible.
 

@@ -1516,21 +1516,6 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     return _defaultCampaignMeta;
   }
 
-  String _localizedCampaignBadge(String? campaignType) {
-    switch (_campaignTypeKindFor(campaignType)) {
-      case _CampaignTypeKind.oneShot:
-        return context.l10n.entryBadgeOneShot;
-      case _CampaignTypeKind.miniCampaign:
-        return context.l10n.entryBadgeMiniCampaign;
-      case _CampaignTypeKind.longCampaign:
-        return context.l10n.entryBadgeLongCampaign;
-      case _CampaignTypeKind.dungeon:
-        return context.l10n.entryBadgeDungeon;
-      case _CampaignTypeKind.custom:
-        return context.l10n.entryBadgeDefault;
-    }
-  }
-
   String _localizedCampaignDescription(String? campaignType) {
     switch (_campaignTypeKindFor(campaignType)) {
       case _CampaignTypeKind.oneShot:

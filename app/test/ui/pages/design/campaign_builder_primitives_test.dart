@@ -44,7 +44,6 @@ void main() {
               child: CampaignModeCard(
                 atmosphere: _testAtmosphere,
                 title: 'Campagna lunga',
-                badge: 'Saga ampia',
                 description:
                     'Fazioni, cambi di equilibrio e sottotrame persistenti per una campagna da far crescere nel tempo.',
                 emblemAsset: 'assets/entry_cards/long_campaign_emblem.svg',
@@ -81,7 +80,6 @@ void main() {
               child: CampaignModeCard(
                 atmosphere: _testAtmosphere,
                 title: 'One-Shot',
-                badge: 'Singola',
                 description: 'Una missione ad alto impatto.',
                 emblemAsset: 'assets/entry_cards/one_shot_emblem.svg',
                 fallbackIcon: Icons.bolt_rounded,
@@ -121,7 +119,6 @@ void main() {
               child: CampaignModeCard(
                 atmosphere: _testAtmosphere,
                 title: 'One-Shot',
-                badge: 'Singola',
                 description: description,
                 emblemAsset: 'assets/entry_cards/one_shot_emblem.svg',
                 fallbackIcon: Icons.bolt_rounded,
@@ -159,7 +156,6 @@ void main() {
               child: CampaignModeCard(
                 atmosphere: _testAtmosphere,
                 title: 'Mini-campagna',
-                badge: 'Arco breve',
                 description: 'Viaggio, bussola e tappe ravvicinate.',
                 emblemAsset: 'assets/entry_cards/mini_campaign_emblem.svg',
                 fallbackIcon: Icons.hiking_rounded,
@@ -198,7 +194,6 @@ void main() {
               child: CampaignModeCard(
                 atmosphere: _testAtmosphere,
                 title: 'Dungeon crawl',
-                badge: 'Profondita',
                 description: 'Torce, discese e sale infestate.',
                 emblemAsset: 'assets/entry_cards/missing_emblem.svg',
                 fallbackIcon: Icons.layers_rounded,

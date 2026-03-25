@@ -168,7 +168,6 @@ extension on _CampaignBuilderPageState {
                   key: ValueKey<String>('entry-campaign-card-$campaignType'),
                   atmosphere: meta.atmosphere,
                   title: campaignType,
-                  badge: _localizedCampaignBadge(campaignType),
                   description: _localizedCampaignDescription(campaignType),
                   emblemAsset: meta.emblemAsset,
                   fallbackIcon: meta.fallbackIcon,
