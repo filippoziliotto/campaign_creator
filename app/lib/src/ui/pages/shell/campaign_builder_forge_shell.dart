@@ -317,6 +317,7 @@ extension on _CampaignBuilderPageState {
                     ? {options.settings.last}
                     : const {},
             premiumHighlightColor: _currentAtmosphere(options).glow,
+            useWheelPicker: true,
             showCustomOption: true,
             isCustomOptionLocked: !_isPremiumUnlocked,
             onCustomOptionTap: () => _showCustomEntryDialog(
@@ -492,6 +493,7 @@ extension on _CampaignBuilderPageState {
     bool showCustomOption = false,
     bool isCustomOptionLocked = false,
     VoidCallback? onCustomOptionTap,
+    bool useWheelPicker = false,
   }) {
     // If the value is not a known preset, it's a custom-entered value — show as-is.
     final isCustomValue =
@@ -530,21 +532,35 @@ extension on _CampaignBuilderPageState {
                 }
               }
 
-              final selected = await _showOptionPicker(
-                keyPrefix: keyPrefix,
-                title: title,
-                label: label,
-                currentValue: normalizedValue,
-                options: options,
-                labels: labels,
-                uppercaseText: uppercaseText,
-                premiumOptionIds: premiumOptionIds,
-                isPremiumUnlocked: premiumUnlocked,
-                premiumHighlightColor: premiumHighlightColor,
-                showCustomOption: showCustomOption,
-                isCustomOptionLocked: isCustomOptionLocked,
-                onCustomOptionTap: onCustomOptionTap,
-              );
+              final selected = useWheelPicker
+                  ? await _showWheelOptionPicker(
+                      keyPrefix: keyPrefix,
+                      title: title,
+                      options: options,
+                      currentValue: normalizedValue,
+                      premiumOptionIds: premiumOptionIds,
+                      isPremiumUnlocked: premiumUnlocked,
+                      crownColor: premiumHighlightColor ??
+                          _resolvedAtmosphereTheme().colorScheme.tertiary,
+                      showCustomOption: showCustomOption,
+                      isCustomOptionLocked: !premiumUnlocked,
+                      onCustomOptionTap: onCustomOptionTap,
+                    )
+                  : await _showOptionPicker(
+                      keyPrefix: keyPrefix,
+                      title: title,
+                      label: label,
+                      currentValue: normalizedValue,
+                      options: options,
+                      labels: labels,
+                      uppercaseText: uppercaseText,
+                      premiumOptionIds: premiumOptionIds,
+                      isPremiumUnlocked: premiumUnlocked,
+                      premiumHighlightColor: premiumHighlightColor,
+                      showCustomOption: showCustomOption,
+                      isCustomOptionLocked: isCustomOptionLocked,
+                      onCustomOptionTap: onCustomOptionTap,
+                    );
               if (selected != null) {
                 onChanged(selected);
               }
@@ -816,6 +832,282 @@ extension on _CampaignBuilderPageState {
                 ),
               ),
             ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<String?> _showWheelOptionPicker({
+    required String keyPrefix,
+    required String title,
+    required List<String> options,
+    required String? currentValue,
+    required Set<String> premiumOptionIds,
+    required bool isPremiumUnlocked,
+    required Color crownColor,
+    bool showCustomOption = false,
+    bool isCustomOptionLocked = false,
+    VoidCallback? onCustomOptionTap,
+  }) {
+    const customSentinel = '__custom__';
+    final allOptions = [
+      ...options,
+      if (showCustomOption) customSentinel,
+    ];
+
+    final initialIndex = currentValue != null
+        ? allOptions.indexOf(currentValue).clamp(0, allOptions.length - 1)
+        : 0;
+
+    final stableContext = context;
+    final theme = _resolvedAtmosphereTheme();
+
+    return showModalBottomSheet<String>(
+      context: stableContext,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) {
+        final colorScheme = theme.colorScheme;
+        final scrollController =
+            FixedExtentScrollController(initialItem: initialIndex);
+        var selectedIndex = initialIndex;
+
+        return Theme(
+          data: theme,
+          child: StatefulBuilder(
+            builder: (_, setState) {
+              final selectedOption = allOptions[selectedIndex];
+              final isCustomSelected = selectedOption == customSentinel;
+              final isPremiumSelected = isCustomSelected ||
+                  premiumOptionIds.contains(selectedOption);
+              final isLockedSelected = isPremiumSelected && !isPremiumUnlocked ||
+                  (isCustomSelected && isCustomOptionLocked);
+
+              return SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(28),
+                      border: Border.all(
+                        color: colorScheme.outline.withValues(alpha: 0.18),
+                      ),
+                      color: colorScheme.surface,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.18),
+                          blurRadius: 24,
+                          offset: const Offset(0, 12),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 10),
+                        Center(
+                          child: Container(
+                            width: 42,
+                            height: 5,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(999),
+                              color: colorScheme.outlineVariant,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 18, 20, 4),
+                          child:
+                              Text(title, style: theme.textTheme.titleLarge),
+                        ),
+                        SizedBox(
+                          height: 320,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              ListWheelScrollView(
+                                controller: scrollController,
+                                itemExtent: 52,
+                                perspective: 0.004,
+                                diameterRatio: 2.8,
+                                physics: const FixedExtentScrollPhysics(),
+                                onSelectedItemChanged: (i) =>
+                                    setState(() => selectedIndex = i),
+                                children: allOptions.map((option) {
+                                  final isCustom = option == customSentinel;
+                                  final isPremium = isCustom ||
+                                      premiumOptionIds.contains(option);
+                                  final displayLabel =
+                                      isCustom ? 'CUSTOM' : option.toUpperCase();
+                                  return Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          displayLabel,
+                                          style: theme.textTheme.titleMedium
+                                              ?.copyWith(
+                                            color: isPremium
+                                                ? crownColor
+                                                : colorScheme.onSurface,
+                                            fontWeight: FontWeight.w600,
+                                            letterSpacing: 0.8,
+                                          ),
+                                        ),
+                                        if (isPremium) ...[
+                                          const SizedBox(width: 8),
+                                          FaIcon(
+                                            FontAwesomeIcons.crown,
+                                            size: 12,
+                                            color: crownColor,
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                              // Top fade
+                              IgnorePointer(
+                                child: Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Container(
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          colorScheme.surface,
+                                          colorScheme.surface
+                                              .withValues(alpha: 0),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // Bottom fade
+                              IgnorePointer(
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                        colors: [
+                                          colorScheme.surface,
+                                          colorScheme.surface
+                                              .withValues(alpha: 0),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // Center selection band
+                              IgnorePointer(
+                                child: Center(
+                                  child: Container(
+                                    height: 52,
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 24),
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        top: BorderSide(
+                                          color:
+                                              crownColor.withValues(alpha: 0.4),
+                                        ),
+                                        bottom: BorderSide(
+                                          color:
+                                              crownColor.withValues(alpha: 0.4),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: FilledButton(
+                              onPressed: () {
+                                if (isLockedSelected) {
+                                  Navigator.of(sheetContext).pop();
+                                  showModalBottomSheet<void>(
+                                    context: stableContext,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (_) => PremiumUnlockPrompt(
+                                      highlightColor: crownColor,
+                                      onWatchAd: () async {
+                                        Navigator.pop(stableContext);
+                                        final prefs =
+                                            await _resolvePreferences();
+                                        if (prefs == null) return;
+                                        await PremiumAccessService
+                                            .grantTemporaryAccess(
+                                          prefs,
+                                          MonetizationPrefs(),
+                                        );
+                                        if (mounted) {
+                                          _applyShellState(() {
+                                            _premiumTemporaryUnlockGrantedAt =
+                                                DateTime.now();
+                                          });
+                                        }
+                                      },
+                                      onGoAdFree: () {
+                                        Navigator.pop(stableContext);
+                                        _handleGoAdFree();
+                                      },
+                                    ),
+                                  );
+                                } else if (isCustomSelected) {
+                                  Navigator.of(sheetContext).pop();
+                                  onCustomOptionTap?.call();
+                                } else {
+                                  Navigator.of(sheetContext).pop(selectedOption);
+                                }
+                              },
+                              style: FilledButton.styleFrom(
+                                backgroundColor: isLockedSelected
+                                    ? colorScheme.surfaceContainerHighest
+                                    : crownColor.withValues(alpha: 0.9),
+                                foregroundColor: isLockedSelected
+                                    ? colorScheme.onSurfaceVariant
+                                    : FantasyPalette.parchment,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 14),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                              ),
+                              child: Text(
+                                isLockedSelected
+                                    ? 'Unlock Premium'
+                                    : isCustomSelected
+                                        ? 'Enter Custom'
+                                        : 'Select',
+                                style: theme.textTheme.labelLarge
+                                    ?.copyWith(fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         );
       },
