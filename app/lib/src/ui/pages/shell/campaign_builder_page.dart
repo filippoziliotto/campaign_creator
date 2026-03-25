@@ -12,6 +12,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../audio/forge_sound_player.dart';
 import '../../../config/app_config.dart';
 import '../../../l10n_extension.dart';
 import '../../../models/campaign_models.dart';
@@ -355,6 +356,7 @@ class CampaignBuilderPage extends StatefulWidget {
     this.reviewPrompter,
     this.interstitialAdService,
     this.purchaseService,
+    this.forgeSoundPlayer,
     required this.currentLocale,
     required this.onLocaleChanged,
     this.currentThemeMode = ThemeMode.dark,
@@ -366,6 +368,7 @@ class CampaignBuilderPage extends StatefulWidget {
   final AppReviewPrompter? reviewPrompter;
   final InterstitialAdService? interstitialAdService;
   final PurchaseService? purchaseService;
+  final ForgeSoundPlayer? forgeSoundPlayer;
   final Locale currentLocale;
   final ValueChanged<Locale> onLocaleChanged;
   final ThemeMode currentThemeMode;
@@ -399,6 +402,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   late final ReviewPromptCoordinator _reviewPromptCoordinator;
   late final InterstitialAdService _interstitialAdService;
   late final PurchaseService _purchaseService;
+  late final ForgeSoundPlayer _forgeSoundPlayer;
   late final MonetizationCoordinator _monetizationCoordinator;
   StreamSubscription<List<NormalizedPurchaseUpdate>>? _purchaseSubscription;
   bool _isAdFree = false;
@@ -471,6 +475,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     _interstitialAdService =
         widget.interstitialAdService ?? DefaultInterstitialAdService();
     _purchaseService = widget.purchaseService ?? DefaultPurchaseService();
+    _forgeSoundPlayer = widget.forgeSoundPlayer ?? DefaultForgeSoundPlayer();
     _monetizationCoordinator = MonetizationCoordinator(
       adService: _interstitialAdService,
       purchaseService: _purchaseService,
@@ -508,6 +513,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     }
     _purchaseSubscription?.cancel();
     _interstitialAdService.dispose();
+    _forgeSoundPlayer.dispose();
     _entryScrollController.dispose();
     _forgeScrollController.dispose();
     _parchmentScrollController.dispose();
@@ -860,6 +866,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         _setAppStage(_AppStage.parchment);
       });
       _triggerMediumImpact();
+      unawaited(_forgeSoundPlayer.playForgeSound());
       await _copyPrompt(showFeedback: false);
       if (!mounted) {
         return;
@@ -1075,6 +1082,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   }
 
   Future<void> _handleNewSession() async {
+    unawaited(_forgeSoundPlayer.playNewSessionSound());
     setState(() => _isResetting = true);
     await Future.delayed(const Duration(milliseconds: 300));
     if (!mounted) return;
@@ -1355,6 +1363,11 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       _setAppStage(_AppStage.forge);
       _setForgeSection(section);
     });
+  }
+
+  void _handleResumeForgeTap([_ForgeSection section = _ForgeSection.world]) {
+    unawaited(_forgeSoundPlayer.playForgeSound());
+    _goToForge(section);
   }
 
   bool _isStageUnlocked(_AppStage stage) {

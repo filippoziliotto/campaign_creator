@@ -1,4 +1,5 @@
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
+import 'package:campaign_creator_flutter/src/audio/forge_sound_player.dart';
 import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
@@ -168,6 +169,79 @@ void main() {
       find.descendant(of: settingField, matching: find.text('EBERRON')),
       findsNothing,
     );
+  });
+
+  testWidgets('new session requests its sound immediately on tap', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      'campaign_builder.saved_prompt': 'Prompt salvato',
+      'campaign_builder.saved_campaign_type': 'One-Shot',
+      'campaign_builder.saved_setting': 'Forgotten Realms',
+    });
+    final soundPlayer = _FakeForgeSoundPlayer();
+
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(_entryOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+          forgeSoundPlayer: soundPlayer,
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    final newSessionButton = find.text('Nuova sessione');
+    await tester.ensureVisible(newSessionButton);
+    await tester.tap(newSessionButton);
+    await tester.pump();
+
+    expect(soundPlayer.newSessionPlayCount, 1);
+    expect(soundPlayer.forgePlayCount, 0);
+
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump();
+  });
+
+  testWidgets('resume forge requests the forge sound immediately on tap', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      'campaign_builder.saved_prompt': 'Prompt salvato',
+      'campaign_builder.saved_campaign_type': 'One-Shot',
+      'campaign_builder.saved_setting': 'Forgotten Realms',
+    });
+    final soundPlayer = _FakeForgeSoundPlayer();
+
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(_entryOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+          forgeSoundPlayer: soundPlayer,
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    final resumeButton = find.text('Riprendi la forgia');
+    await tester.ensureVisible(resumeButton);
+    await tester.tap(resumeButton);
+    await tester.pump();
+
+    expect(soundPlayer.forgePlayCount, 1);
+    expect(soundPlayer.newSessionPlayCount, 0);
   });
 
   testWidgets('entry top bar stays stable on narrow mobile widths', (
@@ -376,6 +450,24 @@ class _TestApp extends StatelessWidget {
       },
       home: child,
     );
+  }
+}
+
+class _FakeForgeSoundPlayer implements ForgeSoundPlayer {
+  int forgePlayCount = 0;
+  int newSessionPlayCount = 0;
+
+  @override
+  void dispose() {}
+
+  @override
+  Future<void> playForgeSound() async {
+    forgePlayCount += 1;
+  }
+
+  @override
+  Future<void> playNewSessionSound() async {
+    newSessionPlayCount += 1;
   }
 }
 

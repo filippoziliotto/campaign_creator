@@ -239,7 +239,7 @@ extension on _CampaignBuilderPageState {
                   children: [
                     FilledButton(
                       style: compactStyle,
-                      onPressed: () => _goToForge(_forgeSection),
+                      onPressed: () => _handleResumeForgeTap(_forgeSection),
                       child: Text(context.l10n.entryResumeForge),
                     ),
                     const SizedBox(height: 8),
@@ -257,7 +257,7 @@ extension on _CampaignBuilderPageState {
                   Expanded(
                     child: FilledButton(
                       style: compactStyle,
-                      onPressed: () => _goToForge(_forgeSection),
+                      onPressed: () => _handleResumeForgeTap(_forgeSection),
                       child: Text(context.l10n.entryResumeForge),
                     ),
                   ),

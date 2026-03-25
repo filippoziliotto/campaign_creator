@@ -1,4 +1,7 @@
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
+import 'package:campaign_creator_flutter/src/audio/forge_sound_player.dart';
+import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
+import 'package:campaign_creator_flutter/src/services/campaign_service.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -134,6 +137,57 @@ void main() {
     await _tapForgePrimaryAction(tester);
 
     expect(find.byKey(const ValueKey('parchment-action-copy')), findsOneWidget);
+  });
+
+  testWidgets('successful generation requests the forge sound once', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+    final soundPlayer = _FakeForgeSoundPlayer();
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: _buildPage(
+          initialPreferences: const <String, Object>{
+            'app.review_prompted': true,
+          },
+          forgeSoundPlayer: soundPlayer,
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openNarrativeSection(tester);
+
+    await _tapForgePrimaryAction(tester);
+
+    expect(soundPlayer.playCount, 1);
+  });
+
+  testWidgets('failed generation does not request the forge sound', (tester) async {
+    await _setLargeSurface(tester);
+    final soundPlayer = _FakeForgeSoundPlayer();
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: _buildPage(
+          initialPreferences: const <String, Object>{
+            'app.review_prompted': true,
+          },
+          service: _FailingCampaignService(),
+          forgeSoundPlayer: soundPlayer,
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openNarrativeSection(tester);
+
+    await _tapForgePrimaryAction(tester);
+
+    expect(soundPlayer.playCount, 0);
+    expect(
+      find.text('Generazione fallita. Controlla il messaggio mostrato nella schermata.'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('copy action triggers a light haptic impact', (tester) async {
@@ -291,6 +345,8 @@ void _clearRecordedHaptics() {
 Widget _buildPage({
   Map<String, Object>? initialPreferences,
   AppReviewPrompter? reviewPrompter,
+  CampaignService? service,
+  ForgeSoundPlayer? forgeSoundPlayer,
   Locale locale = const Locale('it'),
 }) {
   if (initialPreferences != null) {
@@ -298,10 +354,11 @@ Widget _buildPage({
   }
 
   return CampaignBuilderPage(
-    service: FakeCampaignService(minimalOptions()),
+    service: service ?? FakeCampaignService(minimalOptions()),
     currentLocale: locale,
     onLocaleChanged: (_) {},
     reviewPrompter: reviewPrompter,
+    forgeSoundPlayer: forgeSoundPlayer,
   );
 }
 
@@ -365,6 +422,36 @@ class _TestApp extends StatelessWidget {
       },
       home: child,
     );
+  }
+}
+
+class _FakeForgeSoundPlayer implements ForgeSoundPlayer {
+  int playCount = 0;
+  int newSessionPlayCount = 0;
+  bool disposed = false;
+
+  @override
+  Future<void> playForgeSound() async {
+    playCount += 1;
+  }
+
+  @override
+  Future<void> playNewSessionSound() async {
+    newSessionPlayCount += 1;
+  }
+
+  @override
+  void dispose() {
+    disposed = true;
+  }
+}
+
+class _FailingCampaignService extends FakeCampaignService {
+  _FailingCampaignService() : super(minimalOptions());
+
+  @override
+  Future<String> generatePrompt(CampaignGenerateRequest req) async {
+    throw Exception('boom');
   }
 }
 

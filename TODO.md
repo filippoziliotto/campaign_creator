@@ -13,8 +13,5 @@ can be sbloccata by going with the "no ad version" (in that case all crowns are 
 # 8
 The twist choice should follow the preset choice. The preset choice does not have an acrtual "no preset" choice, while the twist instead has. Proably the twist implementation should follow the preset's one.
 
-# 9
-Add audio when forging parchment
-
 # 10
 The vadge on the fixed upper part (the one showing the current choices and where you are 1,2,3,) shoul be the same as the badges of the entry cards (the ones on the upper left, coloured with the entry colour style)
