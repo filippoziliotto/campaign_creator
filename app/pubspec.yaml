@@ -19,6 +19,7 @@ dependencies:
   yaml: ^3.1.2
   shared_preferences: ^2.3.2
   flutter_svg: ^2.0.10+1
+  country_flags: ^3.0.0
   url_launcher: ^6.3.1
   package_info_plus: ^8.0.0
   in_app_review: ^2.0.9

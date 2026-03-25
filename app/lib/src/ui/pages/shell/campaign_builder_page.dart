@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animations/animations.dart';
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -2618,48 +2619,24 @@ class _LanguageMark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (badgeText, backgroundColor, foregroundColor) =
-        switch (languageCode) {
-      'it' => (
-          'IT',
-          const Color(0xFF1F8B4C),
-          const Color(0xFFF7F4EA),
-        ),
-      'es' => (
-          'ES',
-          const Color(0xFFF1C94A),
-          const Color(0xFF7A1F1F),
-        ),
-      'fr' => (
-          'FR',
-          const Color(0xFF2A58A5),
-          const Color(0xFFF7F4EA),
-        ),
-      _ => (
-          'GB',
-          const Color(0xFF1E3D8F),
-          const Color(0xFFF7F4EA),
-        ),
+    final countryCode = switch (languageCode) {
+      'it' => 'IT',
+      'es' => 'ES',
+      'fr' => 'FR',
+      _ => 'GB',
     };
 
-    return Container(
-      width: 22,
-      height: 14,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(5),
-        border: Border.all(color: outlineColor, width: 0.9),
-      ),
-      child: Center(
-        child: Text(
-          badgeText,
-          style: TextStyle(
-            color: foregroundColor,
-            fontSize: 7.5,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 0.3,
-            height: 1,
-          ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(3),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: outlineColor, width: 0.9),
+          borderRadius: BorderRadius.circular(3),
+        ),
+        child: CountryFlag.fromCountryCode(
+          countryCode,
+          width: 22,
+          height: 14,
         ),
       ),
     );

@@ -9,6 +9,7 @@ there is a "strange" right arrow on the selected campaing type
 Inside the entry on the bottom part of the image
 We should get rid of this. 
 Maybe is the arrow next to open-forge, so we can leave it but we have to make sure that is alwyas visibile both open-forge and the arrow if they are present.
+(DONE)
 
 
 # 3
