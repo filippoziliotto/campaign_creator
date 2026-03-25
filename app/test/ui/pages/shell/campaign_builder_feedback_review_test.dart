@@ -32,6 +32,63 @@ void main() {
     expect(haptics, <String>['HapticFeedbackType.lightImpact']);
   });
 
+  testWidgets(
+    'narrative section shows optional eyebrow and localized subtitle',
+    (tester) async {
+      await _setLargeSurface(tester);
+
+      Future<void> pumpForLocale({
+        required Locale locale,
+        required String sectionLabel,
+        required String optionalLabel,
+        required String subtitle,
+      }) async {
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+
+        await tester.pumpWidget(
+          _TestApp(
+            locale: locale,
+            child: _buildPage(locale: locale),
+          ),
+        );
+        await _pumpUi(tester);
+        await _openNarrativeSection(
+          tester,
+          sectionLabel: sectionLabel,
+        );
+
+        expect(find.text(optionalLabel), findsOneWidget);
+        expect(find.text(subtitle), findsOneWidget);
+      }
+
+      await pumpForLocale(
+        locale: const Locale('it'),
+        sectionLabel: 'Trama',
+        optionalLabel: 'Opzionale',
+        subtitle: 'Agganci, fazioni e vincoli extra per personalizzare la pergamena.',
+      );
+      await pumpForLocale(
+        locale: const Locale('en'),
+        sectionLabel: 'Story',
+        optionalLabel: 'Optional',
+        subtitle: 'Extra hooks, factions, and constraints to customize the parchment.',
+      );
+      await pumpForLocale(
+        locale: const Locale('es'),
+        sectionLabel: 'Historia',
+        optionalLabel: 'Opcional',
+        subtitle: 'Ganchos, facciones y restricciones extra para personalizar el pergamino.',
+      );
+      await pumpForLocale(
+        locale: const Locale('fr'),
+        sectionLabel: 'Histoire',
+        optionalLabel: 'Optionnel',
+        subtitle: 'Accroches, factions et contraintes supplémentaires pour personnaliser le parchemin.',
+      );
+    },
+  );
+
   testWidgets('successful generation triggers only a medium haptic impact', (
     tester,
   ) async {
@@ -55,6 +112,28 @@ void main() {
     });
 
     expect(haptics, <String>['HapticFeedbackType.mediumImpact']);
+  });
+
+  testWidgets('narrative section still forges parchment with empty fields', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: _buildPage(
+          initialPreferences: const <String, Object>{
+            'app.review_prompted': true,
+          },
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openNarrativeSection(tester);
+
+    await _tapForgePrimaryAction(tester);
+
+    expect(find.byKey(const ValueKey('parchment-action-copy')), findsOneWidget);
   });
 
   testWidgets('copy action triggers a light haptic impact', (tester) async {
@@ -212,6 +291,7 @@ void _clearRecordedHaptics() {
 Widget _buildPage({
   Map<String, Object>? initialPreferences,
   AppReviewPrompter? reviewPrompter,
+  Locale locale = const Locale('it'),
 }) {
   if (initialPreferences != null) {
     SharedPreferences.setMockInitialValues(initialPreferences);
@@ -219,18 +299,21 @@ Widget _buildPage({
 
   return CampaignBuilderPage(
     service: FakeCampaignService(minimalOptions()),
-    currentLocale: const Locale('it'),
+    currentLocale: locale,
     onLocaleChanged: (_) {},
     reviewPrompter: reviewPrompter,
   );
 }
 
-Future<void> _openNarrativeSection(WidgetTester tester) async {
+Future<void> _openNarrativeSection(
+  WidgetTester tester, {
+  String sectionLabel = 'Trama',
+}) async {
   await tester.tap(
     find.byKey(const ValueKey<String>('entry-campaign-card-One-Shot')),
   );
   await _pumpUi(tester);
-  await tester.tap(find.text('Trama'));
+  await tester.tap(find.text(sectionLabel));
   await _pumpUi(tester);
 
   expect(
@@ -260,14 +343,18 @@ Future<void> _setLargeSurface(WidgetTester tester) async {
 }
 
 class _TestApp extends StatelessWidget {
-  const _TestApp({required this.child});
+  const _TestApp({
+    required this.child,
+    this.locale = const Locale('it'),
+  });
 
   final Widget child;
+  final Locale locale;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      locale: const Locale('it'),
+      locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       builder: (context, child) {

@@ -33,6 +33,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get commonOpen => 'Abrir';
 
   @override
+  String get commonOptional => 'Opcional';
+
+  @override
   String get appFreeFormat => 'Elige formato';
 
   @override
@@ -435,7 +438,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get forgeNarrativeSectionSubtitle =>
-      'Ganchos, facciones, encuentros y límites de contenido.';
+      'Ganchos, facciones y restricciones extra para personalizar el pergamino.';
 
   @override
   String get forgeNarrativePanelTitle => 'Story and forces in play';

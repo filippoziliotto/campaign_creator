@@ -33,6 +33,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get commonOpen => 'Ouvrir';
 
   @override
+  String get commonOptional => 'Optionnel';
+
+  @override
   String get appFreeFormat => 'Choisir le format';
 
   @override
@@ -434,7 +437,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get forgeNarrativeSectionSubtitle =>
-      'Accroches, factions, rencontres et limites de contenu.';
+      'Accroches, factions et contraintes supplémentaires pour personnaliser le parchemin.';
 
   @override
   String get forgeNarrativePanelTitle => 'Story and forces in play';

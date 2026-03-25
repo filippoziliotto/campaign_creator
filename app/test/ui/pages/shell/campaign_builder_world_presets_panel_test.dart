@@ -233,6 +233,105 @@ void main() {
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets('default no-twist selection does not unlock world advance action',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1200, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(neutralTwistOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final advanceButton = find.widgetWithText(FilledButton, 'Vai al Party');
+    expect(tester.widget<FilledButton>(advanceButton).onPressed, isNull);
+    expect(find.text('Nessun colpo di scena'), findsWidgets);
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets('selecting a real twist unlocks world advance action',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1200, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(neutralTwistOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final advanceButton = find.widgetWithText(FilledButton, 'Vai al Party');
+    final twistField =
+        find.byKey(const ValueKey<String>('twist-selector-field'));
+
+    expect(tester.widget<FilledButton>(advanceButton).onPressed, isNull);
+
+    await tester.ensureVisible(twistField);
+    await tester.tap(twistField);
+    await _pumpUi(tester);
+    await tester.tap(find.text('Tradimento').last);
+    await _pumpUi(tester);
+
+    expect(tester.widget<FilledButton>(advanceButton).onPressed, isNotNull);
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets(
+      'selecting a non-default setting unlocks world advance with no twist',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1200, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(neutralTwistSettingOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final advanceButton = find.widgetWithText(FilledButton, 'Vai al Party');
+    final settingDropdown = find.byWidgetPredicate(
+      (widget) =>
+          widget is DropdownButtonFormField<String> &&
+          widget.decoration.labelText == 'Ambientazione',
+    );
+
+    expect(tester.widget<FilledButton>(advanceButton).onPressed, isNull);
+    expect(find.text('Nessun colpo di scena'), findsWidgets);
+
+    await tester.tap(settingDropdown);
+    await _pumpUi(tester);
+    await tester.tap(find.text('Eberron').last);
+    await _pumpUi(tester);
+
+    expect(tester.widget<FilledButton>(advanceButton).onPressed, isNotNull);
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
 }
 
 class _TestApp extends StatelessWidget {
@@ -300,6 +399,47 @@ CampaignOptions longTwistOptions() {
     ],
     presets: const {},
     settingDescriptions: const {'Forgotten Realms': 'Classico high fantasy.'},
+    presetDescriptions: const {},
+    presetNames: const {},
+  );
+}
+
+CampaignOptions neutralTwistOptions() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms'],
+    campaignTypes: const ['One-Shot'],
+    themes: const ['Intrigo'],
+    tones: const ['Epico'],
+    styles: const ['Lineare'],
+    partyArchetypes: const ['Tank'],
+    twists: const [
+      'Nessun colpo di scena',
+      'Tradimento',
+    ],
+    presets: const {},
+    settingDescriptions: const {'Forgotten Realms': 'Classico high fantasy.'},
+    presetDescriptions: const {},
+    presetNames: const {},
+  );
+}
+
+CampaignOptions neutralTwistSettingOptions() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms', 'Eberron'],
+    campaignTypes: const ['One-Shot'],
+    themes: const ['Intrigo'],
+    tones: const ['Epico'],
+    styles: const ['Lineare'],
+    partyArchetypes: const ['Tank'],
+    twists: const [
+      'Nessun colpo di scena',
+      'Tradimento',
+    ],
+    presets: const {},
+    settingDescriptions: const {
+      'Forgotten Realms': 'Classico high fantasy.',
+      'Eberron': 'Metropoli magica e pulp noir.',
+    },
     presetDescriptions: const {},
     presetNames: const {},
   );

@@ -382,6 +382,16 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   static const String _draftCampaignTypeKey =
       'campaign_builder.saved_campaign_type';
   static const String _draftSettingKey = 'campaign_builder.saved_setting';
+  static const Set<String> _neutralTwistValues = <String>{
+    '',
+    'nessun colpo di scena',
+    'nessun twist',
+    'no twist',
+    'none',
+    'sin giro',
+    'sin giro argumental',
+    'sans rebondissement',
+  };
 
   late final CampaignService _service;
   late final SharePromptCallback _sharePromptCallback;
@@ -1567,12 +1577,30 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   }
 
   bool _hasWorldSignals() {
-    return _selectedThemes.isNotEmpty ||
+    return _hasMeaningfulSelectedSetting() ||
+        _selectedThemes.isNotEmpty ||
         _selectedTones.isNotEmpty ||
         _selectedStyles.isNotEmpty ||
         _customThemeController.text.trim().isNotEmpty ||
         _customToneStyleController.text.trim().isNotEmpty ||
-        _customTwistController.text.trim().isNotEmpty;
+        _customTwistController.text.trim().isNotEmpty ||
+        _hasMeaningfulSelectedTwist();
+  }
+
+  bool _hasMeaningfulSelectedSetting() {
+    final options = _options;
+    if (options == null || options.settings.isEmpty) {
+      return false;
+    }
+
+    final selected = (_selectedSetting ?? '').trim();
+    final defaultSetting = options.settings.first.trim();
+    return selected.isNotEmpty && selected != defaultSetting;
+  }
+
+  bool _hasMeaningfulSelectedTwist() {
+    final normalized = (_selectedTwist ?? '').trim().toLowerCase();
+    return normalized.isNotEmpty && !_neutralTwistValues.contains(normalized);
   }
 
   bool _canAdvanceWorldSection() {

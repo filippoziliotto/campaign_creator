@@ -847,6 +847,7 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildNarrativeSection() {
     return SectionFrame(
+      eyebrow: context.l10n.commonOptional,
       title: context.l10n.forgeNarrativeSectionTitle,
       subtitle: context.l10n.forgeNarrativeSectionSubtitle,
       density: FrameDensity.featured,

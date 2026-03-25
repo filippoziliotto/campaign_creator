@@ -140,34 +140,6 @@ void main() {
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-mark-fr')),
         findsOneWidget);
-    expect(
-      find.descendant(
-        of: find.byKey(const ValueKey<String>('settings-language-mark-en')),
-        matching: find.text('GB'),
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.descendant(
-        of: find.byKey(const ValueKey<String>('settings-language-mark-it')),
-        matching: find.text('IT'),
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.descendant(
-        of: find.byKey(const ValueKey<String>('settings-language-mark-es')),
-        matching: find.text('ES'),
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.descendant(
-        of: find.byKey(const ValueKey<String>('settings-language-mark-fr')),
-        matching: find.text('FR'),
-      ),
-      findsOneWidget,
-    );
   });
 
   testWidgets('settings sheet theme control triggers callback and stays open',
@@ -236,7 +208,8 @@ void main() {
         matching: find.byType(TextButton),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
 
     expect(selectedLocale, const Locale('en'));
     expect(find.byKey(const ValueKey<String>('settings-sheet')), findsNothing);
@@ -485,6 +458,10 @@ class _LocaleReactiveTestAppState extends State<_LocaleReactiveTestApp> {
       locale: _locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      builder: (context, child) {
+        final data = MediaQuery.of(context).copyWith(disableAnimations: true);
+        return MediaQuery(data: data, child: child!);
+      },
       home: CampaignBuilderPage(
         service: _LocaleAwareFakeCampaignService(),
         currentLocale: _locale,

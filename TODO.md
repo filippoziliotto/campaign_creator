@@ -15,4 +15,4 @@ Add some possibilities for twists and other stuff with a "crown" symbol next to 
 can be sbloccata by going with the "no ad version" (in that case all crowns are remoed) or by loading an ad and in that case the crown is removed once? (maybe we can improve this idea??).
 
 # 8 
-Put the Trama section as an "advanced settings". Leave it as it is but we can forge the parchment without specifying this stuff, this is already available but we can also specify this with text saying to the user that this trama adds customiation but is not mandatory.
+Put the Trama section as an "advanced settings". Leave it as it is but we can forge the parchment without specifying this stuff, this is already available but we can also specify this with text saying to the user that this trama adds customiation but is not mandatory. (DONE possibly)

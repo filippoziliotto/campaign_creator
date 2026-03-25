@@ -41,7 +41,7 @@ CampaignOptions presetsOptions() {
     tones: const ['Epico'],
     styles: const ['Lineare'],
     partyArchetypes: const ['Tank'],
-    twists: const ['Tradimento', 'Portale'],
+    twists: const ['Nessun colpo di scena', 'Tradimento', 'Portale'],
     presets: const {
       'Cronache del Porto': {
         'campaign_type': 'one-shot',
@@ -75,7 +75,7 @@ CampaignOptions longCampaignPresetsOptions() {
     tones: const ['Tragico'],
     styles: const ['Investigativo'],
     partyArchetypes: const ['Tank'],
-    twists: const ['Tradimento', 'Portale'],
+    twists: const ['Nessun colpo di scena', 'Tradimento', 'Portale'],
     presets: const {
       'Echi del Trono': {
         'campaign_type': 'Campagna lunga',
