@@ -2698,7 +2698,7 @@ class _LanguageSegmentLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     final labelStyle = DefaultTextStyle.of(context).style.copyWith(
           fontWeight: FontWeight.w700,
-          letterSpacing: 0.4,
+          letterSpacing: 0.2,
         );
 
     return Row(
@@ -2709,8 +2709,13 @@ class _LanguageSegmentLabel extends StatelessWidget {
           languageCode: languageCode,
           outlineColor: outlineColor,
         ),
-        const SizedBox(width: 8),
-        Text(shortLabel, style: labelStyle),
+        const SizedBox(width: 6),
+        Text(
+          shortLabel,
+          style: labelStyle,
+          maxLines: 1,
+          softWrap: false,
+        ),
       ],
     );
   }
