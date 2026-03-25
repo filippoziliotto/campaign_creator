@@ -14,3 +14,5 @@ The badge on the fixed upper part (the one showing the current choices and where
 
 # 11
 Fix the premium stuff
+
+# 12

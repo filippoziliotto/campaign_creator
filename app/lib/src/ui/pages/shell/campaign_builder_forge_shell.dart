@@ -840,6 +840,15 @@ extension on _CampaignBuilderPageState {
                 }
               });
             },
+            premiumOptionIds: options.tones.length >= 2
+                ? {
+                    options.tones[options.tones.length - 2],
+                    options.tones.last,
+                  }
+                : options.tones.isNotEmpty
+                    ? {options.tones.last}
+                    : const {},
+            premiumCrownColor: _currentAtmosphere().glow,
           ),
           const SizedBox(height: 18),
           Text(
@@ -860,6 +869,15 @@ extension on _CampaignBuilderPageState {
                 }
               });
             },
+            premiumOptionIds: options.styles.length >= 2
+                ? {
+                    options.styles[options.styles.length - 2],
+                    options.styles.last,
+                  }
+                : options.styles.isNotEmpty
+                    ? {options.styles.last}
+                    : const {},
+            premiumCrownColor: _currentAtmosphere().glow,
           ),
           const SizedBox(height: 14),
           _buildLoreTextField(
