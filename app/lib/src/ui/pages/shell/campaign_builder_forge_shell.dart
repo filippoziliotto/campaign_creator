@@ -312,6 +312,7 @@ extension on _CampaignBuilderPageState {
               _markDirty(() {
                 _selectedSetting = value;
               });
+              if (value != null) _scrollForgeToRevealCreativePanel();
             },
           ),
           if (settingDescription != null) ...[
@@ -1012,5 +1013,19 @@ extension on _CampaignBuilderPageState {
         );
       }).toList(),
     );
+  }
+
+  void _scrollForgeToRevealCreativePanel() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_forgeScrollController.hasClients) return;
+      final maxExtent = _forgeScrollController.position.maxScrollExtent;
+      final target =
+          (_forgeScrollController.offset + 380.0).clamp(0.0, maxExtent);
+      _forgeScrollController.animateTo(
+        target,
+        duration: const Duration(milliseconds: 450),
+        curve: Curves.easeOutCubic,
+      );
+    });
   }
 }
