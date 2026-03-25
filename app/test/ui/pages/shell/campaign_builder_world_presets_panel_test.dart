@@ -68,14 +68,16 @@ void main() {
     final advanceButton = find.widgetWithText(FilledButton, 'Vai al Party');
     expect(tester.widget<FilledButton>(advanceButton).onPressed, isNull);
 
-    final presetDropdown = find.byWidgetPredicate(
-      (widget) =>
-          widget is DropdownButtonFormField<String> &&
-          widget.decoration.labelText == 'Preset rapido',
-    );
+    final presetField =
+        find.byKey(const ValueKey<String>('preset-selector-field'));
 
-    await tester.tap(presetDropdown);
+    await tester.ensureVisible(presetField);
+    await tester.tap(presetField);
     await _pumpUi(tester);
+    expect(
+      find.byKey(const ValueKey<String>('preset-selector-sheet')),
+      findsOneWidget,
+    );
     await tester.tap(find.text('Cronache del Porto').last);
     await _pumpUi(tester);
     await tester.tap(find.widgetWithText(FilledButton, 'Applica'));
@@ -108,14 +110,16 @@ void main() {
       const ValueKey<String>('entry-campaign-card-Campagna lunga'),
     );
 
-    final presetDropdown = find.byWidgetPredicate(
-      (widget) =>
-          widget is DropdownButtonFormField<String> &&
-          widget.decoration.labelText == 'Preset rapido',
-    );
+    final presetField =
+        find.byKey(const ValueKey<String>('preset-selector-field'));
 
-    await tester.tap(presetDropdown);
+    await tester.ensureVisible(presetField);
+    await tester.tap(presetField);
     await _pumpUi(tester);
+    expect(
+      find.byKey(const ValueKey<String>('preset-selector-sheet')),
+      findsOneWidget,
+    );
     await tester.tap(find.text('Echi del Trono').last);
     await _pumpUi(tester);
     await tester.tap(find.widgetWithText(FilledButton, 'Applica'));
@@ -234,6 +238,101 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
+  testWidgets('setting selector uses a bottom sheet for readable options',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(neutralTwistSettingOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final settingField =
+        find.byKey(const ValueKey<String>('setting-selector-field'));
+
+    await tester.ensureVisible(settingField);
+    await tester.tap(settingField);
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('setting-selector-sheet')),
+      findsOneWidget,
+    );
+    expect(find.text('Eberron'), findsWidgets);
+
+    await tester.tap(find.text('Eberron').last);
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('setting-selector-sheet')),
+      findsNothing,
+    );
+    expect(
+      find.descendant(of: settingField, matching: find.text('Eberron')),
+      findsOneWidget,
+    );
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets('preset selector uses a bottom sheet with localized labels',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(presetsOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final presetField =
+        find.byKey(const ValueKey<String>('preset-selector-field'));
+
+    await tester.ensureVisible(presetField);
+    await tester.tap(presetField);
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('preset-selector-sheet')),
+      findsOneWidget,
+    );
+    expect(find.text('Cronache del Porto'), findsWidgets);
+
+    await tester.tap(find.text('Cronache del Porto').last);
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('preset-selector-sheet')),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: presetField,
+        matching: find.text('Cronache del Porto'),
+      ),
+      findsOneWidget,
+    );
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
   testWidgets('default no-twist selection does not unlock world advance action',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
@@ -314,17 +413,19 @@ void main() {
     await _openForgeFromEntry(tester);
 
     final advanceButton = find.widgetWithText(FilledButton, 'Vai al Party');
-    final settingDropdown = find.byWidgetPredicate(
-      (widget) =>
-          widget is DropdownButtonFormField<String> &&
-          widget.decoration.labelText == 'Ambientazione',
-    );
+    final settingField =
+        find.byKey(const ValueKey<String>('setting-selector-field'));
 
     expect(tester.widget<FilledButton>(advanceButton).onPressed, isNull);
     expect(find.text('Nessun colpo di scena'), findsWidgets);
 
-    await tester.tap(settingDropdown);
+    await tester.ensureVisible(settingField);
+    await tester.tap(settingField);
     await _pumpUi(tester);
+    expect(
+      find.byKey(const ValueKey<String>('setting-selector-sheet')),
+      findsOneWidget,
+    );
     await tester.tap(find.text('Eberron').last);
     await _pumpUi(tester);
 

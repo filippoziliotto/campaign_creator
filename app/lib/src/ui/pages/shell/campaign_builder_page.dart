@@ -543,6 +543,18 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     });
   }
 
+  void _clearTextControllersSilently() {
+    for (final controller in _textControllers) {
+      controller.removeListener(_handleDraftInputChanged);
+    }
+    for (final controller in _textControllers) {
+      controller.clear();
+    }
+    for (final controller in _textControllers) {
+      controller.addListener(_handleDraftInputChanged);
+    }
+  }
+
   void _showSnackBar(String message) {
     if (!mounted) {
       return;
@@ -1027,11 +1039,35 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     }
     if (!mounted) return;
     setState(() {
+      final options = _options;
+      _clearTextControllersSilently();
       _generatedPrompt = null;
       _savedDraftPrompt = null;
       _savedDraftSavedAt = null;
-      _hasUnsavedChanges = false;
       _selectedCampaignType = null;
+      _selectedSetting =
+          options != null && options.settings.isNotEmpty
+              ? options.settings.first
+              : null;
+      _selectedTwist =
+          options != null && options.twists.isNotEmpty
+              ? options.twists.first
+              : null;
+      _selectedPreset = null;
+      _appliedPreset = null;
+      _selectedThemes.clear();
+      _selectedTones.clear();
+      _selectedStyles.clear();
+      _selectedArchetypes.clear();
+      _partyLevel = 3;
+      _partySize = 4;
+      _includeNpcs = true;
+      _includeEncounters = true;
+      _errorMessage = null;
+      _hasUnsavedChanges = false;
+      _forgeTransitionReverse = false;
+      _appStage = _AppStage.entry;
+      _forgeSection = _ForgeSection.world;
     });
     _showSnackBar(context.l10n.entryResetDraftConfirm);
   }

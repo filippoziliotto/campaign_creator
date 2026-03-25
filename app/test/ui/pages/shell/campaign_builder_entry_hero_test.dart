@@ -23,7 +23,7 @@ void main() {
       'campaign_builder.saved_setting': 'Forgotten Realms',
     });
 
-    await tester.binding.setSurfaceSize(const Size(390, 844));
+    await tester.binding.setSurfaceSize(const Size(1200, 1600));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await tester.pumpWidget(
@@ -113,6 +113,60 @@ void main() {
         ),
       ),
       findsOneWidget,
+    );
+  });
+
+  testWidgets('new session resets forge selections back to defaults', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      'campaign_builder.saved_prompt': 'Prompt salvato',
+      'campaign_builder.saved_campaign_type': 'One-Shot',
+      'campaign_builder.saved_setting': 'Eberron',
+    });
+
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(_entryResetOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    final newSessionButton = find.text('Nuova sessione');
+    await tester.ensureVisible(newSessionButton);
+    await tester.tap(newSessionButton);
+    await _pumpUi(tester);
+
+    final oneShotCard = find.byKey(
+      const ValueKey<String>('entry-campaign-card-One-Shot'),
+    );
+    await tester.ensureVisible(oneShotCard);
+    await tester.tap(oneShotCard);
+    await _pumpUi(tester);
+
+    final settingField =
+        find.byKey(const ValueKey<String>('setting-selector-field'));
+
+    expect(settingField, findsOneWidget);
+
+    expect(
+      find.descendant(
+        of: settingField,
+        matching: find.text('Forgotten Realms'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: settingField, matching: find.text('Eberron')),
+      findsNothing,
     );
   });
 
@@ -233,6 +287,30 @@ CampaignOptions _entryOptions() {
     twists: const ['Tradimento'],
     presets: const {},
     settingDescriptions: const {'Forgotten Realms': 'Classico high fantasy.'},
+    presetDescriptions: const {},
+    presetNames: const {},
+  );
+}
+
+CampaignOptions _entryResetOptions() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms', 'Eberron'],
+    campaignTypes: const [
+      'One-Shot',
+      'Mini-campaign',
+      'Long campaign',
+      'Dungeon crawl',
+    ],
+    themes: const ['Intrigo'],
+    tones: const ['Epico'],
+    styles: const ['Lineare'],
+    partyArchetypes: const ['Tank'],
+    twists: const ['Nessun colpo di scena', 'Tradimento'],
+    presets: const {},
+    settingDescriptions: const {
+      'Forgotten Realms': 'Classico high fantasy.',
+      'Eberron': 'Metropoli magica e pulp noir.',
+    },
     presetDescriptions: const {},
     presetNames: const {},
   );

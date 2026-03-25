@@ -301,10 +301,12 @@ extension on _CampaignBuilderPageState {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildStringDropdown(
+          _buildPickerSelector(
+            title: context.l10n.forgeFoundationTitle,
             label: context.l10n.forgeSettingLabel,
             value: _selectedSetting,
             options: options.settings,
+            keyPrefix: 'setting-selector',
             onChanged: (value) {
               _markDirty(() {
                 _selectedSetting = value;
@@ -348,72 +350,69 @@ extension on _CampaignBuilderPageState {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final compact = constraints.maxWidth < 520;
-              if (compact) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildStringDropdown(
-                      label: context.l10n.forgeQuickPresetLabel,
-                      value: effectiveSelectedPreset,
-                      options: presets,
-                      labels: presetNames,
-                      onChanged: (value) {
-                        _markDirty(() {
-                          _selectedPreset = value;
-                        });
-                      },
-                    ),
-                    if (!isApplied) ...[
-                      const SizedBox(height: 12),
-                      FilledButton(
-                        style: FilledButton.styleFrom(
-                          visualDensity: VisualDensity.compact,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 8),
-                        ),
-                        onPressed: effectiveSelectedPreset == null
-                            ? null
-                            : _applyPreset,
-                        child: Text(context.l10n.forgeApplyPreset),
-                      ),
-                    ],
-                  ],
-                );
-              }
+          Builder(
+            builder: (context) {
+              final presetSelector = _buildPickerSelector(
+                title: context.l10n.forgePresetPanelTitle,
+                label: context.l10n.forgeQuickPresetLabel,
+                value: effectiveSelectedPreset,
+                options: presets,
+                labels: presetNames,
+                keyPrefix: 'preset-selector',
+                onChanged: (value) {
+                  _markDirty(() {
+                    _selectedPreset = value;
+                  });
+                },
+              );
 
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: _buildStringDropdown(
-                      label: context.l10n.forgeQuickPresetLabel,
-                      value: effectiveSelectedPreset,
-                      options: presets,
-                      labels: presetNames,
-                      onChanged: (value) {
-                        _markDirty(() {
-                          _selectedPreset = value;
-                        });
-                      },
-                    ),
-                  ),
-                  if (!isApplied) ...[
-                    const SizedBox(width: 12),
-                    FilledButton(
-                      style: FilledButton.styleFrom(
-                        visualDensity: VisualDensity.compact,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 8),
-                      ),
-                      onPressed:
-                          effectiveSelectedPreset == null ? null : _applyPreset,
-                      child: Text(context.l10n.forgeApply),
-                    ),
-                  ],
-                ],
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  final compact = constraints.maxWidth < 520;
+                  if (compact) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        presetSelector,
+                        if (!isApplied) ...[
+                          const SizedBox(height: 12),
+                          FilledButton(
+                            style: FilledButton.styleFrom(
+                              visualDensity: VisualDensity.compact,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 8),
+                            ),
+                            onPressed: effectiveSelectedPreset == null
+                                ? null
+                                : _applyPreset,
+                            child: Text(context.l10n.forgeApplyPreset),
+                          ),
+                        ],
+                      ],
+                    );
+                  }
+
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: presetSelector),
+                      if (!isApplied) ...[
+                        const SizedBox(width: 12),
+                        FilledButton(
+                          style: FilledButton.styleFrom(
+                            visualDensity: VisualDensity.compact,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 8),
+                          ),
+                          onPressed: effectiveSelectedPreset == null
+                              ? null
+                              : _applyPreset,
+                          child: Text(context.l10n.forgeApply),
+                        ),
+                      ],
+                    ],
+                  );
+                },
               );
             },
           ),
@@ -436,10 +435,13 @@ extension on _CampaignBuilderPageState {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTwistSelector(
+          _buildPickerSelector(
+            title: context.l10n.forgeTwistTitle,
             label: context.l10n.forgeTwistLabel,
             value: _selectedTwist,
             options: options.twists,
+            keyPrefix: 'twist-selector',
+            emptyText: context.l10n.appTwistPending,
             onChanged: (value) {
               _markDirty(() {
                 _selectedTwist = value;
@@ -459,28 +461,35 @@ extension on _CampaignBuilderPageState {
     );
   }
 
-  Widget _buildTwistSelector({
+  Widget _buildPickerSelector({
+    required String title,
     required String label,
     required String? value,
     required List<String> options,
     required ValueChanged<String?> onChanged,
+    required String keyPrefix,
+    Map<String, String> labels = const {},
+    String? emptyText,
   }) {
     final normalizedValue = options.contains(value)
         ? value
         : (options.isNotEmpty ? options.first : null);
-    final summary = normalizedValue ?? context.l10n.appTwistPending;
+    final summary =
+        normalizedValue == null ? (emptyText ?? label) : (labels[normalizedValue] ?? normalizedValue);
 
     return InkWell(
-      key: const ValueKey<String>('twist-selector-field'),
+      key: ValueKey<String>('$keyPrefix-field'),
       onTap: options.isEmpty
           ? null
           : () async {
               FocusScope.of(context).unfocus();
-              final selected = await _showTwistPicker(
-                title: context.l10n.forgeTwistTitle,
+              final selected = await _showOptionPicker(
+                keyPrefix: keyPrefix,
+                title: title,
                 label: label,
                 currentValue: normalizedValue,
                 options: options,
+                labels: labels,
               );
               if (selected != null) {
                 onChanged(selected);
@@ -502,11 +511,13 @@ extension on _CampaignBuilderPageState {
     );
   }
 
-  Future<String?> _showTwistPicker({
+  Future<String?> _showOptionPicker({
+    required String keyPrefix,
     required String title,
     required String label,
     required String? currentValue,
     required List<String> options,
+    Map<String, String> labels = const {},
   }) {
     final theme = _resolvedAtmosphereTheme();
 
@@ -525,7 +536,7 @@ extension on _CampaignBuilderPageState {
             child: Padding(
               padding: EdgeInsets.fromLTRB(12, 12, 12, bottomInset + 12),
               child: Container(
-                key: const ValueKey<String>('twist-selector-sheet'),
+                key: ValueKey<String>('$keyPrefix-sheet'),
                 constraints: BoxConstraints(maxHeight: maxHeight),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(28),
@@ -587,13 +598,13 @@ extension on _CampaignBuilderPageState {
 
                           return ListTile(
                             key: ValueKey<String>(
-                              'twist-selector-option-$index',
+                              '$keyPrefix-option-$index',
                             ),
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 12,
                               vertical: 6,
                             ),
-                            title: Text(option),
+                            title: Text(labels[option] ?? option),
                             trailing: isSelected
                                 ? Icon(
                                     Icons.check_circle_rounded,
@@ -936,51 +947,6 @@ extension on _CampaignBuilderPageState {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildStringDropdown({
-    required String label,
-    required String? value,
-    required List<String> options,
-    required ValueChanged<String?> onChanged,
-    Map<String, String> labels = const {},
-  }) {
-    final normalizedValue = options.contains(value)
-        ? value
-        : (options.isNotEmpty ? options.first : null);
-    return DropdownButtonFormField<String>(
-      initialValue: normalizedValue,
-      isExpanded: true,
-      items: options
-          .map(
-            (option) => DropdownMenuItem<String>(
-              value: option,
-              child: Text(
-                labels[option] ?? option,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          )
-          .toList(),
-      selectedItemBuilder: (context) {
-        return options
-            .map(
-              (option) => Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  labels[option] ?? option,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            )
-            .toList();
-      },
-      onChanged: options.isEmpty ? null : onChanged,
-      decoration: InputDecoration(
-        labelText: label,
       ),
     );
   }
