@@ -458,19 +458,27 @@ extension on _CampaignBuilderPageState {
             options: options.twists,
             keyPrefix: 'twist-selector',
             emptyText: context.l10n.appTwistPending,
+            premiumOptionIds: options.twists.length >= 5
+                ? options.twists
+                    .sublist(options.twists.length - 5)
+                    .toSet()
+                : options.twists.toSet(),
+            premiumHighlightColor: _currentAtmosphere().glow,
+            useWheelPicker: true,
+            showCustomOption: true,
+            isCustomOptionLocked: !_isPremiumUnlocked,
+            onCustomOptionTap: () => _showCustomEntryDialog(
+              title: 'Custom Twist',
+              hint: context.l10n.forgeCustomTwistHint,
+              onAdd: (value) => _markDirty(() {
+                _selectedTwist = value;
+              }),
+            ),
             onChanged: (value) {
               _markDirty(() {
                 _selectedTwist = value;
               });
             },
-          ),
-          const SizedBox(height: 14),
-          _buildLoreTextField(
-            controller: _customTwistController,
-            label: context.l10n.forgeCustomTwistLabel,
-            hintText: context.l10n.forgeCustomTwistHint,
-            minLines: 2,
-            maxLines: 4,
           ),
         ],
       ),
@@ -494,6 +502,12 @@ extension on _CampaignBuilderPageState {
     bool isCustomOptionLocked = false,
     VoidCallback? onCustomOptionTap,
     bool useWheelPicker = false,
+    // Wheel picker appearance overrides
+    double wheelSheetHeight = 320,
+    double wheelItemExtent = 68,
+    double wheelFontSize = 13,
+    double wheelLetterSpacing = 1.0,
+    FontWeight wheelFontWeight = FontWeight.w600,
   }) {
     // If the value is not a known preset, it's a custom-entered value — show as-is.
     final isCustomValue =
@@ -545,6 +559,11 @@ extension on _CampaignBuilderPageState {
                       showCustomOption: showCustomOption,
                       isCustomOptionLocked: !premiumUnlocked,
                       onCustomOptionTap: onCustomOptionTap,
+                      sheetHeight: wheelSheetHeight,
+                      itemExtent: wheelItemExtent,
+                      fontSize: wheelFontSize,
+                      letterSpacing: wheelLetterSpacing,
+                      fontWeight: wheelFontWeight,
                     )
                   : await _showOptionPicker(
                       keyPrefix: keyPrefix,
@@ -849,6 +868,11 @@ extension on _CampaignBuilderPageState {
     bool showCustomOption = false,
     bool isCustomOptionLocked = false,
     VoidCallback? onCustomOptionTap,
+    double sheetHeight = 320,
+    double itemExtent = 68,
+    double fontSize = 13,
+    double letterSpacing = 1.0,
+    FontWeight fontWeight = FontWeight.w600,
   }) {
     const customSentinel = '__custom__';
     final allOptions = [
@@ -922,13 +946,13 @@ extension on _CampaignBuilderPageState {
                               Text(title, style: theme.textTheme.titleLarge),
                         ),
                         SizedBox(
-                          height: 320,
+                          height: sheetHeight,
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
                               ListWheelScrollView(
                                 controller: scrollController,
-                                itemExtent: 52,
+                                itemExtent: itemExtent,
                                 perspective: 0.004,
                                 diameterRatio: 2.8,
                                 physics: const FixedExtentScrollPhysics(),
@@ -941,30 +965,43 @@ extension on _CampaignBuilderPageState {
                                   final displayLabel =
                                       isCustom ? 'CUSTOM' : option.toUpperCase();
                                   return Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          displayLabel,
-                                          style: theme.textTheme.titleMedium
-                                              ?.copyWith(
-                                            color: isPremium
-                                                ? crownColor
-                                                : colorScheme.onSurface,
-                                            fontWeight: FontWeight.w600,
-                                            letterSpacing: 0.8,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 32),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              displayLabel,
+                                              textAlign: TextAlign.center,
+                                              maxLines: 2,
+                                              style: theme.textTheme.titleSmall
+                                                  ?.copyWith(
+                                                color: isPremium
+                                                    ? crownColor
+                                                    : colorScheme.onSurface,
+                                                fontWeight: fontWeight,
+                                                letterSpacing: letterSpacing,
+                                                height: 1.25,
+                                                fontSize: fontSize,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                        if (isPremium) ...[
-                                          const SizedBox(width: 8),
-                                          FaIcon(
-                                            FontAwesomeIcons.crown,
-                                            size: 12,
-                                            color: crownColor,
-                                          ),
+                                          if (isPremium) ...[
+                                            const SizedBox(width: 8),
+                                            FaIcon(
+                                              FontAwesomeIcons.crown,
+                                              size: 12,
+                                              color: crownColor,
+                                            ),
+                                          ],
                                         ],
-                                      ],
+                                      ),
                                     ),
                                   );
                                 }).toList(),
@@ -1013,7 +1050,7 @@ extension on _CampaignBuilderPageState {
                               IgnorePointer(
                                 child: Center(
                                   child: Container(
-                                    height: 52,
+                                    height: itemExtent,
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 24),
                                     decoration: BoxDecoration(

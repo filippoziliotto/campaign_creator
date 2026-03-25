@@ -461,8 +461,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   String? _savedDraftPrompt;
   int? _savedDraftSavedAt;
 
-final TextEditingController _customTwistController = TextEditingController();
-  final TextEditingController _narrativeHooksController =
+final TextEditingController _narrativeHooksController =
       TextEditingController();
   final TextEditingController _characterNotesController =
       TextEditingController();
@@ -495,7 +494,6 @@ final TextEditingController _customTwistController = TextEditingController();
     _purchaseSubscription =
         _purchaseService.purchaseStream.listen(_handlePurchaseUpdates);
     _textControllers = <TextEditingController>[
-      _customTwistController,
       _narrativeHooksController,
       _characterNotesController,
       _constraintsController,
@@ -704,8 +702,6 @@ List<String> _availablePresetsForCampaignType(CampaignOptions options) {
   }
 
   CampaignGenerateRequest _buildGenerateRequest(CampaignOptions options) {
-    final customTwist = _customTwistController.text.trim();
-
     final themePreferences = [..._selectedThemes, ..._customThemeEntries];
     final tonePreferences = [..._selectedTones, ..._customToneEntries];
     final stylePreferences = [..._selectedStyles, ..._customStyleEntries];
@@ -719,7 +715,7 @@ List<String> _availablePresetsForCampaignType(CampaignOptions options) {
       partyLevel: _partyLevel,
       partySize: _partySize,
       partyArchetypes: _selectedArchetypes.toList(growable: false),
-      twist: customTwist.isNotEmpty ? customTwist : (_selectedTwist ?? ''),
+      twist: _selectedTwist ?? '',
       narrativeHooks: _narrativeHooksController.text.trim(),
       characterNotes: _characterNotesController.text.trim(),
       constraints: _constraintsController.text.trim(),
@@ -1364,10 +1360,6 @@ List<String> _availablePresetsForCampaignType(CampaignOptions options) {
   }
 
   String _currentTwistLabel() {
-    final customTwist = _customTwistController.text.trim();
-    if (customTwist.isNotEmpty) {
-      return customTwist;
-    }
     return _selectedTwist ?? context.l10n.appTwistPending;
   }
 
@@ -1531,7 +1523,6 @@ List<String> _availablePresetsForCampaignType(CampaignOptions options) {
         _customToneEntries.isNotEmpty ||
         _selectedStyles.isNotEmpty ||
         _customStyleEntries.isNotEmpty ||
-        _customTwistController.text.trim().isNotEmpty ||
         _hasMeaningfulSelectedTwist();
   }
 

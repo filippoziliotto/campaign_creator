@@ -15,4 +15,12 @@ The badge on the fixed upper part (the one showing the current choices and where
 # 11
 Fix the premium stuff
 
+# 11 A
+Change the current Wolrd,party,Trama icons with emojis using flutter_emoji package
+leaving the text as it is.
+
 # 12
+Can we add a parallel app or a new app for something similar when choosing the character class, race, style etc..
+
+# 14
+Fix the heigh-spacing etc.. of the two different ambientaione e twist wheelers
