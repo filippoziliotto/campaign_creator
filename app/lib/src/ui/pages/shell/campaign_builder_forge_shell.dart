@@ -317,6 +317,16 @@ extension on _CampaignBuilderPageState {
                     ? {options.settings.last}
                     : const {},
             premiumHighlightColor: _currentAtmosphere(options).glow,
+            showCustomOption: true,
+            isCustomOptionLocked: !_isPremiumUnlocked,
+            onCustomOptionTap: () => _showCustomEntryDialog(
+              title: 'Custom Setting',
+              hint: context.l10n.forgeCustomSettingHint,
+              onAdd: (value) => _markDirty(() {
+                _selectedSetting = value;
+                _scrollForgeToRevealCreativePanel();
+              }),
+            ),
             onChanged: (value) {
               _markDirty(() {
                 _selectedSetting = value;
@@ -331,19 +341,6 @@ extension on _CampaignBuilderPageState {
               text: settingDescription,
             ),
           ],
-          const SizedBox(height: 14),
-          _buildLoreTextField(
-            controller: _customSettingController,
-            label: context.l10n.forgeCustomSettingLabel,
-            hintText: context.l10n.forgeCustomSettingHint,
-            minLines: 1,
-            maxLines: 2,
-            enableSuggestions: false,
-            isPremiumLocked: !_isPremiumUnlocked,
-            premiumCrownColor: _currentAtmosphere().glow,
-            onPremiumLockedTap: () =>
-                _showPremiumUnlockForChip(_currentAtmosphere().glow),
-          ),
         ],
       ),
     );
@@ -492,10 +489,20 @@ extension on _CampaignBuilderPageState {
     bool defaultToFirstOption = true,
     Set<String> premiumOptionIds = const {},
     Color? premiumHighlightColor,
+    bool showCustomOption = false,
+    bool isCustomOptionLocked = false,
+    VoidCallback? onCustomOptionTap,
   }) {
-    final normalizedValue = options.contains(value)
+    // If the value is not a known preset, it's a custom-entered value — show as-is.
+    final isCustomValue =
+        value != null && value.isNotEmpty && !options.contains(value);
+    final normalizedValue = isCustomValue
         ? value
-        : (defaultToFirstOption && options.isNotEmpty ? options.first : null);
+        : options.contains(value)
+            ? value
+            : (defaultToFirstOption && options.isNotEmpty
+                ? options.first
+                : null);
     final hasVisibleSummary = normalizedValue != null || emptyText != null;
     String displayText(String raw) =>
         uppercaseText ? raw.toUpperCase() : raw;
@@ -534,6 +541,9 @@ extension on _CampaignBuilderPageState {
                 premiumOptionIds: premiumOptionIds,
                 isPremiumUnlocked: premiumUnlocked,
                 premiumHighlightColor: premiumHighlightColor,
+                showCustomOption: showCustomOption,
+                isCustomOptionLocked: isCustomOptionLocked,
+                onCustomOptionTap: onCustomOptionTap,
               );
               if (selected != null) {
                 onChanged(selected);
@@ -566,6 +576,9 @@ extension on _CampaignBuilderPageState {
     Set<String> premiumOptionIds = const {},
     bool isPremiumUnlocked = true,
     Color? premiumHighlightColor,
+    bool showCustomOption = false,
+    bool isCustomOptionLocked = false,
+    VoidCallback? onCustomOptionTap,
   }) {
     final theme = _resolvedAtmosphereTheme();
     // Capture the state's stable BuildContext before entering any builder
@@ -638,12 +651,70 @@ extension on _CampaignBuilderPageState {
                       child: ListView.separated(
                         shrinkWrap: true,
                         padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-                        itemCount: options.length,
+                        itemCount:
+                            options.length + (showCustomOption ? 1 : 0),
                         separatorBuilder: (_, __) => Divider(
                           height: 1,
                           color: colorScheme.outline.withValues(alpha: 0.12),
                         ),
                         itemBuilder: (_, index) {
+                          // "Custom…" tile at the end
+                          if (showCustomOption && index == options.length) {
+                            final crownColor =
+                                premiumHighlightColor ?? colorScheme.tertiary;
+                            return ListTile(
+                              key: ValueKey<String>('$keyPrefix-option-custom'),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              title: Text(
+                                'CUSTOM',
+                                style: TextStyle(color: crownColor),
+                              ),
+                              trailing: PremiumCrownBadge(
+                                highlightColor: crownColor,
+                                size: 18,
+                              ),
+                              onTap: isCustomOptionLocked
+                                  ? () {
+                                      Navigator.of(sheetContext).pop();
+                                      showModalBottomSheet<void>(
+                                        context: stableContext,
+                                        backgroundColor: Colors.transparent,
+                                        builder: (_) => PremiumUnlockPrompt(
+                                          highlightColor: crownColor,
+                                          onWatchAd: () async {
+                                            Navigator.pop(stableContext);
+                                            final prefs =
+                                                await _resolvePreferences();
+                                            if (prefs == null) return;
+                                            await PremiumAccessService
+                                                .grantTemporaryAccess(
+                                              prefs,
+                                              MonetizationPrefs(),
+                                            );
+                                            if (mounted) {
+                                              _applyShellState(() {
+                                                _premiumTemporaryUnlockGrantedAt =
+                                                    DateTime.now();
+                                              });
+                                            }
+                                          },
+                                          onGoAdFree: () {
+                                            Navigator.pop(stableContext);
+                                            _handleGoAdFree();
+                                          },
+                                        ),
+                                      );
+                                    }
+                                  : () {
+                                      Navigator.of(sheetContext).pop();
+                                      onCustomOptionTap?.call();
+                                    },
+                            );
+                          }
+
                           final option = options[index];
                           final isSelected = option == currentValue;
                           final isPremium = premiumOptionIds.contains(option);

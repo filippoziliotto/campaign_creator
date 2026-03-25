@@ -461,8 +461,6 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   String? _savedDraftPrompt;
   int? _savedDraftSavedAt;
 
-  final TextEditingController _customSettingController =
-      TextEditingController();
 final TextEditingController _customTwistController = TextEditingController();
   final TextEditingController _narrativeHooksController =
       TextEditingController();
@@ -497,7 +495,6 @@ final TextEditingController _customTwistController = TextEditingController();
     _purchaseSubscription =
         _purchaseService.purchaseStream.listen(_handlePurchaseUpdates);
     _textControllers = <TextEditingController>[
-      _customSettingController,
       _customTwistController,
       _narrativeHooksController,
       _characterNotesController,
@@ -707,7 +704,6 @@ List<String> _availablePresetsForCampaignType(CampaignOptions options) {
   }
 
   CampaignGenerateRequest _buildGenerateRequest(CampaignOptions options) {
-    final customSetting = _customSettingController.text.trim();
     final customTwist = _customTwistController.text.trim();
 
     final themePreferences = [..._selectedThemes, ..._customThemeEntries];
@@ -715,8 +711,7 @@ List<String> _availablePresetsForCampaignType(CampaignOptions options) {
     final stylePreferences = [..._selectedStyles, ..._customStyleEntries];
 
     return CampaignGenerateRequest(
-      setting:
-          customSetting.isNotEmpty ? customSetting : (_selectedSetting ?? ''),
+      setting: _selectedSetting ?? '',
       campaignType: _selectedCampaignType ?? '',
       themePreferences: themePreferences,
       tonePreferences: tonePreferences,
@@ -1365,10 +1360,6 @@ List<String> _availablePresetsForCampaignType(CampaignOptions options) {
   }
 
   String _currentSettingLabel() {
-    final customSetting = _customSettingController.text.trim();
-    if (customSetting.isNotEmpty) {
-      return customSetting;
-    }
     return _selectedSetting ?? context.l10n.appSettingPending;
   }
 
