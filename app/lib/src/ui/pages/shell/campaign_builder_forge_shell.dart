@@ -657,6 +657,7 @@ extension on _CampaignBuilderPageState {
             options.themes,
             _selectedThemes,
             (value, selected) {
+              _triggerLightImpact();
               _markDirty(() {
                 if (selected) {
                   _selectedThemes.add(value);
@@ -685,6 +686,7 @@ extension on _CampaignBuilderPageState {
             options.tones,
             _selectedTones,
             (value, selected) {
+              _triggerLightImpact();
               _markDirty(() {
                 if (selected) {
                   _selectedTones.add(value);
@@ -704,6 +706,7 @@ extension on _CampaignBuilderPageState {
             options.styles,
             _selectedStyles,
             (value, selected) {
+              _triggerLightImpact();
               _markDirty(() {
                 if (selected) {
                   _selectedStyles.add(value);

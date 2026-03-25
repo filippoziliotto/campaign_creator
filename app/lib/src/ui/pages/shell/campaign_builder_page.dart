@@ -2729,10 +2729,11 @@ class _LanguageMark extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final countryCode = switch (languageCode) {
+      'en' => 'US',
       'it' => 'IT',
       'es' => 'ES',
       'fr' => 'FR',
-      _ => 'GB',
+      _ => 'US',
     };
 
     return ClipRRect(

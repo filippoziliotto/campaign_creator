@@ -117,6 +117,42 @@ void main() {
     expect(haptics, <String>['HapticFeedbackType.mediumImpact']);
   });
 
+  testWidgets(
+    'theme tone and style chips trigger a light haptic on select and deselect',
+    (tester) async {
+      await _setLargeSurface(tester);
+
+      final haptics = await _recordHapticFeedback(() async {
+        await tester.pumpWidget(_TestApp(child: _buildPage()));
+        await _pumpUi(tester);
+        await _openWorldSection(tester);
+        _clearRecordedHaptics();
+
+        for (final label in <String>['Intrigo', 'Epico', 'Lineare']) {
+          await tester.tap(find.text(label));
+          await _pumpUi(tester);
+        }
+
+        for (final label in <String>['Intrigo', 'Epico', 'Lineare']) {
+          await tester.tap(find.text(label));
+          await _pumpUi(tester);
+        }
+      });
+
+      expect(
+        haptics,
+        <String>[
+          'HapticFeedbackType.lightImpact',
+          'HapticFeedbackType.lightImpact',
+          'HapticFeedbackType.lightImpact',
+          'HapticFeedbackType.lightImpact',
+          'HapticFeedbackType.lightImpact',
+          'HapticFeedbackType.lightImpact',
+        ],
+      );
+    },
+  );
+
   testWidgets('narrative section still forges parchment with empty fields', (
     tester,
   ) async {
@@ -366,10 +402,7 @@ Future<void> _openNarrativeSection(
   WidgetTester tester, {
   String sectionLabel = 'Trama',
 }) async {
-  await tester.tap(
-    find.byKey(const ValueKey<String>('entry-campaign-card-One-Shot')),
-  );
-  await _pumpUi(tester);
+  await _openWorldSection(tester);
   await tester.tap(find.text(sectionLabel));
   await _pumpUi(tester);
 
@@ -377,6 +410,13 @@ Future<void> _openNarrativeSection(
     find.byKey(const ValueKey<String>('forge-section-narrative')),
     findsOneWidget,
   );
+}
+
+Future<void> _openWorldSection(WidgetTester tester) async {
+  await tester.tap(
+    find.byKey(const ValueKey<String>('entry-campaign-card-One-Shot')),
+  );
+  await _pumpUi(tester);
 }
 
 Future<void> _pumpUi(WidgetTester tester) async {
