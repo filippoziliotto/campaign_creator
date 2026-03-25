@@ -107,6 +107,15 @@ twists:
 - Les monstres fuient un prédateur d’échelle cataclysmique
 - Toute la région est une simulation magique ou le rêve d’un dieu endormi
 - Le remède à la peste exige le sacrifice de la personne qui l’a commandé
+- La faction ennemie est composée des survivants futurs de l’échec du groupe
+- L’apocalypse a déjà eu lieu ; le monde vit à l’intérieur du sort de réparation
+- La prophétie est exacte, mais elle concerne les méchants, pas les héros
+- La Mort a disparu, et autre chose fait son travail très mal
+- Un dieu ment sur ce qu’il veut
+- La prison a été construite pour empêcher quelque chose d’entrer
+- Les souvenirs du groupe ont été modifiés pour une raison
+- Le commanditaire est mort avant même que la mission ne commence
+- La personne disparue a orchestré sa propre disparition
 presets:
   NULLA NELLE TORRI:
     setting: Eberron

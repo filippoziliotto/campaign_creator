@@ -160,12 +160,12 @@ void main() {
     expect(
       find.descendant(
         of: settingField,
-        matching: find.text('Forgotten Realms'),
+        matching: find.text('FORGOTTEN REALMS'),
       ),
       findsOneWidget,
     );
     expect(
-      find.descendant(of: settingField, matching: find.text('Eberron')),
+      find.descendant(of: settingField, matching: find.text('EBERRON')),
       findsNothing,
     );
   });

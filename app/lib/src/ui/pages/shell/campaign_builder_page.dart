@@ -773,6 +773,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       _errorMessage = null;
       _appliedPreset = presetName;
     });
+    unawaited(_generatePrompt());
   }
 
   CampaignGenerateRequest _buildGenerateRequest(CampaignOptions options) {

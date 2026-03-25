@@ -307,6 +307,7 @@ extension on _CampaignBuilderPageState {
             value: _selectedSetting,
             options: options.settings,
             keyPrefix: 'setting-selector',
+            uppercaseText: true,
             onChanged: (value) {
               _markDirty(() {
                 _selectedSetting = value;
@@ -359,6 +360,9 @@ extension on _CampaignBuilderPageState {
                 options: presets,
                 labels: presetNames,
                 keyPrefix: 'preset-selector',
+                uppercaseText: true,
+                emptyText: context.l10n.forgeNoPresetSelected,
+                defaultToFirstOption: false,
                 onChanged: (value) {
                   _markDirty(() {
                     _selectedPreset = value;
@@ -470,12 +474,18 @@ extension on _CampaignBuilderPageState {
     required String keyPrefix,
     Map<String, String> labels = const {},
     String? emptyText,
+    bool uppercaseText = false,
+    bool defaultToFirstOption = true,
   }) {
     final normalizedValue = options.contains(value)
         ? value
-        : (options.isNotEmpty ? options.first : null);
-    final summary =
-        normalizedValue == null ? (emptyText ?? label) : (labels[normalizedValue] ?? normalizedValue);
+        : (defaultToFirstOption && options.isNotEmpty ? options.first : null);
+    final hasVisibleSummary = normalizedValue != null || emptyText != null;
+    String displayText(String raw) =>
+        uppercaseText ? raw.toUpperCase() : raw;
+    final summary = normalizedValue == null
+        ? (emptyText ?? label)
+        : displayText(labels[normalizedValue] ?? normalizedValue);
 
     return InkWell(
       key: ValueKey<String>('$keyPrefix-field'),
@@ -490,6 +500,7 @@ extension on _CampaignBuilderPageState {
                 currentValue: normalizedValue,
                 options: options,
                 labels: labels,
+                uppercaseText: uppercaseText,
               );
               if (selected != null) {
                 onChanged(selected);
@@ -497,7 +508,7 @@ extension on _CampaignBuilderPageState {
             },
       borderRadius: BorderRadius.circular(12),
       child: InputDecorator(
-        isEmpty: normalizedValue == null,
+        isEmpty: !hasVisibleSummary,
         decoration: InputDecoration(
           labelText: label,
           suffixIcon: const Icon(Icons.unfold_more_rounded),
@@ -518,6 +529,7 @@ extension on _CampaignBuilderPageState {
     required String? currentValue,
     required List<String> options,
     Map<String, String> labels = const {},
+    bool uppercaseText = false,
   }) {
     final theme = _resolvedAtmosphereTheme();
 
@@ -595,6 +607,9 @@ extension on _CampaignBuilderPageState {
                         itemBuilder: (context, index) {
                           final option = options[index];
                           final isSelected = option == currentValue;
+                          final displayLabel = uppercaseText
+                              ? (labels[option] ?? option).toUpperCase()
+                              : (labels[option] ?? option);
 
                           return ListTile(
                             key: ValueKey<String>(
@@ -604,7 +619,7 @@ extension on _CampaignBuilderPageState {
                               horizontal: 12,
                               vertical: 6,
                             ),
-                            title: Text(labels[option] ?? option),
+                            title: Text(displayLabel),
                             trailing: isSelected
                                 ? Icon(
                                     Icons.check_circle_rounded,

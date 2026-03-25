@@ -328,10 +328,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get forgeQuickPresetLabel => 'Quick preset';
 
   @override
-  String get forgeApplyPreset => 'Apply preset';
+  String get forgeNoPresetSelected => 'Sin preset';
 
   @override
-  String get forgeApply => 'Apply';
+  String get forgeApplyPreset => 'Forjar con preset';
+
+  @override
+  String get forgeApply => 'Forjar con preset';
 
   @override
   String get forgeSettingLabel => 'Ambientación';

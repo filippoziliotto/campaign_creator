@@ -1,6 +1,7 @@
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_primitives.dart';
+import 'package:campaign_creator_flutter/src/ui/pages/routes/parchment_page.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -47,7 +48,7 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
-  testWidgets('applying a preset still unlocks the world advance action',
+  testWidgets('applying a preset forges directly to parchment',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -65,9 +66,6 @@ void main() {
     await _pumpUi(tester);
     await _openForgeFromEntry(tester);
 
-    final advanceButton = find.widgetWithText(FilledButton, 'Vai al Party');
-    expect(tester.widget<FilledButton>(advanceButton).onPressed, isNull);
-
     final presetField =
         find.byKey(const ValueKey<String>('preset-selector-field'));
 
@@ -78,18 +76,60 @@ void main() {
       find.byKey(const ValueKey<String>('preset-selector-sheet')),
       findsOneWidget,
     );
-    await tester.tap(find.text('Cronache del Porto').last);
+    await tester.tap(find.text('CRONACHE DEL PORTO').last);
     await _pumpUi(tester);
-    await tester.tap(find.widgetWithText(FilledButton, 'Applica'));
+    await tester.tap(find.widgetWithText(FilledButton, 'Forgia con preset'));
     await _pumpUi(tester);
 
-    expect(tester.widget<FilledButton>(advanceButton).onPressed, isNotNull);
-    expect(find.text('Metropoli magica e pulp noir.'), findsOneWidget);
+    expect(find.byKey(const ValueKey('parchment-action-copy')), findsOneWidget);
+    expect(find.byType(ParchmentRoutePage), findsOneWidget);
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
-  testWidgets('applying a long campaign preset updates the world controls',
+  testWidgets('preset selector starts empty and forge button is disabled',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1200, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(presetsOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final presetField =
+        find.byKey(const ValueKey<String>('preset-selector-field'));
+    final forgeButton =
+        find.widgetWithText(FilledButton, 'Forgia con preset');
+
+    expect(
+      find.descendant(
+        of: presetField,
+        matching: find.text('Nessun preset'),
+      ),
+      findsOneWidget,
+    );
+    final inputDecorator = tester.widget<InputDecorator>(
+      find.descendant(
+        of: presetField,
+        matching: find.byType(InputDecorator),
+      ),
+    );
+    expect(inputDecorator.isEmpty, isFalse);
+    expect(tester.widget<FilledButton>(forgeButton).onPressed, isNull);
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets('applying a long campaign preset also forges directly to parchment',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -120,13 +160,13 @@ void main() {
       find.byKey(const ValueKey<String>('preset-selector-sheet')),
       findsOneWidget,
     );
-    await tester.tap(find.text('Echi del Trono').last);
+    await tester.tap(find.text('ECHI DEL TRONO').last);
     await _pumpUi(tester);
-    await tester.tap(find.widgetWithText(FilledButton, 'Applica'));
+    await tester.tap(find.widgetWithText(FilledButton, 'Forgia con preset'));
     await _pumpUi(tester);
 
-    expect(find.text('Ravenloft'), findsWidgets);
-    expect(find.text("L'impero crolla dall'interno."), findsOneWidget);
+    expect(find.byKey(const ValueKey('parchment-action-copy')), findsOneWidget);
+    expect(find.byType(ParchmentRoutePage), findsOneWidget);
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
@@ -267,9 +307,9 @@ void main() {
       find.byKey(const ValueKey<String>('setting-selector-sheet')),
       findsOneWidget,
     );
-    expect(find.text('Eberron'), findsWidgets);
+    expect(find.text('EBERRON'), findsWidgets);
 
-    await tester.tap(find.text('Eberron').last);
+    await tester.tap(find.text('EBERRON').last);
     await _pumpUi(tester);
 
     expect(
@@ -277,7 +317,7 @@ void main() {
       findsNothing,
     );
     expect(
-      find.descendant(of: settingField, matching: find.text('Eberron')),
+      find.descendant(of: settingField, matching: find.text('EBERRON')),
       findsOneWidget,
     );
   },
@@ -313,9 +353,9 @@ void main() {
       find.byKey(const ValueKey<String>('preset-selector-sheet')),
       findsOneWidget,
     );
-    expect(find.text('Cronache del Porto'), findsWidgets);
+    expect(find.text('CRONACHE DEL PORTO'), findsWidgets);
 
-    await tester.tap(find.text('Cronache del Porto').last);
+    await tester.tap(find.text('CRONACHE DEL PORTO').last);
     await _pumpUi(tester);
 
     expect(
@@ -325,7 +365,7 @@ void main() {
     expect(
       find.descendant(
         of: presetField,
-        matching: find.text('Cronache del Porto'),
+        matching: find.text('CRONACHE DEL PORTO'),
       ),
       findsOneWidget,
     );
@@ -426,7 +466,7 @@ void main() {
       find.byKey(const ValueKey<String>('setting-selector-sheet')),
       findsOneWidget,
     );
-    await tester.tap(find.text('Eberron').last);
+    await tester.tap(find.text('EBERRON').last);
     await _pumpUi(tester);
 
     expect(tester.widget<FilledButton>(advanceButton).onPressed, isNotNull);
