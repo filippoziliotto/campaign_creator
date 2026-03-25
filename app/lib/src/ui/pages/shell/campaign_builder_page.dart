@@ -432,6 +432,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   bool _isGenerating = false;
   bool _hasUnsavedChanges = false;
   bool _draftPersistenceAvailable = true;
+  bool _isResetting = false;
 
   _AppStage _appStage = _AppStage.entry;
   _ForgeSection _forgeSection = _ForgeSection.world;
@@ -1071,6 +1072,15 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       _forgeSection = _ForgeSection.world;
     });
     _showSnackBar(context.l10n.entryResetDraftConfirm);
+  }
+
+  Future<void> _handleNewSession() async {
+    setState(() => _isResetting = true);
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (!mounted) return;
+    await _resetDraft();
+    if (!mounted) return;
+    setState(() => _isResetting = false);
   }
 
   Future<void> _sealCurrentParchment() async {
@@ -1717,6 +1727,19 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                   ],
                 ),
               ),
+            IgnorePointer(
+              child: AnimatedOpacity(
+                opacity: _isResetting ? 1.0 : 0.0,
+                duration: _isResetting
+                    ? const Duration(milliseconds: 300)
+                    : const Duration(milliseconds: 420),
+                curve: _isResetting ? Curves.easeIn : Curves.easeOut,
+                child: const ColoredBox(
+                  color: Colors.black,
+                  child: SizedBox.expand(),
+                ),
+              ),
+            ),
             if (options != null)
               Positioned(
                 left: 20,
@@ -2522,12 +2545,19 @@ class _SettingsSheetState extends State<_SettingsSheet>
                         leading:
                             Icon(Icons.block_rounded, color: palette.accent),
                         title: Text(
-                          widget.adFreePrice != null
-                              ? context.l10n.settingsGoAdFreePriceWithAmount(
-                                  widget.adFreePrice!)
-                              : context.l10n.settingsGoAdFreePrice,
+                          context.l10n.settingsGoAdFreePrice,
                           style: textTheme.bodyLarge
                               ?.copyWith(color: palette.foreground),
+                        ),
+                        subtitle: Text(
+                          widget.adFreePrice != null
+                              ? context.l10n.settingsGoAdFreeSubtitleWithAmount(
+                                  widget.adFreePrice!,
+                                )
+                              : context.l10n.settingsGoAdFreeSubtitle,
+                          style: textTheme.labelSmall?.copyWith(
+                            color: palette.accent,
+                          ),
                         ),
                         enabled: !widget.isPurchaseBusy,
                         onTap: () {

@@ -641,6 +641,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsGoAdFreePrice => 'Quitar anuncios';
 
   @override
+  String get settingsGoAdFreeSubtitle => 'Compra única · £1.99';
+
+  @override
+  String settingsGoAdFreeSubtitleWithAmount(String price) {
+    return 'Compra única · $price';
+  }
+
+  @override
   String settingsGoAdFreePriceWithAmount(String price) {
     return 'Quitar anuncios — $price';
   }

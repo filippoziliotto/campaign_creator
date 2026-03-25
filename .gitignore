@@ -66,5 +66,7 @@ Thumbs.db
 CLAUDE.md
 docs/superpowers/
 docs/.superpowers/
-
+docs/brainstorm/
+docs/.brainstorm/
+.superpowers
 app/android/key.properties

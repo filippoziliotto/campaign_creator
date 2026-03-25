@@ -272,6 +272,15 @@
   "settingsVersion": "Version",
   "settingsGoAdFree": "Ads",
   "settingsGoAdFreePrice": "Go Ad-Free",
+  "settingsGoAdFreeSubtitle": "One-time purchase · £1.99",
+  "settingsGoAdFreeSubtitleWithAmount": "One-time purchase · {price}",
+  "@settingsGoAdFreeSubtitleWithAmount": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
   "settingsGoAdFreePriceWithAmount": "Go Ad-Free — {price}",
   "@settingsGoAdFreePriceWithAmount": {
     "placeholders": {

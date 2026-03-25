@@ -245,7 +245,7 @@ extension on _CampaignBuilderPageState {
                     const SizedBox(height: 8),
                     OutlinedButton(
                       style: resetStyle,
-                      onPressed: _resetDraft,
+                      onPressed: _isResetting ? null : _handleNewSession,
                       child: Text(context.l10n.entryResetDraft),
                     ),
                   ],
@@ -265,7 +265,7 @@ extension on _CampaignBuilderPageState {
                   Expanded(
                     child: OutlinedButton(
                       style: resetStyle,
-                      onPressed: _resetDraft,
+                      onPressed: _isResetting ? null : _handleNewSession,
                       child: Text(context.l10n.entryResetDraft),
                     ),
                   ),

@@ -61,6 +61,47 @@ void main() {
         findsOneWidget);
   });
 
+  testWidgets('settings sheet shows ad-free title and small purchase subtitle',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    final row = find.byKey(const ValueKey<String>('settings-go-ad-free-row'));
+    expect(row, findsOneWidget);
+    expect(
+      find.descendant(of: row, matching: find.text('Rimuovi le pubblicità')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: row,
+        matching: find.text('Acquisto una tantum · £1.99'),
+      ),
+      findsOneWidget,
+    );
+
+    final subtitle = tester.widget<Text>(
+      find.descendant(
+        of: row,
+        matching: find.text('Acquisto una tantum · £1.99'),
+      ),
+    );
+    final theme = buildFantasyTheme();
+    expect(subtitle.style?.color, theme.fantasy.accent);
+    expect(
+      subtitle.style?.fontSize,
+      theme.textTheme.labelSmall?.fontSize,
+    );
+  });
+
   testWidgets('settings sheet shows version text', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     addTearDown(() => tester.binding.setSurfaceSize(null));
