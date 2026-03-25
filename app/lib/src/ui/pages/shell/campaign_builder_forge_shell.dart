@@ -1024,6 +1024,10 @@ extension on _CampaignBuilderPageState {
                 }
               });
             },
+            premiumOptionIds: options.partyArchetypes.isNotEmpty
+                ? {options.partyArchetypes.last}
+                : const {},
+            premiumCrownColor: _currentAtmosphere().glow,
           ),
           if (_selectedArchetypes.length >= _partySize) ...[
             const SizedBox(height: 12),
