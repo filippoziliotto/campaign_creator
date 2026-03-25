@@ -225,6 +225,100 @@ class _ParchmentUnfoldRevealState extends State<ParchmentUnfoldReveal>
   }
 }
 
+class ParchmentSummonReveal extends StatefulWidget {
+  const ParchmentSummonReveal({
+    super.key,
+    required this.atmosphere,
+    required this.child,
+  });
+
+  final CampaignAtmosphereData atmosphere;
+  final Widget child;
+
+  @override
+  State<ParchmentSummonReveal> createState() => _ParchmentSummonRevealState();
+}
+
+class _ParchmentSummonRevealState extends State<ParchmentSummonReveal>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  bool get _reducedMotion =>
+      MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.atmosphere.parchmentUnfoldDuration,
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncAnimation();
+  }
+
+  @override
+  void didUpdateWidget(covariant ParchmentSummonReveal oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.atmosphere.parchmentUnfoldDuration !=
+        widget.atmosphere.parchmentUnfoldDuration) {
+      _controller.duration = widget.atmosphere.parchmentUnfoldDuration;
+    }
+    _syncAnimation();
+  }
+
+  void _syncAnimation() {
+    if (_reducedMotion) {
+      _controller.value = 1;
+      return;
+    }
+    if (_controller.status == AnimationStatus.dismissed &&
+        _controller.value == 0) {
+      _controller.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final curvedAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: widget.atmosphere.parchmentUnfoldCurve,
+    );
+
+    return AnimatedBuilder(
+      animation: curvedAnimation,
+      child: widget.child,
+      builder: (context, child) {
+        final progress = _reducedMotion ? 1.0 : curvedAnimation.value;
+        final opacity = Curves.easeOut.transform(progress);
+        final translateY = (1.0 - progress) * 10.0;
+        final scale = 0.98 + (progress * 0.02);
+
+        return Opacity(
+          opacity: opacity,
+          child: Transform(
+            transform: Matrix4.identity()
+              ..translateByDouble(0.0, translateY, 0.0, 1.0)
+              ..scaleByDouble(scale, scale, scale, 1.0),
+            alignment: Alignment.topCenter,
+            child: child,
+          ),
+        );
+      },
+    );
+  }
+}
+
 class PremiumParchmentSheet extends StatelessWidget {
   const PremiumParchmentSheet({
     super.key,

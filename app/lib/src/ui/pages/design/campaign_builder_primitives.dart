@@ -15,12 +15,14 @@ class CampaignStagePage extends Page<void> {
   const CampaignStagePage({
     required this.child,
     required this.atmosphere,
+    this.transitionDurationOverride,
     super.key,
     super.name,
   });
 
   final Widget child;
   final CampaignAtmosphereData atmosphere;
+  final Duration? transitionDurationOverride;
 
   @override
   Route<void> createRoute(BuildContext context) {
@@ -38,7 +40,8 @@ class _CampaignStageRoute extends PageRoute<void> {
   bool get maintainState => true;
 
   @override
-  Duration get transitionDuration => _page.atmosphere.routeTransitionDuration;
+  Duration get transitionDuration =>
+      _page.transitionDurationOverride ?? _page.atmosphere.routeTransitionDuration;
 
   @override
   Duration get reverseTransitionDuration =>

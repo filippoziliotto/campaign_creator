@@ -1792,6 +1792,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
           key: const ValueKey<String>('parchment-route'),
           name: '/parchment',
           atmosphere: atmosphere,
+          transitionDurationOverride: atmosphere.parchmentUnfoldDuration,
           child: _buildParchmentStage(options),
         ),
       );

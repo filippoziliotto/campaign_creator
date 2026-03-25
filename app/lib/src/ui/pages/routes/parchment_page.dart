@@ -28,44 +28,47 @@ class ParchmentRoutePage extends StatelessWidget {
 
     return StageRouteScaffold(
       scrollController: scrollController,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (hero != null) hero!,
-          if (errorBanner != null) ...[
-            if (hero != null) const SizedBox(height: 16),
-            errorBanner!,
-          ],
-          const SizedBox(height: 16),
-          if (sheet != null && isWide)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 11,
-                  child: ParchmentUnfoldReveal(
+      child: ParchmentSummonReveal(
+        atmosphere: atmosphere,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (hero != null) hero!,
+            if (errorBanner != null) ...[
+              if (hero != null) const SizedBox(height: 16),
+              errorBanner!,
+            ],
+            const SizedBox(height: 16),
+            if (sheet != null && isWide)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 11,
+                    child: ParchmentUnfoldReveal(
+                      atmosphere: atmosphere,
+                      child: sheet!,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(flex: 7, child: sidebar),
+                ],
+              )
+            else if (sheet != null)
+              Column(
+                children: [
+                  ParchmentUnfoldReveal(
                     atmosphere: atmosphere,
                     child: sheet!,
                   ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(flex: 7, child: sidebar),
-              ],
-            )
-          else if (sheet != null)
-            Column(
-              children: [
-                ParchmentUnfoldReveal(
-                  atmosphere: atmosphere,
-                  child: sheet!,
-                ),
-                const SizedBox(height: 16),
-                sidebar,
-              ],
-            )
-          else
-            sidebar,
-        ],
+                  const SizedBox(height: 16),
+                  sidebar,
+                ],
+              )
+            else
+              sidebar,
+          ],
+        ),
       ),
     );
   }
