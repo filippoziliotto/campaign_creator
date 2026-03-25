@@ -4,6 +4,7 @@ import 'package:animations/animations.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +20,7 @@ import '../../../models/campaign_models.dart';
 import '../../../monetization/interstitial_ad_service.dart';
 import '../../../monetization/monetization_coordinator.dart';
 import '../../../monetization/monetization_prefs.dart';
+import '../../../monetization/premium_access.dart';
 import '../../../monetization/purchase_service.dart';
 import '../../../services/campaign_service.dart';
 import '../../../services/local_campaign_service.dart';
@@ -2541,10 +2543,13 @@ class _SettingsSheetState extends State<_SettingsSheet>
                       ),
                       ListTile(
                         key: const ValueKey<String>('settings-go-ad-free-row'),
-                        leading:
-                            Icon(Icons.block_rounded, color: palette.accent),
+                        leading: FaIcon(
+                          FontAwesomeIcons.crown,
+                          color: palette.accent,
+                          size: 22,
+                        ),
                         title: Text(
-                          context.l10n.settingsGoAdFreePrice,
+                          'Unlock Premium',
                           style: textTheme.bodyLarge
                               ?.copyWith(color: palette.foreground),
                         ),

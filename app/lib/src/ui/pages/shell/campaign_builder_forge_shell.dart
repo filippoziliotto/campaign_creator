@@ -308,6 +308,15 @@ extension on _CampaignBuilderPageState {
             options: options.settings,
             keyPrefix: 'setting-selector',
             uppercaseText: true,
+            premiumOptionIds: options.settings.length >= 2
+                ? {
+                    options.settings[options.settings.length - 2],
+                    options.settings.last,
+                  }
+                : options.settings.isNotEmpty
+                    ? {options.settings.last}
+                    : const {},
+            premiumHighlightColor: _currentAtmosphere(options).glow,
             onChanged: (value) {
               _markDirty(() {
                 _selectedSetting = value;
@@ -477,6 +486,8 @@ extension on _CampaignBuilderPageState {
     String? emptyText,
     bool uppercaseText = false,
     bool defaultToFirstOption = true,
+    Set<String> premiumOptionIds = const {},
+    Color? premiumHighlightColor,
   }) {
     final normalizedValue = options.contains(value)
         ? value
@@ -494,6 +505,20 @@ extension on _CampaignBuilderPageState {
           ? null
           : () async {
               FocusScope.of(context).unfocus();
+
+              // Resolve premium access state if any options are gated.
+              bool premiumUnlocked = premiumOptionIds.isEmpty;
+              if (premiumOptionIds.isNotEmpty) {
+                final prefs = await _resolvePreferences();
+                if (prefs != null) {
+                  final state = PremiumAccessService.checkState(
+                    prefs,
+                    MonetizationPrefs(),
+                  );
+                  premiumUnlocked = state != PremiumAccessState.locked;
+                }
+              }
+
               final selected = await _showOptionPicker(
                 keyPrefix: keyPrefix,
                 title: title,
@@ -502,6 +527,9 @@ extension on _CampaignBuilderPageState {
                 options: options,
                 labels: labels,
                 uppercaseText: uppercaseText,
+                premiumOptionIds: premiumOptionIds,
+                isPremiumUnlocked: premiumUnlocked,
+                premiumHighlightColor: premiumHighlightColor,
               );
               if (selected != null) {
                 onChanged(selected);
@@ -531,11 +559,17 @@ extension on _CampaignBuilderPageState {
     required List<String> options,
     Map<String, String> labels = const {},
     bool uppercaseText = false,
+    Set<String> premiumOptionIds = const {},
+    bool isPremiumUnlocked = true,
+    Color? premiumHighlightColor,
   }) {
     final theme = _resolvedAtmosphereTheme();
+    // Capture the state's stable BuildContext before entering any builder
+    // so async callbacks inside nested modals always have a valid context.
+    final stableContext = context;
 
     return showModalBottomSheet<String>(
-      context: context,
+      context: stableContext,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (sheetContext) {
@@ -601,16 +635,49 @@ extension on _CampaignBuilderPageState {
                         shrinkWrap: true,
                         padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
                         itemCount: options.length,
-                        separatorBuilder: (context, index) => Divider(
+                        separatorBuilder: (_, __) => Divider(
                           height: 1,
                           color: colorScheme.outline.withValues(alpha: 0.12),
                         ),
-                        itemBuilder: (context, index) {
+                        itemBuilder: (_, index) {
                           final option = options[index];
                           final isSelected = option == currentValue;
+                          final isPremium = premiumOptionIds.contains(option);
+                          final isLocked = isPremium && !isPremiumUnlocked;
                           final displayLabel = uppercaseText
                               ? (labels[option] ?? option).toUpperCase()
                               : (labels[option] ?? option);
+                          final crownColor =
+                              premiumHighlightColor ?? colorScheme.tertiary;
+
+                          // Build trailing: crown badge and/or checkmark.
+                          Widget? trailing;
+                          if (isSelected && isPremium) {
+                            trailing = Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                PremiumCrownBadge(
+                                  highlightColor: crownColor,
+                                  size: 18,
+                                ),
+                                const SizedBox(width: 6),
+                                Icon(
+                                  Icons.check_circle_rounded,
+                                  color: colorScheme.primary,
+                                ),
+                              ],
+                            );
+                          } else if (isSelected) {
+                            trailing = Icon(
+                              Icons.check_circle_rounded,
+                              color: colorScheme.primary,
+                            );
+                          } else if (isPremium) {
+                            trailing = PremiumCrownBadge(
+                              highlightColor: crownColor,
+                              size: 18,
+                            );
+                          }
 
                           return ListTile(
                             key: ValueKey<String>(
@@ -620,14 +687,47 @@ extension on _CampaignBuilderPageState {
                               horizontal: 12,
                               vertical: 6,
                             ),
-                            title: Text(displayLabel),
-                            trailing: isSelected
-                                ? Icon(
-                                    Icons.check_circle_rounded,
-                                    color: colorScheme.primary,
-                                  )
-                                : null,
-                            onTap: () => Navigator.of(sheetContext).pop(option),
+                            title: Text(
+                              displayLabel,
+                              style: isPremium
+                                  ? TextStyle(color: crownColor)
+                                  : null,
+                            ),
+                            trailing: trailing,
+                            onTap: isLocked
+                                ? () {
+                                    // Close the picker without a selection,
+                                    // then present the premium unlock prompt.
+                                    Navigator.of(sheetContext).pop();
+                                    showModalBottomSheet<void>(
+                                      context: stableContext,
+                                      backgroundColor: Colors.transparent,
+                                      builder: (_) => PremiumUnlockPrompt(
+                                        highlightColor: crownColor,
+                                        onWatchAd: () async {
+                                          Navigator.pop(stableContext);
+                                          // TODO: replace with a real rewarded
+                                          // ad once a rewarded ad service is
+                                          // wired up. For now this grants
+                                          // access directly for testing.
+                                          final prefs =
+                                              await _resolvePreferences();
+                                          if (prefs == null) return;
+                                          await PremiumAccessService
+                                              .grantTemporaryAccess(
+                                            prefs,
+                                            MonetizationPrefs(),
+                                          );
+                                          if (mounted) _applyShellState(() {});
+                                        },
+                                        onGoAdFree: () {
+                                          Navigator.pop(stableContext);
+                                          _handleGoAdFree();
+                                        },
+                                      ),
+                                    );
+                                  }
+                                : () => Navigator.of(sheetContext).pop(option),
                           );
                         },
                       ),
