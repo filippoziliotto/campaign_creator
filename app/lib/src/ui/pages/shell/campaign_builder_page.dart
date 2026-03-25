@@ -409,6 +409,15 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   StreamSubscription<List<NormalizedPurchaseUpdate>>? _purchaseSubscription;
   bool _isAdFree = false;
   bool _isPurchaseBusy = false;
+  DateTime? _premiumTemporaryUnlockGrantedAt;
+
+  bool get _isPremiumUnlocked {
+    if (_isAdFree) return true;
+    final grantedAt = _premiumTemporaryUnlockGrantedAt;
+    if (grantedAt == null) return false;
+    return DateTime.now().difference(grantedAt) <
+        PremiumAccessService.temporaryUnlockDuration;
+  }
   String? _adFreePrice;
   late final List<TextEditingController> _textControllers;
   final ScrollController _entryScrollController = ScrollController();

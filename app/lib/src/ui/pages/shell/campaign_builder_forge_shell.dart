@@ -718,7 +718,12 @@ extension on _CampaignBuilderPageState {
                                             prefs,
                                             MonetizationPrefs(),
                                           );
-                                          if (mounted) _applyShellState(() {});
+                                          if (mounted) {
+                                            _applyShellState(() {
+                                              _premiumTemporaryUnlockGrantedAt =
+                                                  DateTime.now();
+                                            });
+                                          }
                                         },
                                         onGoAdFree: () {
                                           Navigator.pop(stableContext);
@@ -739,6 +744,36 @@ extension on _CampaignBuilderPageState {
           ),
         );
       },
+    );
+  }
+
+  void _showPremiumUnlockForChip(Color crownColor) {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (_) => PremiumUnlockPrompt(
+        highlightColor: crownColor,
+        onWatchAd: () async {
+          Navigator.pop(context);
+          // TODO: replace with a real rewarded ad once a rewarded ad service
+          // is wired up. For now this grants access directly for testing.
+          final prefs = await _resolvePreferences();
+          if (prefs == null) return;
+          await PremiumAccessService.grantTemporaryAccess(
+            prefs,
+            MonetizationPrefs(),
+          );
+          if (mounted) {
+            _applyShellState(() {
+              _premiumTemporaryUnlockGrantedAt = DateTime.now();
+            });
+          }
+        },
+        onGoAdFree: () {
+          Navigator.pop(context);
+          _handleGoAdFree();
+        },
+      ),
     );
   }
 
@@ -767,6 +802,15 @@ extension on _CampaignBuilderPageState {
                 }
               });
             },
+            premiumOptionIds: options.themes.length >= 2
+                ? {
+                    options.themes[options.themes.length - 2],
+                    options.themes.last,
+                  }
+                : options.themes.isNotEmpty
+                    ? {options.themes.last}
+                    : const {},
+            premiumCrownColor: _currentAtmosphere().glow,
           ),
           const SizedBox(height: 14),
           _buildLoreTextField(
@@ -1099,17 +1143,25 @@ extension on _CampaignBuilderPageState {
   Widget _buildChipWrap(
     List<String> values,
     Set<String> selectedValues,
-    void Function(String value, bool selected) onSelected,
-  ) {
+    void Function(String value, bool selected) onSelected, {
+    Set<String> premiumOptionIds = const {},
+    Color? premiumCrownColor,
+  }) {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
       children: values.map((value) {
+        final isPremium = premiumOptionIds.contains(value);
+        final isLocked = isPremium && !_isPremiumUnlocked;
         return AnimatedRuneFilterChip(
           atmosphere: _currentAtmosphere(),
           label: value,
           selected: selectedValues.contains(value),
           onSelected: (selected) => onSelected(value, selected),
+          premiumCrownColor: isPremium ? premiumCrownColor : null,
+          onLockedTap: isLocked
+              ? () => _showPremiumUnlockForChip(premiumCrownColor!)
+              : null,
         );
       }).toList(),
     );

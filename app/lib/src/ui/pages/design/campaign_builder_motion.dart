@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../theme/fantasy_theme.dart';
 import 'campaign_builder_atmosphere.dart';
@@ -54,12 +55,22 @@ class AnimatedRuneFilterChip extends StatefulWidget {
     required this.label,
     required this.selected,
     required this.onSelected,
+    this.premiumCrownColor,
+    this.onLockedTap,
   });
 
   final CampaignAtmosphereData atmosphere;
   final String label;
   final bool selected;
   final ValueChanged<bool> onSelected;
+
+  /// When non-null the chip is marked as premium: shows a crown badge and
+  /// uses this color for the unselected label text.
+  final Color? premiumCrownColor;
+
+  /// When non-null the chip is locked: tapping calls this instead of
+  /// [onSelected], typically to show a premium unlock prompt.
+  final VoidCallback? onLockedTap;
 
   @override
   State<AnimatedRuneFilterChip> createState() => _AnimatedRuneFilterChipState();
@@ -108,11 +119,12 @@ class _AnimatedRuneFilterChipState extends State<AnimatedRuneFilterChip>
     final borderColor = widget.selected
         ? colorScheme.primary.withValues(alpha: 0.68)
         : colorScheme.outline.withValues(alpha: 0.45);
+    final isPremium = widget.premiumCrownColor != null;
 
-    return Material(
+    final chip = Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () => widget.onSelected(!widget.selected),
+        onTap: widget.onLockedTap ?? () => widget.onSelected(!widget.selected),
         borderRadius: BorderRadius.circular(999),
         child: AnimatedContainer(
           duration: reducedMotion
@@ -144,13 +156,32 @@ class _AnimatedRuneFilterChipState extends State<AnimatedRuneFilterChip>
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: widget.selected
                           ? FantasyPalette.parchment
-                          : colorScheme.onSurface,
+                          : (widget.premiumCrownColor ?? colorScheme.onSurface),
                     ),
               ),
             ),
           ),
         ),
       ),
+    );
+
+    if (!isPremium) return chip;
+
+    // Wrap in a Stack so the crown badge can overflow the chip's border.
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        chip,
+        Positioned(
+          top: -1,
+          right: -2,
+          child: FaIcon(
+            FontAwesomeIcons.crown,
+            size: 13,
+            color: widget.premiumCrownColor,
+          ),
+        ),
+      ],
     );
   }
 }

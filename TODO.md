@@ -12,5 +12,5 @@ can be sbloccata by going with the "no ad version" (in that case all crowns are 
 # 10
 The badge on the fixed upper part (the one showing the current choices and where you are 1,2,3,) shoul be the same as the badges of the entry cards (the ones on the upper left)
 
-# 11 
-In the Forge (2) the world (1) part. I would like that when a ambientazione is chosen the page scrolled down automatically just a little bit till the start of the temi/etc..
+# 11
+Fix the premium stuff
