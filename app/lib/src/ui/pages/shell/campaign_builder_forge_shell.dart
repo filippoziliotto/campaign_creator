@@ -339,6 +339,10 @@ extension on _CampaignBuilderPageState {
             minLines: 1,
             maxLines: 2,
             enableSuggestions: false,
+            isPremiumLocked: !_isPremiumUnlocked,
+            premiumCrownColor: _currentAtmosphere().glow,
+            onPremiumLockedTap: () =>
+                _showPremiumUnlockForChip(_currentAtmosphere().glow),
           ),
         ],
       ),
@@ -789,105 +793,21 @@ extension on _CampaignBuilderPageState {
             style: _resolvedAtmosphereTheme().textTheme.titleMedium,
           ),
           const SizedBox(height: 10),
-          _buildChipWrap(
-            options.themes,
-            _selectedThemes,
-            (value, selected) {
-              _triggerLightImpact();
-              _markDirty(() {
-                if (selected) {
-                  _selectedThemes.add(value);
-                } else {
-                  _selectedThemes.remove(value);
-                }
-              });
-            },
-            premiumOptionIds: options.themes.length >= 2
-                ? {
-                    options.themes[options.themes.length - 2],
-                    options.themes.last,
-                  }
-                : options.themes.isNotEmpty
-                    ? {options.themes.last}
-                    : const {},
-            premiumCrownColor: _currentAtmosphere().glow,
-          ),
-          const SizedBox(height: 14),
-          _buildLoreTextField(
-            controller: _customThemeController,
-            label: context.l10n.forgeCustomThemesLabel,
-            hintText: context.l10n.forgeCustomThemesHint,
-            minLines: 1,
-            maxLines: 2,
-            enableSuggestions: false,
-          ),
+          _buildThemesChipSection(options),
           const SizedBox(height: 18),
           Text(
             context.l10n.forgeToneTitle,
             style: _resolvedAtmosphereTheme().textTheme.titleMedium,
           ),
           const SizedBox(height: 10),
-          _buildChipWrap(
-            options.tones,
-            _selectedTones,
-            (value, selected) {
-              _triggerLightImpact();
-              _markDirty(() {
-                if (selected) {
-                  _selectedTones.add(value);
-                } else {
-                  _selectedTones.remove(value);
-                }
-              });
-            },
-            premiumOptionIds: options.tones.length >= 2
-                ? {
-                    options.tones[options.tones.length - 2],
-                    options.tones.last,
-                  }
-                : options.tones.isNotEmpty
-                    ? {options.tones.last}
-                    : const {},
-            premiumCrownColor: _currentAtmosphere().glow,
-          ),
+          _buildTonesChipSection(options),
           const SizedBox(height: 18),
           Text(
             context.l10n.forgeStyleTitle,
             style: _resolvedAtmosphereTheme().textTheme.titleMedium,
           ),
           const SizedBox(height: 10),
-          _buildChipWrap(
-            options.styles,
-            _selectedStyles,
-            (value, selected) {
-              _triggerLightImpact();
-              _markDirty(() {
-                if (selected) {
-                  _selectedStyles.add(value);
-                } else {
-                  _selectedStyles.remove(value);
-                }
-              });
-            },
-            premiumOptionIds: options.styles.length >= 2
-                ? {
-                    options.styles[options.styles.length - 2],
-                    options.styles.last,
-                  }
-                : options.styles.isNotEmpty
-                    ? {options.styles.last}
-                    : const {},
-            premiumCrownColor: _currentAtmosphere().glow,
-          ),
-          const SizedBox(height: 14),
-          _buildLoreTextField(
-            controller: _customToneStyleController,
-            label: context.l10n.forgeToneStyleOverrideLabel,
-            hintText: context.l10n.forgeToneStyleOverrideHint,
-            minLines: 1,
-            maxLines: 2,
-            enableSuggestions: false,
-          ),
+          _buildStylesChipSection(options),
         ],
       ),
     );
@@ -1143,22 +1063,46 @@ extension on _CampaignBuilderPageState {
     int minLines = 2,
     int maxLines = 4,
     bool enableSuggestions = true,
+    bool isPremiumLocked = false,
+    Color? premiumCrownColor,
+    VoidCallback? onPremiumLockedTap,
   }) {
-    return TextField(
+    final textField = TextField(
       controller: controller,
       minLines: minLines,
       maxLines: maxLines,
       autocorrect: enableSuggestions,
       enableSuggestions: enableSuggestions,
+      enabled: !isPremiumLocked,
       decoration: InputDecoration(
         labelText: label,
         hintText: hintText,
+        labelStyle: isPremiumLocked && premiumCrownColor != null
+            ? TextStyle(color: premiumCrownColor)
+            : null,
+        suffixIcon: isPremiumLocked && premiumCrownColor != null
+            ? Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: FaIcon(
+                  FontAwesomeIcons.crown,
+                  size: 16,
+                  color: premiumCrownColor,
+                ),
+              )
+            : null,
       ),
       onChanged: (_) {
         if (!_hasUnsavedChanges) {
           _markDirty();
         }
       },
+    );
+
+    if (!isPremiumLocked || onPremiumLockedTap == null) return textField;
+
+    return GestureDetector(
+      onTap: onPremiumLockedTap,
+      child: AbsorbPointer(child: textField),
     );
   }
 
@@ -1187,6 +1131,334 @@ extension on _CampaignBuilderPageState {
         );
       }).toList(),
     );
+  }
+
+  Widget _buildCustomChipSection({
+    required List<String> options,
+    required Set<String> selectedValues,
+    required Set<String> customEntries,
+    required void Function(String, bool) onSelected,
+    required void Function(String) onRemoveCustom,
+    required String dialogTitle,
+    required String dialogHint,
+  }) {
+    final atmosphere = _currentAtmosphere();
+    final premiumOptionIds = options.length >= 2
+        ? {options[options.length - 2], options.last}
+        : options.isNotEmpty
+            ? {options.last}
+            : const <String>{};
+
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        ...options.map((value) {
+          final isPremium = premiumOptionIds.contains(value);
+          final isLocked = isPremium && !_isPremiumUnlocked;
+          return AnimatedRuneFilterChip(
+            atmosphere: atmosphere,
+            label: value,
+            selected: selectedValues.contains(value),
+            onSelected: (sel) {
+              _triggerLightImpact();
+              _markDirty(() => onSelected(value, sel));
+            },
+            premiumCrownColor: isPremium ? atmosphere.glow : null,
+            onLockedTap: isLocked
+                ? () => _showPremiumUnlockForChip(atmosphere.glow)
+                : null,
+          );
+        }),
+        ...customEntries.map((entry) {
+          final atmospherePrimary =
+              _resolvedAtmosphereTheme().colorScheme.primary;
+          final chip = Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => _markDirty(() => onRemoveCustom(entry)),
+              borderRadius: BorderRadius.circular(999),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 220),
+                curve: Curves.easeOutCubic,
+                decoration: BoxDecoration(
+                  color: atmospherePrimary.withValues(alpha: 0.84),
+                  borderRadius: BorderRadius.circular(999),
+                  border: Border.all(
+                    color: atmospherePrimary.withValues(alpha: 0.68),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 10,
+                    right: 6,
+                    top: 6,
+                    bottom: 6,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        entry,
+                        style: _resolvedAtmosphereTheme()
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: FantasyPalette.parchment),
+                      ),
+                      const SizedBox(width: 4),
+                      Icon(
+                        Icons.close,
+                        size: 12,
+                        color: FantasyPalette.parchment.withValues(alpha: 0.7),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              chip,
+              Positioned(
+                top: -1,
+                right: -2,
+                child: FaIcon(
+                  FontAwesomeIcons.crown,
+                  size: 13,
+                  color: atmosphere.glow,
+                ),
+              ),
+            ],
+          );
+        }),
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: !_isPremiumUnlocked
+                    ? () => _showPremiumUnlockForChip(atmosphere.glow)
+                    : () => _showCustomEntryDialog(
+                          title: dialogTitle,
+                          hint: dialogHint,
+                          onAdd: (value) =>
+                              _markDirty(() => customEntries.add(value)),
+                        ),
+                borderRadius: BorderRadius.circular(999),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeOutCubic,
+                  decoration: BoxDecoration(
+                    color: _resolvedAtmosphereTheme()
+                        .colorScheme
+                        .surfaceContainerHighest
+                        .withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.circular(999),
+                    border: Border.all(
+                      color: atmosphere.glow.withValues(alpha: 0.45),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 6),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FaIcon(FontAwesomeIcons.plus,
+                            size: 10, color: atmosphere.glow),
+                        const SizedBox(width: 5),
+                        Text(
+                          'Custom',
+                          style: _resolvedAtmosphereTheme()
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: atmosphere.glow),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: -1,
+              right: -2,
+              child: FaIcon(
+                FontAwesomeIcons.crown,
+                size: 13,
+                color: atmosphere.glow,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildThemesChipSection(CampaignOptions options) =>
+      _buildCustomChipSection(
+        options: options.themes,
+        selectedValues: _selectedThemes,
+        customEntries: _customThemeEntries,
+        onSelected: (v, sel) =>
+            sel ? _selectedThemes.add(v) : _selectedThemes.remove(v),
+        onRemoveCustom: (v) => _customThemeEntries.remove(v),
+        dialogTitle: 'Custom Theme',
+        dialogHint: 'e.g. Noir, Cosmic Horror…',
+      );
+
+  Widget _buildTonesChipSection(CampaignOptions options) =>
+      _buildCustomChipSection(
+        options: options.tones,
+        selectedValues: _selectedTones,
+        customEntries: _customToneEntries,
+        onSelected: (v, sel) =>
+            sel ? _selectedTones.add(v) : _selectedTones.remove(v),
+        onRemoveCustom: (v) => _customToneEntries.remove(v),
+        dialogTitle: 'Custom Tone',
+        dialogHint: 'e.g. Melancholic, Tense…',
+      );
+
+  Widget _buildStylesChipSection(CampaignOptions options) =>
+      _buildCustomChipSection(
+        options: options.styles,
+        selectedValues: _selectedStyles,
+        customEntries: _customStyleEntries,
+        onSelected: (v, sel) =>
+            sel ? _selectedStyles.add(v) : _selectedStyles.remove(v),
+        onRemoveCustom: (v) => _customStyleEntries.remove(v),
+        dialogTitle: 'Custom Style',
+        dialogHint: 'e.g. Gritty Realism, Fairy Tale…',
+      );
+
+  void _showCustomEntryDialog({
+    required String title,
+    required String hint,
+    required ValueChanged<String> onAdd,
+  }) {
+    final stableContext = context;
+    final atmosphereTheme = _resolvedAtmosphereTheme();
+    final glow = _currentAtmosphere().glow;
+    final controller = TextEditingController();
+    showDialog<String>(
+      context: stableContext,
+      builder: (dialogContext) => Theme(
+        data: atmosphereTheme,
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            decoration: BoxDecoration(
+              color: stableContext.fantasy.card,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: glow.withValues(alpha: 0.35)),
+              boxShadow: [
+                BoxShadow(
+                  color: glow.withValues(alpha: 0.12),
+                  blurRadius: 28,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.fromLTRB(24, 20, 24, 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      style: atmosphereTheme.textTheme.titleMedium?.copyWith(
+                        color: glow,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.4,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    FaIcon(FontAwesomeIcons.crown, size: 14, color: glow),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: controller,
+                  autofocus: true,
+                  cursorColor: glow,
+                  style: atmosphereTheme.textTheme.bodyMedium,
+                  decoration: InputDecoration(
+                    hintText: hint,
+                    hintStyle: atmosphereTheme.textTheme.bodyMedium?.copyWith(
+                      color: atmosphereTheme.colorScheme.onSurface
+                          .withValues(alpha: 0.38),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide:
+                          BorderSide(color: glow.withValues(alpha: 0.35)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: glow, width: 1.5),
+                    ),
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                  ),
+                  onSubmitted: (value) =>
+                      Navigator.of(dialogContext).pop(value.trim()),
+                ),
+                const SizedBox(height: 14),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () => Navigator.of(dialogContext).pop(),
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(
+                              color: glow.withValues(alpha: 0.7)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: FilledButton(
+                        onPressed: () => Navigator.of(dialogContext)
+                            .pop(controller.text.trim()),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: glow.withValues(alpha: 0.84),
+                          foregroundColor: FantasyPalette.parchment,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text('Add'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ).then((value) {
+      if (value != null && value.isNotEmpty && mounted) {
+        _triggerLightImpact();
+        onAdd(value);
+      }
+    });
   }
 
   void _scrollForgeToRevealCreativePanel() {

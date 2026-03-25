@@ -436,8 +436,11 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   int _partySize = 4;
 
   final Set<String> _selectedThemes = <String>{};
+  final Set<String> _customThemeEntries = <String>{};
   final Set<String> _selectedTones = <String>{};
+  final Set<String> _customToneEntries = <String>{};
   final Set<String> _selectedStyles = <String>{};
+  final Set<String> _customStyleEntries = <String>{};
   final Set<String> _selectedArchetypes = <String>{};
 
   bool _includeNpcs = true;
@@ -460,10 +463,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
   final TextEditingController _customSettingController =
       TextEditingController();
-  final TextEditingController _customThemeController = TextEditingController();
-  final TextEditingController _customToneStyleController =
-      TextEditingController();
-  final TextEditingController _customTwistController = TextEditingController();
+final TextEditingController _customTwistController = TextEditingController();
   final TextEditingController _narrativeHooksController =
       TextEditingController();
   final TextEditingController _characterNotesController =
@@ -498,8 +498,6 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         _purchaseService.purchaseStream.listen(_handlePurchaseUpdates);
     _textControllers = <TextEditingController>[
       _customSettingController,
-      _customThemeController,
-      _customToneStyleController,
       _customTwistController,
       _narrativeHooksController,
       _characterNotesController,
@@ -547,8 +545,11 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     _selectedPreset = null;
     _appliedPreset = null;
     _selectedThemes.clear();
+    _customThemeEntries.clear();
     _selectedTones.clear();
+    _customToneEntries.clear();
     _selectedStyles.clear();
+    _customStyleEntries.clear();
     _selectedArchetypes.clear();
   }
 
@@ -642,96 +643,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     }
   }
 
-  List<String> _parseCustomList(String rawText) {
-    final normalized = rawText.replaceAll('\n', ',').replaceAll(';', ',');
-    return normalized
-        .split(',')
-        .map((item) => item.trim())
-        .where((item) => item.isNotEmpty)
-        .toList();
-  }
-
-  ({List<String> tones, List<String> styles}) _parseToneStyleOverride(
-    String rawText,
-    List<String> toneOptions,
-    List<String> styleOptions,
-  ) {
-    final text = rawText.trim();
-    if (text.isEmpty) {
-      return (tones: <String>[], styles: <String>[]);
-    }
-
-    final toneLookup = <String, String>{
-      for (final item in toneOptions) item.toLowerCase(): item,
-    };
-    final styleLookup = <String, String>{
-      for (final item in styleOptions) item.toLowerCase(): item,
-    };
-
-    final toneValues = <String>[];
-    final styleValues = <String>[];
-
-    void appendUnique(List<String> target, String value) {
-      if (value.isNotEmpty && !target.contains(value)) {
-        target.add(value);
-      }
-    }
-
-    var explicitMode = false;
-
-    for (final rawLine in text.split('\n')) {
-      final line = rawLine.trim();
-      if (line.isEmpty || !line.contains(':')) {
-        continue;
-      }
-
-      final parts = line.split(':');
-      if (parts.length < 2) {
-        continue;
-      }
-      final prefix = parts.first.trim().toLowerCase();
-      final content = parts.sublist(1).join(':');
-      final parsedValues = _parseCustomList(content);
-
-      if (prefix == 'tono' ||
-          prefix == 'toni' ||
-          prefix == 'tone' ||
-          prefix == 'tones') {
-        explicitMode = true;
-        for (final value in parsedValues) {
-          appendUnique(toneValues, toneLookup[value.toLowerCase()] ?? value);
-        }
-      } else if (prefix == 'stile' ||
-          prefix == 'stili' ||
-          prefix == 'style' ||
-          prefix == 'styles') {
-        explicitMode = true;
-        for (final value in parsedValues) {
-          appendUnique(styleValues, styleLookup[value.toLowerCase()] ?? value);
-        }
-      }
-    }
-
-    if (explicitMode) {
-      return (tones: toneValues, styles: styleValues);
-    }
-
-    for (final value in _parseCustomList(text)) {
-      final normalizedValue = value.toLowerCase();
-      final toneMatch = toneLookup[normalizedValue];
-      final styleMatch = styleLookup[normalizedValue];
-      if (toneMatch != null) {
-        appendUnique(toneValues, toneMatch);
-      }
-      if (styleMatch != null) {
-        appendUnique(styleValues, styleMatch);
-      }
-    }
-
-    return (tones: toneValues, styles: styleValues);
-  }
-
-  List<String> _availablePresetsForCampaignType(CampaignOptions options) {
+List<String> _availablePresetsForCampaignType(CampaignOptions options) {
     if (_selectedCampaignType == null) {
       return <String>[];
     }
@@ -796,26 +708,11 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
   CampaignGenerateRequest _buildGenerateRequest(CampaignOptions options) {
     final customSetting = _customSettingController.text.trim();
-    final customTheme = _parseCustomList(_customThemeController.text.trim());
     final customTwist = _customTwistController.text.trim();
 
-    final toneStyleOverride = _parseToneStyleOverride(
-      _customToneStyleController.text,
-      options.tones,
-      options.styles,
-    );
-
-    final themePreferences = customTheme.isNotEmpty
-        ? customTheme
-        : _selectedThemes.toList(growable: false);
-
-    final tonePreferences = toneStyleOverride.tones.isNotEmpty
-        ? toneStyleOverride.tones
-        : _selectedTones.toList(growable: false);
-
-    final stylePreferences = toneStyleOverride.styles.isNotEmpty
-        ? toneStyleOverride.styles
-        : _selectedStyles.toList(growable: false);
+    final themePreferences = [..._selectedThemes, ..._customThemeEntries];
+    final tonePreferences = [..._selectedTones, ..._customToneEntries];
+    final stylePreferences = [..._selectedStyles, ..._customStyleEntries];
 
     return CampaignGenerateRequest(
       setting:
@@ -1076,8 +973,11 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       _selectedPreset = null;
       _appliedPreset = null;
       _selectedThemes.clear();
+      _customThemeEntries.clear();
       _selectedTones.clear();
+      _customToneEntries.clear();
       _selectedStyles.clear();
+      _customStyleEntries.clear();
       _selectedArchetypes.clear();
       _partyLevel = 3;
       _partySize = 4;
@@ -1635,10 +1535,11 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   bool _hasWorldSignals() {
     return _hasMeaningfulSelectedSetting() ||
         _selectedThemes.isNotEmpty ||
+        _customThemeEntries.isNotEmpty ||
         _selectedTones.isNotEmpty ||
+        _customToneEntries.isNotEmpty ||
         _selectedStyles.isNotEmpty ||
-        _customThemeController.text.trim().isNotEmpty ||
-        _customToneStyleController.text.trim().isNotEmpty ||
+        _customStyleEntries.isNotEmpty ||
         _customTwistController.text.trim().isNotEmpty ||
         _hasMeaningfulSelectedTwist();
   }
