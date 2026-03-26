@@ -12,6 +12,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../audio/forge_sound_player.dart';
 import '../../../config/app_config.dart';
@@ -1784,10 +1785,27 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
               ),
             ),
           ),
-          child: Icon(
-            _currentCampaignMeta().fallbackIcon,
-            color: atmosphere.highlight,
-            size: 17,
+          child: Padding(
+            padding: const EdgeInsets.all(6),
+            child: SvgPicture.asset(
+              _currentCampaignMeta().emblemAsset,
+              key: const ValueKey<String>('persistent-top-bar-emblem'),
+              fit: BoxFit.contain,
+              colorFilter: ColorFilter.mode(
+                atmosphere.highlight,
+                BlendMode.srcIn,
+              ),
+              placeholderBuilder: (context) => Icon(
+                _currentCampaignMeta().fallbackIcon,
+                color: atmosphere.highlight.withValues(alpha: 0.7),
+                size: 17,
+              ),
+              errorBuilder: (context, error, stackTrace) => Icon(
+                _currentCampaignMeta().fallbackIcon,
+                color: atmosphere.highlight,
+                size: 17,
+              ),
+            ),
           ),
         ),
         const SizedBox(width: 12),

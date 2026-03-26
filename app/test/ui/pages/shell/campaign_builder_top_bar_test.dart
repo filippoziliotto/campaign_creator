@@ -2,6 +2,7 @@ import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../helpers/fake_campaign_service.dart';
@@ -64,6 +65,21 @@ void main() {
     );
     expect(topBarForgeAction, findsNothing);
     expect(topBarOpenAction, findsNothing);
+    expect(
+      find.descendant(
+        of: topBar,
+        matching:
+            find.byKey(const ValueKey<String>('persistent-top-bar-emblem')),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: topBar,
+        matching: find.byType(SvgPicture),
+      ),
+      findsOneWidget,
+    );
     expect(tester.takeException(), isNull);
   });
 }
