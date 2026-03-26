@@ -308,14 +308,11 @@ extension on _CampaignBuilderPageState {
             options: options.settings,
             keyPrefix: 'setting-selector',
             uppercaseText: true,
-            premiumOptionIds: options.settings.length >= 2
-                ? {
-                    options.settings[options.settings.length - 2],
-                    options.settings.last,
-                  }
-                : options.settings.isNotEmpty
-                    ? {options.settings.last}
-                    : const {},
+            premiumOptionIds: options.settings.length >= 6
+                ? options.settings
+                    .skip(options.settings.length - 6)
+                    .toSet()
+                : const {},
             premiumHighlightColor: _currentAtmosphere(options).glow,
             useWheelPicker: true,
             wheelConfig: settingWheelPickerConfig,

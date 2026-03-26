@@ -14,6 +14,12 @@ settings:
   - Planescape
   - Underdark
   - Frontier
+  - Shadowfell
+  - Radiant Citadel
+  - Avernus
+  - Sigil
+  - Greyhawk
+  - Ghosts of Saltmarsh Coast
 
 setting_descriptions:
   Forgotten Realms: Classic high-fantasy world, rich with kingdoms, ancient magic, and heroic adventures.
@@ -31,6 +37,12 @@ setting_descriptions:
   Planescape: Cosmic crossroads dominated by warring philosophies, where every faction claims the True Nature of Reality across infinite planes.
   Underdark: Endless subterranean world of darkness, threaded by lightless tunnels, ruthless factions, and ancient secrets buried deep below.
   Frontier: Wild lands at the edges of civilisation, where law is uncertain, communities are isolated, and danger is a constant.
+  Shadowfell: Bleak reflection of the material world, steeped in decay, muted emotion, and lingering dead.
+  Radiant Citadel: Luminous crossroads in the Ethereal Plane, linking distant cultures through magical gateways and living traditions.
+  Avernus: First layer of the Nine Hells, a scorched battlefield of infernal war, iron engines, and desperate bargains.
+  Sigil: City of Doors at the center of the planes, where factions, portals, and dangerous ideas shape every street.
+  Greyhawk: Classic old-school fantasy world of rival realms, deep dungeons, and grounded heroic adventure.
+  Ghosts of Saltmarsh Coast: Rugged coastal frontier of fishing towns, hidden coves, smugglers, and threats rising from the sea.
 
 campaign_types:
   - One-Shot
@@ -52,6 +64,10 @@ themes:
   - Ancient ruins
   - Rescue
   - Expedition
+  - Tournament
+  - Treasure hunt
+  - Post-apocalyptic
+  - Rebellion
 
 tones:
   - Heroic
@@ -64,6 +80,9 @@ tones:
   - Bizarre
   - Tense
   - Hopeful
+  - Dreamlike
+  - Chaotic
+  - Ominous
 
 styles:
   - Epic
@@ -76,6 +95,10 @@ styles:
   - Fairytale
   - Sandbox
   - Survival
+  - Open-world
+  - Tactical
+  - Mythic
+  - Mystery
 
 party_archetypes:
   - Fighter

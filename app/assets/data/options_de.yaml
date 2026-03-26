@@ -14,6 +14,12 @@ settings:
   - Planescape
   - Underdark
   - Grenzland
+  - Shadowfell
+  - Radiant Citadel
+  - Avernus
+  - Sigil
+  - Greyhawk
+  - Ghosts of Saltmarsh Coast
 
 setting_descriptions:
   Forgotten Realms: Klassische High-Fantasy-Welt voller Reiche, uralter Magie und heroischer Abenteuer.
@@ -31,6 +37,12 @@ setting_descriptions:
   Planescape: Kosmischer Kreuzungspunkt widerstreitender Philosophien, an dem jede Fraktion die wahre Natur der Realität über unendliche Ebenen beansprucht.
   Underdark: Endlose unterirdische Welt der Dunkelheit, durchzogen von lichtlosen Tunneln, erbarmungslosen Fraktionen und uralten Geheimnissen tief unten.
   Grenzland: Wilde Länder am Rand der Zivilisation, wo Recht unsicher ist, Siedlungen isoliert sind und Gefahr allgegenwärtig bleibt.
+  Shadowfell: Düsteres Spiegelbild der materiellen Welt, geprägt von Verfall, gedämpften Gefühlen und rastlosen Toten.
+  Radiant Citadel: Leuchtender Knotenpunkt in der Ätherebene, verbunden mit fernen Zivilisationen durch magische Tore und lebendige Kulturen.
+  Avernus: Erste Schicht der Neun Höllen, ein verbranntes Kriegsland aus infernalem Eisen, brutalen Pakten und verzweifeltem Überleben.
+  Sigil: Stadt der Türen im Zentrum der Ebenen, wo Fraktionen, Portale und gefährliche Ideen jede Straße prägen.
+  Greyhawk: Klassische Old-School-Fantasy-Welt voller rivalisierender Reiche, tiefer Dungeons und bodenständigen Heldentums.
+  Ghosts of Saltmarsh Coast: Raue Küstenfrontier aus Fischerorten, verborgenen Buchten, Schmugglern und Bedrohungen aus dem Meer.
 
 campaign_types:
   - One-Shot
@@ -52,6 +64,10 @@ themes:
   - Antike Ruinen
   - Rettungsmission
   - Expedition
+  - Turnier
+  - Schatzjagd
+  - Postapokalyptisch
+  - Rebellion
 
 tones:
   - Heldenhaft
@@ -64,6 +80,9 @@ tones:
   - Bizarr
   - Angespannt
   - Hoffnungsvoll
+  - Traumhaft
+  - Chaotisch
+  - Unheilvoll
 
 styles:
   - Episch
@@ -76,6 +95,10 @@ styles:
   - Märchenhaft
   - Sandbox
   - Überlebensorientiert
+  - Open-world
+  - Taktisch
+  - Mythisch
+  - Mysterium
 
 party_archetypes:
   - Fighter

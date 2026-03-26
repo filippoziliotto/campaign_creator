@@ -14,6 +14,12 @@ settings:
   - Planescape
   - Underdark
   - Frontiera
+  - Shadowfell
+  - Radiant Citadel
+  - Avernus
+  - Sigil
+  - Greyhawk
+  - Ghosts of Saltmarsh Coast
 
 setting_descriptions:
   Forgotten Realms: Mondo fantasy classico, ricco di regni, magie antiche e avventure eroiche.
@@ -31,6 +37,12 @@ setting_descriptions:
   Planescape: Crocevia cosmico dominato da filosofie in guerra, dove ogni fazione rivendica la Vera Natura della Realtà tra piani infiniti.
   Underdark: Mondo sotterraneo di oscurità infinita, percorso da tunnel senza luce, fazioni spietate e antichi segreti sepolti in profondità.
   Frontiera: Terre selvagge ai confini della civiltà, dove la legge è incerta, le comunità sono isolate e il pericolo è una costante.
+  Shadowfell: Cupo riflesso del mondo materiale, intriso di decadenza, emozioni spente e anime che non trovano pace.
+  Radiant Citadel: Crocevia luminoso nel Piano Etereo, collegato a civiltà lontane tramite portali magici e culture vive.
+  Avernus: Primo strato dei Nove Inferi, landa di guerra e cenere tra motori infernali, patti crudeli e sopravvivenza disperata.
+  Sigil: Città delle Porte al centro dei piani, dove fazioni, portali e idee pericolose plasmano ogni quartiere.
+  Greyhawk: Classico mondo fantasy old-school, fatto di regni rivali, dungeon profondi ed eroismo concreto.
+  Ghosts of Saltmarsh Coast: Frontiera costiera aspra di villaggi di pescatori, cale nascoste, contrabbandieri e minacce che emergono dal mare.
 
 campaign_types:
   - One-Shot
@@ -52,6 +64,10 @@ themes:
   - Rovine antiche
   - Salvataggio
   - Spedizione
+  - Torneo
+  - Caccia al tesoro
+  - Post-apocalittico
+  - Ribellione
 
 tones:
   - Eroico
@@ -64,6 +80,9 @@ tones:
   - Bizzaro
   - Teso
   - Speranzoso
+  - Onirico
+  - Caotico
+  - Minaccioso
 
 styles:
   - Epico
@@ -76,6 +95,10 @@ styles:
   - Fiabesco
   - Sandbox
   - Sopravvivenza
+  - Open-world
+  - Tattico
+  - Mitico
+  - Mistero
 
 party_archetypes:
   - Guerriero

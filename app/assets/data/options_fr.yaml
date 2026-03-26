@@ -14,6 +14,12 @@ settings:
 - Planescape
 - Underdark
 - Frontière
+- Shadowfell
+- Radiant Citadel
+- Avernus
+- Sigil
+- Greyhawk
+- Ghosts of Saltmarsh Coast
 setting_descriptions:
   Forgotten Realms: Monde classique de fantasy héroïque, riche en royaumes, magie ancienne et aventures légendaires.
   Eberron: Univers pulp-noir avec technologie arcanique, intrigue politique et mystères métropolitains.
@@ -35,6 +41,12 @@ setting_descriptions:
   Underdark: Monde souterrain d’obscurité infinie, parcouru de tunnels sans lumière, de factions impitoyables et de secrets
     anciens.
   Frontière: Terres sauvages aux confins de la civilisation, où la loi est incertaine et le danger permanent.
+  Shadowfell: Reflet funèbre du monde matériel, saturé de décrépitude, d’émotions étouffées et d’âmes qui refusent de partir.
+  Radiant Citadel: Carrefour lumineux du Plan Éthéré, relié à des civilisations lointaines par des portails magiques et des cultures vivantes.
+  Avernus: Première strate des Neuf Enfers, champ de guerre calciné entre machines infernales, pactes cruels et survie désespérée.
+  Sigil: Cité des Portes au cœur des plans, où factions, portails et idées dangereuses façonnent chaque rue.
+  Greyhawk: Monde classique de fantasy old-school, peuplé de royaumes rivaux, de donjons profonds et d’un héroïsme plus terre-à-terre.
+  Ghosts of Saltmarsh Coast: Frontière côtière rude de villages de pêcheurs, criques cachées, contrebandiers et menaces surgies de la mer.
 campaign_types:
 - One-Shot
 - Mini-campagne
@@ -54,6 +66,10 @@ themes:
 - Ruines antiques
 - Sauvetage
 - Expédition
+- Tournoi
+- Chasse au trésor
+- Post-apocalyptique
+- Rébellion
 tones:
 - Héroïque
 - Sombre
@@ -65,6 +81,9 @@ tones:
 - Bizarre
 - Tendu
 - Plein d’espoir
+- Onirique
+- Chaotique
+- Funeste
 styles:
 - Épique
 - Cinématographique
@@ -76,6 +95,10 @@ styles:
 - Conte de fées
 - Sandbox
 - Survie
+- Open-world
+- Tactique
+- Mythique
+- Mystère
 party_archetypes:
 - Guerrier
 - Mage

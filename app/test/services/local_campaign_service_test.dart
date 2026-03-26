@@ -114,6 +114,123 @@ void main() {
       expect(deOptions.presetsForCampaignType('Lange Kampagne'), isNotEmpty);
     });
 
+    test(
+        'bundled settings include the new premium settings in the same order across locales with localized descriptions',
+        () async {
+      final service = LocalCampaignService();
+
+      final enOptions = await service.getOptions(localeCode: 'en');
+      final itOptions = await service.getOptions(localeCode: 'it');
+
+      const expectedPremiumSettings = <String>[
+        'Shadowfell',
+        'Radiant Citadel',
+        'Avernus',
+        'Sigil',
+        'Greyhawk',
+        'Ghosts of Saltmarsh Coast',
+      ];
+
+      expect(
+        enOptions.settings.sublist(
+          enOptions.settings.length - expectedPremiumSettings.length,
+        ),
+        expectedPremiumSettings,
+      );
+      expect(
+        itOptions.settings.sublist(
+          itOptions.settings.length - expectedPremiumSettings.length,
+        ),
+        expectedPremiumSettings,
+      );
+      expect(
+        enOptions.settingDescriptions['Shadowfell'],
+        isNotEmpty,
+      );
+      expect(
+        itOptions.settingDescriptions['Shadowfell'],
+        isNotEmpty,
+      );
+      expect(
+        itOptions.settingDescriptions['Shadowfell'],
+        isNot(enOptions.settingDescriptions['Shadowfell']),
+      );
+    });
+
+    test(
+        'bundled themes tones and styles include the new localized options',
+        () async {
+      final service = LocalCampaignService();
+
+      final enOptions = await service.getOptions(localeCode: 'en');
+      final itOptions = await service.getOptions(localeCode: 'it');
+      final deOptions = await service.getOptions(localeCode: 'de');
+
+      expect(
+        enOptions.themes,
+        containsAll(<String>[
+          'Tournament',
+          'Treasure hunt',
+          'Post-apocalyptic',
+          'Rebellion',
+        ]),
+      );
+      expect(
+        enOptions.tones,
+        containsAll(<String>['Dreamlike', 'Chaotic', 'Ominous']),
+      );
+      expect(
+        enOptions.styles,
+        containsAll(<String>['Open-world', 'Tactical', 'Mythic', 'Mystery']),
+      );
+
+      expect(
+        itOptions.themes,
+        containsAll(<String>[
+          'Torneo',
+          'Caccia al tesoro',
+          'Post-apocalittico',
+          'Ribellione',
+        ]),
+      );
+      expect(
+        itOptions.tones,
+        containsAll(<String>['Onirico', 'Caotico', 'Minaccioso']),
+      );
+      expect(
+        itOptions.styles,
+        containsAll(<String>[
+          'Open-world',
+          'Tattico',
+          'Mitico',
+          'Mistero',
+        ]),
+      );
+
+      expect(
+        deOptions.themes,
+        containsAll(<String>[
+          'Turnier',
+          'Schatzjagd',
+          'Postapokalyptisch',
+          'Rebellion',
+        ]),
+      );
+      expect(
+        deOptions.tones,
+        containsAll(<String>['Traumhaft', 'Chaotisch', 'Unheilvoll']),
+      );
+      expect(
+        deOptions.styles,
+        containsAll(<String>[
+          'Open-world',
+          'Taktisch',
+          'Mythisch',
+          'Mysterium',
+        ]),
+      );
+    });
+
     group('generatePrompt', () {
       test('validation: throws when archetypes exceed party size', () async {
         final service = LocalCampaignService();

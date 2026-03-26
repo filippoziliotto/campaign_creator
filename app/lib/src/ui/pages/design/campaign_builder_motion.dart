@@ -154,6 +154,7 @@ class _AnimatedRuneFilterChipState extends State<AnimatedRuneFilterChip>
               child: Text(
                 widget.label,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontSize: 12,
                       color: widget.selected
                           ? FantasyPalette.parchment
                           : (widget.premiumCrownColor ?? colorScheme.onSurface),

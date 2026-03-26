@@ -369,6 +369,48 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
+  testWidgets('setting selector treats Shadowfell as a premium option',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('en'),
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(premiumSettingsOptions()),
+          currentLocale: const Locale('en'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final settingField =
+        find.byKey(const ValueKey<String>('setting-selector-field'));
+
+    await tester.ensureVisible(settingField);
+    await tester.tap(settingField);
+    await _pumpUi(tester);
+
+    expect(find.byType(ListWheelScrollView), findsWidgets);
+
+    await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -170));
+    await _pumpUi(tester);
+
+    expect(find.text('SHADOWFELL'), findsWidgets);
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Unlock Premium'));
+    await _pumpUi(tester);
+
+    expect(find.text('Watch Ad (5 min)'), findsOneWidget);
+    expect(find.text('Unlock Premium'), findsWidgets);
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
   testWidgets('default no-twist selection does not unlock world advance action',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
@@ -627,5 +669,41 @@ CampaignOptions englishPresetsOptions() {
     presetNames: const {
       'Cronache del Porto': 'Harbor Chronicles',
     },
+  );
+}
+
+CampaignOptions premiumSettingsOptions() {
+  return CampaignOptions(
+    settings: const [
+      'Forgotten Realms',
+      'Eberron',
+      'Ravenloft',
+      'Shadowfell',
+      'Radiant Citadel',
+      'Avernus',
+      'Sigil',
+      'Greyhawk',
+      'Ghosts of Saltmarsh Coast',
+    ],
+    campaignTypes: const ['One-Shot'],
+    themes: const ['Intrigue'],
+    tones: const ['Dark'],
+    styles: const ['Cinematic'],
+    partyArchetypes: const ['Tank'],
+    twists: const ['No twist', 'Betrayal'],
+    presets: const {},
+    settingDescriptions: const {
+      'Forgotten Realms': 'Classic high fantasy.',
+      'Eberron': 'Arcane pulp noir.',
+      'Ravenloft': 'Gothic dread.',
+      'Shadowfell': 'Bleak mirrored world of decay.',
+      'Radiant Citadel': 'Radiant hub of many cultures.',
+      'Avernus': 'Infernal battlefield of iron and fire.',
+      'Sigil': 'Planar city of infinite doors.',
+      'Greyhawk': 'Classic old-school fantasy.',
+      'Ghosts of Saltmarsh Coast': 'Rugged coast of smugglers and storms.',
+    },
+    presetDescriptions: const {},
+    presetNames: const {},
   );
 }
