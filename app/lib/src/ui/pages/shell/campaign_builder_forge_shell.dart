@@ -376,6 +376,9 @@ extension on _CampaignBuilderPageState {
                 uppercaseText: true,
                 emptyText: context.l10n.forgeNoPresetSelected,
                 defaultToFirstOption: false,
+                premiumHighlightColor: _currentAtmosphere().glow,
+                useWheelPicker: true,
+                wheelConfig: presetWheelPickerConfig,
                 onChanged: (value) {
                   _markDirty(() {
                     _selectedPreset = value;

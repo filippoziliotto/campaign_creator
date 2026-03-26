@@ -58,9 +58,18 @@ extension on _CampaignBuilderPageState {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: _summaryTokens(limit: 4)
-                .map((token) => SummaryBadge(label: token, maxWidth: 180))
-                .toList(),
+            children: [
+              if (_selectedPreset != null)
+                SummaryBadge(
+                  label: (_options?.presetNames[_selectedPreset!] ??
+                          _selectedPreset!)
+                      .toUpperCase(),
+                  maxWidth: 180,
+                  textColor: atmosphere.primary,
+                ),
+              ..._summaryTokens()
+                  .map((token) => SummaryBadge(label: token, maxWidth: 180)),
+            ],
           ),
           const SizedBox(height: 12),
           LoreCallout(

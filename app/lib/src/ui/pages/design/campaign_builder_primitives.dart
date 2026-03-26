@@ -1264,10 +1264,12 @@ class SummaryBadge extends StatelessWidget {
     super.key,
     required this.label,
     this.maxWidth,
+    this.textColor,
   });
 
   final String label;
   final double? maxWidth;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -1290,7 +1292,7 @@ class SummaryBadge extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: colorScheme.onSurface,
+                color: textColor ?? colorScheme.onSurface,
               ),
         ),
       ),

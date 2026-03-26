@@ -86,6 +86,17 @@ const WheelPickerConfig twistWheelPickerConfig = WheelPickerConfig(
   maxLines: 3,
 );
 
+const WheelPickerConfig presetWheelPickerConfig = WheelPickerConfig(
+  sheetHeight: 260,
+  itemExtent: 66,
+  fontSize: 16,
+  letterSpacing: 1.08,
+  fontWeight: FontWeight.w700,
+  diameterRatio: 2.9,
+  perspective: 0.0038,
+  maxLines: 2,
+);
+
 enum _CampaignTypeKind {
   oneShot,
   miniCampaign,
@@ -1411,8 +1422,6 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     final tokens = <String>[
       _selectedCampaignType ?? context.l10n.appFreeFormat,
       _currentSettingLabel(),
-      context.l10n.appSummaryLevel(_partyLevel),
-      context.l10n.appSummaryPartySize(_partySize),
     ];
 
     if (_selectedThemes.isNotEmpty) {
@@ -1421,11 +1430,12 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     if (_selectedTones.isNotEmpty) {
       tokens.add(_selectedTones.take(2).join(' + '));
     }
-    if (_selectedPreset != null) {
-      final displayName =
-          _options?.presetNames[_selectedPreset!] ?? _selectedPreset!;
-      tokens.add(context.l10n.appSummaryPreset(displayName));
+    if (_selectedStyles.isNotEmpty) {
+      tokens.add(_selectedStyles.take(2).join(' + '));
     }
+
+    tokens.add(context.l10n.appSummaryPartySize(_partySize));
+    tokens.add(context.l10n.appSummaryLevel(_partyLevel));
 
     if (limit == null || tokens.length <= limit) {
       return tokens;

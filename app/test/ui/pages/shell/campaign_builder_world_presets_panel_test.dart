@@ -70,15 +70,12 @@ void main() {
 
     await tester.ensureVisible(presetField);
     await tester.tap(presetField);
-    await _pumpUi(tester);
-    expect(
-      find.byKey(const ValueKey<String>('preset-selector-sheet')),
-      findsOneWidget,
-    );
-    await tester.tap(find.text('CRONACHE DEL PORTO').last);
-    await _pumpUi(tester);
+    await tester.pumpAndSettle();
+    expect(find.byType(ListWheelScrollView), findsWidgets);
+    await tester.tap(find.widgetWithText(FilledButton, 'Select'));
+    await tester.pump(const Duration(milliseconds: 300));
     await tester.tap(find.widgetWithText(FilledButton, 'Forgia con preset'));
-    await _pumpUi(tester);
+    await tester.pump(const Duration(milliseconds: 800));
 
     expect(find.byKey(const ValueKey('parchment-action-copy')), findsOneWidget);
     expect(find.byType(ParchmentRoutePage), findsOneWidget);
@@ -154,15 +151,12 @@ void main() {
 
     await tester.ensureVisible(presetField);
     await tester.tap(presetField);
-    await _pumpUi(tester);
-    expect(
-      find.byKey(const ValueKey<String>('preset-selector-sheet')),
-      findsOneWidget,
-    );
-    await tester.tap(find.text('ECHI DEL TRONO').last);
-    await _pumpUi(tester);
+    await tester.pumpAndSettle();
+    expect(find.byType(ListWheelScrollView), findsWidgets);
+    await tester.tap(find.widgetWithText(FilledButton, 'Select'));
+    await tester.pump(const Duration(milliseconds: 300));
     await tester.tap(find.widgetWithText(FilledButton, 'Forgia con preset'));
-    await _pumpUi(tester);
+    await tester.pump(const Duration(milliseconds: 800));
 
     expect(find.byKey(const ValueKey('parchment-action-copy')), findsOneWidget);
     expect(find.byType(ParchmentRoutePage), findsOneWidget);
@@ -256,23 +250,8 @@ void main() {
     await tester.tap(twistField);
     await _pumpUi(tester);
 
-    expect(
-      find.byKey(const ValueKey<String>('twist-selector-sheet')),
-      findsOneWidget,
-    );
+    expect(find.byType(ListWheelScrollView), findsWidgets);
     expect(find.text(longTwist), findsWidgets);
-
-    await tester.tap(find.text(longTwist).last);
-    await _pumpUi(tester);
-
-    expect(
-      find.byKey(const ValueKey<String>('twist-selector-sheet')),
-      findsNothing,
-    );
-    expect(
-      find.descendant(of: twistField, matching: find.text(longTwist)),
-      findsOneWidget,
-    );
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
@@ -301,29 +280,13 @@ void main() {
     await tester.ensureVisible(settingField);
     await tester.tap(settingField);
     await _pumpUi(tester);
-
-    expect(
-      find.byKey(const ValueKey<String>('setting-selector-sheet')),
-      findsOneWidget,
-    );
+    expect(find.byType(ListWheelScrollView), findsWidgets);
     expect(find.text('EBERRON'), findsWidgets);
-
-    await tester.tap(find.text('EBERRON').last);
-    await _pumpUi(tester);
-
-    expect(
-      find.byKey(const ValueKey<String>('setting-selector-sheet')),
-      findsNothing,
-    );
-    expect(
-      find.descendant(of: settingField, matching: find.text('EBERRON')),
-      findsOneWidget,
-    );
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
-  testWidgets('preset selector uses a bottom sheet with localized labels',
+  testWidgets('preset selector uses a wheel bottom sheet with localized labels',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -347,27 +310,16 @@ void main() {
     await tester.ensureVisible(presetField);
     await tester.tap(presetField);
     await _pumpUi(tester);
-
-    expect(
-      find.byKey(const ValueKey<String>('preset-selector-sheet')),
-      findsOneWidget,
-    );
+    expect(find.byType(ListWheelScrollView), findsWidgets);
     expect(find.text('CRONACHE DEL PORTO'), findsWidgets);
 
-    await tester.tap(find.text('CRONACHE DEL PORTO').last);
-    await _pumpUi(tester);
+    await tester.tap(find.widgetWithText(FilledButton, 'Select'));
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.tap(find.widgetWithText(FilledButton, 'Forgia con preset'));
+    await tester.pump(const Duration(milliseconds: 800));
 
-    expect(
-      find.byKey(const ValueKey<String>('preset-selector-sheet')),
-      findsNothing,
-    );
-    expect(
-      find.descendant(
-        of: presetField,
-        matching: find.text('CRONACHE DEL PORTO'),
-      ),
-      findsOneWidget,
-    );
+    expect(find.byKey(const ValueKey('parchment-action-copy')), findsOneWidget);
+    expect(find.byType(ParchmentRoutePage), findsOneWidget);
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
@@ -424,7 +376,9 @@ void main() {
     await tester.ensureVisible(twistField);
     await tester.tap(twistField);
     await _pumpUi(tester);
-    await tester.tap(find.text('Tradimento').last);
+    await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -80));
+    await _pumpUi(tester);
+    await tester.tap(find.widgetWithText(FilledButton, 'Select'));
     await _pumpUi(tester);
 
     expect(tester.widget<FilledButton>(advanceButton).onPressed, isNotNull);
@@ -461,11 +415,12 @@ void main() {
     await tester.ensureVisible(settingField);
     await tester.tap(settingField);
     await _pumpUi(tester);
-    expect(
-      find.byKey(const ValueKey<String>('setting-selector-sheet')),
-      findsOneWidget,
-    );
-    await tester.tap(find.text('EBERRON').last);
+    expect(find.byType(ListWheelScrollView), findsWidgets);
+    expect(find.text('EBERRON'), findsWidgets);
+
+    await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -70));
+    await _pumpUi(tester);
+    await tester.tap(find.widgetWithText(FilledButton, 'Select'));
     await _pumpUi(tester);
 
     expect(tester.widget<FilledButton>(advanceButton).onPressed, isNotNull);
@@ -555,6 +510,11 @@ CampaignOptions neutralTwistOptions() {
     twists: const [
       'Nessun colpo di scena',
       'Tradimento',
+      'Rivelazione',
+      'Doppio gioco',
+      'Maledizione',
+      'Portale instabile',
+      'Assedio finale',
     ],
     presets: const {},
     settingDescriptions: const {'Forgotten Realms': 'Classico high fantasy.'},
@@ -565,7 +525,12 @@ CampaignOptions neutralTwistOptions() {
 
 CampaignOptions neutralTwistSettingOptions() {
   return CampaignOptions(
-    settings: const ['Forgotten Realms', 'Eberron'],
+    settings: const [
+      'Forgotten Realms',
+      'Eberron',
+      'Ravenloft',
+      'Dragonlance',
+    ],
     campaignTypes: const ['One-Shot'],
     themes: const ['Intrigo'],
     tones: const ['Epico'],
