@@ -941,8 +941,10 @@ extension on _CampaignBuilderPageState {
                                 perspective: wheelConfig.perspective,
                                 diameterRatio: wheelConfig.diameterRatio,
                                 physics: const FixedExtentScrollPhysics(),
-                                onSelectedItemChanged: (i) =>
-                                    setState(() => selectedIndex = i),
+                                onSelectedItemChanged: (i) {
+                                  HapticFeedback.selectionClick();
+                                  setState(() => selectedIndex = i);
+                                },
                                 children: allOptions.map((option) {
                                   final isCustom = option == customSentinel;
                                   final isPremium = isCustom ||
