@@ -2,6 +2,7 @@ import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:campaign_creator_flutter/src/audio/forge_sound_player.dart';
 import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
 import 'package:campaign_creator_flutter/src/services/campaign_service.dart';
+import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_motion.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -192,7 +193,7 @@ void main() {
     expect(customText.style?.fontSize, 12);
   });
 
-  testWidgets('party scale shows no premium threshold markers', (
+  testWidgets('party scale uses one-line segmented controls for level and size', (
     tester,
   ) async {
     await _setLargeSurface(tester);
@@ -204,17 +205,42 @@ void main() {
     await _pumpUi(tester);
     await _openPartySection(tester);
 
-    expect(find.byKey(const ValueKey<String>('party-level-premium-threshold')),
-        findsNothing);
-    expect(find.byKey(const ValueKey<String>('party-size-premium-threshold')),
-        findsNothing);
-    expect(find.text('Levels 4+ are premium'), findsNothing);
-    expect(find.text('5+ characters are premium'), findsNothing);
-    expect(find.text('4+'), findsNothing);
-    expect(find.text('5+'), findsNothing);
+    expect(find.byType(Slider), findsNothing);
+    expect(find.byKey(const ValueKey<String>('party-level-control')),
+        findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('party-level-control')),
+        matching: find.byKey(const ValueKey<String>('party-level-pill-1')),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('party-level-control')),
+        matching: find.byKey(const ValueKey<String>('party-level-pill-20')),
+      ),
+      findsOneWidget,
+    );
+    expect(find.byKey(const ValueKey<String>('party-size-control')),
+        findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('party-size-control')),
+        matching: find.byKey(const ValueKey<String>('party-size-pill-1')),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('party-size-control')),
+        matching: find.byKey(const ValueKey<String>('party-size-pill-8')),
+      ),
+      findsOneWidget,
+    );
   });
 
-  testWidgets('dragging party level into premium opens unlock flow', (
+  testWidgets('tapping a free level pill updates the party level label', (
     tester,
   ) async {
     await _setLargeSurface(tester);
@@ -226,13 +252,29 @@ void main() {
     await _pumpUi(tester);
     await _openPartySection(tester);
 
-    expect(find.byKey(const ValueKey<String>('party-level-label')),
-        findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey<String>('party-level-pill-5')));
+    await _pumpUi(tester);
 
-    await tester.drag(
-      find.byKey(const ValueKey<String>('party-level-slider')),
-      const Offset(2000, 0),
+    expect(
+      tester.widget<Text>(find.byKey(const ValueKey<String>('party-level-label')))
+          .data,
+      'Party level: 5',
     );
+  });
+
+  testWidgets('tapping a locked level pill opens unlock flow and does not select 6', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+
+    await tester.pumpWidget(_TestApp(
+      locale: const Locale('en'),
+      child: _buildPage(locale: const Locale('en')),
+    ));
+    await _pumpUi(tester);
+    await _openPartySection(tester);
+
+    await tester.tap(find.byKey(const ValueKey<String>('party-level-pill-6')));
     await _pumpUi(tester);
 
     expect(find.text('Unlock Premium'), findsWidgets);
@@ -240,6 +282,104 @@ void main() {
       tester.widget<Text>(find.byKey(const ValueKey<String>('party-level-label')))
           .data,
       isNot('Party level: 6'),
+    );
+  });
+
+  testWidgets('tapping a free party size pill updates the party size label', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+
+    await tester.pumpWidget(_TestApp(
+      locale: const Locale('en'),
+      child: _buildPage(locale: const Locale('en')),
+    ));
+    await _pumpUi(tester);
+    await _openPartySection(tester);
+
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('party-size-control')),
+        matching: find.byKey(const ValueKey<String>('party-size-pill-3')),
+      ),
+    );
+    await _pumpUi(tester);
+
+    expect(
+      tester.widget<Text>(find.byKey(const ValueKey<String>('party-size-label')))
+          .data,
+      'Number of characters: 3',
+    );
+  });
+
+  testWidgets('tapping a locked party size pill opens unlock flow and does not select 5', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+
+    await tester.pumpWidget(_TestApp(
+      locale: const Locale('en'),
+      child: _buildPage(locale: const Locale('en')),
+    ));
+    await _pumpUi(tester);
+    await _openPartySection(tester);
+
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('party-size-control')),
+        matching: find.byKey(const ValueKey<String>('party-size-pill-5')),
+      ),
+    );
+    await _pumpUi(tester);
+
+    expect(find.text('Unlock Premium'), findsWidgets);
+    expect(
+      tester.widget<Text>(find.byKey(const ValueKey<String>('party-size-label')))
+          .data,
+      isNot('Number of characters: 5'),
+    );
+  });
+
+  testWidgets('reducing party size trims selected archetypes', (tester) async {
+    await _setLargeSurface(tester);
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: _buildPage(
+          service: FakeCampaignService(_partyScaleOptions()),
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openPartySection(tester);
+
+    for (final label in <String>['Tank', 'Healer', 'Scout', 'Mage']) {
+      await tester.tap(find.byKey(ValueKey<String>('forge-option-chip-$label')));
+      await _pumpUi(tester);
+    }
+
+    expect(
+      tester
+          .widgetList<AnimatedRuneFilterChip>(find.byType(AnimatedRuneFilterChip))
+          .where((widget) => widget.selected)
+          .length,
+      4,
+    );
+
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('party-size-control')),
+        matching: find.byKey(const ValueKey<String>('party-size-pill-2')),
+      ),
+    );
+    await _pumpUi(tester);
+
+    expect(
+      tester
+          .widgetList<AnimatedRuneFilterChip>(find.byType(AnimatedRuneFilterChip))
+          .where((widget) => widget.selected)
+          .length,
+      2,
     );
   });
 
@@ -597,6 +737,22 @@ class _FailingCampaignService extends FakeCampaignService {
   Future<String> generatePrompt(CampaignGenerateRequest req) async {
     throw Exception('boom');
   }
+}
+
+CampaignOptions _partyScaleOptions() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms'],
+    campaignTypes: const ['One-Shot'],
+    themes: const ['Intrigo'],
+    tones: const ['Epico'],
+    styles: const ['Lineare'],
+    partyArchetypes: const ['Tank', 'Healer', 'Scout', 'Mage', 'Bard'],
+    twists: const ['Tradimento'],
+    presets: const {},
+    settingDescriptions: const {'Forgotten Realms': 'Classico high fantasy.'},
+    presetDescriptions: const {},
+    presetNames: const {},
+  );
 }
 
 class _FakeAppReviewPrompter implements AppReviewPrompter {

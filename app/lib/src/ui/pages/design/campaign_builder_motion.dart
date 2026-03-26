@@ -187,6 +187,276 @@ class _AnimatedRuneFilterChipState extends State<AnimatedRuneFilterChip>
   }
 }
 
+class SegmentedValuePillItem {
+  const SegmentedValuePillItem({
+    required this.key,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+    this.locked = false,
+  });
+
+  final Key key;
+  final String label;
+  final bool selected;
+  final bool locked;
+  final VoidCallback onTap;
+}
+
+enum SegmentedValueSelectorLayout {
+  wrap,
+  horizontalScroll,
+  segmentedButton,
+  segmentedButtonScrollable,
+}
+
+class AnimatedRuneSegmentedValueSelector extends StatelessWidget {
+  const AnimatedRuneSegmentedValueSelector({
+    super.key,
+    required this.atmosphere,
+    required this.items,
+    this.lockedColor,
+    this.layout = SegmentedValueSelectorLayout.wrap,
+    this.controlKey,
+  });
+
+  final CampaignAtmosphereData atmosphere;
+  final List<SegmentedValuePillItem> items;
+  final Color? lockedColor;
+  final SegmentedValueSelectorLayout layout;
+  final Key? controlKey;
+
+  @override
+  Widget build(BuildContext context) {
+    if (layout == SegmentedValueSelectorLayout.segmentedButtonScrollable) {
+      return SingleChildScrollView(
+        key: controlKey,
+        scrollDirection: Axis.horizontal,
+        child: _buildSegmentedButton(context),
+      );
+    }
+
+    if (layout == SegmentedValueSelectorLayout.horizontalScroll) {
+      return SingleChildScrollView(
+        key: controlKey,
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            for (final item in items) ...[
+              _AnimatedRuneSegmentedValuePill(
+                key: item.key,
+                atmosphere: atmosphere,
+                label: item.label,
+                selected: item.selected,
+                locked: item.locked,
+                lockedColor: lockedColor,
+                onTap: item.onTap,
+              ),
+              if (item != items.last) const SizedBox(width: 8),
+            ],
+          ],
+        ),
+      );
+    }
+
+    if (layout == SegmentedValueSelectorLayout.segmentedButton) {
+      return _buildSegmentedButton(context, key: controlKey);
+    }
+
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: items
+          .map(
+            (item) => _AnimatedRuneSegmentedValuePill(
+              key: item.key,
+              atmosphere: atmosphere,
+              label: item.label,
+              selected: item.selected,
+              locked: item.locked,
+              lockedColor: lockedColor,
+              onTap: item.onTap,
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  Widget _buildSegmentedButton(BuildContext context, {Key? key}) {
+    final selectedIndex = items.indexWhere((item) => item.selected);
+    final selected = selectedIndex >= 0 ? <int>{selectedIndex} : <int>{};
+
+    return SegmentedButton<int>(
+      key: key,
+      showSelectedIcon: false,
+      segments: List<ButtonSegment<int>>.generate(
+        items.length,
+        (index) {
+          final item = items[index];
+          return ButtonSegment<int>(
+            value: index,
+            label: Text(
+              item.label,
+              key: item.key,
+              style: TextStyle(
+                color: item.locked
+                    ? (lockedColor ??
+                        Theme.of(context).colorScheme.tertiary
+                            .withValues(alpha: 0.92))
+                    : null,
+              ),
+            ),
+          );
+        },
+      ),
+      selected: selected,
+      style: ButtonStyle(
+        visualDensity: const VisualDensity(horizontal: -2, vertical: -2),
+        padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
+          EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        ),
+        textStyle: WidgetStatePropertyAll<TextStyle?>(
+          Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+        ),
+      ),
+      onSelectionChanged: (selection) {
+        if (selection.isEmpty) {
+          return;
+        }
+        items[selection.first].onTap();
+      },
+    );
+  }
+}
+
+class _AnimatedRuneSegmentedValuePill extends StatefulWidget {
+  const _AnimatedRuneSegmentedValuePill({
+    super.key,
+    required this.atmosphere,
+    required this.label,
+    required this.selected,
+    required this.locked,
+    required this.onTap,
+    this.lockedColor,
+  });
+
+  final CampaignAtmosphereData atmosphere;
+  final String label;
+  final bool selected;
+  final bool locked;
+  final VoidCallback onTap;
+  final Color? lockedColor;
+
+  @override
+  State<_AnimatedRuneSegmentedValuePill> createState() =>
+      _AnimatedRuneSegmentedValuePillState();
+}
+
+class _AnimatedRuneSegmentedValuePillState
+    extends State<_AnimatedRuneSegmentedValuePill>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _flashController;
+
+  @override
+  void initState() {
+    super.initState();
+    _flashController = AnimationController(
+      vsync: this,
+      duration: widget.atmosphere.chipFlashDuration,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant _AnimatedRuneSegmentedValuePill oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.atmosphere.chipFlashDuration !=
+        widget.atmosphere.chipFlashDuration) {
+      _flashController.duration = widget.atmosphere.chipFlashDuration;
+    }
+    if (!oldWidget.selected &&
+        widget.selected &&
+        !prefersReducedMotion(context)) {
+      _flashController.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _flashController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final reducedMotion = prefersReducedMotion(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    final selectedColor = colorScheme.primary.withValues(alpha: 0.86);
+    final backgroundColor =
+        colorScheme.surfaceContainerHighest.withValues(alpha: 0.62);
+    final lockedColor =
+        widget.lockedColor ?? colorScheme.tertiary.withValues(alpha: 0.92);
+    final borderColor = widget.selected
+        ? colorScheme.primary.withValues(alpha: 0.72)
+        : widget.locked
+            ? lockedColor.withValues(alpha: 0.72)
+            : colorScheme.outline.withValues(alpha: 0.45);
+    final textColor = widget.selected
+        ? FantasyPalette.parchment
+        : widget.locked
+            ? lockedColor
+            : colorScheme.onSurface;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: widget.onTap,
+        borderRadius: BorderRadius.circular(999),
+        child: AnimatedContainer(
+          duration: reducedMotion
+              ? const Duration(milliseconds: 120)
+              : const Duration(milliseconds: 220),
+          curve: Curves.easeOutCubic,
+          constraints: const BoxConstraints(minWidth: 40),
+          decoration: BoxDecoration(
+            color: widget.selected ? selectedColor : backgroundColor,
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: borderColor),
+          ),
+          child: AnimatedBuilder(
+            animation: _flashController,
+            builder: (context, child) {
+              return CustomPaint(
+                foregroundPainter: reducedMotion
+                    ? null
+                    : _RuneChipFlashPainter(
+                        progress: _flashController.value,
+                        atmosphere: widget.atmosphere,
+                      ),
+                child: child,
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Text(
+                widget.label,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: textColor,
+                    ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class ForgePrimaryActionButton extends StatefulWidget {
   const ForgePrimaryActionButton({
     super.key,

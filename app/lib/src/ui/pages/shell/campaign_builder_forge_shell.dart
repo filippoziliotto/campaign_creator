@@ -1285,19 +1285,19 @@ extension on _CampaignBuilderPageState {
             style: _resolvedAtmosphereTheme().textTheme.titleMedium,
           ),
           const SizedBox(height: 10),
-          _buildPremiumThresholdSlider(
-            sliderKey: const ValueKey<String>('party-level-slider'),
-            value: _partyLevel.toDouble(),
+          _buildPartyValuePills(
+            keyPrefix: 'party-level-pill',
+            currentValue: _partyLevel,
             min: 1,
             max: 20,
-            divisions: 19,
             freeMax: freePartyLevelMax,
-            onChanged: (value) {
+            premiumHighlightColor: glow,
+            layout: SegmentedValueSelectorLayout.segmentedButtonScrollable,
+            onSelected: (value) {
               _markDirty(() {
-                _partyLevel = value.round();
+                _partyLevel = value;
               });
             },
-            onPremiumBlocked: () => _showPremiumUnlockForChip(glow),
           ),
           const SizedBox(height: 10),
           Text(
@@ -1306,50 +1306,64 @@ extension on _CampaignBuilderPageState {
             style: _resolvedAtmosphereTheme().textTheme.titleMedium,
           ),
           const SizedBox(height: 10),
-          _buildPremiumThresholdSlider(
-            sliderKey: const ValueKey<String>('party-size-slider'),
-            value: _partySize.toDouble(),
+          _buildPartyValuePills(
+            keyPrefix: 'party-size-pill',
+            currentValue: _partySize,
             min: 1,
             max: 8,
-            divisions: 7,
             freeMax: freePartySizeMax,
-            onChanged: (value) {
+            premiumHighlightColor: glow,
+            layout: SegmentedValueSelectorLayout.segmentedButton,
+            onSelected: (value) {
               _markDirty(() {
-                _partySize = value.round();
+                _partySize = value;
                 _trimArchetypesToPartySize();
               });
             },
-            onPremiumBlocked: () => _showPremiumUnlockForChip(glow),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildPremiumThresholdSlider({
-    required Key sliderKey,
-    required double value,
-    required double min,
-    required double max,
-    required int divisions,
+  Widget _buildPartyValuePills({
+    required String keyPrefix,
+    required int currentValue,
+    required int min,
+    required int max,
     required int freeMax,
-    required ValueChanged<double> onChanged,
-    required VoidCallback onPremiumBlocked,
+    required Color premiumHighlightColor,
+    required SegmentedValueSelectorLayout layout,
+    required ValueChanged<int> onSelected,
   }) {
-    return Slider(
-      key: sliderKey,
-      value: value,
-      min: min,
-      max: max,
-      divisions: divisions,
-      label: value.round().toString(),
-      onChanged: (nextValue) {
-        if (!_isPremiumUnlocked && nextValue.round() > freeMax) {
-          onPremiumBlocked();
-          return;
-        }
-        onChanged(nextValue);
-      },
+    return AnimatedRuneSegmentedValueSelector(
+      controlKey: layout == SegmentedValueSelectorLayout.wrap
+          ? null
+          : ValueKey<String>('${keyPrefix.replaceAll('-pill', '')}-control'),
+      atmosphere: _currentAtmosphere(),
+      layout: layout,
+      lockedColor: premiumHighlightColor,
+      items: List<SegmentedValuePillItem>.generate(
+        max - min + 1,
+        (index) {
+          final value = min + index;
+          final isLocked = !_isPremiumUnlocked && value > freeMax;
+          return SegmentedValuePillItem(
+            key: ValueKey<String>('$keyPrefix-$value'),
+            label: value.toString(),
+            selected: currentValue == value,
+            locked: isLocked,
+            onTap: () {
+              if (isLocked) {
+                _showPremiumUnlockForChip(premiumHighlightColor);
+                return;
+              }
+              _triggerLightImpact();
+              onSelected(value);
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -1551,6 +1565,7 @@ extension on _CampaignBuilderPageState {
         final isPremium = premiumOptionIds.contains(value);
         final isLocked = isPremium && !_isPremiumUnlocked;
         return AnimatedRuneFilterChip(
+          key: ValueKey<String>('forge-option-chip-$value'),
           atmosphere: _currentAtmosphere(),
           label: value,
           selected: selectedValues.contains(value),
