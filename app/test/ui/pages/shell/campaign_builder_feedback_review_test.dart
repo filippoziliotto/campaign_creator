@@ -70,25 +70,29 @@ void main() {
         locale: const Locale('it'),
         sectionLabel: 'Trama',
         optionalLabel: 'Opzionale',
-        subtitle: 'Agganci, fazioni e vincoli extra per personalizzare la pergamena.',
+        subtitle:
+            'Agganci, fazioni e vincoli extra per personalizzare la pergamena.',
       );
       await pumpForLocale(
         locale: const Locale('en'),
         sectionLabel: 'Story',
         optionalLabel: 'Optional',
-        subtitle: 'Extra hooks, factions, and constraints to customize the parchment.',
+        subtitle:
+            'Extra hooks, factions, and constraints to customize the parchment.',
       );
       await pumpForLocale(
         locale: const Locale('es'),
         sectionLabel: 'Historia',
         optionalLabel: 'Opcional',
-        subtitle: 'Ganchos, facciones y restricciones extra para personalizar el pergamino.',
+        subtitle:
+            'Ganchos, facciones y restricciones extra para personalizar el pergamino.',
       );
       await pumpForLocale(
         locale: const Locale('fr'),
         sectionLabel: 'Histoire',
         optionalLabel: 'Optionnel',
-        subtitle: 'Accroches, factions et contraintes supplémentaires pour personnaliser le parchemin.',
+        subtitle:
+            'Accroches, factions et contraintes supplémentaires pour personnaliser le parchemin.',
       );
     },
   );
@@ -119,7 +123,7 @@ void main() {
   });
 
   testWidgets(
-    'theme tone and style chips trigger a light haptic on select and deselect',
+    'theme tone and style chip handlers trigger a light haptic on select and deselect',
     (tester) async {
       await _setLargeSurface(tester);
 
@@ -130,18 +134,16 @@ void main() {
         _clearRecordedHaptics();
 
         for (final label in <String>['Intrigo', 'Epico', 'Lineare']) {
-          final chip =
-              find.byKey(ValueKey<String>('forge-option-chip-$label'));
+          final chip = find.byKey(ValueKey<String>('forge-option-chip-$label'));
           await tester.ensureVisible(chip);
-          await tester.tap(chip, warnIfMissed: false);
+          tester.widget<AnimatedRuneFilterChip>(chip).onSelected(true);
           await _pumpUi(tester);
         }
 
         for (final label in <String>['Intrigo', 'Epico', 'Lineare']) {
-          final chip =
-              find.byKey(ValueKey<String>('forge-option-chip-$label'));
+          final chip = find.byKey(ValueKey<String>('forge-option-chip-$label'));
           await tester.ensureVisible(chip);
-          await tester.tap(chip, warnIfMissed: false);
+          tester.widget<AnimatedRuneFilterChip>(chip).onSelected(false);
           await _pumpUi(tester);
         }
       });
@@ -193,7 +195,77 @@ void main() {
     expect(customText.style?.fontSize, 12);
   });
 
-  testWidgets('party scale uses one-line segmented controls for level and size', (
+  testWidgets('tapping the custom add chip triggers a light haptic impact', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+
+    final haptics = await _recordHapticFeedback(() async {
+      await tester.pumpWidget(
+        _TestApp(
+          child: _buildPage(
+            initialPreferences: <String, Object>{
+              'app.ad_free_purchased': true,
+            },
+          ),
+        ),
+      );
+      await _pumpUi(tester);
+      await _openWorldSection(tester);
+      _clearRecordedHaptics();
+
+      final customButton = find.ancestor(
+        of: find.text('Custom').first,
+        matching: find.byType(InkWell),
+      );
+      await tester.ensureVisible(customButton.first);
+      await tester.tap(customButton.first, warnIfMissed: false);
+      await _pumpUi(tester);
+    });
+
+    expect(haptics, <String>['HapticFeedbackType.lightImpact']);
+  });
+
+  testWidgets('tapping a custom chip triggers a light haptic impact', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+
+    final haptics = await _recordHapticFeedback(() async {
+      await tester.pumpWidget(
+        _TestApp(
+          child: _buildPage(
+            initialPreferences: <String, Object>{
+              'app.ad_free_purchased': true,
+            },
+          ),
+        ),
+      );
+      await _pumpUi(tester);
+      await _openWorldSection(tester);
+
+      final customButton = find.ancestor(
+        of: find.text('Custom').first,
+        matching: find.byType(InkWell),
+      );
+      await tester.ensureVisible(customButton.first);
+      await tester.tap(customButton.first, warnIfMissed: false);
+      await _pumpUi(tester);
+
+      await tester.enterText(find.byType(TextField), 'Noir');
+      await tester.tap(find.widgetWithText(FilledButton, 'Add'));
+      await _pumpUi(tester);
+
+      _clearRecordedHaptics();
+      await tester.tap(find.text('Noir'));
+      await _pumpUi(tester);
+    });
+
+    expect(haptics, <String>['HapticFeedbackType.lightImpact']);
+  });
+
+  testWidgets('party scale uses one-line segmented controls for level and size',
+      (
     tester,
   ) async {
     await _setLargeSurface(tester);
@@ -256,13 +328,15 @@ void main() {
     await _pumpUi(tester);
 
     expect(
-      tester.widget<Text>(find.byKey(const ValueKey<String>('party-level-label')))
+      tester
+          .widget<Text>(find.byKey(const ValueKey<String>('party-level-label')))
           .data,
       'Party level: 5',
     );
   });
 
-  testWidgets('tapping a locked level pill opens unlock flow and does not select 6', (
+  testWidgets(
+      'tapping a locked level pill opens unlock flow and does not select 6', (
     tester,
   ) async {
     await _setLargeSurface(tester);
@@ -279,7 +353,8 @@ void main() {
 
     expect(find.text('Unlock Premium'), findsWidgets);
     expect(
-      tester.widget<Text>(find.byKey(const ValueKey<String>('party-level-label')))
+      tester
+          .widget<Text>(find.byKey(const ValueKey<String>('party-level-label')))
           .data,
       isNot('Party level: 6'),
     );
@@ -306,13 +381,16 @@ void main() {
     await _pumpUi(tester);
 
     expect(
-      tester.widget<Text>(find.byKey(const ValueKey<String>('party-size-label')))
+      tester
+          .widget<Text>(find.byKey(const ValueKey<String>('party-size-label')))
           .data,
       'Number of characters: 3',
     );
   });
 
-  testWidgets('tapping a locked party size pill opens unlock flow and does not select 5', (
+  testWidgets(
+      'tapping a locked party size pill opens unlock flow and does not select 5',
+      (
     tester,
   ) async {
     await _setLargeSurface(tester);
@@ -334,7 +412,8 @@ void main() {
 
     expect(find.text('Unlock Premium'), findsWidgets);
     expect(
-      tester.widget<Text>(find.byKey(const ValueKey<String>('party-size-label')))
+      tester
+          .widget<Text>(find.byKey(const ValueKey<String>('party-size-label')))
           .data,
       isNot('Number of characters: 5'),
     );
@@ -354,13 +433,15 @@ void main() {
     await _openPartySection(tester);
 
     for (final label in <String>['Tank', 'Healer', 'Scout', 'Mage']) {
-      await tester.tap(find.byKey(ValueKey<String>('forge-option-chip-$label')));
+      await tester
+          .tap(find.byKey(ValueKey<String>('forge-option-chip-$label')));
       await _pumpUi(tester);
     }
 
     expect(
       tester
-          .widgetList<AnimatedRuneFilterChip>(find.byType(AnimatedRuneFilterChip))
+          .widgetList<AnimatedRuneFilterChip>(
+              find.byType(AnimatedRuneFilterChip))
           .where((widget) => widget.selected)
           .length,
       4,
@@ -376,7 +457,8 @@ void main() {
 
     expect(
       tester
-          .widgetList<AnimatedRuneFilterChip>(find.byType(AnimatedRuneFilterChip))
+          .widgetList<AnimatedRuneFilterChip>(
+              find.byType(AnimatedRuneFilterChip))
           .where((widget) => widget.selected)
           .length,
       2,
@@ -429,7 +511,8 @@ void main() {
     expect(soundPlayer.playCount, 1);
   });
 
-  testWidgets('failed generation does not request the forge sound', (tester) async {
+  testWidgets('failed generation does not request the forge sound',
+      (tester) async {
     await _setLargeSurface(tester);
     final soundPlayer = _FakeForgeSoundPlayer();
 
@@ -451,7 +534,8 @@ void main() {
 
     expect(soundPlayer.playCount, 0);
     expect(
-      find.text('Generazione fallita. Controlla il messaggio mostrato nella schermata.'),
+      find.text(
+          'Generazione fallita. Controlla il messaggio mostrato nella schermata.'),
       findsOneWidget,
     );
   });

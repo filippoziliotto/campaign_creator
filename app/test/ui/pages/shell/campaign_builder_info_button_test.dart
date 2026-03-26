@@ -281,7 +281,9 @@ void main() {
     expect(capturedArguments!['originHeight'], isNotNull);
     expect(capturedArguments!['originWidth'] as double, greaterThan(0));
     expect(capturedArguments!['originHeight'] as double, greaterThan(0));
-  }, variant: const TargetPlatformVariant(<TargetPlatform>{TargetPlatform.iOS}));
+  },
+      variant:
+          const TargetPlatformVariant(<TargetPlatform>{TargetPlatform.iOS}));
 
   testWidgets('settings sheet shows ad-free title and small purchase subtitle',
       (tester) async {
@@ -407,6 +409,123 @@ void main() {
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-mark-de')),
         findsOneWidget);
+  });
+
+  testWidgets('settings sheet language segments do not overflow on mobile',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    final exceptions = <Object>[];
+    Object? exception;
+    while ((exception = tester.takeException()) != null) {
+      exceptions.add(exception!);
+    }
+
+    expect(exceptions, isEmpty);
+  });
+
+  testWidgets(
+      'settings sheet language segments do not overflow with modest text scaling',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester
+        .pumpWidget(_testApp(textScaler: const TextScaler.linear(1.15)));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    final exceptions = <Object>[];
+    Object? exception;
+    while ((exception = tester.takeException()) != null) {
+      exceptions.add(exception!);
+    }
+
+    expect(exceptions, isEmpty);
+  });
+
+  testWidgets(
+      'opening settings sheet does not emit language segment overflow during animation',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+
+    final exceptions = <Object>[];
+    for (var i = 0; i < 12; i++) {
+      await tester.pump(const Duration(milliseconds: 16));
+      Object? exception;
+      while ((exception = tester.takeException()) != null) {
+        exceptions.add(exception!);
+      }
+    }
+
+    expect(exceptions, isEmpty);
+  });
+
+  testWidgets(
+      'settings sheet language segments do not overflow on compact phones',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(320, 640));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    final exceptions = <Object>[];
+    Object? exception;
+    while ((exception = tester.takeException()) != null) {
+      exceptions.add(exception!);
+    }
+
+    expect(exceptions, isEmpty);
+  });
+
+  testWidgets(
+      'settings sheet language segments do not overflow on compact phones with larger text',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(320, 640));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp(textScaler: const TextScaler.linear(1.3)));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    final exceptions = <Object>[];
+    Object? exception;
+    while ((exception = tester.takeException()) != null) {
+      exceptions.add(exception!);
+    }
+
+    expect(exceptions, isEmpty);
   });
 
   testWidgets('settings sheet theme control triggers callback and stays open',
@@ -656,14 +775,17 @@ Widget _testApp({
   ThemeMode currentThemeMode = ThemeMode.dark,
   ValueChanged<ThemeMode>? onThemeModeChanged,
   bool disableAnimations = false,
+  TextScaler textScaler = TextScaler.noScaling,
 }) =>
     MaterialApp(
       locale: currentLocale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       builder: (context, child) {
-        final mediaQuery = MediaQuery.of(context)
-            .copyWith(disableAnimations: disableAnimations);
+        final mediaQuery = MediaQuery.of(context).copyWith(
+          disableAnimations: disableAnimations,
+          textScaler: textScaler,
+        );
         return MediaQuery(data: mediaQuery, child: child!);
       },
       home: CampaignBuilderPage(

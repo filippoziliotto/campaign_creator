@@ -1562,7 +1562,10 @@ extension on _CampaignBuilderPageState {
           atmosphere: _currentAtmosphere(),
           label: value,
           selected: selectedValues.contains(value),
-          onSelected: (selected) => onSelected(value, selected),
+          onSelected: (selected) {
+            _triggerLightImpact();
+            onSelected(value, selected);
+          },
           premiumCrownColor: isPremium ? premiumCrownColor : null,
           onLockedTap: isLocked
               ? () => _showPremiumUnlockForChip(premiumCrownColor!)
@@ -1616,7 +1619,10 @@ extension on _CampaignBuilderPageState {
           final chip = Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () => _markDirty(() => onRemoveCustom(entry)),
+              onTap: () {
+                _triggerLightImpact();
+                _markDirty(() => onRemoveCustom(entry));
+              },
               borderRadius: BorderRadius.circular(999),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 220),
@@ -1671,12 +1677,15 @@ extension on _CampaignBuilderPageState {
               child: InkWell(
                 onTap: !_isPremiumUnlocked
                     ? () => _showPremiumUnlockForChip(atmosphere.glow)
-                    : () => _showCustomEntryDialog(
+                    : () {
+                        _triggerLightImpact();
+                        _showCustomEntryDialog(
                           title: dialogTitle,
                           hint: dialogHint,
                           onAdd: (value) =>
                               _markDirty(() => customEntries.add(value)),
-                        ),
+                        );
+                      },
                 borderRadius: BorderRadius.circular(999),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 220),

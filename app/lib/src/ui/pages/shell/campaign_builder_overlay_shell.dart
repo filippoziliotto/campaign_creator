@@ -465,7 +465,7 @@ class _SettingsSheetState extends State<_SettingsSheet> {
               style: ButtonStyle(
                 visualDensity: VisualDensity.compact,
                 padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
-                  EdgeInsets.symmetric(horizontal: 11, vertical: 10),
+                  EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                 ),
                 backgroundColor: WidgetStateProperty.resolveWith<Color?>(
                   (states) {
@@ -936,22 +936,25 @@ class _LanguageSegmentLabel extends StatelessWidget {
           letterSpacing: 0.2,
         );
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _LanguageMark(
-          key: ValueKey<String>('settings-language-mark-$languageCode'),
-          languageCode: languageCode,
-          outlineColor: outlineColor,
-        ),
-        const SizedBox(width: 6),
-        Text(
-          shortLabel,
-          style: labelStyle,
-          maxLines: 1,
-          softWrap: false,
-        ),
-      ],
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _LanguageMark(
+            key: ValueKey<String>('settings-language-mark-$languageCode'),
+            languageCode: languageCode,
+            outlineColor: outlineColor,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            shortLabel,
+            style: labelStyle,
+            maxLines: 1,
+            softWrap: false,
+          ),
+        ],
+      ),
     );
   }
 }
