@@ -196,6 +196,8 @@
       }
     }
   },
+  "forgePartyLevelPremiumHint": "Levels 4+ are premium",
+  "forgePartySizePremiumHint": "5+ characters are premium",
   "forgePartyArchetypesTitle": "Party archetypes",
   "forgePartyArchetypesSubtitle": "Select up to {size} archetypes.",
   "@forgePartyArchetypesSubtitle": {

@@ -412,6 +412,12 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get forgePartyLevelPremiumHint => 'Stufen ab 4 sind premium';
+
+  @override
+  String get forgePartySizePremiumHint => '5+ Charaktere sind premium';
+
+  @override
   String get forgePartyArchetypesTitle => 'Gruppenarchetypen';
 
   @override

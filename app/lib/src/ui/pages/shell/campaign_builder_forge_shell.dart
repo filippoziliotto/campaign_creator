@@ -1265,6 +1265,10 @@ extension on _CampaignBuilderPageState {
   }
 
   Widget _buildPartyMetricsPanel() {
+    const freePartyLevelMax = 5;
+    const freePartySizeMax = 4;
+    final glow = _currentAtmosphere().glow;
+
     return ControlRoomPanel(
       label: context.l10n.forgeScaleLabel,
       title: context.l10n.forgeScaleTitle,
@@ -1277,40 +1281,75 @@ extension on _CampaignBuilderPageState {
         children: [
           Text(
             context.l10n.forgePartyLevel(_partyLevel),
+            key: const ValueKey<String>('party-level-label'),
             style: _resolvedAtmosphereTheme().textTheme.titleMedium,
           ),
-          Slider(
+          const SizedBox(height: 10),
+          _buildPremiumThresholdSlider(
+            sliderKey: const ValueKey<String>('party-level-slider'),
             value: _partyLevel.toDouble(),
             min: 1,
             max: 20,
             divisions: 19,
-            label: '$_partyLevel',
+            freeMax: freePartyLevelMax,
             onChanged: (value) {
               _markDirty(() {
                 _partyLevel = value.round();
               });
             },
+            onPremiumBlocked: () => _showPremiumUnlockForChip(glow),
           ),
           const SizedBox(height: 10),
           Text(
             context.l10n.forgePartySize(_partySize),
+            key: const ValueKey<String>('party-size-label'),
             style: _resolvedAtmosphereTheme().textTheme.titleMedium,
           ),
-          Slider(
+          const SizedBox(height: 10),
+          _buildPremiumThresholdSlider(
+            sliderKey: const ValueKey<String>('party-size-slider'),
             value: _partySize.toDouble(),
             min: 1,
             max: 8,
             divisions: 7,
-            label: '$_partySize',
+            freeMax: freePartySizeMax,
             onChanged: (value) {
               _markDirty(() {
                 _partySize = value.round();
                 _trimArchetypesToPartySize();
               });
             },
+            onPremiumBlocked: () => _showPremiumUnlockForChip(glow),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPremiumThresholdSlider({
+    required Key sliderKey,
+    required double value,
+    required double min,
+    required double max,
+    required int divisions,
+    required int freeMax,
+    required ValueChanged<double> onChanged,
+    required VoidCallback onPremiumBlocked,
+  }) {
+    return Slider(
+      key: sliderKey,
+      value: value,
+      min: min,
+      max: max,
+      divisions: divisions,
+      label: value.round().toString(),
+      onChanged: (nextValue) {
+        if (!_isPremiumUnlocked && nextValue.round() > freeMax) {
+          onPremiumBlocked();
+          return;
+        }
+        onChanged(nextValue);
+      },
     );
   }
 
@@ -1549,6 +1588,7 @@ extension on _CampaignBuilderPageState {
           final isPremium = premiumOptionIds.contains(value);
           final isLocked = isPremium && !_isPremiumUnlocked;
           return AnimatedRuneFilterChip(
+            key: ValueKey<String>('forge-option-chip-$value'),
             atmosphere: atmosphere,
             label: value,
             selected: selectedValues.contains(value),

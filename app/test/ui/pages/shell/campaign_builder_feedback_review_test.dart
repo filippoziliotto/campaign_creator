@@ -129,12 +129,18 @@ void main() {
         _clearRecordedHaptics();
 
         for (final label in <String>['Intrigo', 'Epico', 'Lineare']) {
-          await tester.tap(find.text(label));
+          final chip =
+              find.byKey(ValueKey<String>('forge-option-chip-$label'));
+          await tester.ensureVisible(chip);
+          await tester.tap(chip, warnIfMissed: false);
           await _pumpUi(tester);
         }
 
         for (final label in <String>['Intrigo', 'Epico', 'Lineare']) {
-          await tester.tap(find.text(label));
+          final chip =
+              find.byKey(ValueKey<String>('forge-option-chip-$label'));
+          await tester.ensureVisible(chip);
+          await tester.tap(chip, warnIfMissed: false);
           await _pumpUi(tester);
         }
       });
@@ -184,6 +190,57 @@ void main() {
 
     final customText = tester.widget<Text>(find.text('Noir'));
     expect(customText.style?.fontSize, 12);
+  });
+
+  testWidgets('party scale shows no premium threshold markers', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+
+    await tester.pumpWidget(_TestApp(
+      locale: const Locale('en'),
+      child: _buildPage(locale: const Locale('en')),
+    ));
+    await _pumpUi(tester);
+    await _openPartySection(tester);
+
+    expect(find.byKey(const ValueKey<String>('party-level-premium-threshold')),
+        findsNothing);
+    expect(find.byKey(const ValueKey<String>('party-size-premium-threshold')),
+        findsNothing);
+    expect(find.text('Levels 4+ are premium'), findsNothing);
+    expect(find.text('5+ characters are premium'), findsNothing);
+    expect(find.text('4+'), findsNothing);
+    expect(find.text('5+'), findsNothing);
+  });
+
+  testWidgets('dragging party level into premium opens unlock flow', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+
+    await tester.pumpWidget(_TestApp(
+      locale: const Locale('en'),
+      child: _buildPage(locale: const Locale('en')),
+    ));
+    await _pumpUi(tester);
+    await _openPartySection(tester);
+
+    expect(find.byKey(const ValueKey<String>('party-level-label')),
+        findsOneWidget);
+
+    await tester.drag(
+      find.byKey(const ValueKey<String>('party-level-slider')),
+      const Offset(2000, 0),
+    );
+    await _pumpUi(tester);
+
+    expect(find.text('Unlock Premium'), findsWidgets);
+    expect(
+      tester.widget<Text>(find.byKey(const ValueKey<String>('party-level-label')))
+          .data,
+      isNot('Party level: 6'),
+    );
   });
 
   testWidgets('narrative section still forges parchment with empty fields', (
@@ -441,6 +498,20 @@ Future<void> _openNarrativeSection(
 
   expect(
     find.byKey(const ValueKey<String>('forge-section-narrative')),
+    findsOneWidget,
+  );
+}
+
+Future<void> _openPartySection(WidgetTester tester) async {
+  await _openWorldSection(tester);
+  final partyTab = find.text('Party').evaluate().isNotEmpty
+      ? find.text('Party')
+      : find.text('Gruppe');
+  await tester.tap(partyTab);
+  await _pumpUi(tester);
+
+  expect(
+    find.byKey(const ValueKey<String>('forge-section-party')),
     findsOneWidget,
   );
 }

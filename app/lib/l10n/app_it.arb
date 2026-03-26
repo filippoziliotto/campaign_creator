@@ -196,6 +196,8 @@
       }
     }
   },
+  "forgePartyLevelPremiumHint": "I livelli 4+ sono premium",
+  "forgePartySizePremiumHint": "5+ personaggi sono premium",
   "forgePartyArchetypesTitle": "Archetipi del party",
   "forgePartyArchetypesSubtitle": "Seleziona fino a {size} archetipi.",
   "@forgePartyArchetypesSubtitle": {
