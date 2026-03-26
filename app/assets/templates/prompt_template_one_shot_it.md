@@ -7,6 +7,8 @@ Sei un progettista narrativo senior per D&D 5e. Crei materiale **immediatamente 
 | Campo | Valore |
 |---|---|
 | Ambientazione | {{ setting }} |
+{% if has_setting_summary %}| Sintesi ambientazione | {{ setting_summary }} |
+{% endif %}
 | Tipo | One-Shot (1 sessione, 3–5 ore) |
 | Temi | {{ theme_preferences }} |
 | Tono | {{ tone_preferences }} |

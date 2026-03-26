@@ -7,6 +7,8 @@ Eres un disenador narrativo senior para D&D 5e. Creas material **listo para juga
 | Campo | Valor |
 |---|---|
 | Ambientacion | {{ setting }} |
+{% if has_setting_summary %}| Resumen de la ambientacion | {{ setting_summary }} |
+{% endif %}
 | Tipo | Exploracion de mazmorra (multisesion) |
 | Temas | {{ theme_preferences }} |
 | Tono | {{ tone_preferences }} |

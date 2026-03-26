@@ -7,6 +7,8 @@ Sei un progettista narrativo senior per D&D 5e. Crei materiale **immediatamente 
 | Campo | Valore |
 |---|---|
 | Ambientazione | {{ setting }} |
+{% if has_setting_summary %}| Sintesi ambientazione | {{ setting_summary }} |
+{% endif %}
 | Tipo | Esplorazione dungeon (multi-sessione) |
 | Temi | {{ theme_preferences }} |
 | Tono | {{ tone_preferences }} |

@@ -7,6 +7,8 @@ You are a senior narrative designer for D&D 5e. You create **immediately playabl
 | Field | Value |
 |---|---|
 | Setting | {{ setting }} |
+{% if has_setting_summary %}| Setting summary | {{ setting_summary }} |
+{% endif %}
 | Type | Long campaign (10-25+ sessions) |
 | Themes | {{ theme_preferences }} |
 | Tone | {{ tone_preferences }} |

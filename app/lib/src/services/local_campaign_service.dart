@@ -413,8 +413,12 @@ class LocalCampaignService implements CampaignService {
       constraints.add(bundle.noConstraintsProvided);
     }
 
+    final settingSummary = req.settingSummary.trim();
+
     return <String, Object>{
       'setting': req.setting,
+      'setting_summary': settingSummary,
+      'has_setting_summary': settingSummary.isNotEmpty,
       'campaign_type': req.campaignType,
       'theme_preferences': req.themePreferences.isNotEmpty
           ? req.themePreferences.join(', ')

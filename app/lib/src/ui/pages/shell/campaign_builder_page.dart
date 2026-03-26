@@ -762,9 +762,14 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     final themePreferences = [..._selectedThemes, ..._customThemeEntries];
     final tonePreferences = [..._selectedTones, ..._customToneEntries];
     final stylePreferences = [..._selectedStyles, ..._customStyleEntries];
+    final selectedSetting = _selectedSetting ?? '';
+    final settingSummary = options.settings.contains(selectedSetting)
+        ? (options.settingDescriptions[selectedSetting] ?? '')
+        : '';
 
     return CampaignGenerateRequest(
-      setting: _selectedSetting ?? '',
+      setting: selectedSetting,
+      settingSummary: settingSummary,
       campaignType: _selectedCampaignType ?? '',
       themePreferences: themePreferences,
       tonePreferences: tonePreferences,

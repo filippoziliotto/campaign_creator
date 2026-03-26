@@ -7,6 +7,8 @@ Eres un diseñador narrativo senior para D&D 5e. Creas material **inmediatamente
 | Campo | Valor |
 |---|---|
 | Ambientación | {{ setting }} |
+{% if has_setting_summary %}| Resumen de la ambientacion | {{ setting_summary }} |
+{% endif %}
 | Tipo | One-Shot (1 sesión, 3-5 horas) |
 | Temas | {{ theme_preferences }} |
 | Tono | {{ tone_preferences }} |

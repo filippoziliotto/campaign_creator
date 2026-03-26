@@ -4,6 +4,8 @@ Write a campaign proposal ready to bring to the table.
 
 ## Campaign data
 - Setting: {{ setting }}
+{% if has_setting_summary %}- Setting summary: {{ setting_summary }}
+{% endif %}
 - Campaign type: {{ campaign_type }}
 - Preferred themes: {{ theme_preferences }}
 - Party level: {{ party_level }}

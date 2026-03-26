@@ -10,13 +10,16 @@ void main() {
       String campaignType = 'One-Shot',
       String localeCode = 'it',
       String twist = '',
+      String setting = 'Forgotten Realms',
+      String settingSummary = '',
       List<String> themePreferences = const [],
       List<String> tonePreferences = const [],
       bool includeNpcs = true,
       bool includeEncounters = true,
     }) {
       return CampaignGenerateRequest(
-        setting: 'Forgotten Realms',
+        setting: setting,
+        settingSummary: settingSummary,
         campaignType: campaignType,
         themePreferences: themePreferences,
         tonePreferences: tonePreferences,
@@ -294,6 +297,57 @@ void main() {
         expect(prompt, isNot(contains('| Rebondissement |')));
         expect(prompt, isNot(contains('Sans rebondissement demandé')));
         expect(prompt, contains('point de bascule principal'));
+      });
+
+      test('predefined settings include a localized setting summary row',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          localeCode: 'en',
+          setting: 'Forgotten Realms',
+          settingSummary:
+              'Classic high fantasy across a vast, conflict-rich world.',
+        ));
+
+        expect(prompt, contains('| Setting | Forgotten Realms |'));
+        expect(
+          prompt,
+          contains(
+            '| Setting summary | Classic high fantasy across a vast, conflict-rich world. |',
+          ),
+        );
+      });
+
+      test('Italian prompts localize the setting summary row label', () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          localeCode: 'it',
+          setting: 'Forgotten Realms',
+          settingSummary: 'High fantasy classico in un mondo vasto e ricco di conflitti.',
+        ));
+
+        expect(
+          prompt,
+          contains(
+            '| Sintesi ambientazione | High fantasy classico in un mondo vasto e ricco di conflitti. |',
+          ),
+        );
+      });
+
+      test('custom settings do not render a localized setting summary row',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          localeCode: 'it',
+          setting: 'Mia Ambientazione Originale',
+          settingSummary: '',
+        ));
+
+        expect(prompt, contains('| Ambientazione | Mia Ambientazione Originale |'));
+        expect(prompt, isNot(contains('| Sintesi ambientazione |')));
       });
 
       test('one-shot template is selected for One-Shot campaign type',

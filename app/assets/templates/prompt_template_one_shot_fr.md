@@ -7,6 +7,8 @@ Tu es un concepteur narratif senior pour D&D 5e. Tu crées du matériel **imméd
 | Champ | Valeur |
 |---|---|
 | Cadre | {{ setting }} |
+{% if has_setting_summary %}| Resume du cadre | {{ setting_summary }} |
+{% endif %}
 | Type | One-Shot (1 séance, 3-5 heures) |
 | Thèmes | {{ theme_preferences }} |
 | Ton | {{ tone_preferences }} |

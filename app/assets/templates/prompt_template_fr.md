@@ -4,6 +4,8 @@ Agis comme un concepteur narratif senior pour D&D 5e. Sois créatif mais discipl
 
 ## Données de campagne
 - Cadre : {{ setting }}
+{% if has_setting_summary %}- Resume du cadre : {{ setting_summary }}
+{% endif %}
 - Type de campagne : {{ campaign_type }}
 - Thèmes préférés : {{ theme_preferences }}
 - Niveau du groupe : {{ party_level }}

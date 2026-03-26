@@ -7,6 +7,8 @@ Vous etes un concepteur narratif senior pour D&D 5e. Vous creez du materiel **im
 | Champ | Valeur |
 |---|---|
 | Cadre | {{ setting }} |
+{% if has_setting_summary %}| Resume du cadre | {{ setting_summary }} |
+{% endif %}
 | Type | Exploration de donjon (multi-session) |
 | Themes | {{ theme_preferences }} |
 | Ton | {{ tone_preferences }} |

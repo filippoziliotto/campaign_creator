@@ -108,6 +108,7 @@ class CampaignOptions {
 class CampaignGenerateRequest {
   CampaignGenerateRequest({
     required this.setting,
+    this.settingSummary = '',
     required this.campaignType,
     required this.themePreferences,
     required this.tonePreferences,
@@ -129,6 +130,7 @@ class CampaignGenerateRequest {
   });
 
   final String setting;
+  final String settingSummary;
   final String campaignType;
   final List<String> themePreferences;
   final List<String> tonePreferences;

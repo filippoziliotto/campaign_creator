@@ -4,6 +4,8 @@ Escribe una propuesta de campaña lista para llevar a la mesa.
 
 ## Datos de campaña
 - Ambientación: {{ setting }}
+{% if has_setting_summary %}- Resumen de la ambientacion: {{ setting_summary }}
+{% endif %}
 - Tipo de campaña: {{ campaign_type }}
 - Temas preferidos: {{ theme_preferences }}
 - Nivel del grupo: {{ party_level }}
