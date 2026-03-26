@@ -318,6 +318,7 @@ extension on _CampaignBuilderPageState {
                     : const {},
             premiumHighlightColor: _currentAtmosphere(options).glow,
             useWheelPicker: true,
+            wheelConfig: settingWheelPickerConfig,
             showCustomOption: true,
             isCustomOptionLocked: !_isPremiumUnlocked,
             onCustomOptionTap: () => _showCustomEntryDialog(
@@ -459,12 +460,11 @@ extension on _CampaignBuilderPageState {
             keyPrefix: 'twist-selector',
             emptyText: context.l10n.appTwistPending,
             premiumOptionIds: options.twists.length >= 5
-                ? options.twists
-                    .sublist(options.twists.length - 5)
-                    .toSet()
+                ? options.twists.sublist(options.twists.length - 5).toSet()
                 : options.twists.toSet(),
             premiumHighlightColor: _currentAtmosphere().glow,
             useWheelPicker: true,
+            wheelConfig: twistWheelPickerConfig,
             showCustomOption: true,
             isCustomOptionLocked: !_isPremiumUnlocked,
             onCustomOptionTap: () => _showCustomEntryDialog(
@@ -502,12 +502,7 @@ extension on _CampaignBuilderPageState {
     bool isCustomOptionLocked = false,
     VoidCallback? onCustomOptionTap,
     bool useWheelPicker = false,
-    // Wheel picker appearance overrides
-    double wheelSheetHeight = 320,
-    double wheelItemExtent = 68,
-    double wheelFontSize = 13,
-    double wheelLetterSpacing = 1.0,
-    FontWeight wheelFontWeight = FontWeight.w600,
+    WheelPickerConfig wheelConfig = twistWheelPickerConfig,
   }) {
     // If the value is not a known preset, it's a custom-entered value — show as-is.
     final isCustomValue =
@@ -520,8 +515,7 @@ extension on _CampaignBuilderPageState {
                 ? options.first
                 : null);
     final hasVisibleSummary = normalizedValue != null || emptyText != null;
-    String displayText(String raw) =>
-        uppercaseText ? raw.toUpperCase() : raw;
+    String displayText(String raw) => uppercaseText ? raw.toUpperCase() : raw;
     final summary = normalizedValue == null
         ? (emptyText ?? label)
         : displayText(labels[normalizedValue] ?? normalizedValue);
@@ -559,11 +553,7 @@ extension on _CampaignBuilderPageState {
                       showCustomOption: showCustomOption,
                       isCustomOptionLocked: !premiumUnlocked,
                       onCustomOptionTap: onCustomOptionTap,
-                      sheetHeight: wheelSheetHeight,
-                      itemExtent: wheelItemExtent,
-                      fontSize: wheelFontSize,
-                      letterSpacing: wheelLetterSpacing,
-                      fontWeight: wheelFontWeight,
+                      wheelConfig: wheelConfig,
                     )
                   : await _showOptionPicker(
                       keyPrefix: keyPrefix,
@@ -686,8 +676,7 @@ extension on _CampaignBuilderPageState {
                       child: ListView.separated(
                         shrinkWrap: true,
                         padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-                        itemCount:
-                            options.length + (showCustomOption ? 1 : 0),
+                        itemCount: options.length + (showCustomOption ? 1 : 0),
                         separatorBuilder: (_, __) => Divider(
                           height: 1,
                           color: colorScheme.outline.withValues(alpha: 0.12),
@@ -868,11 +857,7 @@ extension on _CampaignBuilderPageState {
     bool showCustomOption = false,
     bool isCustomOptionLocked = false,
     VoidCallback? onCustomOptionTap,
-    double sheetHeight = 320,
-    double itemExtent = 68,
-    double fontSize = 13,
-    double letterSpacing = 1.0,
-    FontWeight fontWeight = FontWeight.w600,
+    required WheelPickerConfig wheelConfig,
   }) {
     const customSentinel = '__custom__';
     final allOptions = [
@@ -903,10 +888,11 @@ extension on _CampaignBuilderPageState {
             builder: (_, setState) {
               final selectedOption = allOptions[selectedIndex];
               final isCustomSelected = selectedOption == customSentinel;
-              final isPremiumSelected = isCustomSelected ||
-                  premiumOptionIds.contains(selectedOption);
-              final isLockedSelected = isPremiumSelected && !isPremiumUnlocked ||
-                  (isCustomSelected && isCustomOptionLocked);
+              final isPremiumSelected =
+                  isCustomSelected || premiumOptionIds.contains(selectedOption);
+              final isLockedSelected =
+                  isPremiumSelected && !isPremiumUnlocked ||
+                      (isCustomSelected && isCustomOptionLocked);
 
               return SafeArea(
                 child: Padding(
@@ -942,19 +928,18 @@ extension on _CampaignBuilderPageState {
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(20, 18, 20, 4),
-                          child:
-                              Text(title, style: theme.textTheme.titleLarge),
+                          child: Text(title, style: theme.textTheme.titleLarge),
                         ),
                         SizedBox(
-                          height: sheetHeight,
+                          height: wheelConfig.sheetHeight,
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
                               ListWheelScrollView(
                                 controller: scrollController,
-                                itemExtent: itemExtent,
-                                perspective: 0.004,
-                                diameterRatio: 2.8,
+                                itemExtent: wheelConfig.itemExtent,
+                                perspective: wheelConfig.perspective,
+                                diameterRatio: wheelConfig.diameterRatio,
                                 physics: const FixedExtentScrollPhysics(),
                                 onSelectedItemChanged: (i) =>
                                     setState(() => selectedIndex = i),
@@ -962,8 +947,9 @@ extension on _CampaignBuilderPageState {
                                   final isCustom = option == customSentinel;
                                   final isPremium = isCustom ||
                                       premiumOptionIds.contains(option);
-                                  final displayLabel =
-                                      isCustom ? 'CUSTOM' : option.toUpperCase();
+                                  final displayLabel = isCustom
+                                      ? 'CUSTOM'
+                                      : option.toUpperCase();
                                   return Center(
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -979,16 +965,18 @@ extension on _CampaignBuilderPageState {
                                             child: Text(
                                               displayLabel,
                                               textAlign: TextAlign.center,
-                                              maxLines: 2,
+                                              maxLines: wheelConfig.maxLines,
                                               style: theme.textTheme.titleSmall
                                                   ?.copyWith(
                                                 color: isPremium
                                                     ? crownColor
                                                     : colorScheme.onSurface,
-                                                fontWeight: fontWeight,
-                                                letterSpacing: letterSpacing,
+                                                fontWeight:
+                                                    wheelConfig.fontWeight,
+                                                letterSpacing:
+                                                    wheelConfig.letterSpacing,
                                                 height: 1.25,
-                                                fontSize: fontSize,
+                                                fontSize: wheelConfig.fontSize,
                                               ),
                                             ),
                                           ),
@@ -1050,7 +1038,7 @@ extension on _CampaignBuilderPageState {
                               IgnorePointer(
                                 child: Center(
                                   child: Container(
-                                    height: itemExtent,
+                                    height: wheelConfig.itemExtent,
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 24),
                                     decoration: BoxDecoration(
@@ -1111,7 +1099,8 @@ extension on _CampaignBuilderPageState {
                                   Navigator.of(sheetContext).pop();
                                   onCustomOptionTap?.call();
                                 } else {
-                                  Navigator.of(sheetContext).pop(selectedOption);
+                                  Navigator.of(sheetContext)
+                                      .pop(selectedOption);
                                 }
                               },
                               style: FilledButton.styleFrom(
@@ -1662,8 +1651,8 @@ extension on _CampaignBuilderPageState {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -1824,8 +1813,7 @@ extension on _CampaignBuilderPageState {
                         ),
                         child: Text(
                           'Cancel',
-                          style: TextStyle(
-                              color: glow.withValues(alpha: 0.7)),
+                          style: TextStyle(color: glow.withValues(alpha: 0.7)),
                         ),
                       ),
                     ),

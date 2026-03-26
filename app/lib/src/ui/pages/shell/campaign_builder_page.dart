@@ -41,6 +41,51 @@ enum _AppStage { entry, forge, parchment }
 
 enum _ForgeSection { world, party, narrative }
 
+@immutable
+class WheelPickerConfig {
+  const WheelPickerConfig({
+    required this.sheetHeight,
+    required this.itemExtent,
+    required this.fontSize,
+    required this.letterSpacing,
+    required this.fontWeight,
+    required this.diameterRatio,
+    required this.perspective,
+    required this.maxLines,
+  });
+
+  final double sheetHeight;
+  final double itemExtent;
+  final double fontSize;
+  final double letterSpacing;
+  final FontWeight fontWeight;
+  final double diameterRatio;
+  final double perspective;
+  final int maxLines;
+}
+
+const WheelPickerConfig settingWheelPickerConfig = WheelPickerConfig(
+  sheetHeight: 260,
+  itemExtent: 54,
+  fontSize: 16,
+  letterSpacing: 1.15,
+  fontWeight: FontWeight.w700,
+  diameterRatio: 2.45,
+  perspective: 0.0032,
+  maxLines: 2,
+);
+
+const WheelPickerConfig twistWheelPickerConfig = WheelPickerConfig(
+  sheetHeight: 350,
+  itemExtent: 80,
+  fontSize: 13,
+  letterSpacing: 1.0,
+  fontWeight: FontWeight.w600,
+  diameterRatio: 3.5,
+  perspective: 0.0045,
+  maxLines: 3,
+);
+
 enum _CampaignTypeKind {
   oneShot,
   miniCampaign,
@@ -418,6 +463,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     return DateTime.now().difference(grantedAt) <
         PremiumAccessService.temporaryUnlockDuration;
   }
+
   String? _adFreePrice;
   late final List<TextEditingController> _textControllers;
   final ScrollController _entryScrollController = ScrollController();
@@ -461,7 +507,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   String? _savedDraftPrompt;
   int? _savedDraftSavedAt;
 
-final TextEditingController _narrativeHooksController =
+  final TextEditingController _narrativeHooksController =
       TextEditingController();
   final TextEditingController _characterNotesController =
       TextEditingController();
@@ -638,7 +684,7 @@ final TextEditingController _narrativeHooksController =
     }
   }
 
-List<String> _availablePresetsForCampaignType(CampaignOptions options) {
+  List<String> _availablePresetsForCampaignType(CampaignOptions options) {
     if (_selectedCampaignType == null) {
       return <String>[];
     }
@@ -953,14 +999,12 @@ List<String> _availablePresetsForCampaignType(CampaignOptions options) {
       _savedDraftPrompt = null;
       _savedDraftSavedAt = null;
       _selectedCampaignType = null;
-      _selectedSetting =
-          options != null && options.settings.isNotEmpty
-              ? options.settings.first
-              : null;
-      _selectedTwist =
-          options != null && options.twists.isNotEmpty
-              ? options.twists.first
-              : null;
+      _selectedSetting = options != null && options.settings.isNotEmpty
+          ? options.settings.first
+          : null;
+      _selectedTwist = options != null && options.twists.isNotEmpty
+          ? options.twists.first
+          : null;
       _selectedPreset = null;
       _appliedPreset = null;
       _selectedThemes.clear();

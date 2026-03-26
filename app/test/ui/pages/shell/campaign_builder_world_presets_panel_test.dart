@@ -48,8 +48,7 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
-  testWidgets('applying a preset forges directly to parchment',
-      (tester) async {
+  testWidgets('applying a preset forges directly to parchment', (tester) async {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -107,8 +106,7 @@ void main() {
 
     final presetField =
         find.byKey(const ValueKey<String>('preset-selector-field'));
-    final forgeButton =
-        find.widgetWithText(FilledButton, 'Forgia con preset');
+    final forgeButton = find.widgetWithText(FilledButton, 'Forgia con preset');
 
     expect(
       find.descendant(
@@ -129,7 +127,8 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
-  testWidgets('applying a long campaign preset also forges directly to parchment',
+  testWidgets(
+      'applying a long campaign preset also forges directly to parchment',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -496,13 +495,13 @@ class _TestApp extends StatelessWidget {
 }
 
 Future<void> _pumpUi(WidgetTester tester) async {
-  await tester.pump();
-  await tester.pump(const Duration(milliseconds: 800));
+  await tester.pumpAndSettle();
 }
 
 Future<void> _openForgeFromEntry(
   WidgetTester tester, [
-  ValueKey<String> cardKey = const ValueKey<String>('entry-campaign-card-One-Shot'),
+  ValueKey<String> cardKey =
+      const ValueKey<String>('entry-campaign-card-One-Shot'),
 ]) async {
   final card = find.byKey(cardKey);
   await tester.ensureVisible(card);
