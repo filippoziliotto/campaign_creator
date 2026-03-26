@@ -282,8 +282,8 @@ class PremiumUnlockPrompt extends StatelessWidget {
           // Description
           Text(
             showAdOption
-                ? 'Watch a short ad to unlock this feature for 5 minutes,\n'
-                    'or unlock Premium to access everything permanently.'
+                ? 'Watch an ad to access premium features for 5 minutes,\n'
+                    'or directly unlock Premium to access everything permanently.'
                 : 'Unlock Premium to access this feature permanently.',
             textAlign: TextAlign.center,
             style: textTheme.bodySmall?.copyWith(

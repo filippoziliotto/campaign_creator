@@ -1429,15 +1429,9 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       _currentSettingLabel(),
     ];
 
-    if (_selectedThemes.isNotEmpty) {
-      tokens.add(_selectedThemes.take(2).join(' + '));
-    }
-    if (_selectedTones.isNotEmpty) {
-      tokens.add(_selectedTones.take(2).join(' + '));
-    }
-    if (_selectedStyles.isNotEmpty) {
-      tokens.add(_selectedStyles.take(2).join(' + '));
-    }
+    tokens.addAll(_selectedThemes.take(2));
+    tokens.addAll(_selectedTones.take(2));
+    tokens.addAll(_selectedStyles.take(2));
 
     tokens.add(context.l10n.appSummaryPartySize(_partySize));
     tokens.add(context.l10n.appSummaryLevel(_partyLevel));

@@ -1583,29 +1583,16 @@ extension on _CampaignBuilderPageState {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 10,
-                    right: 6,
-                    top: 6,
-                    bottom: 6,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        entry,
-                        style: _resolvedAtmosphereTheme()
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(color: FantasyPalette.parchment),
-                      ),
-                      const SizedBox(width: 4),
-                      Icon(
-                        Icons.close,
-                        size: 12,
-                        color: FantasyPalette.parchment.withValues(alpha: 0.7),
-                      ),
-                    ],
+                  child: Text(
+                    entry,
+                    style: _resolvedAtmosphereTheme()
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(color: FantasyPalette.parchment),
                   ),
                 ),
               ),
