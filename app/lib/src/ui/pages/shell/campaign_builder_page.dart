@@ -381,16 +381,19 @@ _CampaignTypeKind _campaignTypeKindFor(String? campaignType) {
     case 'Mini-campaign':
     case 'Mini-campaña':
     case 'Mini-campagne':
+    case 'Mini-Kampagne':
       return _CampaignTypeKind.miniCampaign;
     case 'Campagna lunga':
     case 'Long campaign':
     case 'Campaña larga':
     case 'Longue campagne':
+    case 'Lange Kampagne':
       return _CampaignTypeKind.longCampaign;
     case 'Esplorazione dungeon':
     case 'Dungeon crawl':
     case 'Exploración de mazmorra':
     case 'Exploration de donjon':
+    case 'Dungeon-Erkundung':
       return _CampaignTypeKind.dungeon;
     default:
       return _CampaignTypeKind.custom;
@@ -2374,13 +2377,24 @@ class _SettingsSheetState extends State<_SettingsSheet>
                                   palette.outline.withValues(alpha: 0.72),
                             ),
                           ),
+                          ButtonSegment<String>(
+                            value: 'de',
+                            label: _LanguageSegmentLabel(
+                              key: const ValueKey<String>(
+                                  'settings-language-segment-de'),
+                              languageCode: 'de',
+                              shortLabel: context.l10n.languageGermanShort,
+                              outlineColor:
+                                  palette.outline.withValues(alpha: 0.72),
+                            ),
+                          ),
                         ],
                         selected: <String>{widget.currentLocale.languageCode},
                         style: ButtonStyle(
                           visualDensity: VisualDensity.compact,
                           padding:
                               const WidgetStatePropertyAll<EdgeInsetsGeometry>(
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                            EdgeInsets.symmetric(horizontal: 11, vertical: 10),
                           ),
                           backgroundColor:
                               WidgetStateProperty.resolveWith<Color?>(
@@ -2651,6 +2665,7 @@ class _LanguageSegmentLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     final labelStyle = DefaultTextStyle.of(context).style.copyWith(
           fontWeight: FontWeight.w700,
+          fontSize: 14,
           letterSpacing: 0.2,
         );
 
@@ -2691,6 +2706,7 @@ class _LanguageMark extends StatelessWidget {
       'it' => 'IT',
       'es' => 'ES',
       'fr' => 'FR',
+      'de' => 'DE',
       _ => 'US',
     };
 
@@ -2698,13 +2714,13 @@ class _LanguageMark extends StatelessWidget {
       borderRadius: BorderRadius.circular(3),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: outlineColor, width: 0.9),
+          border: Border.all(color: outlineColor, width: 0.1),
           borderRadius: BorderRadius.circular(3),
         ),
         child: CountryFlag.fromCountryCode(
           countryCode,
-          width: 22,
-          height: 14,
+          width: 16,
+          height: 12,
         ),
       ),
     );

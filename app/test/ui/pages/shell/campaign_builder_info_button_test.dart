@@ -173,6 +173,8 @@ void main() {
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-segment-fr')),
         findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-segment-de')),
+        findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-mark-en')),
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-mark-it')),
@@ -180,6 +182,8 @@ void main() {
     expect(find.byKey(const ValueKey<String>('settings-language-mark-es')),
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-mark-fr')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-mark-de')),
         findsOneWidget);
   });
 

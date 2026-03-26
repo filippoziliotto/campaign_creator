@@ -1,0 +1,302 @@
+{
+  "@@locale": "de",
+  "appTitle": "D&D Kampagnenersteller",
+  "appNameShort": "Kampagnenersteller",
+  "languageItalianShort": "IT",
+  "languageEnglishShort": "EN",
+  "languageSpanishShort": "ES",
+  "languageFrenchShort": "FR",
+  "languageGermanShort": "DE",
+  "commonRetry": "Erneut versuchen",
+  "commonOpen": "Öffnen",
+  "commonOptional": "Optional",
+  "appFreeFormat": "Format wählen",
+  "appSettingPending": "Setting festlegen",
+  "appTwistPending": "Twist festlegen",
+  "appStageEntry": "Auswahl",
+  "appStageForge": "Schmiede",
+  "appStageParchment": "Pergament",
+  "appOpenParchment": "Pergament öffnen",
+  "appSealParchment": "Pergament versiegeln",
+  "appSummaryLevel": "Stufe {level}",
+  "@appSummaryLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "appSummaryPartySize": "{size} SC",
+  "@appSummaryPartySize": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "appSummaryPreset": "Preset: {name}",
+  "@appSummaryPreset": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "appLoadOptionsError": "Optionen konnten nicht geladen werden: {error}",
+  "@appLoadOptionsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appGenerationFailedError": "Generierung fehlgeschlagen: {error}",
+  "@appGenerationFailedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appInvalidArchetypeSelection": "Du hast {count} Archetypen gewählt, aber die Gruppe ist auf {size} SC eingestellt.",
+  "@appInvalidArchetypeSelection": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "appSnackForgedAndCopied": "Pergament geschmiedet und Prompt in die Zwischenablage kopiert.",
+  "appSnackGenerationFailed": "Generierung fehlgeschlagen. Prüfe die eingeblendete Meldung.",
+  "appSnackPromptCopied": "Prompt in die Zwischenablage kopiert.",
+  "appSnackNoParchmentToShare": "Es gibt noch kein Pergament zum Teilen.",
+  "appSnackShareUnavailableOnDevice": "Teilen ist auf diesem Gerät nicht verfügbar.",
+  "appSnackShareUnavailable": "Teilen nicht verfügbar: {error}",
+  "@appSnackShareUnavailable": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appSnackGenerateFirst": "Erzeuge zuerst ein Pergament, bevor du es sendest.",
+  "appSnackChatGptOpened": "ChatGPT geöffnet. Der Prompt liegt bereits in der Zwischenablage.",
+  "appSnackChatGptCopiedOnly": "ChatGPT konnte nicht geöffnet werden, aber der Prompt wurde kopiert.",
+  "appSnackNoParchmentToSave": "Es gibt kein Pergament zum Speichern.",
+  "appSnackDraftSaved": "Pergament-Entwurf lokal gespeichert.",
+  "appSnackDraftMemoryOnly": "Entwurf nur im Speicher gesichert. Starte die App vollständig neu, um lokale Persistenz zu aktivieren.",
+  "appSnackSealedSavedAndCopied": "Pergament versiegelt: Entwurf gespeichert und Prompt kopiert.",
+  "appSnackSealedCopiedOnlyMemory": "Pergament versiegelt: Prompt kopiert. Starte die App vollständig neu, um lokales Speichern zu aktivieren.",
+  "appSnackLocalSaveUnavailable": "Lokales Speichern ist in dieser Sitzung nicht verfügbar. Schließe und starte die App erneut, um das Plugin zu registrieren.",
+  "appDraftMemoryOnly": "Entwurf nur im Speicher gehalten. Starte die App vollständig neu, um lokales Speichern wieder zu aktivieren.",
+  "appDraftAligned": "Lokaler Entwurf abgeglichen am {dateTime}.",
+  "@appDraftAligned": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "appDraftLastSaved": "Letzter Entwurf gespeichert am {dateTime}.",
+  "@appDraftLastSaved": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "appErrorEyebrow": "Ritual unterbrochen",
+  "appErrorTitle": "Das Grimoire reagiert nicht",
+  "appErrorUnknownLoad": "Unbekannter Fehler beim Laden der Optionen.",
+  "entryCampaignTypesTitle": "Kampagnentypen",
+  "entryResumeTitle": "Sitzung fortsetzen",
+  "entryResumeSubtitle": "Du hast bereits einen aktiven Entwurf. Springe direkt an die richtige Stelle zurück.",
+  "entryResumeForge": "Schmiede fortsetzen",
+  "entryOpenForge": "Schmiede öffnen",
+  "entryHeroWelcomeTitle": "Wähle deine Kampagne",
+  "entryHeroWelcomeBody": "Schmiede deinen Kampagnen-Prompt und erwecke ihn dann mit deiner vertrauten KI zum Leben.",
+  "entryHeroChooseRitual": "Wähle ein Format, um zu beginnen.",
+  "entryResetDraft": "Neue Sitzung",
+  "entryResetDraftConfirm": "Entwurf gelöscht.",
+  "entryBadgeDefault": "Format",
+  "entryDescriptionDefault": "Kampagnenformat direkt auf dem Gerät bereit.",
+  "entryBadgeOneShot": "Schnelle Klinge",
+  "entryDescriptionOneShot": "Eine wirkungsvolle Mission für eine einzige Sitzung, mit sofortigem Payoff und präzisem Twist.",
+  "entryBadgeMiniCampaign": "Kurzer Bogen",
+  "entryDescriptionMiniCampaign": "Eine Geschichte für wenige Sitzungen, mit klarer Steigerung, Eskalation und scharfem Finale.",
+  "entryBadgeLongCampaign": "Weite Saga",
+  "entryDescriptionLongCampaign": "Fraktionen, wechselnde Machtverhältnisse und dauerhafte Nebenhandlungen für eine Kampagne, die mit der Zeit wächst.",
+  "entryBadgeDungeon": "Tiefen",
+  "entryDescriptionDungeon": "Ein strukturierter Abstieg durch Karten, Risiko, Zermürbung und mehrschichtige Entdeckungen.",
+  "forgeSectionWorld": "Welt",
+  "forgeSectionParty": "Gruppe",
+  "forgeSectionNarrative": "Geschichte",
+  "forgeButtonForging": "Wird geschmiedet...",
+  "forgeNextParty": "Zur Gruppe",
+  "forgeNextNarrative": "Zur Geschichte",
+  "forgeReforgeParchment": "Pergament neu schmieden",
+  "forgeForgeParchment": "Pergament schmieden",
+  "forgeAdvanceBlockedWorld": "Lege mindestens Ton, Stil oder Themen fest, bevor du zur Gruppe gehst.",
+  "forgeAdvanceBlockedParty": "Prüfe Gruppenstufe, Größe und Archetypen, bevor du fortfährst.",
+  "forgeAdvanceBlockedNarrative": "Füge mindestens ein narratives Detail hinzu, bevor du das Pergament schmiedest.",
+  "forgeReadinessWorldReady": "Du kannst zur Gruppe weitergehen.",
+  "forgeReadinessWorldPending": "Wähle Format, Setting und Kernsignale.",
+  "forgeReadinessPartyReady": "Du kannst die Geschichte öffnen.",
+  "forgeReadinessPartyPending": "Lege Stufe, Größe und Gruppenrollen fest.",
+  "forgeReadinessNarrativeReady": "Du kannst das Pergament schmieden.",
+  "forgeReadinessNarrativePending": "Füge mindestens einen narrativen Aufhänger hinzu.",
+  "forgeWorldSectionTitle": "Weltenbau",
+  "forgeWorldSectionSubtitle": "Format, Setting und die ersten Signale der Kampagne.",
+  "forgeFoundationLabel": "Grundlage",
+  "forgeFoundationTitle": "Basiskonfiguration",
+  "forgeFoundationSubtitle": "Setting und Ausgangssituation.",
+  "forgePresetSectionTitle": "Preset wählen",
+  "forgePresetSectionSubtitle": "Wende ein Preset an, um deine Kampagne schnell zu konfigurieren.",
+  "forgePresetPanelLabel": "Presets",
+  "forgePresetPanelTitle": "Schnelle Presets",
+  "forgeQuickPresetLabel": "Schnelles Preset",
+  "forgeNoPresetSelected": "Kein Preset",
+  "forgeApplyPreset": "Mit Preset schmieden",
+  "forgeApply": "Mit Preset schmieden",
+  "forgeSettingLabel": "Setting",
+  "forgeCustomSettingLabel": "Eigenes Setting",
+  "forgeCustomSettingHint": "Z. B. Königreich im Krieg, vertikale Stadt",
+  "forgeTwistTitle": "Auftakt-Twist",
+  "forgeTwistLabel": "Twist",
+  "forgeCustomTwistLabel": "Eigener Twist",
+  "forgeCustomTwistHint": "Ein Verbündeter lügt, der Dungeon lebt, die Mission ist eine Falle...",
+  "forgeCreativeTitle": "Themen, Ton und Stil",
+  "forgeThemesTitle": "Themen",
+  "forgeCustomThemesLabel": "Eigene Themen",
+  "forgeCustomThemesHint": "Z. B. Steampunk, kosmischer Horror",
+  "forgeToneTitle": "Ton",
+  "forgeStyleTitle": "Stil",
+  "forgeToneStyleOverrideLabel": "Eigene Ton- & Stilvorgaben",
+  "forgeToneStyleOverrideHint": "Z. B. Ton: düster; Stil: gritty",
+  "forgePartySectionTitle": "Gruppe und Spielmaßstab",
+  "forgePartySectionSubtitle": "Stufe, Größe und zentrale Gruppenrollen.",
+  "forgeScaleLabel": "Maßstab",
+  "forgeScaleTitle": "Stufe und Größe",
+  "forgePartyLevel": "Gruppenstufe: {level}",
+  "@forgePartyLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartySize": "Anzahl der Charaktere: {size}",
+  "@forgePartySize": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartyArchetypesTitle": "Gruppenarchetypen",
+  "forgePartyArchetypesSubtitle": "Wähle bis zu {size} Archetypen.",
+  "@forgePartyArchetypesSubtitle": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartyArchetypesMaxReached": "Du hast die maximale Anzahl an Archetypen für die aktuelle Gruppe erreicht.",
+  "forgePartyInfoTitle": "Nützliche Informationen",
+  "forgeCharacterNotesLabel": "Charakternotizen",
+  "forgeCharacterNotesHint": "Geheimnisse, Bindungen, Ängste, wichtige Hintergrundgeschichte...",
+  "forgeConstraintsLabel": "Einschränkungen",
+  "forgeConstraintsHint": "Kurze Dauer, keine Planarreisen, verpflichtender Endboss...",
+  "forgeNarrativeSectionTitle": "Narrativer Druck",
+  "forgeNarrativeSectionSubtitle": "Zusätzliche Aufhänger, Fraktionen und Einschränkungen, um das Pergament zu individualisieren.",
+  "forgeNarrativePanelTitle": "Geschichte und wirkende Kräfte",
+  "forgeNarrativeHooksLabel": "Narrative Aufhänger",
+  "forgeNarrativeHooksHint": "Auftaktmission, Bedrohung, Geheimnis, Countdown...",
+  "forgeFactionsLabel": "Fraktionen und Mächte",
+  "forgeFactionsHint": "Gilden, Kulte, Adelshäuser, Antagonisten, instabile Verbündete...",
+  "forgeNpcFocusLabel": "Zentrale NSC",
+  "forgeNpcFocusHint": "Ambivalenter Mentor, Rivale, Auftraggeber, Verräter...",
+  "forgeEncounterFocusLabel": "Gewünschte Begegnungen",
+  "forgeEncounterFocusHint": "Belagerung, soziale Ermittlung, Verfolgungsjagd, Endboss...",
+  "forgeContentConstraintsTitle": "Inhaltliche Grenzen",
+  "forgeIncludeNpcsLabel": "NSC einbeziehen",
+  "forgeIncludeNpcsSubtitle": "Der Prompt enthält relevante Nichtspielercharaktere.",
+  "forgeIncludeEncountersLabel": "Begegnungen einbeziehen",
+  "forgeIncludeEncountersSubtitle": "Der Prompt schlägt Szenen und Kämpfe vor.",
+  "forgeSafetyNotesLabel": "Safety-Hinweise",
+  "forgeSafetyNotesHint": "Zu vermeidende Themen, Lines and Veils, Ton-Grenzen...",
+  "forgeParchmentDirty": "Konfiguration geändert: neu generieren.",
+  "forgeParchmentReady": "Pergament ist aktuell.",
+  "forgeParchmentIncomplete": "Vervollständige die Geschichte, um zu generieren.",
+  "statusReady": "Bereit",
+  "statusNeedsPolish": "Braucht Feinschliff",
+  "parchmentReadyTitle": "Pergament bereit",
+  "parchmentReadySubtitleStale": "Du hast die Schmiede geändert: Der kopierte Prompt ist nicht mehr aktuell.",
+  "parchmentReadySubtitleAligned": "Der kopierte Prompt ist mit dem aktuellen Schmiedestatus abgestimmt.",
+  "parchmentQuickActionsTitle": "Schnellaktionen",
+  "parchmentCopyPromptTitle": "Prompt kopieren",
+  "parchmentCopyPromptSubtitle": "Sendet den Prompt in die Zwischenablage.",
+  "parchmentShareTitle": "Teilen",
+  "parchmentShareSubtitle": "Öffnet das Teilen-Menü.",
+  "parchmentOpenChatGptTitle": "In ChatGPT öffnen",
+  "parchmentOpenChatGptSubtitle": "Öffnet ChatGPT in einem neuen Tab.",
+  "parchmentDraftUpdatedTitle": "Entwurf aktualisiert",
+  "parchmentSaveDraftTitle": "Entwurf speichern",
+  "parchmentSaveDraftSubtitle": "Speichere den Prompt lokal für später.",
+  "parchmentPromptCopied": "Prompt kopiert",
+  "parchmentCopiedStaleBanner": "Du hast die Schmiede nach der letzten Generierung verändert. Generiere neu, um den kopierten Prompt zu aktualisieren.",
+  "parchmentCopiedSuccessBody": "Das Pergament wurde erfolgreich geschmiedet. Nutze die Rituale rechts, um es zu teilen, zu speichern oder in ChatGPT zu öffnen.",
+  "atmosphereOneShot": "Purpurene Dringlichkeit",
+  "atmosphereMiniCampaign": "Goldener Pfad",
+  "atmosphereLongCampaign": "Grüner Atlas",
+  "atmosphereDungeon": "Fackelgewölbe",
+  "parchmentSeal": "VERSIEGELN",
+  "parchmentSealAndCopy": "Versiegeln und kopieren",
+  "infoDialogLine1": "Diese App ist ein Prompt-Generator, inspiriert von Fantasy-Rollenspielen.",
+  "infoDialogLine2": "Sie ist weder mit Dungeons & Dragons noch mit einem KI-Sprachtool verbunden.",
+  "infoDialogLine3": "Du kannst die Prompts mit KI-Tools nutzen, um deine eigenen Geschichten zu erschaffen.",
+  "settingsTitle": "Einstellungen",
+  "settingsLeaveReview": "Bewertung hinterlassen",
+  "settingsShareApp": "App teilen",
+  "settingsShareText": "Entdecke Campaign Forge, den D&D-Kampagnengenerator: ",
+  "settingsLanguageLabel": "Sprache",
+  "settingsLanguageEnglish": "English",
+  "settingsLanguageItalian": "Italiano",
+  "settingsThemeLabel": "Thema",
+  "settingsThemeDark": "Dunkel",
+  "settingsThemeLight": "Hell",
+  "settingsInfoLabel": "Info",
+  "settingsVersion": "Version",
+  "settingsGoAdFree": "Werbung",
+  "settingsGoAdFreePrice": "Werbefrei",
+  "settingsGoAdFreeSubtitle": "Einmalkauf · £1.99",
+  "settingsGoAdFreeSubtitleWithAmount": "Einmalkauf · {price}",
+  "@settingsGoAdFreeSubtitleWithAmount": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsGoAdFreePriceWithAmount": "Werbefrei — {price}",
+  "@settingsGoAdFreePriceWithAmount": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsRestorePurchases": "Käufe wiederherstellen",
+  "settingsRestorePurchasesStarted": "Käufe werden wiederhergestellt…",
+  "settingsRestorePurchasesComplete": "Käufe erfolgreich wiederhergestellt.",
+  "settingsAdFreeActive": "Werbung entfernt",
+  "settingsIapUnavailable": "In-App-Käufe sind auf diesem Gerät nicht verfügbar.",
+  "settingsIapProductNotFound": "Produkt nicht gefunden. Versuche es später erneut.",
+  "settingsPurchasePending": "Kauf wird verarbeitet…",
+  "settingsPurchaseCancelled": "Kauf abgebrochen.",
+  "settingsPurchaseFailed": "Kauf fehlgeschlagen. Bitte versuche es erneut."
+}

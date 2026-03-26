@@ -36,6 +36,7 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
     Locale('it'),
     Locale('es'),
     Locale('fr'),
+    Locale('de'),
   ];
 
   late Locale _locale;

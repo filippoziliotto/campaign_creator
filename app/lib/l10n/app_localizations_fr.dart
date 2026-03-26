@@ -27,6 +27,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get languageFrenchShort => 'FR';
 
   @override
+  String get languageGermanShort => 'DE';
+
+  @override
   String get commonRetry => 'Réessayer';
 
   @override

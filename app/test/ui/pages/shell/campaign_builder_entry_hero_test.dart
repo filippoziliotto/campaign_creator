@@ -1,6 +1,7 @@
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:campaign_creator_flutter/src/audio/forge_sound_player.dart';
 import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
+import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_primitives.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -115,6 +116,53 @@ void main() {
       ),
       findsOneWidget,
     );
+  });
+
+  testWidgets('German entry cards use distinct artwork and atmosphere per campaign type', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1200, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('de'),
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(_entryOptionsDe()),
+          currentLocale: const Locale('de'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    final oneShotCard = tester.widget<CampaignModeCard>(
+      find.byKey(const ValueKey<String>('entry-campaign-card-One-Shot')),
+    );
+    final miniCampaignCard = tester.widget<CampaignModeCard>(
+      find.byKey(const ValueKey<String>('entry-campaign-card-Mini-Kampagne')),
+    );
+    final longCampaignCard = tester.widget<CampaignModeCard>(
+      find.byKey(const ValueKey<String>('entry-campaign-card-Lange Kampagne')),
+    );
+    final dungeonCard = tester.widget<CampaignModeCard>(
+      find.byKey(
+        const ValueKey<String>('entry-campaign-card-Dungeon-Erkundung'),
+      ),
+    );
+
+    expect(oneShotCard.artAsset, 'assets/entry_cards/one_shot.jpg');
+    expect(oneShotCard.atmosphere.id, 'one-shot');
+
+    expect(miniCampaignCard.artAsset, 'assets/entry_cards/campagna_corta.jpg');
+    expect(miniCampaignCard.atmosphere.id, 'mini-campaign');
+
+    expect(longCampaignCard.artAsset, 'assets/entry_cards/campagna_lunga.jpg');
+    expect(longCampaignCard.atmosphere.id, 'long-campaign');
+
+    expect(dungeonCard.artAsset, 'assets/entry_cards/dungeon.jpg');
+    expect(dungeonCard.atmosphere.id, 'dungeon');
   });
 
   testWidgets('new session resets forge selections back to defaults', (
@@ -455,6 +503,27 @@ CampaignOptions _entryOptionsFr() {
     twists: const ['Trahison'],
     presets: const {},
     settingDescriptions: const {'Forgotten Realms': 'High fantasy classique.'},
+    presetDescriptions: const {},
+    presetNames: const {},
+  );
+}
+
+CampaignOptions _entryOptionsDe() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms'],
+    campaignTypes: const [
+      'One-Shot',
+      'Mini-Kampagne',
+      'Lange Kampagne',
+      'Dungeon-Erkundung',
+    ],
+    themes: const ['Intrige'],
+    tones: const ['Düster'],
+    styles: const ['Cinematisch'],
+    partyArchetypes: const ['Tank'],
+    twists: const ['Verrat'],
+    presets: const {},
+    settingDescriptions: const {'Forgotten Realms': 'Klassische High Fantasy.'},
     presetDescriptions: const {},
     presetNames: const {},
   );

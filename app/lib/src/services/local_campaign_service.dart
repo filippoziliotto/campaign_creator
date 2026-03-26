@@ -40,6 +40,9 @@ class LocalCampaignService implements CampaignService {
       case 'fr':
       case 'fr-fr':
         return 'fr';
+      case 'de':
+      case 'de-de':
+        return 'de';
       case 'en':
       case 'en-us':
       case 'en-gb':
@@ -60,16 +63,21 @@ class LocalCampaignService implements CampaignService {
     'mini campaña': 'mini_campaign',
     'mini-campagne': 'mini_campaign',
     'mini campagne': 'mini_campaign',
+    'mini-kampagne': 'mini_campaign',
+    'mini kampagne': 'mini_campaign',
     'campagna lunga': 'long_campaign',
     'long campaign': 'long_campaign',
     'campaña larga': 'long_campaign',
     'campana larga': 'long_campaign',
     'longue campagne': 'long_campaign',
+    'lange kampagne': 'long_campaign',
     'esplorazione dungeon': 'dungeon_exploration',
     'dungeon crawl': 'dungeon_exploration',
     'exploración de mazmorra': 'dungeon_exploration',
     'exploracion de mazmorra': 'dungeon_exploration',
     'exploration de donjon': 'dungeon_exploration',
+    'dungeon-erkundung': 'dungeon_exploration',
+    'dungeonerkundung': 'dungeon_exploration',
   };
 
   static const _templatePathByFamily = <String, String>{
@@ -85,6 +93,7 @@ class LocalCampaignService implements CampaignService {
     'gothic horror',
     'horror gótico',
     'horreur gothique',
+    'gotischer horror',
   };
 
   static const _darkToneValues = <String>{
@@ -93,6 +102,7 @@ class LocalCampaignService implements CampaignService {
     'sombrío',
     'sombrio',
     'sombre',
+    'düster',
   };
 
   static const _noTwistValues = <String>{
@@ -105,6 +115,8 @@ class LocalCampaignService implements CampaignService {
     'sin giro',
     'sin giro argumental',
     'sans rebondissement',
+    'kein twist',
+    'keine wendung',
   };
 
   static const Map<String, _PromptLocaleBundle> _bundles =
@@ -339,6 +351,64 @@ class LocalCampaignService implements CampaignService {
             "Conçois une campagne centrée sur une exploration à étages, la gestion des ressources, les pièges, les découvertes et les retours stratégiques à la surface.",
       },
     ),
+    'de': _PromptLocaleBundle(
+      languageLabel: 'Deutsch',
+      themeFallback: 'Keine starke Präferenz (freie Mischung).',
+      toneFallback: 'Keine starke Präferenz (freie Mischung).',
+      styleFallback: 'Keine starke Präferenz (freie Mischung).',
+      defaultStructure:
+          'Entwirf eine modulare Kampagne mit starkem Einstieg, Eskalation und klarem Finale.',
+      partyArchetypesFallback: 'Nicht vom Nutzer angegeben.',
+      noTwistReference: 'den zentralen Wendepunkt',
+      twistReferencePattern: 'den Twist "{twist}"',
+      npcInstructionsEnabled:
+          'Definiere mindestens 5 NSC mit Zielen, Geheimnissen und einer klar unterscheidbaren Stimme.',
+      npcInstructionsDisabled:
+          'NSC sind optional: nutze nur diejenigen, die für den Hauptplot nötig sind.',
+      encounterInstructionsEnabled:
+          'Baue 3 bis 5 bedeutende Begegnungen mit narrativem Zweck ein, nicht nur taktischem.',
+      encounterInstructionsDisabled:
+          'Reduziere Kampfbegegnungen und stütze dich stärker auf Ermittlung und soziale Szenen.',
+      missingPartyComposition:
+          'Falls die Gruppenzusammensetzung fehlt, schlage eine stimmige Kombination aus Klassen und Rollen der SC vor.',
+      missingNarrativeHooks:
+          'Falls narrative Aufhänger fehlen, schlage 3 alternative Einstiege vor.',
+      missingCharacterNotes:
+          'Falls Charakternotizen fehlen, erschaffe plausible Bindungen zwischen den SC und der Welt.',
+      missingFactions:
+          'Falls Fraktionen fehlen, schlage 2 bis 3 Fraktionen vor, die zur Welt und zum zentralen Konflikt passen.',
+      missingNpcFocus:
+          'Falls der NSC-Fokus fehlt, variiere zwischen Verbündeten, Rivalen und ambivalenten Neutralen.',
+      missingEncounterFocus:
+          'Falls der Begegnungsfokus fehlt, balanciere soziale Szenen, Erkundung und Kampf passend zum Kampagnenrhythmus.',
+      missingSafetyNotes:
+          'Falls Safety-Hinweise fehlen, vermeide nicht angeforderten sensiblen Inhalt und bleibe innerhalb vernünftiger impliziter Grenzen.',
+      missingTwist:
+          'Baue die Geschichte um eine starke Enthüllung, Wendung oder Eskalation herum.',
+      qualityRules: <String>[
+        'Respektiere die gewählten Vorgaben. Ersetze Setting, Themen, Ton oder Stil nicht durch einfachere Alternativen.',
+        'Wenn zwei Eingaben in Spannung stehen, löse sie kreativ, ohne eine davon zu ignorieren.',
+        'Vermeide generische Fantasy-Platzhalter, sofern sie nicht durch konkrete Details spezifisch gemacht werden.',
+        'Jeder NSC, jede Fraktion, jeder Ort und jede Begegnung braucht mindestens ein einprägsames und am Spieltisch nutzbares Unterscheidungsmerkmal.',
+        'Bevorzuge spürbare Folgen am Spieltisch statt abstrakter Lore oder Hintergrundgeschichte, die nie ins Spiel kommt.',
+      ],
+      horrorConstraint:
+          'Halte den Horror atmosphärisch; vermeide explizites Gore und Splatterbeschreibungen.',
+      agencyConstraint:
+          'Bewahre die Entscheidungsfreiheit der Spieler: vermeide unvermeidbare Szenen ohne bedeutungsvolle Wahl.',
+      noConstraintsProvided:
+          'Der Nutzer hat keine zusätzlichen Einschränkungen angegeben.',
+      structureRulesByFamily: <String, String>{
+        'one_shot':
+            'Entwirf eine Struktur in 3 Akten: Einstieg, Entwicklung, Höhepunkt plus Epilog. Füge einen ungefähren Ablauf für 1 Sitzung hinzu.',
+        'mini_campaign':
+            'Entwirf einen Bogen für 4 bis 6 Sitzungen mit klar steigenden Einsätzen, mittleren Enthüllungen und einem wirkungsvollen Finale.',
+        'long_campaign':
+            'Entwirf einen Bogen für 10+ Sitzungen mit Nebenhandlungen, sich entwickelnden Schlüssel-NSC, Fraktionen und dauerhaften Folgen der Entscheidungen der Gruppe.',
+        'dungeon_exploration':
+            'Entwirf eine Kampagne mit Fokus auf mehrstufige Erkundung, Ressourcenmanagement, Fallen, Entdeckungen und strategische Rückzüge an die Oberfläche.',
+      },
+    ),
   };
 
   static String _selectTemplate(String campaignType, String localeCode) {
@@ -405,7 +475,8 @@ class LocalCampaignService implements CampaignService {
           return normalized.contains('agency') ||
               normalized.contains('agenzia') ||
               normalized.contains('agencia') ||
-              normalized.contains('libre arbitre');
+              normalized.contains('libre arbitre') ||
+              normalized.contains('entscheidungsfreiheit');
         })) {
       constraints.add(bundle.agencyConstraint);
     }

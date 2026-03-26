@@ -324,6 +324,51 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
+  testWidgets(
+      'preset selector uses localized preset names in uppercase for English',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('en'),
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(englishPresetsOptions()),
+          currentLocale: const Locale('en'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final presetField =
+        find.byKey(const ValueKey<String>('preset-selector-field'));
+
+    await tester.ensureVisible(presetField);
+    await tester.tap(presetField);
+    await _pumpUi(tester);
+
+    expect(find.byType(ListWheelScrollView), findsWidgets);
+    expect(find.text('HARBOR CHRONICLES'), findsWidgets);
+    expect(find.text('CRONACHE DEL PORTO'), findsNothing);
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Select'));
+    await _pumpUi(tester);
+
+    expect(
+      find.descendant(
+        of: presetField,
+        matching: find.text('HARBOR CHRONICLES'),
+      ),
+      findsOneWidget,
+    );
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
   testWidgets('default no-twist selection does not unlock world advance action',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
@@ -430,14 +475,15 @@ void main() {
 }
 
 class _TestApp extends StatelessWidget {
-  const _TestApp({required this.child});
+  const _TestApp({required this.child, this.locale = const Locale('it')});
 
   final Widget child;
+  final Locale locale;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      locale: const Locale('it'),
+      locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       builder: (context, child) {
@@ -547,5 +593,39 @@ CampaignOptions neutralTwistSettingOptions() {
     },
     presetDescriptions: const {},
     presetNames: const {},
+  );
+}
+
+CampaignOptions englishPresetsOptions() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms', 'Eberron'],
+    campaignTypes: const ['One-Shot'],
+    themes: const ['Intrigue'],
+    tones: const ['Epic'],
+    styles: const ['Linear'],
+    partyArchetypes: const ['Tank'],
+    twists: const ['No twist', 'Betrayal', 'Portal'],
+    presets: const {
+      'Cronache del Porto': {
+        'campaign_type': 'One-Shot',
+        'setting': 'Eberron',
+        'twist': 'Betrayal',
+        'theme': 'Intrigue',
+        'tone': 'Epic',
+        'style': 'Linear',
+        'party_level': 5,
+        'party_size': 4,
+      },
+    },
+    settingDescriptions: const {
+      'Forgotten Realms': 'Classic high fantasy.',
+      'Eberron': 'Magical metropolis and pulp noir.',
+    },
+    presetDescriptions: const {
+      'Cronache del Porto': 'Dockside intrigue and feuds between houses.',
+    },
+    presetNames: const {
+      'Cronache del Porto': 'Harbor Chronicles',
+    },
   );
 }

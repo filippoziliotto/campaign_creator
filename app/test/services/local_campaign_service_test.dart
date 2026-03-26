@@ -85,8 +85,19 @@ void main() {
       expect(options.presets, isNotEmpty);
     });
 
+    test('loads bundled German options from assets', () async {
+      final service = LocalCampaignService();
+
+      final options = await service.getOptions(localeCode: 'de');
+
+      expect(options.settings, isNotEmpty);
+      expect(options.settings, contains('Forgotten Realms'));
+      expect(options.campaignTypes, contains('Lange Kampagne'));
+      expect(options.presets, isNotEmpty);
+    });
+
     test(
-        'bundled assets include long campaign presets in Italian, English, Spanish, and French',
+        'bundled assets include long campaign presets in Italian, English, Spanish, French, and German',
         () async {
       final service = LocalCampaignService();
 
@@ -94,11 +105,13 @@ void main() {
       final enOptions = await service.getOptions(localeCode: 'en');
       final esOptions = await service.getOptions(localeCode: 'es');
       final frOptions = await service.getOptions(localeCode: 'fr');
+      final deOptions = await service.getOptions(localeCode: 'de');
 
       expect(itOptions.presetsForCampaignType('Campagna lunga'), isNotEmpty);
       expect(enOptions.presetsForCampaignType('Long campaign'), isNotEmpty);
       expect(esOptions.presetsForCampaignType('Campaña larga'), isNotEmpty);
       expect(frOptions.presetsForCampaignType('Longue campagne'), isNotEmpty);
+      expect(deOptions.presetsForCampaignType('Lange Kampagne'), isNotEmpty);
     });
 
     group('generatePrompt', () {
@@ -445,6 +458,32 @@ void main() {
         ));
 
         expect(prompt, contains('PHASE 1 — CINQ CONCEPTS'));
+        expect(prompt, isNot(contains('PHASE 1 — FIVE CONCEPTS')));
+      });
+
+      test('German generic requests use the German generic template',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          campaignType: 'Benutzerdefinierter Handlungsbogen',
+          localeCode: 'de',
+        ));
+
+        expect(prompt, contains('# Rolle'));
+        expect(prompt, contains('## Ausgabeformat'));
+        expect(prompt, isNot(contains('## Output format')));
+      });
+
+      test('German One-Shot requests use the German one-shot template',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          localeCode: 'de',
+        ));
+
+        expect(prompt, contains('PHASE 1 — FÜNF KONZEPTE'));
         expect(prompt, isNot(contains('PHASE 1 — FIVE CONCEPTS')));
       });
 

@@ -548,6 +548,7 @@ extension on _CampaignBuilderPageState {
                       keyPrefix: keyPrefix,
                       title: title,
                       options: options,
+                      labels: labels,
                       currentValue: normalizedValue,
                       premiumOptionIds: premiumOptionIds,
                       isPremiumUnlocked: premiumUnlocked,
@@ -853,6 +854,7 @@ extension on _CampaignBuilderPageState {
     required String keyPrefix,
     required String title,
     required List<String> options,
+    Map<String, String> labels = const {},
     required String? currentValue,
     required Set<String> premiumOptionIds,
     required bool isPremiumUnlocked,
@@ -954,7 +956,8 @@ extension on _CampaignBuilderPageState {
                                       premiumOptionIds.contains(option);
                                   final displayLabel = isCustom
                                       ? 'CUSTOM'
-                                      : option.toUpperCase();
+                                      : (labels[option] ?? option)
+                                          .toUpperCase();
                                   return Center(
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(

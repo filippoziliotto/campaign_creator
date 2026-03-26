@@ -1,0 +1,824 @@
+settings:
+  - Forgotten Realms
+  - Eberron
+  - Ravenloft
+  - Exandria
+  - Eigenkontinent
+  - Dragonlance
+  - Ravnica
+  - Spelljammer
+  - Theros
+  - Dark Sun
+  - Wildemount
+  - Feywild
+  - Planescape
+  - Underdark
+  - Grenzland
+
+setting_descriptions:
+  Forgotten Realms: Klassische High-Fantasy-Welt voller Reiche, uralter Magie und heroischer Abenteuer.
+  Eberron: Pulp-Noir-Setting mit arkaner Technologie, politischer Intrige und urbanen Geheimnissen.
+  Ravenloft: Gothische Horror-Domäne, in der der Nebel Flüche und dunkle Herrscher verbirgt.
+  Exandria: Episches, modernes Szenario mit großen Konflikten, aktiven Göttern und sehr unterschiedlichen Regionen.
+  Eigenkontinent: Am Spieltisch erschaffene Originalwelt mit flexiblem Ton, eigener Geschichte und Hausregeln.
+  Dragonlance: Heroische Fantasy, geprägt vom Krieg zwischen Drachen, Ritterorden und Prophezeiungen.
+  Ravnica: Planare Megastadt rivalisierender Gilden, ideal für urbane Plots und Machtkämpfe.
+  Spelljammer: Kosmische Reise zwischen Kristallsphären, fliegenden Schiffen und gemischten Crews in Space-Fantasy-Abenteuern.
+  Theros: Griechisch-mythologisches Setting mit aktiven Göttern, Orakeln und legendären Monstern, die an das Schicksal der Helden gebunden sind.
+  Dark Sun: Postapokalyptische Wüstenwelt, hart und dystopisch, in der Magie Ressourcen verzehrt und Überleben zentral ist.
+  Wildemount: Politisch und kriegerisch geprägter Teil Exandrias, ideal für nationale Konflikte, Intrigen und Kriegsfronten.
+  Feywild: Feenebene als verzerrter Spiegel der materiellen Welt, bevölkert von magischen Wesen, verzauberten Reichen und unberechenbarer Fremdartigkeit.
+  Planescape: Kosmischer Kreuzungspunkt widerstreitender Philosophien, an dem jede Fraktion die wahre Natur der Realität über unendliche Ebenen beansprucht.
+  Underdark: Endlose unterirdische Welt der Dunkelheit, durchzogen von lichtlosen Tunneln, erbarmungslosen Fraktionen und uralten Geheimnissen tief unten.
+  Grenzland: Wilde Länder am Rand der Zivilisation, wo Recht unsicher ist, Siedlungen isoliert sind und Gefahr allgegenwärtig bleibt.
+
+campaign_types:
+  - One-Shot
+  - Mini-Kampagne
+  - Lange Kampagne
+  - Dungeon-Erkundung
+
+themes:
+  - Klassische Fantasy
+  - Urbaner Raubzug
+  - Gotischer Horror
+  - Planare Reise
+  - Politische Intrige
+  - Wildnis
+  - Nautisches Abenteuer
+  - Fraktionskrieg
+  - Monsterjagd
+  - Mittelalterlicher Steampunk
+  - Antike Ruinen
+  - Rettungsmission
+  - Expedition
+
+tones:
+  - Heldenhaft
+  - Düster
+  - Ironisch
+  - Geheimnisvoll
+  - Tragisch
+  - Komisch
+  - Noir
+  - Bizarr
+  - Angespannt
+  - Hoffnungsvoll
+
+styles:
+  - Episch
+  - Cinematisch
+  - Realistisch
+  - Rau
+  - High Fantasy
+  - Low Fantasy
+  - Ermittlerisch
+  - Märchenhaft
+  - Sandbox
+  - Überlebensorientiert
+
+party_archetypes:
+  - Fighter
+  - Wizard
+  - Cleric
+  - Rogue
+  - Ranger
+  - Bard
+  - Paladin
+  - Druid
+  - Warlock
+  - Sorcerer
+  - Monk
+  - Barbarian
+  - Artificer
+
+twists:
+  - Kein Twist
+  - Die Prophezeiung ist falsch
+  - Der vertraute Verbündete ist der Verräter
+  - Der Antagonist versucht, eine schlimmere Katastrophe zu verhindern
+  - Die Gruppe teilt einen vergessenen Ursprung
+  - Das zentrale Artefakt ist empfindungsfähig und manipulativ
+  - Die wahre Bedrohung ist eine wohlwollende Institution (Kirche, Gilde, Akademie)
+  - Die Welt steckt in einer subtilen Zeitschleife fest
+  - Der Dungeon ist ein lebender Organismus
+  - Das Missionsziel will nicht gerettet werden
+  - Die SC sind bereits tot und wissen es nicht
+  - Der Bösewicht hat bereits gewonnen, und die Mission dient nur noch der Schadensbegrenzung
+  - Die Gruppe dient dem Bösewicht, ohne es zu wissen
+  - Die Monster fliehen vor einem Raubtier kataklysmischen Ausmaßes
+  - Die gesamte Region ist eine magische Simulation oder der Traum eines schlafenden Gottes
+  - Die Heilung der Seuche erfordert das Opfer der Person, die den Auftrag gegeben hat
+  - Die feindliche Fraktion besteht aus zukünftigen Überlebenden des Scheiterns der Gruppe
+  - Die Apokalypse hat bereits stattgefunden; die Welt lebt innerhalb des Reparaturzaubers
+  - Die Prophezeiung ist korrekt, aber sie bezieht sich auf die Bösewichte, nicht auf die Helden
+  - Der Tod ist verschwunden, und etwas anderes erledigt seinen Job schlecht
+  - Ein Gott lügt über das, was er will
+  - Das Gefängnis wurde gebaut, um etwas draußen zu halten
+  - Die Erinnerungen der Gruppe wurden aus einem Grund verändert
+  - Der Auftraggeber ist schon vor Beginn der Mission gestorben
+  - Die vermisste Person hat ihr eigenes Verschwinden inszeniert
+
+
+presets:
+
+ # ── ONE-SHOT (10) ────────────────────────────────────────────────────────────
+
+  NULLA NELLE TORRI:
+    setting: Eberron
+    campaign_type: One-Shot
+    theme: Urbaner Raubzug
+    tone: Noir
+    style: Cinematisch
+    party_level: 5
+    party_size: 4
+    twist: Die Gruppe dient dem Bösewicht, ohne es zu wissen
+
+  SPECCHI SENZA VITA:
+    setting: Ravenloft
+    campaign_type: One-Shot
+    theme: Gotischer Horror
+    tone: Düster
+    style: Ermittlerisch
+    party_level: 4
+    party_size: 4
+    twist: Die SC sind bereits tot und wissen es nicht
+
+  ORDINI SPEZZATI:
+    setting: Wildemount
+    campaign_type: One-Shot
+    theme: Fraktionskrieg
+    tone: Tragisch
+    style: Realistisch
+    party_level: 6
+    party_size: 4
+    twist: Der vertraute Verbündete ist der Verräter
+
+  CENERI SENZA SPERANZA:
+    setting: Dark Sun
+    campaign_type: One-Shot
+    theme: Wildnis
+    tone: Düster
+    style: Rau
+    party_level: 3
+    party_size: 5
+    twist: Der Bösewicht hat bereits gewonnen, und die Mission dient nur noch der Schadensbegrenzung
+
+  FIERA SOTTO PRESSIONE:
+    setting: Ravnica
+    campaign_type: One-Shot
+    theme: Politische Intrige
+    tone: Ironisch
+    style: Cinematisch
+    party_level: 5
+    party_size: 4
+    twist: Das Missionsziel will nicht gerettet werden
+
+  FUNERALE SBAGLIATO:
+    setting: Forgotten Realms
+    campaign_type: One-Shot
+    theme: Klassische Fantasy
+    tone: Geheimnisvoll
+    style: Ermittlerisch
+    party_level: 4
+    party_size: 4
+    twist: Der Antagonist versucht, eine schlimmere Katastrophe zu verhindern
+
+  OMBRA NELLA CACCIA:
+    setting: Eigenkontinent
+    campaign_type: One-Shot
+    theme: Monsterjagd
+    tone: Bizarr
+    style: Low Fantasy
+    party_level: 3
+    party_size: 5
+    twist: Die Monster fliehen vor einem Raubtier kataklysmischen Ausmaßes
+
+  ECO DAL FUTURO:
+    setting: Exandria
+    campaign_type: One-Shot
+    theme: Planare Reise
+    tone: Bizarr
+    style: Cinematisch
+    party_level: 7
+    party_size: 4
+    twist: Die Welt steckt in einer subtilen Zeitschleife fest
+
+  LOCANDA AL CREPUSCOLO:
+    setting: Feywild
+    campaign_type: One-Shot
+    theme: Gotischer Horror
+    tone: Geheimnisvoll
+    style: Märchenhaft
+    party_level: 4
+    party_size: 4
+    twist: Das zentrale Artefakt ist empfindungsfähig und manipulativ
+
+  ROTTE STELLARI:
+    setting: Spelljammer
+    campaign_type: One-Shot
+    theme: Nautisches Abenteuer
+    tone: Ironisch
+    style: Cinematisch
+    party_level: 5
+    party_size: 5
+    twist: Das Missionsziel will nicht gerettet werden
+
+  # ── MINI-CAMPAIGN (10) ───────────────────────────────────────────────────────
+
+  CICATRICI DI FERRO:
+    setting: Wildemount
+    campaign_type: Mini-Kampagne
+    theme: Fraktionskrieg
+    tone: Tragisch
+    style: Realistisch
+    party_level: 5
+    party_size: 4
+    twist: Die Gruppe dient dem Bösewicht, ohne es zu wissen
+
+  MARE CHE SCOMPARE:
+    setting: Eigenkontinent
+    campaign_type: Mini-Kampagne
+    theme: Nautisches Abenteuer
+    tone: Geheimnisvoll
+    style: Low Fantasy
+    party_level: 4
+    party_size: 4
+    twist: Die gesamte Region ist eine magische Simulation oder der Traum eines schlafenden Gottes
+
+  ARCHIVI IN FIAMME:
+    setting: Eberron
+    campaign_type: Mini-Kampagne
+    theme: Politische Intrige
+    tone: Noir
+    style: Ermittlerisch
+    party_level: 5
+    party_size: 4
+    twist: Die wahre Bedrohung ist eine wohlwollende Institution (Kirche, Gilde, Akademie)
+
+  NODI DI SANGUE:
+    setting: Ravnica
+    campaign_type: Mini-Kampagne
+    theme: Politische Intrige
+    tone: Geheimnisvoll
+    style: Cinematisch
+    party_level: 6
+    party_size: 4
+    twist: Der vertraute Verbündete ist der Verräter
+
+  RADICE DEL MORBO:
+    setting: Forgotten Realms
+    campaign_type: Mini-Kampagne
+    theme: Gotischer Horror
+    tone: Düster
+    style: Rau
+    party_level: 4
+    party_size: 4
+    twist: Die Heilung der Seuche erfordert das Opfer der Person, die den Auftrag gegeben hat
+
+  GIURAMENTO INFRANTO:
+    setting: Dragonlance
+    campaign_type: Mini-Kampagne
+    theme: Klassische Fantasy
+    tone: Tragisch
+    style: Episch
+    party_level: 5
+    party_size: 4
+    twist: Die Gruppe teilt einen vergessenen Ursprung
+
+  PROFEZIA DI CARTA:
+    setting: Eigenkontinent
+    campaign_type: Mini-Kampagne
+    theme: Klassische Fantasy
+    tone: Geheimnisvoll
+    style: Ermittlerisch
+    party_level: 4
+    party_size: 5
+    twist: Die Prophezeiung ist falsch
+
+  POLVERE E SILENZIO:
+    setting: Dark Sun
+    campaign_type: Mini-Kampagne
+    theme: Wildnis
+    tone: Düster
+    style: Rau
+    party_level: 3
+    party_size: 5
+    twist: Der Bösewicht hat bereits gewonnen, und die Mission dient nur noch der Schadensbegrenzung
+
+  SETTIMANA DI VETRO:
+    setting: Eberron
+    campaign_type: Mini-Kampagne
+    theme: Urbaner Raubzug
+    tone: Noir
+    style: Cinematisch
+    party_level: 6
+    party_size: 4
+    twist: Das zentrale Artefakt ist empfindungsfähig und manipulativ
+
+  CERCHIO CHIUSO:
+    setting: Ravenloft
+    campaign_type: Mini-Kampagne
+    theme: Gotischer Horror
+    tone: Düster
+    style: Ermittlerisch
+    party_level: 5
+    party_size: 4
+    twist: Die Gruppe dient dem Bösewicht, ohne es zu wissen
+
+  # ── LONG CAMPAIGN (10) ───────────────────────────────────────────────────────
+
+  CORONA DI CENERE:
+    setting: Dragonlance
+    campaign_type: Lange Kampagne
+    theme: Klassische Fantasy
+    tone: Tragisch
+    style: Episch
+    party_level: 4
+    party_size: 4
+    twist: Der vertraute Verbündete ist der Verräter
+
+  PATTO DELLE MAREE:
+    setting: Exandria
+    campaign_type: Lange Kampagne
+    theme: Nautisches Abenteuer
+    tone: Geheimnisvoll
+    style: Sandbox
+    party_level: 5
+    party_size: 5
+    twist: Die Gruppe teilt einen vergessenen Ursprung
+
+  ARCHIVIO DEI SANTI:
+    setting: Eberron
+    campaign_type: Lange Kampagne
+    theme: Politische Intrige
+    tone: Noir
+    style: Ermittlerisch
+    party_level: 5
+    party_size: 4
+    twist: Die wahre Bedrohung ist eine wohlwollende Institution (Kirche, Gilde, Akademie)
+
+  INVERNO SENZA EREDI:
+    setting: Ravenloft
+    campaign_type: Lange Kampagne
+    theme: Gotischer Horror
+    tone: Tragisch
+    style: Realistisch
+    party_level: 4
+    party_size: 4
+    twist: Die Prophezeiung ist falsch
+
+  LEGGI DELLA POLVERE:
+    setting: Dark Sun
+    campaign_type: Lange Kampagne
+    theme: Wildnis
+    tone: Düster
+    style: Rau
+    party_level: 3
+    party_size: 5
+    twist: Der Bösewicht hat bereits gewonnen, und die Mission dient nur noch der Schadensbegrenzung
+
+  OSSA DELLA CITTA:
+    setting: Ravnica
+    campaign_type: Lange Kampagne
+    theme: Fraktionskrieg
+    tone: Noir
+    style: Cinematisch
+    party_level: 6
+    party_size: 4
+    twist: Das zentrale Artefakt ist empfindungsfähig und manipulativ
+
+  ALTARE DELLA COMETA:
+    setting: Forgotten Realms
+    campaign_type: Lange Kampagne
+    theme: Planare Reise
+    tone: Epic
+    style: Ermittlerisch
+    party_level: 7
+    party_size: 5
+    twist: Die gesamte Region ist eine magische Simulation oder der Traum eines schlafenden Gottes
+
+  TRONO SOMMERSO:
+    setting: Wildemount
+    campaign_type: Lange Kampagne
+    theme: Fraktionskrieg
+    tone: Geheimnisvoll
+    style: Sandbox
+    party_level: 5
+    party_size: 4
+    twist: Der Antagonist versucht, eine schlimmere Katastrophe zu verhindern
+
+  RE DEL VETRO:
+    setting: Eigenkontinent
+    campaign_type: Lange Kampagne
+    theme: Politische Intrige
+    tone: Bizarr
+    style: Märchenhaft
+    party_level: 6
+    party_size: 4
+    twist: Die Welt steckt in einer subtilen Zeitschleife fest
+
+  LANTERNE NELLA NEBBIA:
+    setting: Spelljammer
+    campaign_type: Lange Kampagne
+    theme: Nautisches Abenteuer
+    tone: Ironisch
+    style: Cinematisch
+    party_level: 5
+    party_size: 5
+    twist: Das Missionsziel will nicht gerettet werden
+
+  # ── DUNGEON CRAWL (10) ────────────────────────────────────────────────────────
+
+  TOMBA RESPIRANTE:
+    setting: Forgotten Realms
+    campaign_type: Dungeon-Erkundung
+    theme: Klassische Fantasy
+    tone: Geheimnisvoll
+    style: Ermittlerisch
+    party_level: 4
+    party_size: 4
+    twist: Der Dungeon ist ein lebender Organismus
+
+  PALUDE SENZA RITORNO:
+    setting: Eigenkontinent
+    campaign_type: Dungeon-Erkundung
+    theme: Gotischer Horror
+    tone: Düster
+    style: Rau
+    party_level: 3
+    party_size: 4
+    twist: Die SC sind bereits tot und wissen es nicht
+
+  FUGA DAL PROFONDO:
+    setting: Dark Sun
+    campaign_type: Dungeon-Erkundung
+    theme: Wildnis
+    tone: Düster
+    style: Rau
+    party_level: 5
+    party_size: 5
+    twist: Die Monster fliehen vor einem Raubtier kataklysmischen Ausmaßes
+
+  SANTUARIO DEL PECCATO:
+    setting: Ravenloft
+    campaign_type: Dungeon-Erkundung
+    theme: Gotischer Horror
+    tone: Tragisch
+    style: Rau
+    party_level: 6
+    party_size: 4
+    twist: Die wahre Bedrohung ist eine wohlwollende Institution (Kirche, Gilde, Akademie)
+
+  FONDERIA SENZA PADRONE:
+    setting: Eberron
+    campaign_type: Dungeon-Erkundung
+    theme: Mittelalterlicher Steampunk
+    tone: Noir
+    style: Cinematisch
+    party_level: 5
+    party_size: 4
+    twist: Das zentrale Artefakt ist empfindungsfähig und manipulativ
+
+  SOGNO A LIVELLI:
+    setting: Exandria
+    campaign_type: Dungeon-Erkundung
+    theme: Planare Reise
+    tone: Bizarr
+    style: Episch
+    party_level: 8
+    party_size: 5
+    twist: Die gesamte Region ist eine magische Simulation oder der Traum eines schlafenden Gottes
+
+  ABISSO NECESSARIO:
+    setting: Eigenkontinent
+    campaign_type: Dungeon-Erkundung
+    theme: Monsterjagd
+    tone: Düster
+    style: Rau
+    party_level: 5
+    party_size: 4
+    twist: Der Antagonist versucht, eine schlimmere Katastrophe zu verhindern
+
+  LABIRINTO RISCRITTO:
+    setting: Feywild
+    campaign_type: Dungeon-Erkundung
+    theme: Gotischer Horror
+    tone: Bizarr
+    style: Märchenhaft
+    party_level: 4
+    party_size: 4
+    twist: Die Welt steckt in einer subtilen Zeitschleife fest
+
+  TANA DELL'ORIGINE:
+    setting: Dragonlance
+    campaign_type: Dungeon-Erkundung
+    theme: Monsterjagd
+    tone: Heldenhaft
+    style: Episch
+    party_level: 7
+    party_size: 5
+    twist: Die Gruppe teilt einen vergessenen Ursprung
+
+  AVAMPOSTO CONTESO:
+    setting: Wildemount
+    campaign_type: Dungeon-Erkundung
+    theme: Fraktionskrieg
+    tone: Geheimnisvoll
+    style: Ermittlerisch
+    party_level: 6
+    party_size: 4
+    twist: Der vertraute Verbündete ist der Verräter
+
+
+preset_names:
+  NULLA NELLE TORRI: Nichts in den Türmen
+  SPECCHI SENZA VITA: Leblose Spiegel
+  ORDINI SPEZZATI: Zerbrochene Befehle
+  CENERI SENZA SPERANZA: Asche ohne Hoffnung
+  FIERA SOTTO PRESSIONE: Jahrmarkt unter Druck
+  FUNERALE SBAGLIATO: Das falsche Begräbnis
+  OMBRA NELLA CACCIA: Schatten in der Jagd
+  ECO DAL FUTURO: Echo aus der Zukunft
+  LOCANDA AL CREPUSCOLO: Herberge in der Dämmerung
+  ROTTE STELLARI: Sternenrouten
+  CICATRICI DI FERRO: Eiserne Narben
+  MARE CHE SCOMPARE: Das verschwindende Meer
+  ARCHIVI IN FIAMME: Archive in Flammen
+  NODI DI SANGUE: Blutknoten
+  RADICE DEL MORBO: Wurzel der Seuche
+  GIURAMENTO INFRANTO: Gebrochener Schwur
+  PROFEZIA DI CARTA: Papierene Prophezeiung
+  POLVERE E SILENZIO: Staub und Stille
+  SETTIMANA DI VETRO: Woche aus Glas
+  CERCHIO CHIUSO: Geschlossener Kreis
+  CORONA DI CENERE: Krone aus Asche
+  PATTO DELLE MAREE: Gezeitenpakt
+  ARCHIVIO DEI SANTI: Archiv der Heiligen
+  INVERNO SENZA EREDI: Winter ohne Erben
+  LEGGI DELLA POLVERE: Gesetze des Staubs
+  OSSA DELLA CITTA: Stadt der Knochen
+  ALTARE DELLA COMETA: Altar des Kometen
+  TRONO SOMMERSO: Versunkener Thron
+  RE DEL VETRO: Glaskönig
+  LANTERNE NELLA NEBBIA: Laternen im Nebel
+  TOMBA RESPIRANTE: Das atmende Grab
+  PALUDE SENZA RITORNO: Sumpf ohne Rückkehr
+  FUGA DAL PROFONDO: Flucht aus der Tiefe
+  SANTUARIO DEL PECCATO: Heiligtum der Sünde
+  FONDERIA SENZA PADRONE: Die herrenlose Gießerei
+  SOGNO A LIVELLI: Geschichteter Traum
+  ABISSO NECESSARIO: Der notwendige Abgrund
+  LABIRINTO RISCRITTO: Das umgeschriebene Labyrinth
+  TANA DELL'ORIGINE: Der Bau des Ursprungs
+  AVAMPOSTO CONTESO: Umkämpfter Außenposten
+
+preset_descriptions:
+
+  # ── ONE-SHOT ─────────────────────────────────────────────────────────────────
+
+  NULLA NELLE TORRI: |
+    One-Shot · Eberron · Noir
+    A stolen artifact tears open a rift into the void — and something comes through.
+    Race against time in a city that doesn't yet know it's already condemned.
+    The party works for someone. They find out too late for whom.
+
+  SPECCHI SENZA VITA: |
+    One-Shot · Ravenloft · Horror
+    A curse that spreads door to door. The party is already infected.
+    Tense investigation with an internal clock and no easy answers.
+    The twist doesn't come from outside — it comes from the mirror.
+
+  ORDINI SPEZZATI: |
+    One-Shot · Wildemount · Krieg
+    An order to execute. An ally who smiles too much.
+    Infiltration in a war zone with colliding factions.
+    Frantic pace, moral ambiguity, an ending that weighs.
+
+  CENERI SENZA SPERANZA: |
+    One-Shot · Dark Sun · Überlebensorientiert
+    The villain has already won. The party arrives in the wreckage.
+    Race against time in a burned world, without saviours.
+    Surviving isn't enough — you have to choose what to save.
+
+  FIERA SOTTO PRESSIONE: |
+    One-Shot · Ravnica · Intrige
+    Thirty minutes to stop something in a crowded fair.
+    Three suspects, a thousand civilians, zero available authorities.
+    The target doesn't want to be stopped. They have their own good reasons.
+
+  FUNERALE SBAGLIATO: |
+    One-Shot · Forgotten Realms · Mysterium
+    A wrong funeral. A body that isn't the right one.
+    Whoever swapped the corpse already knows the party is there.
+    The villain isn't the villain that appears — and they're right.
+
+  OMBRA NELLA CACCIA: |
+    One-Shot · Homebrew · Jagd
+    The hunt was simple. The creature wasn't what they thought.
+    Something much bigger has been driving them toward the party.
+    Final choice: fight the threat or follow it to the source.
+
+  ECO DAL FUTURO: |
+    One-Shot · Exandria · Schleife
+    A portal opens. From inside comes the party itself.
+    Future versions, impossible warnings, an enemy that knows everything.
+    The circle closes only if you understand where it began.
+
+  LOCANDA AL CREPUSCOLO: |
+    One-Shot · Feywild · Märchen
+    The last inn before the border. One guest won't leave.
+    Claustrophobic horror with layered revelation, room by room.
+    The artifact isn't a weapon — it's someone who remembers.
+
+  ROTTE STELLARI: |
+    One-Shot · Spelljammer · Weltraum
+    A ship, an unlikely crew, an impossible delivery.
+    The target doesn't want to be found — and has their own good reasons.
+    Ironic and high-speed tone, cosmic chaos guaranteed.
+
+  # ── MINI-CAMPAIGN ────────────────────────────────────────────────────────────
+
+  CICATRICI DI FERRO: |
+    Mini · Wildemount · Krieg
+    A war that ended two years ago. The scars haven't closed.
+    The party follows vendettas that trace back to orders never officially given.
+    Each session uncovers a new layer of who lied and why.
+
+  MARE CHE SCOMPARE: |
+    Mini · Homebrew · Ozean
+    A coastal town disappears from maps every thirty years. It's time again.
+    The party has a few sessions to understand — and decide if it's worth stopping.
+    Folklore, local politics, and a final cosmological revelation.
+
+  ARCHIVI IN FIAMME: |
+    Mini · Eberron · Intrige
+    Someone is burning the arcane archives of three cities in a precise order.
+    The traces lead to a truth the guild wants buried.
+    Academic intrigue, chases, allies that switch sides.
+
+  NODI DI SANGUE: |
+    Mini · Ravnica · Macht
+    Four noble families. A contested inheritance. One body per session.
+    The party is involved against their will — and everyone wants to use them.
+    Final twist on who was really hiring whom.
+
+  RADICE DEL MORBO: |
+    Mini · Forgotten Realms · Seuche
+    A village asks for help. What they find isn't a monster.
+    The creature is a consequence — the cause is smiling among the people.
+    Rural horror with a high emotional-impact finale.
+
+  GIURAMENTO INFRANTO: |
+    Mini · Dragonlance · Schicksal
+    The party made a vow years ago. Someone wants payment.
+    Three sessions to honour, betray, or reinterpret an impossible promise.
+    Backstory at the centre, personal climax, no clean sides.
+
+  PROFEZIA DI CARTA: |
+    Mini · Homebrew · Prophezeiung
+    The prophecy is false — but someone built a power base on it.
+    The party follows ancient inscriptions toward an uncomfortable truth.
+    Layered mystery with a revelation that rewrites the initial premise.
+
+  POLVERE E SILENZIO: |
+    Mini · Dark Sun · Überlebensorientiert
+    The villain has already won. The mission is to save what can be saved.
+    A burned world, limited resources, no saviour coming.
+    Difficult moral decisions and an ending that depends on what you chose.
+
+  SETTIMANA DI VETRO: |
+    Mini · Eberron · Paranoia
+    Protect someone for a week. It's Thursday. Three assassination attempts already failed.
+    The fourth comes from inside. The artifact knows more than it says.
+    Rising tension, partial information, a tightening countdown.
+
+  CERCHIO CHIUSO: |
+    Mini · Ravenloft · Kult
+    A cult does no harm — officially. Former members disappear.
+    The party infiltrates and finds a truth worse than suspected.
+    Layered escalation, double identities, impossible choices at the finale.
+
+  # ── LONG CAMPAIGN ────────────────────────────────────────────────────────────
+
+  CORONA DI CENERE: |
+    Lange Kampagne · Dragonlance · Klassische Fantasy
+    A crown resurfaces just as the kingdom is too weak to bear its weight.
+    Noble houses, knightly orders, and war veterans all claim the same symbol of legitimacy.
+    The traitor does not wait at the end of the story; they grow alongside the party.
+
+  PATTO DELLE MAREE: |
+    Lange Kampagne · Exandria · Nautisches Abenteuer
+    Broken routes, vanishing islands, and an oath engraved beneath the sea.
+    Every port opens a different arc: politics, mystery, war, or cult intrigue.
+    The party's shared past is the key that binds the entire saga together.
+
+  ARCHIVIO DEI SANTI: |
+    Lange Kampagne · Eberron · Politische Intrige
+    A sacred archive holds evidence that could redraw entire nations.
+    Churches, guilds, and academies all seem to compete for the truth, but only one institution truly wants it buried.
+    A slow-burn campaign of fragile alliances, layered revelations, and respectable power gone rotten.
+
+  INVERNO SENZA EREDI: |
+    Lange Kampagne · Ravenloft · Gotischer Horror
+    A dynasty is dying, yet the castle still demands an heir.
+    Every claimant carries a truth that contradicts the official history of the domain.
+    The prophecy sustaining the realm is false, and someone has known for generations.
+
+  LEGGI DELLA POLVERE: |
+    Lange Kampagne · Dark Sun · Wildnis
+    The world cannot be saved; it can only be crossed long enough to decide what deserves to survive.
+    The city-states fall one by one, and every victory comes too late for someone.
+    The villain has already won, so the real arc is what can still be taken back from ruin.
+
+  OSSA DELLA CITTA: |
+    Lange Kampagne · Ravnica · Fraktionskrieg
+    Beneath the city lies a second conflict, older and hungrier than the first.
+    The guilds believe they are fighting for the present, but they are feeding something far more ancient.
+    The artifact everyone wants is not a weapon. It is an adviser with an appetite for empire.
+
+  ALTARE DELLA COMETA: |
+    Lange Kampagne · Forgotten Realms · Planare Reise
+    A returning comet tears open wounds in the sky on an impossible cycle.
+    Each arc pushes the party farther from the world they thought they understood.
+    The central revelation does not just threaten the region; it challenges the nature of reality itself.
+
+  TRONO SOMMERSO: |
+    Lange Kampagne · Wildemount · Fraktionskrieg
+    A drowned kingdom returns to the center of surface politics.
+    Ships, spies, and relics drag the party into a war no faction truly understands.
+    The apparent antagonist looks like the engine of chaos, but is really trying to stop something worse.
+
+  RE DEL VETRO: |
+    Lange Kampagne · Eigenkontinent · Politische Intrige
+    An elegant court rewrites the continent's memory with almost fairy-tale grace.
+    Every alliance the party secures leaves behind a new fracture in reality.
+    The time loop is never obvious; it lives in the details, the mistakes, and the faces that remember too much.
+
+  LANTERNE NELLA NEBBIA: |
+    Lange Kampagne · Spelljammer · Nautisches Abenteuer
+    A flotilla of minor worlds vanishes behind a fog that does not belong to space.
+    The party chases someone who needs saving and has excellent reasons not to return.
+    Lighter in tone, but ideal for cosmic escalation and late-stage revelation.
+
+  # ── DUNGEON CRAWL ─────────────────────────────────────────────────────────
+
+  TOMBA RESPIRANTE: |
+    Dungeon · Forgotten Realms · Mysterium
+    A tomb that shouldn't be empty — and isn't.
+    The dungeon breathes, grows, responds to the party's actions.
+    Each room hides a revelation. The last one changes everything.
+
+  PALUDE SENZA RITORNO: |
+    Dungeon · Homebrew · Horror
+    They entered to loot. They found something that shouldn't exist.
+    The party is already dead — they don't know it yet.
+    Claustrophobic horror with layered revelation, level by level.
+
+  FUGA DAL PROFONDO: |
+    Dungeon · Dark Sun · Überlebensorientiert
+    Creatures are fleeing to the surface from something below.
+    The party descends toward what everyone else is running from.
+    Limited resources, desperate factions, a cataclysmic-scale predator.
+
+  SANTUARIO DEL PECCATO: |
+    Dungeon · Ravenloft · Institution
+    A cursed sanctuary — built by the church to hide a truth.
+    The threat isn't the undead: it's whoever created them and why.
+    Horror with a strong investigative component and a morally heavy finale.
+
+  FONDERIA SENZA PADRONE: |
+    Dungeon · Eberron · Arkane Macht
+    An abandoned arcane foundry. The golems are still working — for someone.
+    The artifact at the centre knows more than it seems — and has a plan.
+    Underground steampunk with unique mechanics and a surprise final revelation.
+
+  SOGNO A LIVELLI: |
+    Dungeon · Exandria · Kosmisch
+    The dungeon isn't a place — it's the dream of a god who hasn't woken yet.
+    Each level follows different rules. Reality is negotiable.
+    For those who want a dungeon crawl that defies categories.
+
+  ABISSO NECESSARIO: |
+    Dungeon · Homebrew · Jagd
+    They descended to kill the monster. The monster is trying to stop something worse.
+    Internal factions in conflict, revelation that flips the initial mission.
+    A dungeon where the greatest threat isn't at the bottom — it's whoever sent them.
+
+  LABIRINTO RISCRITTO: |
+    Dungeon · Feywild · Schleife
+    A labyrinth that rewrites itself every time the party rests.
+    Time flows differently here — and someone uses it to their advantage.
+    Fairytale and disorienting, with an ending that requires understanding the rules.
+
+  TANA DELL'ORIGINE: |
+    Dungeon · Dragonlance · Vermächtnis
+    The dragon's lair is empty. The dragons fled — and the party shares the same origin as whatever drove them out.
+    Heroic dungeon with the party's identity as the central climax revelation.
+    For those who want a classic crawl with a devastating personal twist.
+
+  AVAMPOSTO CONTESO: |
+    Dungeon · Wildemount · Krieg
+    A military outpost fallen below the surface. Someone has taken control.
+    Factions fighting on every level — the party is the unexpected variable.
+    The ally who guides them inside has their own reasons. Not all align with theirs.
