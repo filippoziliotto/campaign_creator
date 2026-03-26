@@ -298,5 +298,21 @@
   "settingsIapProductNotFound": "Producto no encontrado. Vuelve a intentarlo más tarde.",
   "settingsPurchasePending": "Procesando compra…",
   "settingsPurchaseCancelled": "Compra cancelada.",
-  "settingsPurchaseFailed": "La compra ha fallado. Inténtalo de nuevo."
+  "settingsPurchaseFailed": "La compra ha fallado. Inténtalo de nuevo.",
+  "helpTitle": "Guía",
+  "helpCampaignTypesTitle": "Tipos de campaña",
+  "helpCampaignTypeOneShotTitle": "One-Shot",
+  "helpCampaignTypeOneShotBody": "Una aventura completa pensada para una sola sesión, con inicio fuerte, objetivo claro y cierre rápido. Elígela cuando quieras ritmo alto y recompensa inmediata.",
+  "helpCampaignTypeMiniCampaignTitle": "Mini-campaña",
+  "helpCampaignTypeMiniCampaignBody": "Un arco corto que se desarrolla en pocas sesiones, con espacio para escalar y cerrar con más fuerza. Ideal si quieres algo compacto pero menos comprimido que un one-shot.",
+  "helpCampaignTypeLongCampaignTitle": "Campaña larga",
+  "helpCampaignTypeLongCampaignBody": "Una estructura amplia con facciones, subtramas y consecuencias que crecen con el tiempo. Perfecta si quieres continuidad, progresión y un mundo que responda a las decisiones del grupo.",
+  "helpCampaignTypeDungeonTitle": "Exploración de mazmorras",
+  "helpCampaignTypeDungeonBody": "Una campaña centrada en mapas, descubrimiento, desgaste y secretos ocultos en lugares peligrosos. Funciona muy bien si buscas presión, exploración y un lugar con identidad fuerte.",
+  "helpTipsTitle": "Consejos y buenas prácticas",
+  "helpTipTwist": "Elige un giro para dar tensión inmediata a la trama.",
+  "helpTipContrast": "Prueba a combinar tonos en contraste para obtener prompts menos previsibles.",
+  "helpTipPreset": "Usa los presets cuando quieras inspiración rápida o una base sólida desde la que partir.",
+  "helpTipCustom": "Añade entradas personalizadas solo cuando la opción exacta que necesitas no exista ya.",
+  "helpTipParty": "Mantén alineados nivel, tamaño del grupo y arquetipos para evitar prompts desequilibrados."
 }

@@ -686,4 +686,61 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get settingsPurchaseFailed =>
       'La compra ha fallado. Inténtalo de nuevo.';
+
+  @override
+  String get helpTitle => 'Guía';
+
+  @override
+  String get helpCampaignTypesTitle => 'Tipos de campaña';
+
+  @override
+  String get helpCampaignTypeOneShotTitle => 'One-Shot';
+
+  @override
+  String get helpCampaignTypeOneShotBody =>
+      'Una aventura completa pensada para una sola sesión, con inicio fuerte, objetivo claro y cierre rápido. Elígela cuando quieras ritmo alto y recompensa inmediata.';
+
+  @override
+  String get helpCampaignTypeMiniCampaignTitle => 'Mini-campaña';
+
+  @override
+  String get helpCampaignTypeMiniCampaignBody =>
+      'Un arco corto que se desarrolla en pocas sesiones, con espacio para escalar y cerrar con más fuerza. Ideal si quieres algo compacto pero menos comprimido que un one-shot.';
+
+  @override
+  String get helpCampaignTypeLongCampaignTitle => 'Campaña larga';
+
+  @override
+  String get helpCampaignTypeLongCampaignBody =>
+      'Una estructura amplia con facciones, subtramas y consecuencias que crecen con el tiempo. Perfecta si quieres continuidad, progresión y un mundo que responda a las decisiones del grupo.';
+
+  @override
+  String get helpCampaignTypeDungeonTitle => 'Exploración de mazmorras';
+
+  @override
+  String get helpCampaignTypeDungeonBody =>
+      'Una campaña centrada en mapas, descubrimiento, desgaste y secretos ocultos en lugares peligrosos. Funciona muy bien si buscas presión, exploración y un lugar con identidad fuerte.';
+
+  @override
+  String get helpTipsTitle => 'Consejos y buenas prácticas';
+
+  @override
+  String get helpTipTwist =>
+      'Elige un giro para dar tensión inmediata a la trama.';
+
+  @override
+  String get helpTipContrast =>
+      'Prueba a combinar tonos en contraste para obtener prompts menos previsibles.';
+
+  @override
+  String get helpTipPreset =>
+      'Usa los presets cuando quieras inspiración rápida o una base sólida desde la que partir.';
+
+  @override
+  String get helpTipCustom =>
+      'Añade entradas personalizadas solo cuando la opción exacta que necesitas no exista ya.';
+
+  @override
+  String get helpTipParty =>
+      'Mantén alineados nivel, tamaño del grupo y arquetipos para evitar prompts desequilibrados.';
 }

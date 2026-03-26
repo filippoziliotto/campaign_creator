@@ -684,4 +684,61 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsPurchaseFailed => 'Échec de l’achat. Veuillez réessayer.';
+
+  @override
+  String get helpTitle => 'Guide';
+
+  @override
+  String get helpCampaignTypesTitle => 'Types de campagne';
+
+  @override
+  String get helpCampaignTypeOneShotTitle => 'One-Shot';
+
+  @override
+  String get helpCampaignTypeOneShotBody =>
+      'Une aventure complète pensée pour une seule session, avec une ouverture forte, un objectif clair et une conclusion rapide. Choisis-la si tu veux un rythme immédiat et un arc serré.';
+
+  @override
+  String get helpCampaignTypeMiniCampaignTitle => 'Mini-campagne';
+
+  @override
+  String get helpCampaignTypeMiniCampaignBody =>
+      'Un arc court qui se déploie sur quelques sessions, avec assez d’espace pour monter en intensité et conclure plus nettement. Idéal si tu veux quelque chose de compact mais moins condensé qu’un one-shot.';
+
+  @override
+  String get helpCampaignTypeLongCampaignTitle => 'Campagne longue';
+
+  @override
+  String get helpCampaignTypeLongCampaignBody =>
+      'Une structure étendue avec des factions, des sous-intrigues et des conséquences qui évoluent dans le temps. Parfaite si tu veux de la continuité, de la progression et un monde qui réagit aux choix du groupe.';
+
+  @override
+  String get helpCampaignTypeDungeonTitle => 'Exploration de donjon';
+
+  @override
+  String get helpCampaignTypeDungeonBody =>
+      'Une campagne centrée sur les cartes, la découverte, l’attrition et les secrets enfouis dans des lieux dangereux. Très adaptée si tu cherches de la pression, de l’exploration et un fort sens du lieu.';
+
+  @override
+  String get helpTipsTitle => 'Conseils et bonnes pratiques';
+
+  @override
+  String get helpTipTwist =>
+      'Choisis un twist pour donner tout de suite de la tension à l’intrigue.';
+
+  @override
+  String get helpTipContrast =>
+      'Essaie de combiner des tons contrastés pour obtenir des prompts moins prévisibles.';
+
+  @override
+  String get helpTipPreset =>
+      'Utilise les presets quand tu veux une inspiration rapide ou une base solide à affiner.';
+
+  @override
+  String get helpTipCustom =>
+      'Ajoute des entrées personnalisées seulement si l’option exacte dont tu as besoin n’existe pas déjà.';
+
+  @override
+  String get helpTipParty =>
+      'Garde cohérents niveau, taille du groupe et archétypes pour éviter des prompts déséquilibrés.';
 }

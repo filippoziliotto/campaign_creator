@@ -298,5 +298,21 @@
   "settingsIapProductNotFound": "Prodotto non trovato. Riprova più tardi.",
   "settingsPurchasePending": "Acquisto in elaborazione…",
   "settingsPurchaseCancelled": "Acquisto annullato.",
-  "settingsPurchaseFailed": "Acquisto non riuscito. Riprova."
+  "settingsPurchaseFailed": "Acquisto non riuscito. Riprova.",
+  "helpTitle": "Guida",
+  "helpCampaignTypesTitle": "Tipi di campagna",
+  "helpCampaignTypeOneShotTitle": "One-Shot",
+  "helpCampaignTypeOneShotBody": "Un'avventura completa pensata per una sola sessione, con inizio forte, obiettivo chiaro e finale rapido. Sceglila quando vuoi ritmo alto e payoff immediato.",
+  "helpCampaignTypeMiniCampaignTitle": "Mini-campagna",
+  "helpCampaignTypeMiniCampaignBody": "Un arco breve che si sviluppa in poche sessioni, lasciando spazio a escalation e finale più netto. Ideale se vuoi qualcosa di compatto ma meno compresso di un one-shot.",
+  "helpCampaignTypeLongCampaignTitle": "Campagna lunga",
+  "helpCampaignTypeLongCampaignBody": "Una struttura estesa con fazioni, sottotrame e conseguenze che crescono nel tempo. Perfetta se vuoi continuità, progressione e un mondo che reagisce alle scelte del party.",
+  "helpCampaignTypeDungeonTitle": "Esplorazione dungeon",
+  "helpCampaignTypeDungeonBody": "Una campagna centrata su mappe, scoperta, attrito e segreti nascosti in luoghi pericolosi. Ottima se vuoi pressione costante, esplorazione e forte senso del luogo.",
+  "helpTipsTitle": "Consigli e buone pratiche",
+  "helpTipTwist": "Scegli un twist per dare subito tensione alla trama.",
+  "helpTipContrast": "Prova a combinare toni in contrasto per ottenere prompt meno prevedibili.",
+  "helpTipPreset": "Usa i preset quando vuoi ispirazione rapida o una base solida da rifinire.",
+  "helpTipCustom": "Aggiungi voci custom solo quando l'opzione esatta che ti serve non esiste già.",
+  "helpTipParty": "Tieni coerenti livello, dimensione del party e archetipi per evitare prompt sbilanciati."
 }

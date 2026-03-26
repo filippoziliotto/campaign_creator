@@ -298,5 +298,21 @@
   "settingsIapProductNotFound": "Product not found. Try again later.",
   "settingsPurchasePending": "Purchase processing…",
   "settingsPurchaseCancelled": "Purchase cancelled.",
-  "settingsPurchaseFailed": "Purchase failed. Please try again."
+  "settingsPurchaseFailed": "Purchase failed. Please try again.",
+  "helpTitle": "Guide",
+  "helpCampaignTypesTitle": "Campaign types",
+  "helpCampaignTypeOneShotTitle": "One-Shot",
+  "helpCampaignTypeOneShotBody": "A complete adventure built for a single session, with a strong opening, a clear goal, and a fast payoff. Choose it when you want immediate momentum and a tight arc.",
+  "helpCampaignTypeMiniCampaignTitle": "Mini-Campaign",
+  "helpCampaignTypeMiniCampaignBody": "A short arc that unfolds across a few sessions, leaving room for escalation and a sharper finale. Best when you want something compact but less compressed than a one-shot.",
+  "helpCampaignTypeLongCampaignTitle": "Long Campaign",
+  "helpCampaignTypeLongCampaignBody": "An extended structure with factions, subplots, and consequences that develop over time. Ideal if you want continuity, progression, and a world that reacts to player choices.",
+  "helpCampaignTypeDungeonTitle": "Dungeon Exploration",
+  "helpCampaignTypeDungeonBody": "A campaign focused on maps, discovery, attrition, and secrets hidden in dangerous places. Perfect when you want pressure, exploration, and a strong sense of place.",
+  "helpTipsTitle": "Tips & best practices",
+  "helpTipTwist": "Pick a twist to give the plot immediate tension.",
+  "helpTipContrast": "Try combining contrasting tones to get less predictable prompts.",
+  "helpTipPreset": "Use presets when you want quick inspiration or a strong starting point.",
+  "helpTipCustom": "Add custom entries only when the exact option you need does not already exist.",
+  "helpTipParty": "Keep level, party size, and archetypes aligned to avoid uneven prompts."
 }

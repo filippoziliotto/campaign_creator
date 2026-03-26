@@ -690,4 +690,61 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get settingsPurchaseFailed =>
       'Kauf fehlgeschlagen. Bitte versuche es erneut.';
+
+  @override
+  String get helpTitle => 'Leitfaden';
+
+  @override
+  String get helpCampaignTypesTitle => 'Kampagnentypen';
+
+  @override
+  String get helpCampaignTypeOneShotTitle => 'One-Shot';
+
+  @override
+  String get helpCampaignTypeOneShotBody =>
+      'Ein vollständiges Abenteuer für genau eine Sitzung, mit starkem Einstieg, klarem Ziel und schnellem Abschluss. Wähle es, wenn du sofortiges Tempo und einen kompakten Bogen willst.';
+
+  @override
+  String get helpCampaignTypeMiniCampaignTitle => 'Mini-Kampagne';
+
+  @override
+  String get helpCampaignTypeMiniCampaignBody =>
+      'Ein kurzer Handlungsbogen über einige Sitzungen, mit Raum für Eskalation und ein klareres Finale. Ideal, wenn du etwas Kompaktes willst, das trotzdem mehr Luft hat als ein One-Shot.';
+
+  @override
+  String get helpCampaignTypeLongCampaignTitle => 'Lange Kampagne';
+
+  @override
+  String get helpCampaignTypeLongCampaignBody =>
+      'Eine ausgedehnte Struktur mit Fraktionen, Nebenhandlungen und Folgen, die sich über Zeit entfalten. Perfekt, wenn du Kontinuität, Entwicklung und eine Welt willst, die auf Spielerentscheidungen reagiert.';
+
+  @override
+  String get helpCampaignTypeDungeonTitle => 'Dungeon-Erkundung';
+
+  @override
+  String get helpCampaignTypeDungeonBody =>
+      'Eine Kampagne rund um Karten, Entdeckung, Ressourcenverschleiß und Geheimnisse in gefährlichen Orten. Besonders geeignet, wenn du Druck, Erkundung und ein starkes Ortsgefühl willst.';
+
+  @override
+  String get helpTipsTitle => 'Tipps & Best Practices';
+
+  @override
+  String get helpTipTwist =>
+      'Wähle einen Twist, um der Handlung sofort Spannung zu geben.';
+
+  @override
+  String get helpTipContrast =>
+      'Kombiniere gegensätzliche Töne, um weniger vorhersehbare Prompts zu erhalten.';
+
+  @override
+  String get helpTipPreset =>
+      'Nutze Presets, wenn du schnelle Inspiration oder eine starke Ausgangsbasis willst.';
+
+  @override
+  String get helpTipCustom =>
+      'Füge eigene Einträge nur hinzu, wenn die genaue Option, die du brauchst, noch nicht vorhanden ist.';
+
+  @override
+  String get helpTipParty =>
+      'Halte Stufe, Gruppengröße und Archetypen im Einklang, damit die Prompts ausgewogen bleiben.';
 }

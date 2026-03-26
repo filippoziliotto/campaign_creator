@@ -309,9 +309,7 @@ extension on _CampaignBuilderPageState {
             keyPrefix: 'setting-selector',
             uppercaseText: true,
             premiumOptionIds: options.settings.length >= 6
-                ? options.settings
-                    .skip(options.settings.length - 6)
-                    .toSet()
+                ? options.settings.skip(options.settings.length - 6).toSet()
                 : const {},
             premiumHighlightColor: _currentAtmosphere(options).glow,
             useWheelPicker: true,
@@ -1592,7 +1590,10 @@ extension on _CampaignBuilderPageState {
                     style: _resolvedAtmosphereTheme()
                         .textTheme
                         .bodySmall
-                        ?.copyWith(color: FantasyPalette.parchment),
+                        ?.copyWith(
+                          fontSize: 12,
+                          color: FantasyPalette.parchment,
+                        ),
                   ),
                 ),
               ),
@@ -1656,7 +1657,10 @@ extension on _CampaignBuilderPageState {
                           style: _resolvedAtmosphereTheme()
                               .textTheme
                               .bodySmall
-                              ?.copyWith(color: atmosphere.glow),
+                              ?.copyWith(
+                                fontSize: 12,
+                                color: atmosphere.glow,
+                              ),
                         ),
                       ],
                     ),

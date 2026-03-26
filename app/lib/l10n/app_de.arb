@@ -298,5 +298,21 @@
   "settingsIapProductNotFound": "Produkt nicht gefunden. Versuche es später erneut.",
   "settingsPurchasePending": "Kauf wird verarbeitet…",
   "settingsPurchaseCancelled": "Kauf abgebrochen.",
-  "settingsPurchaseFailed": "Kauf fehlgeschlagen. Bitte versuche es erneut."
+  "settingsPurchaseFailed": "Kauf fehlgeschlagen. Bitte versuche es erneut.",
+  "helpTitle": "Leitfaden",
+  "helpCampaignTypesTitle": "Kampagnentypen",
+  "helpCampaignTypeOneShotTitle": "One-Shot",
+  "helpCampaignTypeOneShotBody": "Ein vollständiges Abenteuer für genau eine Sitzung, mit starkem Einstieg, klarem Ziel und schnellem Abschluss. Wähle es, wenn du sofortiges Tempo und einen kompakten Bogen willst.",
+  "helpCampaignTypeMiniCampaignTitle": "Mini-Kampagne",
+  "helpCampaignTypeMiniCampaignBody": "Ein kurzer Handlungsbogen über einige Sitzungen, mit Raum für Eskalation und ein klareres Finale. Ideal, wenn du etwas Kompaktes willst, das trotzdem mehr Luft hat als ein One-Shot.",
+  "helpCampaignTypeLongCampaignTitle": "Lange Kampagne",
+  "helpCampaignTypeLongCampaignBody": "Eine ausgedehnte Struktur mit Fraktionen, Nebenhandlungen und Folgen, die sich über Zeit entfalten. Perfekt, wenn du Kontinuität, Entwicklung und eine Welt willst, die auf Spielerentscheidungen reagiert.",
+  "helpCampaignTypeDungeonTitle": "Dungeon-Erkundung",
+  "helpCampaignTypeDungeonBody": "Eine Kampagne rund um Karten, Entdeckung, Ressourcenverschleiß und Geheimnisse in gefährlichen Orten. Besonders geeignet, wenn du Druck, Erkundung und ein starkes Ortsgefühl willst.",
+  "helpTipsTitle": "Tipps & Best Practices",
+  "helpTipTwist": "Wähle einen Twist, um der Handlung sofort Spannung zu geben.",
+  "helpTipContrast": "Kombiniere gegensätzliche Töne, um weniger vorhersehbare Prompts zu erhalten.",
+  "helpTipPreset": "Nutze Presets, wenn du schnelle Inspiration oder eine starke Ausgangsbasis willst.",
+  "helpTipCustom": "Füge eigene Einträge nur hinzu, wenn die genaue Option, die du brauchst, noch nicht vorhanden ist.",
+  "helpTipParty": "Halte Stufe, Gruppengröße und Archetypen im Einklang, damit die Prompts ausgewogen bleiben."
 }

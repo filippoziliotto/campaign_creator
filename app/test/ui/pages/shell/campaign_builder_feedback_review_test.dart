@@ -153,6 +153,39 @@ void main() {
     },
   );
 
+  testWidgets('custom chips use the same text size as standard chips', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: _buildPage(
+          initialPreferences: <String, Object>{
+            'app.ad_free_purchased': true,
+          },
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openWorldSection(tester);
+
+    final customButton = find.ancestor(
+      of: find.text('Custom').first,
+      matching: find.byType(InkWell),
+    );
+    await tester.ensureVisible(customButton.first);
+    await tester.tap(customButton.first, warnIfMissed: false);
+    await _pumpUi(tester);
+
+    await tester.enterText(find.byType(TextField), 'Noir');
+    await tester.tap(find.widgetWithText(FilledButton, 'Add'));
+    await _pumpUi(tester);
+
+    final customText = tester.widget<Text>(find.text('Noir'));
+    expect(customText.style?.fontSize, 12);
+  });
+
   testWidgets('narrative section still forges parchment with empty fields', (
     tester,
   ) async {

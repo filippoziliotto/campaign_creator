@@ -3,6 +3,7 @@ import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
 import 'package:campaign_creator_flutter/src/theme/fantasy_theme.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,6 +44,183 @@ void main() {
     expect(find.textContaining('generatore di prompt'), findsOneWidget);
   });
 
+  testWidgets('settings and help buttons are visible and help opens its sheet',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    expect(find.byKey(const ValueKey<String>('info-settings-button')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('help-guide-button')),
+        findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey<String>('help-guide-button')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('help-sheet')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-sheet')), findsNothing);
+  });
+
+  testWidgets('help button uses the handbook icon', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    final iconButton = tester.widget<IconButton>(
+      find.byKey(const ValueKey<String>('help-guide-button')),
+    );
+
+    expect((iconButton.icon as Icon).icon, Icons.menu_book_rounded);
+  });
+
+  testWidgets('help sheet shows campaign types and tips sections',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester.tap(find.byKey(const ValueKey<String>('help-guide-button')));
+    await tester.pumpAndSettle();
+
+    final helpSheet = find.byKey(const ValueKey<String>('help-sheet'));
+    expect(
+      find.descendant(of: helpSheet, matching: find.text('Tipi di campagna')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: helpSheet,
+        matching: find.text('Consigli e buone pratiche'),
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('help sheet is dismissed by dragging down from the top handle',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester.tap(find.byKey(const ValueKey<String>('help-guide-button')));
+    await tester.pumpAndSettle();
+
+    final helpSheet = find.byKey(const ValueKey<String>('help-sheet'));
+    final handle = find.byKey(const ValueKey<String>('help-sheet-drag-handle'));
+    expect(helpSheet, findsOneWidget);
+    expect(handle, findsOneWidget);
+
+    final dragStart = tester.getRect(handle).center;
+    await tester.dragFrom(dragStart, const Offset(0, 220));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('help-sheet')), findsNothing);
+  });
+
+  testWidgets('settings and help sheets can open independently',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester.tap(find.byKey(const ValueKey<String>('help-guide-button')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('help-sheet')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-sheet')), findsNothing);
+
+    await tester.tapAt(Offset.zero);
+    await tester.pumpAndSettle();
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+    expect(
+        find.byKey(const ValueKey<String>('settings-sheet')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('help-sheet')), findsNothing);
+  });
+
+  for (final (
+        locale,
+        campaignTypesTitle,
+        tipsTitle,
+        sampleTip,
+      ) in <(Locale, String, String, String)>[
+    (
+      const Locale('it'),
+      'Tipi di campagna',
+      'Consigli e buone pratiche',
+      'Scegli un twist per dare subito tensione alla trama.',
+    ),
+    (
+      const Locale('en'),
+      'Campaign types',
+      'Tips & best practices',
+      'Pick a twist to give the plot immediate tension.',
+    ),
+    (
+      const Locale('es'),
+      'Tipos de campaña',
+      'Consejos y buenas prácticas',
+      'Elige un giro para dar tensión inmediata a la trama.',
+    ),
+    (
+      const Locale('fr'),
+      'Types de campagne',
+      'Conseils et bonnes pratiques',
+      'Choisis un twist pour donner tout de suite de la tension à l’intrigue.',
+    ),
+    (
+      const Locale('de'),
+      'Kampagnentypen',
+      'Tipps & Best Practices',
+      'Wähle einen Twist, um der Handlung sofort Spannung zu geben.',
+    ),
+  ]) {
+    testWidgets(
+        'help sheet localizes static guide content for ${locale.languageCode}',
+        (tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 844));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(_testApp(currentLocale: locale));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 800));
+
+      await tester.tap(find.byKey(const ValueKey<String>('help-guide-button')));
+      await tester.pumpAndSettle();
+
+      final helpSheet = find.byKey(const ValueKey<String>('help-sheet'));
+      expect(
+        find.descendant(of: helpSheet, matching: find.text(campaignTypesTitle)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: helpSheet, matching: find.text(tipsTitle)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: helpSheet, matching: find.text(sampleTip)),
+        findsOneWidget,
+      );
+    });
+  }
+
   testWidgets('settings sheet contains review and share rows', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -60,6 +238,50 @@ void main() {
     expect(find.byKey(const ValueKey<String>('settings-share-row')),
         findsOneWidget);
   });
+
+  testWidgets('settings share passes a non-empty origin rect to share_plus',
+      (tester) async {
+    Map<dynamic, dynamic>? capturedArguments;
+
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      const MethodChannel('dev.fluttercommunity.plus/share'),
+      (call) async {
+        if (call.method == 'share') {
+          capturedArguments = call.arguments as Map<dynamic, dynamic>;
+          return 'dev.fluttercommunity.plus/share/success';
+        }
+        return null;
+      },
+    );
+    addTearDown(() {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+        const MethodChannel('dev.fluttercommunity.plus/share'),
+        null,
+      );
+    });
+
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey<String>('settings-share-row')));
+    await tester.pumpAndSettle();
+
+    expect(capturedArguments, isNotNull);
+    expect(capturedArguments!['originWidth'], isNotNull);
+    expect(capturedArguments!['originHeight'], isNotNull);
+    expect(capturedArguments!['originWidth'] as double, greaterThan(0));
+    expect(capturedArguments!['originHeight'] as double, greaterThan(0));
+  }, variant: const TargetPlatformVariant(<TargetPlatform>{TargetPlatform.iOS}));
 
   testWidgets('settings sheet shows ad-free title and small purchase subtitle',
       (tester) async {
