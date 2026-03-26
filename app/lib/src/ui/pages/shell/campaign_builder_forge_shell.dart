@@ -10,7 +10,9 @@ extension on _CampaignBuilderPageState {
     final activeSection = _revealed(
       delay: 0.18,
       atmosphere: atmosphere,
-      child: _buildActiveForgeSection(options),
+      child: isTouchPlatform
+          ? _buildInteractiveForgeSection(options)
+          : _buildActiveForgeSection(options),
     );
 
     return ForgeRoutePage(
@@ -27,50 +29,13 @@ extension on _CampaignBuilderPageState {
         atmosphere: atmosphere,
         child: _buildForgeSectionRibbon(),
       ),
-      activeSection: isTouchPlatform
-          ? GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onHorizontalDragEnd: _onForgeSectionSwipe,
-              child: activeSection,
-            )
-          : activeSection,
+      activeSection: activeSection,
       controlPanel: _revealed(
         delay: 0.22,
         atmosphere: atmosphere,
         child: _buildForgeControlPanel(),
       ),
     );
-  }
-
-  void _onForgeSectionSwipe(DragEndDetails details) {
-    const double threshold = 300;
-    final dx = details.velocity.pixelsPerSecond.dx;
-    final sections = _ForgeSection.values;
-    final currentIndex = _forgeSectionIndex(_forgeSection);
-    final lastIndex = sections.length - 1;
-
-    if (dx < -threshold && currentIndex < lastIndex) {
-      _applyShellState(() {
-        _setForgeSection(sections[currentIndex + 1]);
-      });
-      return;
-    }
-
-    if (dx < -threshold && currentIndex == lastIndex) {
-      _goToStage(_AppStage.parchment);
-      return;
-    }
-
-    if (dx > threshold && currentIndex == 0) {
-      _goToStage(_AppStage.entry);
-      return;
-    }
-
-    if (dx > threshold && currentIndex > 0) {
-      _applyShellState(() {
-        _setForgeSection(sections[currentIndex - 1]);
-      });
-    }
   }
 
   Widget _buildForgeSectionRibbon() {
@@ -154,31 +119,59 @@ extension on _CampaignBuilderPageState {
 
   Widget _buildActiveForgeSection(CampaignOptions options) {
     final atmosphere = _currentAtmosphere(options);
-    final child = switch (_forgeSection) {
-      _ForgeSection.world => _buildCampaignSection(options),
-      _ForgeSection.party => _buildPartySection(options),
-      _ForgeSection.narrative => _buildNarrativeSection(),
-    };
 
     return PageTransitionSwitcher(
       duration: atmosphere.sectionTransitionDuration,
       reverse: _forgeTransitionReverse,
-      child: KeyedSubtree(
-        key: ValueKey<String>('forge-section-${_forgeSection.name}'),
-        child: child,
-      ),
+      child: _buildForgeSectionViewportChild(_forgeSection, options),
       transitionBuilder: (
         Widget child,
         Animation<double> primaryAnimation,
         Animation<double> secondaryAnimation,
       ) {
-        return buildCampaignSharedAxisTransition(
+        return buildCampaignPanelSlideTransition(
           animation: primaryAnimation,
           secondaryAnimation: secondaryAnimation,
-          transitionType: atmosphere.sectionTransitionType,
           child: child,
         );
       },
+    );
+  }
+
+  Widget _buildInteractiveForgeSection(CampaignOptions options) {
+    final atmosphere = _currentAtmosphere(options);
+
+    return InteractiveHorizontalSectionPager(
+      currentIndex: _forgeSectionIndex(_forgeSection),
+      itemCount: _ForgeSection.values.length,
+      duration: atmosphere.sectionTransitionDuration,
+      itemBuilder: (context, index) {
+        return _buildForgeSectionViewportChild(
+          _ForgeSection.values[index],
+          options,
+        );
+      },
+      onIndexChanged: (index) {
+        _applyShellState(() {
+          _setForgeSection(_ForgeSection.values[index]);
+        });
+      },
+    );
+  }
+
+  Widget _buildForgeSectionViewportChild(
+    _ForgeSection section,
+    CampaignOptions options,
+  ) {
+    final child = switch (section) {
+      _ForgeSection.world => _buildCampaignSection(options),
+      _ForgeSection.party => _buildPartySection(options),
+      _ForgeSection.narrative => _buildNarrativeSection(),
+    };
+
+    return KeyedSubtree(
+      key: ValueKey<String>('forge-section-${section.name}'),
+      child: child,
     );
   }
 

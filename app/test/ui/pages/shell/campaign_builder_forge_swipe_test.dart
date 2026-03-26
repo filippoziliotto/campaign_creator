@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
-import 'package:campaign_creator_flutter/src/ui/pages/routes/entry_page.dart';
+import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_motion.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/routes/parchment_page.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ void main() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
-  testWidgets('forge swipe advances from narrative into parchment', (
+  testWidgets('swiping left from narrative keeps the forge on narrative', (
     tester,
   ) async {
     SharedPreferences.setMockInitialValues(<String, Object>{
@@ -64,14 +64,7 @@ void main() {
     );
     await _pumpUi(tester);
 
-    expect(find.byType(ParchmentRoutePage), findsOneWidget);
-
-    await _flingSection(
-      tester,
-      find.byType(ParchmentRoutePage),
-      const Offset(500, 0),
-    );
-    await _pumpUi(tester);
+    expect(find.byType(ParchmentRoutePage), findsNothing);
 
     expect(
       find.byKey(const ValueKey<String>('forge-section-narrative')),
@@ -81,9 +74,9 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
-  testWidgets('forge swipe opens parchment from narrative without a prompt', (
-    tester,
-  ) async {
+  testWidgets(
+      'swiping beyond narrative without a prompt keeps the forge focused',
+      (tester) async {
     await tester.binding.setSurfaceSize(const Size(430, 932));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -137,14 +130,120 @@ void main() {
     );
     await _pumpUi(tester);
 
-    expect(find.byType(ParchmentRoutePage), findsOneWidget);
+    expect(find.byType(ParchmentRoutePage), findsNothing);
+    expect(
+      find.byKey(const ValueKey<String>('forge-section-narrative')),
+      findsOneWidget,
+    );
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
-  testWidgets('swiping right from the first forge section returns to entry', (
+  testWidgets('partial horizontal drag reveals the adjacent forge section', (
     tester,
   ) async {
+    await tester.binding.setSurfaceSize(const Size(430, 932));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    final oneShotCard = find.byKey(
+      const ValueKey<String>('entry-campaign-card-One-Shot'),
+    );
+    await tester.ensureVisible(oneShotCard);
+    await tester.tap(oneShotCard);
+    await _pumpUi(tester);
+
+    final worldSection = find.byKey(
+      const ValueKey<String>('forge-section-world'),
+    );
+    final worldRect = tester.getRect(worldSection);
+    final gesture = await tester.startGesture(
+      Offset(worldRect.left + 48, worldRect.top + 48),
+    );
+    await gesture.moveBy(const Offset(-45, 0));
+    await tester.pump();
+    await gesture.moveBy(const Offset(-45, 0));
+    await tester.pump();
+
+    expect(find.byKey(const ValueKey<String>('forge-section-world')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('forge-section-party')),
+        findsOneWidget);
+
+    await gesture.up();
+    await _pumpUi(tester);
+
+    expect(find.byKey(const ValueKey<String>('forge-section-world')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('forge-section-party')),
+        findsNothing);
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets('slow drag past threshold commits the next forge section', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(430, 932));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    final oneShotCard = find.byKey(
+      const ValueKey<String>('entry-campaign-card-One-Shot'),
+    );
+    await tester.ensureVisible(oneShotCard);
+    await tester.tap(oneShotCard);
+    await _pumpUi(tester);
+
+    final worldSection = find.byKey(
+      const ValueKey<String>('forge-section-world'),
+    );
+    final worldRect = tester.getRect(worldSection);
+    final gesture = await tester.startGesture(
+      Offset(worldRect.left + 48, worldRect.top + 48),
+    );
+    await gesture.moveBy(const Offset(-60, 0));
+    await tester.pump();
+    await gesture.moveBy(const Offset(-60, 0));
+    await tester.pump();
+    await gesture.moveBy(const Offset(-60, 0));
+    await tester.pump();
+    await gesture.up();
+    await _pumpUi(tester);
+
+    expect(find.byKey(const ValueKey<String>('forge-section-world')),
+        findsNothing);
+    expect(find.byKey(const ValueKey<String>('forge-section-party')),
+        findsOneWidget);
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets(
+      'swiping right from the first forge section keeps the forge active',
+      (tester) async {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -182,16 +281,15 @@ void main() {
     );
     await _pumpUi(tester);
 
-    expect(find.byType(EntryRoutePage), findsOneWidget);
     expect(
       find.byKey(const ValueKey<String>('forge-section-world')),
-      findsNothing,
+      findsOneWidget,
     );
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
-  testWidgets('long campaign uses horizontal shared-axis transitions in forge',
+  testWidgets('selecting a campaign type uses shared-axis route transitions',
       (tester) async {
     final options = CampaignOptions(
       settings: const ['Forgotten Realms'],
@@ -241,7 +339,58 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
-  testWidgets('dragging the party slider does not change forge section', (
+  testWidgets('touch forge section changes use the interactive pager',
+      (tester) async {
+    final options = CampaignOptions(
+      settings: const ['Forgotten Realms'],
+      campaignTypes: const ['Long campaign'],
+      themes: const ['Intrigue'],
+      tones: const ['Heroic'],
+      styles: const ['Epic'],
+      partyArchetypes: const ['Fighter'],
+      twists: const ['No twist'],
+      presets: const {},
+      settingDescriptions: const {'Forgotten Realms': 'Classic high fantasy.'},
+      presetDescriptions: const {},
+      presetNames: const {},
+    );
+
+    await tester.binding.setSurfaceSize(const Size(430, 932));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(options),
+          currentLocale: const Locale('en'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    final longCampaignCard = find.byKey(
+      const ValueKey<String>('entry-campaign-card-Long campaign'),
+    );
+    await tester.ensureVisible(longCampaignCard);
+    await tester.tap(longCampaignCard);
+    await _pumpUi(tester);
+
+    expect(find.byType(InteractiveHorizontalSectionPager), findsOneWidget);
+
+    await tester.tap(find.text('Party'));
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('forge-section-party')),
+      findsOneWidget,
+    );
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets('changing party metrics does not change forge section', (
     tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
@@ -281,8 +430,9 @@ void main() {
       find.byKey(const ValueKey<String>('forge-section-party')),
     );
 
-    final slider = find.byType(Slider).first;
-    await tester.drag(slider, const Offset(160, 0));
+    final levelPill = find.byKey(const ValueKey<String>('party-level-pill-2'));
+    await tester.ensureVisible(levelPill);
+    await tester.tap(levelPill);
     await _pumpUi(tester);
 
     expect(

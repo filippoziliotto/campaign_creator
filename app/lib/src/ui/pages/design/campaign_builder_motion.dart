@@ -48,6 +48,384 @@ Widget buildCampaignSharedAxisTransition({
   );
 }
 
+Widget buildCampaignPanelSlideTransition({
+  required Animation<double> animation,
+  required Animation<double> secondaryAnimation,
+  required Widget child,
+}) {
+  return SlideTransition(
+    position: Tween<Offset>(
+      begin: const Offset(1.0, 0.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOutCubic,
+    )),
+    child: SlideTransition(
+      position: Tween<Offset>(
+        begin: Offset.zero,
+        end: const Offset(-1.0, 0.0),
+      ).animate(CurvedAnimation(
+        parent: secondaryAnimation,
+        curve: Curves.easeInCubic,
+      )),
+      child: child,
+    ),
+  );
+}
+
+typedef IndexedChildWidgetBuilder = Widget Function(
+  BuildContext context,
+  int index,
+);
+
+class InteractiveHorizontalSectionPager extends StatefulWidget {
+  const InteractiveHorizontalSectionPager({
+    super.key,
+    required this.currentIndex,
+    required this.itemCount,
+    required this.itemBuilder,
+    required this.onIndexChanged,
+    required this.duration,
+    this.commitThresholdFraction = 0.22,
+    this.commitVelocityPagesPerSecond = 1.0,
+    this.onSwipePastStart,
+    this.onSwipePastEnd,
+  });
+
+  final int currentIndex;
+  final int itemCount;
+  final IndexedChildWidgetBuilder itemBuilder;
+  final ValueChanged<int> onIndexChanged;
+  final Duration duration;
+  final double commitThresholdFraction;
+  final double commitVelocityPagesPerSecond;
+  final VoidCallback? onSwipePastStart;
+  final VoidCallback? onSwipePastEnd;
+
+  @override
+  State<InteractiveHorizontalSectionPager> createState() =>
+      _InteractiveHorizontalSectionPagerState();
+}
+
+class _InteractiveHorizontalSectionPagerState
+    extends State<InteractiveHorizontalSectionPager>
+    with SingleTickerProviderStateMixin {
+  final GlobalKey _viewportKey = GlobalKey();
+  late final AnimationController _settleController;
+  Animation<double>? _pageAnimation;
+  late double _page;
+  double _viewportWidth = 1;
+  bool _isDragging = false;
+  int? _pendingIndex;
+  VoidCallback? _pendingEdgeAction;
+  Offset? _pointerDownPosition;
+  Duration? _pointerDownTime;
+
+  @override
+  void initState() {
+    super.initState();
+    _page = widget.currentIndex.toDouble();
+    _settleController = AnimationController(
+      vsync: this,
+      duration: widget.duration,
+    )
+      ..addListener(_handleSettleTick)
+      ..addStatusListener(_handleSettleStatusChanged);
+  }
+
+  @override
+  void didUpdateWidget(covariant InteractiveHorizontalSectionPager oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.duration != widget.duration) {
+      _settleController.duration = widget.duration;
+    }
+
+    final targetPage = widget.currentIndex.toDouble();
+    if (!_isDragging &&
+        _pendingIndex == null &&
+        (_page - targetPage).abs() > 0.001) {
+      _animateToPage(targetPage);
+    }
+  }
+
+  @override
+  void dispose() {
+    _settleController
+      ..removeListener(_handleSettleTick)
+      ..removeStatusListener(_handleSettleStatusChanged)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _handleSettleTick() {
+    final animation = _pageAnimation;
+    if (animation == null) {
+      return;
+    }
+    setState(() {
+      _page = animation.value;
+    });
+  }
+
+  void _handleSettleStatusChanged(AnimationStatus status) {
+    if (status != AnimationStatus.completed) {
+      return;
+    }
+
+    final pendingIndex = _pendingIndex;
+    final pendingEdgeAction = _pendingEdgeAction;
+    _pendingIndex = null;
+    _pendingEdgeAction = null;
+
+    if (pendingIndex != null && pendingIndex != widget.currentIndex) {
+      widget.onIndexChanged(pendingIndex);
+      return;
+    }
+
+    pendingEdgeAction?.call();
+  }
+
+  void _animateToPage(
+    double targetPage, {
+    int? commitIndex,
+    VoidCallback? edgeAction,
+  }) {
+    if (prefersReducedMotion(context)) {
+      setState(() {
+        _page = targetPage;
+      });
+      if (commitIndex != null && commitIndex != widget.currentIndex) {
+        widget.onIndexChanged(commitIndex);
+      } else {
+        edgeAction?.call();
+      }
+      return;
+    }
+
+    _pendingIndex = commitIndex;
+    _pendingEdgeAction = edgeAction;
+    _pageAnimation = Tween<double>(
+      begin: _page,
+      end: targetPage,
+    ).animate(
+      CurvedAnimation(
+        parent: _settleController,
+        curve: Curves.easeOutCubic,
+      ),
+    );
+
+    _settleController
+      ..stop()
+      ..reset()
+      ..forward();
+  }
+
+  void _handleHorizontalDragStart(DragStartDetails details) {
+    _isDragging = true;
+    _pendingIndex = null;
+    _pendingEdgeAction = null;
+    _settleController.stop();
+  }
+
+  void _handleHorizontalDragUpdate(DragUpdateDetails details) {
+    if (_viewportWidth <= 0) {
+      return;
+    }
+
+    final primaryDelta = details.primaryDelta ?? 0;
+    final nextPage = _page - (primaryDelta / _viewportWidth);
+    final maxPage = (widget.itemCount - 1).toDouble();
+
+    setState(() {
+      _page = nextPage.clamp(0.0, maxPage);
+    });
+  }
+
+  void _handleHorizontalDragCancel() {
+    _isDragging = false;
+    _animateToPage(widget.currentIndex.toDouble());
+  }
+
+  void _handleHorizontalDragEnd(DragEndDetails details) {
+    _isDragging = false;
+    final currentIndex = widget.currentIndex;
+    final currentPage = currentIndex.toDouble();
+    final pageDelta = _page - currentPage;
+    final velocityPagesPerSecond = _viewportWidth <= 0
+        ? 0.0
+        : -(details.velocity.pixelsPerSecond.dx / _viewportWidth);
+
+    int? targetIndex;
+    VoidCallback? edgeAction;
+
+    if (velocityPagesPerSecond.abs() >= widget.commitVelocityPagesPerSecond) {
+      if (velocityPagesPerSecond > 0 && currentIndex < widget.itemCount - 1) {
+        targetIndex = currentIndex + 1;
+      } else if (velocityPagesPerSecond < 0 && currentIndex > 0) {
+        targetIndex = currentIndex - 1;
+      } else if (velocityPagesPerSecond < 0 && currentIndex == 0) {
+        edgeAction = widget.onSwipePastStart;
+      } else if (velocityPagesPerSecond > 0 &&
+          currentIndex == widget.itemCount - 1) {
+        edgeAction = widget.onSwipePastEnd;
+      }
+    } else if (pageDelta.abs() >= widget.commitThresholdFraction) {
+      if (pageDelta > 0 && currentIndex < widget.itemCount - 1) {
+        targetIndex = currentIndex + 1;
+      } else if (pageDelta < 0 && currentIndex > 0) {
+        targetIndex = currentIndex - 1;
+      }
+    }
+
+    if (targetIndex != null) {
+      _animateToPage(
+        targetIndex.toDouble(),
+        commitIndex: targetIndex,
+      );
+      return;
+    }
+
+    _animateToPage(
+      currentPage,
+      edgeAction: edgeAction,
+    );
+  }
+
+  void _handlePointerDown(PointerDownEvent event) {
+    _pointerDownPosition = event.position;
+    _pointerDownTime = event.timeStamp;
+  }
+
+  void _handlePointerCancel(PointerCancelEvent event) {
+    _pointerDownPosition = null;
+    _pointerDownTime = null;
+  }
+
+  void _handlePointerUp(PointerUpEvent event) {
+    final startPosition = _pointerDownPosition;
+    final startTime = _pointerDownTime;
+    _pointerDownPosition = null;
+    _pointerDownTime = null;
+
+    if (_isDragging || startPosition == null || startTime == null) {
+      return;
+    }
+
+    final elapsed = event.timeStamp - startTime;
+    if (elapsed.inMilliseconds <= 0) {
+      return;
+    }
+
+    final delta = event.position - startPosition;
+    final absDx = delta.dx.abs();
+    final absDy = delta.dy.abs();
+    if (absDx < 90 || absDx <= absDy * 1.2) {
+      return;
+    }
+
+    final velocityX = delta.dx / elapsed.inMilliseconds * 1000;
+    if (velocityX.abs() < 550) {
+      return;
+    }
+
+    final currentIndex = widget.currentIndex;
+    if (delta.dx < 0 && currentIndex < widget.itemCount - 1) {
+      _animateToPage(
+        (currentIndex + 1).toDouble(),
+        commitIndex: currentIndex + 1,
+      );
+      return;
+    }
+
+    if (delta.dx > 0 && currentIndex > 0) {
+      _animateToPage(
+        (currentIndex - 1).toDouble(),
+        commitIndex: currentIndex - 1,
+      );
+      return;
+    }
+
+    if (delta.dx > 0 && currentIndex == 0) {
+      _animateToPage(
+        currentIndex.toDouble(),
+        edgeAction: widget.onSwipePastStart,
+      );
+      return;
+    }
+
+    if (delta.dx < 0 && currentIndex == widget.itemCount - 1) {
+      _animateToPage(
+        currentIndex.toDouble(),
+        edgeAction: widget.onSwipePastEnd,
+      );
+    }
+  }
+
+  Iterable<int> _visibleIndices() sync* {
+    final leading = _page.floor().clamp(0, widget.itemCount - 1);
+    final trailing = _page.ceil().clamp(0, widget.itemCount - 1);
+    yield leading;
+    if (trailing != leading) {
+      yield trailing;
+    }
+  }
+
+  double _resolveViewportWidth(BuildContext context, double fallbackWidth) {
+    final renderObject = _viewportKey.currentContext?.findRenderObject();
+    if (renderObject is RenderBox && renderObject.hasSize) {
+      final width = renderObject.size.width;
+      if (width > 0) {
+        return width;
+      }
+    }
+
+    if (fallbackWidth.isFinite && fallbackWidth > 0) {
+      return fallbackWidth;
+    }
+
+    final mediaWidth = MediaQuery.sizeOf(context).width;
+    return mediaWidth > 0 ? mediaWidth : 1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _viewportWidth = _resolveViewportWidth(context, constraints.maxWidth);
+        final visibleIndices = _visibleIndices().toList(growable: false);
+
+        return Listener(
+          onPointerDown: _handlePointerDown,
+          onPointerUp: _handlePointerUp,
+          onPointerCancel: _handlePointerCancel,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onHorizontalDragStart: _handleHorizontalDragStart,
+            onHorizontalDragUpdate: _handleHorizontalDragUpdate,
+            onHorizontalDragEnd: _handleHorizontalDragEnd,
+            onHorizontalDragCancel: _handleHorizontalDragCancel,
+            child: SizedBox(
+              key: _viewportKey,
+              child: ClipRect(
+                child: Stack(
+                  children: [
+                    for (final index in visibleIndices)
+                      Transform.translate(
+                        offset: Offset((index - _page) * _viewportWidth, 0),
+                        child: widget.itemBuilder(context, index),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
 class AnimatedRuneFilterChip extends StatefulWidget {
   const AnimatedRuneFilterChip({
     super.key,
@@ -301,7 +679,9 @@ class AnimatedRuneSegmentedValueSelector extends StatelessWidget {
               style: TextStyle(
                 color: item.locked
                     ? (lockedColor ??
-                        Theme.of(context).colorScheme.tertiary
+                        Theme.of(context)
+                            .colorScheme
+                            .tertiary
                             .withValues(alpha: 0.92))
                     : null,
               ),
