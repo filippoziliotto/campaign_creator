@@ -96,6 +96,17 @@ void main() {
       expect(options.presets, isNotEmpty);
     });
 
+    test('loads bundled Portuguese options from assets', () async {
+      final service = LocalCampaignService();
+
+      final options = await service.getOptions(localeCode: 'pt');
+
+      expect(options.settings, isNotEmpty);
+      expect(options.settings, contains('Forgotten Realms'));
+      expect(options.campaignTypes, contains('Campanha longa'));
+      expect(options.presets, isNotEmpty);
+    });
+
     test(
         'returns the same CampaignOptions instance for repeated calls with the same locale',
         () async {

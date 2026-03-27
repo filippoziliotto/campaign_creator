@@ -1,0 +1,326 @@
+{
+  "@@locale": "pt",
+  "appTitle": "Criador de Campanhas D&D",
+  "appNameShort": "Criador de Campanhas",
+  "languageItalianShort": "IT",
+  "languageEnglishShort": "EN",
+  "languageSpanishShort": "ES",
+  "languageFrenchShort": "FR",
+  "languageGermanShort": "DE",
+  "languagePortugueseShort": "PT",
+  "commonRetry": "Tentar novamente",
+  "commonOpen": "Abrir",
+  "commonOptional": "Opcional",
+  "appFreeFormat": "Escolher formato",
+  "appSettingPending": "Ambientação por definir",
+  "appTwistPending": "Reviravolta por definir",
+  "appStageEntry": "Escolha",
+  "appStageForge": "Forja",
+  "appStageParchment": "Pergaminho",
+  "appOpenParchment": "Abrir pergaminho",
+  "appSealParchment": "Selar pergaminho",
+  "appSummaryLevel": "Nv {level}",
+  "@appSummaryLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "appSummaryPartySize": "{size} PJs",
+  "@appSummaryPartySize": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "appSummaryPreset": "Predefinição: {name}",
+  "@appSummaryPreset": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "appLoadOptionsError": "Não foi possível carregar as opções: {error}",
+  "@appLoadOptionsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appGenerationFailedError": "A geração falhou: {error}",
+  "@appGenerationFailedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appInvalidArchetypeSelection": "Selecionaste {count} arquétipos, mas o grupo está definido para {size} PJs.",
+  "@appInvalidArchetypeSelection": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "appSnackForgedAndCopied": "Pergaminho forjado e prompt copiado para a área de transferência.",
+  "appSnackGenerationFailed": "A geração falhou. Verifica a mensagem apresentada no ecrã.",
+  "appSnackPromptCopied": "Prompt copiado para a área de transferência.",
+  "appSnackNoParchmentToShare": "Ainda não há nenhum pergaminho para partilhar.",
+  "appSnackShareUnavailableOnDevice": "A partilha não está disponível neste dispositivo.",
+  "appSnackShareUnavailable": "Partilha indisponível: {error}",
+  "@appSnackShareUnavailable": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appSnackGenerateFirst": "Gera primeiro um pergaminho antes de o enviar.",
+  "appSnackChatGptOpened": "ChatGPT aberto. O prompt já está na área de transferência.",
+  "appSnackChatGptCopiedOnly": "Não foi possível abrir o ChatGPT, mas o prompt foi copiado.",
+  "appSnackPremiumUnlockedTemporary": "Premium desbloqueado por 5 minutos",
+  "appSnackNoParchmentToSave": "Não há nenhum pergaminho para guardar.",
+  "appSnackDraftSaved": "Rascunho do pergaminho guardado localmente.",
+  "appSnackDraftMemoryOnly": "Rascunho guardado apenas em memória. Reinicia completamente a app para ativar a persistência local.",
+  "appSnackSealedSavedAndCopied": "Pergaminho selado: rascunho guardado e prompt copiado.",
+  "appSnackSealedCopiedOnlyMemory": "Pergaminho selado: prompt copiado. Reinicia completamente a app para ativar a gravação local.",
+  "appSnackLocalSaveUnavailable": "A gravação local não está disponível nesta sessão. Fecha e volta a abrir a app para registar o plugin.",
+  "appDraftMemoryOnly": "Rascunho mantido apenas em memória. Reinicia completamente a app para reativar a gravação local.",
+  "appDraftAligned": "Rascunho local alinhado em {dateTime}.",
+  "@appDraftAligned": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "appDraftLastSaved": "Último rascunho guardado em {dateTime}.",
+  "@appDraftLastSaved": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "appErrorEyebrow": "Ritual interrompido",
+  "appErrorTitle": "O grimório não está a responder",
+  "appErrorUnknownLoad": "Erro desconhecido ao carregar as opções.",
+  "entryCampaignTypesTitle": "Tipos de campanha",
+  "entryResumeTitle": "Retomar sessão",
+  "entryResumeSubtitle": "Já tens um rascunho ativo. Volta ao ponto certo.",
+  "entryResumeForge": "Retomar forja",
+  "entryOpenForge": "Abrir forja",
+  "entryHeroWelcomeTitle": "Escolhe a tua campanha",
+  "entryHeroWelcomeBody": "Forja o prompt da tua campanha e depois dá-lhe vida com a tua IA de confiança.",
+  "entryHeroChooseRitual": "Seleciona um formato para começar.",
+  "entryResetDraft": "Nova sessão",
+  "entryResetDraftConfirm": "Rascunho limpo.",
+  "entryBadgeDefault": "Formato",
+  "entryDescriptionDefault": "Formato de campanha pronto no dispositivo.",
+  "entryBadgeOneShot": "Lâmina rápida",
+  "entryDescriptionOneShot": "Uma missão de alto impacto pensada para uma única sessão, com retorno imediato e uma reviravolta precisa.",
+  "entryBadgeMiniCampaign": "Arco curto",
+  "entryDescriptionMiniCampaign": "Uma história condensada em poucas sessões, com forte progressão, escalada e um final marcante.",
+  "entryBadgeLongCampaign": "Saga ampla",
+  "entryDescriptionLongCampaign": "Facções, equilíbrios em mudança e subtramas persistentes para uma campanha que cresce com o tempo.",
+  "entryBadgeDungeon": "Profundezas",
+  "entryDescriptionDungeon": "Uma descida estruturada por mapas, risco, desgaste e descobertas em camadas.",
+  "forgeSectionWorld": "Mundo",
+  "forgeSectionParty": "Grupo",
+  "forgeSectionNarrative": "História",
+  "forgeButtonForging": "A forjar...",
+  "forgeNextParty": "Ir para o grupo",
+  "forgeNextNarrative": "Ir para a história",
+  "forgeReforgeParchment": "Reforjar pergaminho",
+  "forgeForgeParchment": "Forjar pergaminho",
+  "forgeReforgeParchmentCompact": "Reforjar pergaminho",
+  "forgeForgeParchmentCompact": "Forjar pergaminho",
+  "forgeAdvanceBlockedWorld": "Define pelo menos o tom, o estilo ou os temas antes de passar para o grupo.",
+  "forgeAdvanceBlockedParty": "Verifica o nível, o tamanho e os arquétipos do grupo antes de continuar.",
+  "forgeAdvanceBlockedNarrative": "Adiciona pelo menos um detalhe narrativo antes de forjar o pergaminho.",
+  "forgeReadinessWorldReady": "Podes avançar para o grupo.",
+  "forgeReadinessWorldPending": "Escolhe o formato, a ambientação e os sinais-chave.",
+  "forgeReadinessPartyReady": "Podes abrir a história.",
+  "forgeReadinessPartyPending": "Define o nível, o tamanho e os papéis do grupo.",
+  "forgeReadinessNarrativeReady": "Podes forjar o pergaminho.",
+  "forgeReadinessNarrativePending": "Adiciona pelo menos um gancho narrativo.",
+  "forgeWorldSectionTitle": "Construção do mundo",
+  "forgeWorldSectionSubtitle": "Formato, ambientação e os sinais de abertura da campanha.",
+  "forgeFoundationLabel": "Fundação",
+  "forgeFoundationTitle": "Configuração base",
+  "forgeFoundationSubtitle": "Ambientação e cenário.",
+  "forgePresetSectionTitle": "Escolher uma predefinição",
+  "forgePresetSectionSubtitle": "Aplica uma predefinição para configurar rapidamente a tua campanha.",
+  "forgePresetPanelLabel": "Predefinições",
+  "forgePresetPanelTitle": "Predefinições rápidas",
+  "forgeQuickPresetLabel": "Predefinição rápida",
+  "forgeNoPresetSelected": "Sem predefinição",
+  "forgeApplyPreset": "Forjar com predefinição",
+  "forgeApply": "Forjar com predefinição",
+  "forgeSettingLabel": "Ambientação",
+  "forgeCustomSettingLabel": "Ambientação personalizada",
+  "forgeCustomSettingHint": "Ex.: Reino em guerra, cidade vertical",
+  "forgeTwistTitle": "Reviravolta inicial",
+  "forgeTwistLabel": "Reviravolta",
+  "forgeCustomTwistLabel": "Reviravolta personalizada",
+  "forgeCustomTwistHint": "Um aliado mente, a masmorra está viva, a missão é uma armadilha...",
+  "forgeCreativeTitle": "Temas, tom e estilo",
+  "forgeThemesTitle": "Temas",
+  "forgeCustomThemesLabel": "Temas personalizados",
+  "forgeCustomThemesHint": "Ex.: Steampunk, horror cósmico",
+  "forgeToneTitle": "Tom",
+  "forgeStyleTitle": "Estilo",
+  "forgeToneStyleOverrideLabel": "Tons e estilo personalizados",
+  "forgeToneStyleOverrideHint": "Ex.: Tom: sombrio; Estilo: cru",
+  "forgePartySectionTitle": "Grupo e escala do jogo",
+  "forgePartySectionSubtitle": "Nível, tamanho e principais papéis do grupo.",
+  "forgeScaleLabel": "Escala",
+  "forgeScaleTitle": "Nível e tamanho",
+  "forgePartyLevel": "Nível do grupo: {level}",
+  "@forgePartyLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartySize": "Número de personagens: {size}",
+  "@forgePartySize": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartyLevelPremiumHint": "Níveis 4+ são premium",
+  "forgePartySizePremiumHint": "5+ personagens são premium",
+  "forgePartyArchetypesTitle": "Arquétipos do grupo",
+  "forgePartyArchetypesSubtitle": "Seleciona até {size} arquétipos.",
+  "@forgePartyArchetypesSubtitle": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartyArchetypesMaxReached": "Atingiste o máximo de arquétipos selecionáveis para o grupo atual.",
+  "forgePartyInfoTitle": "Informações úteis",
+  "forgeCharacterNotesLabel": "Notas de personagem",
+  "forgeCharacterNotesHint": "Segredos, laços, medos, história importante...",
+  "forgeConstraintsLabel": "Restrições",
+  "forgeConstraintsHint": "Duração curta, sem viagens planares, chefe final obrigatório...",
+  "forgeNarrativeSectionTitle": "Pressão narrativa",
+  "forgeNarrativeSectionSubtitle": "Ganchos extra, facções e restrições para personalizar o pergaminho.",
+  "forgeNarrativePanelTitle": "História e forças em jogo",
+  "forgeNarrativeHooksLabel": "Ganchos narrativos",
+  "forgeNarrativeHooksHint": "Missão inicial, ameaça, mistério, contagem decrescente...",
+  "forgeFactionsLabel": "Facções e poderes",
+  "forgeFactionsHint": "Guildas, cultos, casas nobres, antagonistas, aliados instáveis...",
+  "forgeNpcFocusLabel": "PNJs-chave",
+  "forgeNpcFocusHint": "Mentor ambíguo, rival, patrono, traidor...",
+  "forgeEncounterFocusLabel": "Encontros desejados",
+  "forgeEncounterFocusHint": "Cerco, investigação social, perseguição, chefe final...",
+  "forgeContentConstraintsTitle": "Restrições de conteúdo",
+  "forgeIncludeNpcsLabel": "Incluir PNJs",
+  "forgeIncludeNpcsSubtitle": "O prompt incluirá PNJs relevantes.",
+  "forgeIncludeEncountersLabel": "Incluir encontros",
+  "forgeIncludeEncountersSubtitle": "O prompt sugerirá cenas e combates.",
+  "forgeSafetyNotesLabel": "Notas de segurança",
+  "forgeSafetyNotesHint": "Tópicos a evitar, linhas e véus, limites de tom...",
+  "forgeParchmentDirty": "Configuração alterada: regenera.",
+  "forgeParchmentReady": "Pergaminho atualizado.",
+  "forgeParchmentIncomplete": "Conclui a história para gerar.",
+  "statusReady": "Pronto",
+  "statusNeedsPolish": "Precisa de polimento",
+  "parchmentReadyTitle": "Pergaminho pronto",
+  "parchmentReadySubtitleStale": "Alteraste a forja: o prompt copiado já não está atualizado.",
+  "parchmentReadySubtitleAligned": "O prompt copiado está alinhado com o estado atual da forja.",
+  "parchmentQuickActionsTitle": "Ações rápidas",
+  "parchmentCopyPromptTitle": "Copiar prompt",
+  "parchmentCopyPromptSubtitle": "Envia o prompt para a área de transferência.",
+  "parchmentShareTitle": "Partilhar",
+  "parchmentShareSubtitle": "Abre o menu de partilha.",
+  "parchmentOpenChatGptTitle": "Abrir no ChatGPT",
+  "parchmentOpenChatGptSubtitle": "Abre o ChatGPT num novo separador.",
+  "parchmentDraftUpdatedTitle": "Rascunho atualizado",
+  "parchmentSaveDraftTitle": "Guardar rascunho",
+  "parchmentSaveDraftSubtitle": "Guarda o prompt localmente para mais tarde.",
+  "parchmentPromptCopied": "Prompt copiado",
+  "parchmentCopiedStaleBanner": "Alteraste a forja após a última geração. Regenera para atualizar o prompt copiado.",
+  "parchmentCopiedSuccessBody": "O pergaminho foi forjado com sucesso. Usa os rituais à direita para o partilhar, guardar ou abrir no ChatGPT.",
+  "atmosphereOneShot": "Urgência carmesim",
+  "atmosphereMiniCampaign": "Estrada dourada",
+  "atmosphereLongCampaign": "Atlas verde",
+  "atmosphereDungeon": "Cofre da tocha",
+  "parchmentSeal": "SELO",
+  "parchmentSealAndCopy": "Selar e copiar",
+  "infoDialogLine1": "Esta app é um gerador de prompts inspirado em jogos de interpretação de fantasia.",
+  "infoDialogLine2": "Não está afiliada a Dungeons & Dragons nem a qualquer ferramenta de IA.",
+  "infoDialogLine3": "Podes usar os prompts com ferramentas de IA para criares as tuas próprias histórias.",
+  "settingsTitle": "Definições",
+  "settingsLeaveReview": "Deixar uma avaliação",
+  "settingsShareApp": "Partilhar a app",
+  "settingsShareText": "Descobre o Campaign Forge, o gerador de campanhas de D&D: ",
+  "settingsLanguageLabel": "Idioma",
+  "settingsLanguageEnglish": "Inglês",
+  "settingsLanguageItalian": "Italiano",
+  "settingsThemeLabel": "Tema",
+  "settingsThemeDark": "Escuro",
+  "settingsThemeLight": "Claro",
+  "settingsInfoLabel": "Info",
+  "settingsVersion": "Versão",
+  "settingsGoAdFree": "Anúncios",
+  "settingsGoAdFreePrice": "Desbloquear Premium",
+  "settingsGoAdFreeSubtitle": "Compra única · £1.99",
+  "settingsGoAdFreeSubtitleWithAmount": "Compra única · {price}",
+  "@settingsGoAdFreeSubtitleWithAmount": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsGoAdFreePriceWithAmount": "Desbloquear Premium — {price}",
+  "@settingsGoAdFreePriceWithAmount": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsRestorePurchases": "Restaurar compras",
+  "settingsRestorePurchasesStarted": "A restaurar compras…",
+  "settingsRestorePurchasesComplete": "Compras restauradas com sucesso.",
+  "settingsAdFreeActive": "Anúncios removidos",
+  "settingsIapUnavailable": "Compras dentro da app indisponíveis neste dispositivo.",
+  "settingsIapProductNotFound": "Produto não encontrado. Tenta novamente mais tarde.",
+  "settingsPurchasePending": "Compra em processamento…",
+  "settingsPurchaseCancelled": "Compra cancelada.",
+  "settingsPurchaseFailed": "A compra falhou. Por favor, tenta novamente.",
+  "helpTitle": "Guia",
+  "helpCampaignTypesTitle": "Tipos de campanha",
+  "helpCampaignTypeOneShotTitle": "One-Shot",
+  "helpCampaignTypeOneShotBody": "Uma aventura completa pensada para uma única sessão, com uma abertura forte, um objetivo claro e um desfecho rápido. Escolhe-a quando quiseres impulso imediato e um arco apertado.",
+  "helpCampaignTypeMiniCampaignTitle": "Mini-campanha",
+  "helpCampaignTypeMiniCampaignBody": "Um arco curto que se desenrola ao longo de algumas sessões, deixando espaço para escalada e um final mais marcante. Ideal quando queres algo compacto, mas menos comprimido do que um One-Shot.",
+  "helpCampaignTypeLongCampaignTitle": "Campanha longa",
+  "helpCampaignTypeLongCampaignBody": "Uma estrutura alargada com facções, subtramas e consequências que se desenvolvem ao longo do tempo. Ideal se quiseres continuidade, progressão e um mundo que reage às escolhas dos jogadores.",
+  "helpCampaignTypeDungeonTitle": "Exploração de masmorra",
+  "helpCampaignTypeDungeonBody": "Uma campanha focada em mapas, descoberta, desgaste e segredos escondidos em lugares perigosos. Perfeita quando queres pressão, exploração e um forte sentido de lugar.",
+  "helpTipsTitle": "Dicas e boas práticas",
+  "helpTipWorld": "Começa pela ambientação e pelo tema: são as restrições que mantêm tudo coerente.",
+  "helpTipTheme": "Usa 1 ou 2 temas fortes em vez de acumulares demasiadas ideias semelhantes.",
+  "helpTipTwist": "Escolhe uma reviravolta para dar tensão imediata ao enredo.",
+  "helpTipContrast": "Experimenta combinar tons contrastantes para obter prompts menos previsíveis.",
+  "helpTipPreset": "Usa predefinições quando quiseres inspiração rápida ou um ponto de partida forte.",
+  "helpTipCustom": "Adiciona entradas personalizadas apenas quando a opção exata de que precisas ainda não existir.",
+  "helpTipParty": "Mantém o nível, o tamanho do grupo e os arquétipos alinhados para evitar prompts desequilibrados."
+}

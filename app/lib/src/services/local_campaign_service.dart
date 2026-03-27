@@ -59,6 +59,10 @@ class LocalCampaignService implements CampaignService {
       case 'fr':
       case 'fr-fr':
         return 'fr';
+      case 'pt':
+      case 'pt-pt':
+      case 'pt-br':
+        return 'pt';
       case 'de':
       case 'de-de':
         return 'de';
@@ -84,17 +88,22 @@ class LocalCampaignService implements CampaignService {
     'mini campagne': 'mini_campaign',
     'mini-kampagne': 'mini_campaign',
     'mini kampagne': 'mini_campaign',
+    'mini-campanha': 'mini_campaign',
+    'mini campanha': 'mini_campaign',
     'campagna lunga': 'long_campaign',
     'long campaign': 'long_campaign',
     'campaña larga': 'long_campaign',
     'campana larga': 'long_campaign',
     'longue campagne': 'long_campaign',
     'lange kampagne': 'long_campaign',
+    'campanha longa': 'long_campaign',
     'esplorazione dungeon': 'dungeon_exploration',
     'dungeon crawl': 'dungeon_exploration',
     'exploración de mazmorra': 'dungeon_exploration',
     'exploracion de mazmorra': 'dungeon_exploration',
     'exploration de donjon': 'dungeon_exploration',
+    'exploração de masmorra': 'dungeon_exploration',
+    'exploracao de masmorra': 'dungeon_exploration',
     'dungeon-erkundung': 'dungeon_exploration',
     'dungeonerkundung': 'dungeon_exploration',
   };
@@ -131,6 +140,9 @@ class LocalCampaignService implements CampaignService {
     'no twist',
     'no twist requested',
     'none',
+    'sem reviravolta',
+    'nenhuma reviravolta',
+    'sem twist',
     'sin giro',
     'sin giro argumental',
     'sans rebondissement',
@@ -370,6 +382,64 @@ class LocalCampaignService implements CampaignService {
             "Conçois une campagne centrée sur une exploration à étages, la gestion des ressources, les pièges, les découvertes et les retours stratégiques à la surface.",
       },
     ),
+    'pt': _PromptLocaleBundle(
+      languageLabel: 'Português (Portugal)',
+      themeFallback: 'Sem uma preferência forte (mistura livre).',
+      toneFallback: 'Sem uma preferência forte (mistura livre).',
+      styleFallback: 'Sem uma preferência forte (mistura livre).',
+      defaultStructure:
+          'Cria uma campanha modular com um início forte, escalada e payoff final.',
+      partyArchetypesFallback: 'Não especificada pelo utilizador.',
+      noTwistReference: 'o ponto de viragem principal',
+      twistReferencePattern: 'a reviravolta "{twist}"',
+      npcInstructionsEnabled:
+          'Define pelo menos 5 PNJ com objetivos, segredos e uma voz distinta.',
+      npcInstructionsDisabled:
+          'Os PNJ são opcionais: usa apenas os necessários para a trama principal.',
+      encounterInstructionsEnabled:
+          'Inclui 3-5 encontros significativos com um objetivo narrativo, não apenas tático.',
+      encounterInstructionsDisabled:
+          'Reduz os encontros de combate e aposta mais em investigação e jogo social.',
+      missingPartyComposition:
+          'Se a composição do grupo estiver em falta, propõe uma combinação coerente de classes e papéis para as PJs.',
+      missingNarrativeHooks:
+          'Se os ganchos narrativos estiverem em falta, propõe 3 ganchos iniciais alternativos.',
+      missingCharacterNotes:
+          'Se faltarem notas de personagem, cria ligações plausíveis entre as PJs e o mundo.',
+      missingFactions:
+          'Se faltarem fações, propõe 2-3 fações coerentes com a ambientação e o conflito central.',
+      missingNpcFocus:
+          'Se faltar foco em PNJ, varia os PNJ entre aliados, rivais e neutros ambíguos.',
+      missingEncounterFocus:
+          'Se faltar foco em encontros, equilibra cenas sociais, exploração e combate de acordo com o ritmo da campanha.',
+      missingSafetyNotes:
+          'Se faltarem notas de segurança, evita conteúdo sensível não solicitado e mantém-te dentro de limites implícitos razoáveis.',
+      missingTwist:
+          'Constrói a história em torno de uma revelação forte, uma reviravolta ou um ponto de escalada.',
+      qualityRules: <String>[
+        'Respeita os inputs selecionados. Não substituas ambientação, temas, tom ou estilo por alternativas mais fáceis.',
+        'Se dois inputs entrarem em tensão, resolve-os criativamente sem ignorar nenhum.',
+        'Evita placeholders genéricos de fantasia, a menos que fiquem específicos através de detalhes concretos.',
+        'Cada PNJ, fação, local e encontro deve ter pelo menos um traço distintivo memorável e utilizável na mesa.',
+        'Prefere consequências visíveis na mesa a lore abstrato ou backstory que nunca entra em jogo.',
+      ],
+      horrorConstraint:
+          'Mantém o horror atmosférico; evita gore explícito e descrições splatter.',
+      agencyConstraint:
+          'Preserva a agência dos jogadores: evita cenas inevitáveis sem escolha significativa.',
+      noConstraintsProvided:
+          'Não foram fornecidas restrições adicionais pelo utilizador.',
+      structureRulesByFamily: <String, String>{
+        'one_shot':
+            'Cria uma estrutura em 3 atos: abertura, desenvolvimento, clímax+epílogo. Inclui uma linha temporal aproximada de 1 sessão.',
+        'mini_campaign':
+            'Cria um arco de 4-6 sessões com escalada clara das apostas, revelações intermédias e um final de grande impacto.',
+        'long_campaign':
+            'Cria um arco de 10+ sessões com subtramas, evolução dos PNJ-chave, fações e consequências persistentes das escolhas do grupo.',
+        'dungeon_exploration':
+            'Cria uma campanha centrada em exploração por níveis, gestão de recursos, armadilhas, descobertas e regressos estratégicos à superfície.',
+      },
+    ),
     'de': _PromptLocaleBundle(
       languageLabel: 'Deutsch',
       themeFallback: 'Keine starke Präferenz (freie Mischung).',
@@ -497,6 +567,8 @@ class LocalCampaignService implements CampaignService {
           return normalized.contains('agency') ||
               normalized.contains('agenzia') ||
               normalized.contains('agencia') ||
+              normalized.contains('livre arbítrio') ||
+              normalized.contains('livre arbitrio') ||
               normalized.contains('libre arbitre') ||
               normalized.contains('entscheidungsfreiheit');
         })) {

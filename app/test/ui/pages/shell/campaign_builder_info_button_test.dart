@@ -231,6 +231,12 @@ void main() {
       'Tipps & Best Practices',
       'Wähle einen Twist, um der Handlung sofort Spannung zu geben.',
     ),
+    (
+      const Locale('pt'),
+      'Tipos de campanha',
+      'Dicas e boas práticas',
+      'Escolhe uma reviravolta para dar tensão imediata ao enredo.',
+    ),
   ]) {
     testWidgets(
         'help sheet localizes static guide content for ${locale.languageCode}',
@@ -465,6 +471,8 @@ void main() {
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-segment-de')),
         findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-segment-pt')),
+        findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-mark-en')),
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-mark-it')),
@@ -474,6 +482,8 @@ void main() {
     expect(find.byKey(const ValueKey<String>('settings-language-mark-fr')),
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-mark-de')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-mark-pt')),
         findsOneWidget);
   });
 

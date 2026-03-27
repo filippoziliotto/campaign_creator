@@ -49,36 +49,42 @@ flutter:
     - assets/data/options_es.yaml
     - assets/data/options_fr.yaml
     - assets/data/options_de.yaml
+    - assets/data/options_pt.yaml
     - assets/templates/prompt_template.md
     - assets/templates/prompt_template_it.md
     - assets/templates/prompt_template_en.md
     - assets/templates/prompt_template_es.md
     - assets/templates/prompt_template_fr.md
     - assets/templates/prompt_template_de.md
+    - assets/templates/prompt_template_pt.md
     - assets/templates/prompt_template_one_shot.md
     - assets/templates/prompt_template_one_shot_it.md
     - assets/templates/prompt_template_one_shot_en.md
     - assets/templates/prompt_template_one_shot_es.md
     - assets/templates/prompt_template_one_shot_fr.md
     - assets/templates/prompt_template_one_shot_de.md
+    - assets/templates/prompt_template_one_shot_pt.md
     - assets/templates/prompt_template_mini_campaign.md
     - assets/templates/prompt_template_mini_campaign_it.md
     - assets/templates/prompt_template_mini_campaign_en.md
     - assets/templates/prompt_template_mini_campaign_es.md
     - assets/templates/prompt_template_mini_campaign_fr.md
     - assets/templates/prompt_template_mini_campaign_de.md
+    - assets/templates/prompt_template_mini_campaign_pt.md
     - assets/templates/prompt_template_long_campaign.md
     - assets/templates/prompt_template_long_campaign_it.md
     - assets/templates/prompt_template_long_campaign_en.md
     - assets/templates/prompt_template_long_campaign_es.md
     - assets/templates/prompt_template_long_campaign_fr.md
     - assets/templates/prompt_template_long_campaign_de.md
+    - assets/templates/prompt_template_long_campaign_pt.md
     - assets/templates/prompt_template_dungeon_exploration.md
     - assets/templates/prompt_template_dungeon_exploration_it.md
     - assets/templates/prompt_template_dungeon_exploration_en.md
     - assets/templates/prompt_template_dungeon_exploration_es.md
     - assets/templates/prompt_template_dungeon_exploration_fr.md
     - assets/templates/prompt_template_dungeon_exploration_de.md
+    - assets/templates/prompt_template_dungeon_exploration_pt.md
 
 flutter_launcher_icons:
   android: true

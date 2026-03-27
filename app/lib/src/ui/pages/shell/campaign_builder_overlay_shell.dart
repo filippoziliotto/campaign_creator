@@ -463,6 +463,15 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                     outlineColor: palette.outline.withValues(alpha: 0.72),
                   ),
                 ),
+                ButtonSegment<String>(
+                  value: 'pt',
+                  label: _LanguageSegmentLabel(
+                    key: const ValueKey<String>('settings-language-segment-pt'),
+                    languageCode: 'pt',
+                    shortLabel: context.l10n.languagePortugueseShort,
+                    outlineColor: palette.outline.withValues(alpha: 0.72),
+                  ),
+                ),
               ],
               selected: <String>{widget.currentLocale.languageCode},
               style: ButtonStyle(
@@ -990,6 +999,7 @@ class _LanguageMark extends StatelessWidget {
       'es' => 'ES',
       'fr' => 'FR',
       'de' => 'DE',
+      'pt' => 'PT',
       _ => 'US',
     };
 

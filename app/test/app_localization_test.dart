@@ -34,7 +34,7 @@ void main() {
     expect(find.text('Creatore Campagne D&D'), findsOneWidget);
     expect(find.text('locale:it'), findsOneWidget);
     expect(find.text('theme:dark'), findsOneWidget);
-    expect(find.text('IT | EN | ES | FR | DE'), findsOneWidget);
+    expect(find.text('IT | EN | ES | FR | DE | PT'), findsOneWidget);
     expect(find.text('free-format:Scegli formato'), findsOneWidget);
     expect(find.text('seal:Forgia pergamena'), findsOneWidget);
     expect(
@@ -48,7 +48,7 @@ void main() {
     tester,
   ) async {
     tester.binding.platformDispatcher.localesTestValue = const <Locale>[
-      Locale('pt'),
+      Locale('pl'),
     ];
     addTearDown(tester.binding.platformDispatcher.clearLocalesTestValue);
 
@@ -106,7 +106,7 @@ void main() {
     expect(find.text('seal:Sellar pergamino'), findsOneWidget);
     expect(find.text('entry-description:Formato de campaña listo en el dispositivo.'),
         findsOneWidget);
-    expect(find.text('IT | EN | ES | FR | DE'), findsOneWidget);
+    expect(find.text('IT | EN | ES | FR | DE | PT'), findsOneWidget);
 
     await pumpForLocale(const Locale('fr'));
     expect(find.text('locale:fr'), findsOneWidget);
@@ -115,7 +115,7 @@ void main() {
     expect(find.text('seal:Sceller le parchemin'), findsOneWidget);
     expect(find.text('entry-description:Format de campagne prêt sur l’appareil.'),
         findsOneWidget);
-    expect(find.text('IT | EN | ES | FR | DE'), findsOneWidget);
+    expect(find.text('IT | EN | ES | FR | DE | PT'), findsOneWidget);
 
     await pumpForLocale(const Locale('de'));
     expect(find.text('locale:de'), findsOneWidget);
@@ -126,7 +126,16 @@ void main() {
       find.text('entry-description:Kampagnenformat direkt auf dem Gerät bereit.'),
       findsOneWidget,
     );
-    expect(find.text('IT | EN | ES | FR | DE'), findsOneWidget);
+    expect(find.text('IT | EN | ES | FR | DE | PT'), findsOneWidget);
+
+    await pumpForLocale(const Locale('pt'));
+    expect(find.text('locale:pt'), findsOneWidget);
+    expect(find.text('Criador de Campanhas D&D'), findsOneWidget);
+    expect(find.text('free-format:Escolher formato'), findsOneWidget);
+    expect(find.text('seal:Selar pergaminho'), findsOneWidget);
+    expect(find.text('entry-description:Formato de campanha pronto no dispositivo.'),
+        findsOneWidget);
+    expect(find.text('IT | EN | ES | FR | DE | PT'), findsOneWidget);
   });
 
   testWidgets('CampaignCreatorApp switches locale at runtime without restart', (
@@ -175,6 +184,13 @@ void main() {
     expect(find.text('D&D Kampagnenersteller'), findsOneWidget);
     expect(find.text('locale:de'), findsOneWidget);
     expect(find.text('free-format:Format wählen'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('switch-pt')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Criador de Campanhas D&D'), findsOneWidget);
+    expect(find.text('locale:pt'), findsOneWidget);
+    expect(find.text('free-format:Escolher formato'), findsOneWidget);
   });
 
   testWidgets('CampaignCreatorApp restores the saved locale on startup', (
@@ -314,7 +330,7 @@ class _AppProbe extends StatelessWidget {
             Text('seal:${context.l10n.appSealParchment}'),
             Text('entry-description:${context.l10n.entryDescriptionDefault}'),
             Text(
-              '${context.l10n.languageItalianShort} | ${context.l10n.languageEnglishShort} | ${context.l10n.languageSpanishShort} | ${context.l10n.languageFrenchShort} | ${context.l10n.languageGermanShort}',
+              '${context.l10n.languageItalianShort} | ${context.l10n.languageEnglishShort} | ${context.l10n.languageSpanishShort} | ${context.l10n.languageFrenchShort} | ${context.l10n.languageGermanShort} | ${context.l10n.languagePortugueseShort}',
             ),
             const SizedBox(height: 12),
             TextButton(
@@ -341,6 +357,11 @@ class _AppProbe extends StatelessWidget {
               key: const Key('switch-de'),
               onPressed: () => onLocaleChanged(const Locale('de')),
               child: const Text('DE'),
+            ),
+            TextButton(
+              key: const Key('switch-pt'),
+              onPressed: () => onLocaleChanged(const Locale('pt')),
+              child: const Text('PT'),
             ),
             TextButton(
               key: const Key('switch-dark'),

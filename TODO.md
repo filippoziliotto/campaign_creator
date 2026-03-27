@@ -20,8 +20,5 @@ in other campaing types in the party and level selection
 the "premium" colors are not showing and the high levels are always white
 this applies also to the number of characters
 
-# 17
-The messages on the screen, e.g. "bozza eliminata", should be centered; right now they start from the left side of the page.
-
 # 19
 Fix when i should have the button pressable before selecting anything, or if i leave it always pressable
