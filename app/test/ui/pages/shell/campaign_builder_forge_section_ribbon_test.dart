@@ -49,6 +49,14 @@ void main() {
         find.descendant(of: ribbon, matching: find.text('⚔️')), findsOneWidget);
     expect(
         find.descendant(of: ribbon, matching: find.text('📜')), findsOneWidget);
+
+    await tester.tap(find.descendant(of: ribbon, matching: find.text('Party')));
+    await _pumpUi(tester);
+
+    expect(
+      find.descendant(of: ribbon, matching: find.text('✅')),
+      findsOneWidget,
+    );
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android, TargetPlatform.iOS}));

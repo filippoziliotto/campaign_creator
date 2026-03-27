@@ -83,7 +83,13 @@ extension on _CampaignBuilderPageState {
                 softWrap: false,
               ),
               icon: completed
-                  ? Icon(Icons.check_circle_rounded, size: iconSize)
+                  ? Text(
+                      _completedForgeSectionEmoji(),
+                      style: TextStyle(
+                        fontSize: iconSize - 1,
+                        height: 1,
+                      ),
+                    )
                   : Text(
                       _forgeSectionEmoji(forgeSection),
                       style: TextStyle(
@@ -145,6 +151,10 @@ extension on _CampaignBuilderPageState {
       case _ForgeSection.narrative:
         return _emojiCode('scroll', fallback: '📜');
     }
+  }
+
+  String _completedForgeSectionEmoji() {
+    return _emojiCode('white_check_mark', fallback: '✅');
   }
 
   String _emojiCode(String name, {required String fallback}) {
