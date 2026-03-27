@@ -34,7 +34,7 @@ setting_descriptions:
   Dark Sun: Mundo desértico pós-apocalíptico, duro e distópico, onde a magia consome recursos e a sobrevivência é central.
   Wildemount: Cenário político e bélico de Exandria, ideal para campanhas de conflito entre nações, intriga e frentes de guerra.
   Feywild: Plano feérico, espelho distorcido do mundo material, povoado por criaturas mágicas, reinos encantados e estranhezas imprevisíveis.
-  Planescape: Encruzilhada cósmica dominada por filosofias em guerra, onde cada fação reivindica a verdadeira Natureza da Realidade através de planos infinitos.
+  Planescape: Encruzilhada cósmica dominada por filosofias em guerra, onde cada fação reivindica a verdadeira natureza da realidade através de planos infinitos.
   Underdark: Mundo subterrâneo de escuridão sem fim, tecido por túneis sem luz, fações implacáveis e segredos antigos enterrados nas profundezas.
   Fronteira: Terras selvagens nas margens da civilização, onde a lei é incerta, as comunidades estão isoladas e o perigo é constante.
   Shadowfell: Reflexo sombrio do mundo material, saturado de decadência, emoções abafadas e mortos que persistem.
@@ -404,7 +404,7 @@ presets:
     party_size: 4
     twist: O grupo está, sem o saber, ao serviço do vilão
 
-  # ── LONG CAMPAIGN (10) ───────────────────────────────────────────────────────
+  # ── CAMPANHA LONGA (10) ──────────────────────────────────────────────────────
 
   CORONA DI CENERE:
     setting: Dragonlance
@@ -506,7 +506,7 @@ presets:
     party_size: 5
     twist: O alvo da missão não quer ser salvo
 
-  # ── DUNGEON CRAWL (10) ────────────────────────────────────────────────────────
+  # ── MASMORRA (10) ────────────────────────────────────────────────────────────
 
   TOMBA RESPIRANTE:
     setting: Forgotten Realms
@@ -715,7 +715,7 @@ preset_descriptions:
     O alvo não quer ser encontrado — e tem as suas boas razões.
     Tom irónico e alta velocidade; caos cósmico garantido.
 
-  # ── MINI-CAMPAIGN ────────────────────────────────────────────────────────────
+  # ── MINI-CAMPANHA ────────────────────────────────────────────────────────────
 
   CICATRICI DI FERRO: |
     Mini-campanha · Wildemount · Guerra

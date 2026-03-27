@@ -5,9 +5,6 @@ Fix this huge files and maybe make multiple files to reduce the lenght.
 Apply this fix to all files that are above 1000 lines if possible.
 
 
-# 11
-Fix the premium stuff
-
 # 11 A
 Change the current Wolrd,party,Trama icons with emojis using flutter_emoji package
 leaving the text as it is.
