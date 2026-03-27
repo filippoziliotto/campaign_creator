@@ -811,25 +811,14 @@ extension on _CampaignBuilderPageState {
                                           highlightColor: crownColor,
                                           onWatchAd: () async {
                                             Navigator.pop(stableContext);
-                                            final prefs =
-                                                await _resolvePreferences();
-                                            if (prefs == null) return;
-                                            await PremiumAccessService
-                                                .grantTemporaryAccess(
-                                              prefs,
-                                              MonetizationPrefs(),
-                                            );
-                                            if (mounted) {
-                                              _applyShellState(() {
-                                                _premiumTemporaryUnlockGrantedAt =
-                                                    DateTime.now();
-                                              });
-                                            }
+                                            await _handleWatchAdForPremiumUnlock();
                                           },
                                           onGoAdFree: () {
                                             Navigator.pop(stableContext);
                                             _handleGoAdFree();
                                           },
+                                          showAdOption:
+                                              _rewardedAdService.isReady,
                                         ),
                                       );
                                     }
@@ -906,29 +895,13 @@ extension on _CampaignBuilderPageState {
                                         highlightColor: crownColor,
                                         onWatchAd: () async {
                                           Navigator.pop(stableContext);
-                                          // TODO: replace with a real rewarded
-                                          // ad once a rewarded ad service is
-                                          // wired up. For now this grants
-                                          // access directly for testing.
-                                          final prefs =
-                                              await _resolvePreferences();
-                                          if (prefs == null) return;
-                                          await PremiumAccessService
-                                              .grantTemporaryAccess(
-                                            prefs,
-                                            MonetizationPrefs(),
-                                          );
-                                          if (mounted) {
-                                            _applyShellState(() {
-                                              _premiumTemporaryUnlockGrantedAt =
-                                                  DateTime.now();
-                                            });
-                                          }
+                                          await _handleWatchAdForPremiumUnlock();
                                         },
                                         onGoAdFree: () {
                                           Navigator.pop(stableContext);
                                           _handleGoAdFree();
                                         },
+                                        showAdOption: _rewardedAdService.isReady,
                                       ),
                                     );
                                   }
@@ -1179,25 +1152,13 @@ extension on _CampaignBuilderPageState {
                                       highlightColor: crownColor,
                                       onWatchAd: () async {
                                         Navigator.pop(stableContext);
-                                        final prefs =
-                                            await _resolvePreferences();
-                                        if (prefs == null) return;
-                                        await PremiumAccessService
-                                            .grantTemporaryAccess(
-                                          prefs,
-                                          MonetizationPrefs(),
-                                        );
-                                        if (mounted) {
-                                          _applyShellState(() {
-                                            _premiumTemporaryUnlockGrantedAt =
-                                                DateTime.now();
-                                          });
-                                        }
+                                        await _handleWatchAdForPremiumUnlock();
                                       },
                                       onGoAdFree: () {
                                         Navigator.pop(stableContext);
                                         _handleGoAdFree();
                                       },
+                                      showAdOption: _rewardedAdService.isReady,
                                     ),
                                   );
                                 } else if (isCustomSelected) {
@@ -1253,24 +1214,13 @@ extension on _CampaignBuilderPageState {
         highlightColor: crownColor,
         onWatchAd: () async {
           Navigator.pop(context);
-          // TODO: replace with a real rewarded ad once a rewarded ad service
-          // is wired up. For now this grants access directly for testing.
-          final prefs = await _resolvePreferences();
-          if (prefs == null) return;
-          await PremiumAccessService.grantTemporaryAccess(
-            prefs,
-            MonetizationPrefs(),
-          );
-          if (mounted) {
-            _applyShellState(() {
-              _premiumTemporaryUnlockGrantedAt = DateTime.now();
-            });
-          }
+          await _handleWatchAdForPremiumUnlock();
         },
         onGoAdFree: () {
           Navigator.pop(context);
           _handleGoAdFree();
         },
+        showAdOption: _rewardedAdService.isReady,
       ),
     );
   }

@@ -85,6 +85,7 @@
   "appSnackGenerateFirst": "Generate a parchment first before sending it.",
   "appSnackChatGptOpened": "ChatGPT opened. The prompt is already in the clipboard.",
   "appSnackChatGptCopiedOnly": "Unable to open ChatGPT, but the prompt was copied.",
+  "appSnackPremiumUnlockedTemporary": "Premium unlocked for 5 minutes",
   "appSnackNoParchmentToSave": "There is no parchment to save.",
   "appSnackDraftSaved": "Parchment draft saved locally.",
   "appSnackDraftMemoryOnly": "Draft saved in memory only. Fully restart the app to enable local persistence.",

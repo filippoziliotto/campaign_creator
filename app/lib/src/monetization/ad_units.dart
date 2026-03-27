@@ -11,6 +11,10 @@ class MonetizationIds {
       'ca-app-pub-3940256099942544/1033173712';
   static const String _iosTestInterstitial =
       'ca-app-pub-3940256099942544/4411468910';
+  static const String _androidTestRewarded =
+      'ca-app-pub-3940256099942544/5224354917';
+  static const String _iosTestRewarded =
+      'ca-app-pub-3940256099942544/1712485313';
 
   static const String _androidTestAppId =
       'ca-app-pub-3940256099942544~3347511713';
@@ -38,6 +42,17 @@ class MonetizationIds {
     return id;
   }
 
+  static String get rewardedAdUnitId {
+    final id = _rawRewardedAdUnitId;
+    assert(
+      kDebugMode || !_isTestId(id),
+      'Release build is using a test rewarded ad-unit ID. '
+      'Pass --dart-define=ADMOB_REWARDED_ANDROID=<your-id> '
+      'and --dart-define=ADMOB_REWARDED_IOS=<your-id> for production.',
+    );
+    return id;
+  }
+
   static String get _rawInterstitialAdUnitId {
     if (Platform.isAndroid) {
       return const String.fromEnvironment(
@@ -49,6 +64,22 @@ class MonetizationIds {
       return const String.fromEnvironment(
         'ADMOB_INTERSTITIAL_IOS',
         defaultValue: _iosTestInterstitial,
+      );
+    }
+    return '';
+  }
+
+  static String get _rawRewardedAdUnitId {
+    if (Platform.isAndroid) {
+      return const String.fromEnvironment(
+        'ADMOB_REWARDED_ANDROID',
+        defaultValue: _androidTestRewarded,
+      );
+    }
+    if (Platform.isIOS) {
+      return const String.fromEnvironment(
+        'ADMOB_REWARDED_IOS',
+        defaultValue: _iosTestRewarded,
       );
     }
     return '';

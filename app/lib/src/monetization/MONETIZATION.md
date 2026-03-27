@@ -6,6 +6,7 @@ Modulo di monetizzazione per Campaign Forge. Gestisce ads interstiziali e acquis
 
 - `ad_units.dart` — ID degli ad unit e del prodotto IAP. Nessuna logica.
 - `interstitial_ad_service.dart` — Interfaccia e implementazione del wrapper per `google_mobile_ads`.
+- `rewarded_ad_service.dart` — Interfaccia e implementazione del wrapper per i rewarded ad.
 - `purchase_service.dart` — Interfaccia e implementazione del wrapper per `in_app_purchase`, con update normalizzati.
 - `monetization_prefs.dart` — Chiavi SharedPreferences e helper per conteggio generazioni e stato ad-free.
 - `monetization_coordinator.dart` — Policy e sequencing: decide quando mostrare un ad, gestisce gli entitlement di acquisto.

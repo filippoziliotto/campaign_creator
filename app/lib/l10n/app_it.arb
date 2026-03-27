@@ -85,6 +85,7 @@
   "appSnackGenerateFirst": "Genera prima una pergamena da inviare.",
   "appSnackChatGptOpened": "ChatGPT aperto. Il prompt è già negli appunti.",
   "appSnackChatGptCopiedOnly": "Impossibile aprire ChatGPT, ma il prompt è stato copiato.",
+  "appSnackPremiumUnlockedTemporary": "Premium sbloccato per 5 minuti",
   "appSnackNoParchmentToSave": "Non c'è nessuna pergamena da salvare.",
   "appSnackDraftSaved": "Bozza della pergamena salvata in locale.",
   "appSnackDraftMemoryOnly": "Bozza salvata solo in memoria. Riavvia completamente l'app per abilitare la persistenza locale.",

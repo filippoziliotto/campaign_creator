@@ -23,6 +23,7 @@ import '../../../monetization/monetization_coordinator.dart';
 import '../../../monetization/monetization_prefs.dart';
 import '../../../monetization/premium_access.dart';
 import '../../../monetization/purchase_service.dart';
+import '../../../monetization/rewarded_ad_service.dart';
 import '../../../services/campaign_service.dart';
 import '../../../services/local_campaign_service.dart';
 import '../../../theme/fantasy_theme.dart';
@@ -508,6 +509,7 @@ class CampaignBuilderPage extends StatefulWidget {
     this.sharePrompt,
     this.reviewPrompter,
     this.interstitialAdService,
+    this.rewardedAdService,
     this.purchaseService,
     this.forgeSoundPlayer,
     required this.currentLocale,
@@ -520,6 +522,7 @@ class CampaignBuilderPage extends StatefulWidget {
   final SharePromptCallback? sharePrompt;
   final AppReviewPrompter? reviewPrompter;
   final InterstitialAdService? interstitialAdService;
+  final RewardedAdService? rewardedAdService;
   final PurchaseService? purchaseService;
   final ForgeSoundPlayer? forgeSoundPlayer;
   final Locale currentLocale;
@@ -554,6 +557,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   late final AppReviewPrompter _reviewPrompter;
   late final ReviewPromptCoordinator _reviewPromptCoordinator;
   late final InterstitialAdService _interstitialAdService;
+  late final RewardedAdService _rewardedAdService;
   late final PurchaseService _purchaseService;
   late final ForgeSoundPlayer _forgeSoundPlayer;
   late final MonetizationCoordinator _monetizationCoordinator;
@@ -635,6 +639,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         ReviewPromptCoordinator(reviewPrompter: _reviewPrompter);
     _interstitialAdService =
         widget.interstitialAdService ?? DefaultInterstitialAdService();
+    _rewardedAdService = widget.rewardedAdService ?? DefaultRewardedAdService();
     _purchaseService = widget.purchaseService ?? DefaultPurchaseService();
     _forgeSoundPlayer = widget.forgeSoundPlayer ?? DefaultForgeSoundPlayer();
     _monetizationCoordinator = MonetizationCoordinator(
@@ -643,6 +648,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       prefs: MonetizationPrefs(),
     );
     unawaited(_interstitialAdService.preload());
+    unawaited(_rewardedAdService.preload());
     unawaited(_restoreMonetizationState());
     _purchaseSubscription =
         _purchaseService.purchaseStream.listen(_handlePurchaseUpdates);
@@ -674,6 +680,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     _forgeDraftViewState.dispose();
     _purchaseSubscription?.cancel();
     _interstitialAdService.dispose();
+    _rewardedAdService.dispose();
     _forgeSoundPlayer.dispose();
     _entryScrollController.dispose();
     _forgeScrollController.dispose();
@@ -808,6 +815,36 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _handleWatchAdForPremiumUnlock() async {
+    if (!_rewardedAdService.isReady) {
+      return;
+    }
+
+    final prefs = await _resolvePreferences();
+    if (prefs == null) {
+      return;
+    }
+
+    final rewardEarned = await _rewardedAdService.show();
+    unawaited(_rewardedAdService.preload());
+    if (!rewardEarned || !mounted) {
+      return;
+    }
+
+    await PremiumAccessService.grantTemporaryAccess(
+      prefs,
+      MonetizationPrefs(),
+    );
+    if (!mounted) {
+      return;
+    }
+
+    _applyShellState(() {
+      _premiumTemporaryUnlockGrantedAt = DateTime.now();
+    });
+    _showSnackBar(context.l10n.appSnackPremiumUnlockedTemporary);
   }
 
   void _markDirty([VoidCallback? update]) {

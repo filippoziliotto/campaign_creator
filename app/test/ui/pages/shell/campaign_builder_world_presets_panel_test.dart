@@ -1,5 +1,6 @@
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
+import 'package:campaign_creator_flutter/src/monetization/rewarded_ad_service.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_primitives.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/routes/parchment_page.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
@@ -373,12 +374,14 @@ void main() {
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     addTearDown(() => tester.binding.setSurfaceSize(null));
+    final rewardedAdService = FakeRewardedAdService()..shouldBeReady = true;
 
     await tester.pumpWidget(
       _TestApp(
         locale: const Locale('en'),
         child: CampaignBuilderPage(
           service: FakeCampaignService(premiumSettingsOptions()),
+          rewardedAdService: rewardedAdService,
           currentLocale: const Locale('en'),
           onLocaleChanged: (_) {},
         ),
@@ -454,12 +457,14 @@ void main() {
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     addTearDown(() => tester.binding.setSurfaceSize(null));
+    final rewardedAdService = FakeRewardedAdService()..shouldBeReady = true;
 
     await tester.pumpWidget(
       _TestApp(
         locale: const Locale('en'),
         child: CampaignBuilderPage(
           service: FakeCampaignService(premiumPresetsOptions()),
+          rewardedAdService: rewardedAdService,
           currentLocale: const Locale('en'),
           onLocaleChanged: (_) {},
         ),
@@ -484,6 +489,111 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, 'Unlock Premium'));
     await _pumpUi(tester);
 
+    expect(find.text('Watch Ad (5 min)'), findsOneWidget);
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets(
+      'watching rewarded ad unlocks premium temporarily and shows confirmation',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final rewardedAdService = FakeRewardedAdService()
+      ..shouldBeReady = true
+      ..showResult = true;
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('en'),
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(premiumPresetsOptions()),
+          rewardedAdService: rewardedAdService,
+          currentLocale: const Locale('en'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final presetField =
+        find.byKey(const ValueKey<String>('preset-selector-field'));
+
+    await tester.ensureVisible(presetField);
+    await tester.tap(presetField);
+    await _pumpUi(tester);
+    await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -70));
+    await _pumpUi(tester);
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Unlock Premium'));
+    await _pumpUi(tester);
+    await tester.tap(find.widgetWithText(FilledButton, 'Watch Ad (5 min)'));
+    await _pumpUi(tester);
+
+    expect(rewardedAdService.showCallCount, 1);
+    expect(find.text('Premium unlocked for 5 minutes'), findsOneWidget);
+
+    await tester.tap(presetField);
+    await _pumpUi(tester);
+    await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -70));
+    await _pumpUi(tester);
+    await tester.tap(find.widgetWithText(FilledButton, 'Select'));
+    await _pumpUi(tester);
+
+    expect(find.text('VOID THRONES'), findsWidgets);
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets('failed rewarded ad does not unlock premium access',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final rewardedAdService = FakeRewardedAdService()
+      ..shouldBeReady = true
+      ..showResult = false;
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('en'),
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(premiumPresetsOptions()),
+          rewardedAdService: rewardedAdService,
+          currentLocale: const Locale('en'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final presetField =
+        find.byKey(const ValueKey<String>('preset-selector-field'));
+
+    await tester.ensureVisible(presetField);
+    await tester.tap(presetField);
+    await _pumpUi(tester);
+    await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -70));
+    await _pumpUi(tester);
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Unlock Premium'));
+    await _pumpUi(tester);
+    await tester.tap(find.widgetWithText(FilledButton, 'Watch Ad (5 min)'));
+    await _pumpUi(tester);
+
+    expect(rewardedAdService.showCallCount, 1);
+    expect(find.text('Premium unlocked for 5 minutes'), findsNothing);
+
+    await tester.tap(presetField);
+    await _pumpUi(tester);
+    await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -70));
+    await _pumpUi(tester);
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Unlock Premium'));
+    await _pumpUi(tester);
     expect(find.text('Watch Ad (5 min)'), findsOneWidget);
   },
       variant: const TargetPlatformVariant(
@@ -824,4 +934,26 @@ CampaignOptions premiumPresetsOptions() {
     premiumStyles: const {'Cinematic'},
     premiumTwists: const {'The party is unknowingly serving the villain'},
   );
+}
+
+class FakeRewardedAdService implements RewardedAdService {
+  int preloadCallCount = 0;
+  int showCallCount = 0;
+  bool shouldBeReady = true;
+  bool showResult = true;
+
+  @override
+  bool get isReady => shouldBeReady;
+
+  @override
+  Future<void> preload() async => preloadCallCount++;
+
+  @override
+  Future<bool> show() async {
+    showCallCount++;
+    return showResult;
+  }
+
+  @override
+  void dispose() {}
 }

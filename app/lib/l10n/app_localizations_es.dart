@@ -129,6 +129,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'No se pudo abrir ChatGPT, pero el prompt se copió.';
 
   @override
+  String get appSnackPremiumUnlockedTemporary =>
+      'Premium desbloqueado durante 5 minutos';
+
+  @override
   String get appSnackNoParchmentToSave => 'There is no parchment to save.';
 
   @override
