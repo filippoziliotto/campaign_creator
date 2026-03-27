@@ -242,6 +242,57 @@ void main() {
           <TargetPlatform>{TargetPlatform.android}));
 
   testWidgets(
+      'mostly vertical drags in forge do not reveal the adjacent section on android',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(430, 932));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    final oneShotCard = find.byKey(
+      const ValueKey<String>('entry-campaign-card-One-Shot'),
+    );
+    await tester.ensureVisible(oneShotCard);
+    await tester.tap(oneShotCard);
+    await _pumpUi(tester);
+
+    final worldSection = find.byKey(
+      const ValueKey<String>('forge-section-world'),
+    );
+    final worldRect = tester.getRect(worldSection);
+    final gesture = await tester.startGesture(
+      Offset(worldRect.left + 48, worldRect.top + 48),
+    );
+    await gesture.moveBy(const Offset(-42, 96));
+    await tester.pump();
+    await gesture.moveBy(const Offset(-42, 96));
+    await tester.pump();
+    await gesture.up();
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('forge-section-world')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('forge-section-party')),
+      findsNothing,
+    );
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets(
       'swiping right from the first forge section keeps the forge active',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));

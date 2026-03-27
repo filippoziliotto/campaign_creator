@@ -1,4 +1,7 @@
+import 'dart:math' as math;
+
 import 'package:animations/animations.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -79,6 +82,11 @@ typedef IndexedChildWidgetBuilder = Widget Function(
   int index,
 );
 
+enum HorizontalGestureMode {
+  standard,
+  androidVerticalPriority,
+}
+
 class InteractiveHorizontalSectionPager extends StatefulWidget {
   const InteractiveHorizontalSectionPager({
     super.key,
@@ -89,6 +97,7 @@ class InteractiveHorizontalSectionPager extends StatefulWidget {
     required this.duration,
     this.commitThresholdFraction = 0.22,
     this.commitVelocityPagesPerSecond = 1.0,
+    this.horizontalGestureMode = HorizontalGestureMode.standard,
     this.onSwipePastStart,
     this.onSwipePastEnd,
   });
@@ -100,6 +109,7 @@ class InteractiveHorizontalSectionPager extends StatefulWidget {
   final Duration duration;
   final double commitThresholdFraction;
   final double commitVelocityPagesPerSecond;
+  final HorizontalGestureMode horizontalGestureMode;
   final VoidCallback? onSwipePastStart;
   final VoidCallback? onSwipePastEnd;
 
@@ -405,6 +415,56 @@ class _InteractiveHorizontalSectionPagerState
     return mediaWidth > 0 ? mediaWidth : 1;
   }
 
+  Widget _buildViewportBody(BuildContext context, List<int> visibleIndices) {
+    return SizedBox(
+      key: _viewportKey,
+      child: ClipRect(
+        child: Stack(
+          children: [
+            for (final index in visibleIndices)
+              Transform.translate(
+                offset: Offset((index - _page) * _viewportWidth, 0),
+                child: _cachedChild(context, index),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDragSurface(BuildContext context, List<int> visibleIndices) {
+    final child = _buildViewportBody(context, visibleIndices);
+    if (widget.horizontalGestureMode == HorizontalGestureMode.standard) {
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onHorizontalDragStart: _handleHorizontalDragStart,
+        onHorizontalDragUpdate: _handleHorizontalDragUpdate,
+        onHorizontalDragEnd: _handleHorizontalDragEnd,
+        onHorizontalDragCancel: _handleHorizontalDragCancel,
+        child: child,
+      );
+    }
+
+    return RawGestureDetector(
+      behavior: HitTestBehavior.opaque,
+      gestures: <Type, GestureRecognizerFactory>{
+        _AndroidVerticalPriorityHorizontalDragGestureRecognizer:
+            GestureRecognizerFactoryWithHandlers<
+                _AndroidVerticalPriorityHorizontalDragGestureRecognizer>(
+          () => _AndroidVerticalPriorityHorizontalDragGestureRecognizer(),
+          (recognizer) {
+            recognizer
+              ..onStart = _handleHorizontalDragStart
+              ..onUpdate = _handleHorizontalDragUpdate
+              ..onEnd = _handleHorizontalDragEnd
+              ..onCancel = _handleHorizontalDragCancel;
+          },
+        ),
+      },
+      child: child,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -416,30 +476,68 @@ class _InteractiveHorizontalSectionPagerState
           onPointerDown: _handlePointerDown,
           onPointerUp: _handlePointerUp,
           onPointerCancel: _handlePointerCancel,
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onHorizontalDragStart: _handleHorizontalDragStart,
-            onHorizontalDragUpdate: _handleHorizontalDragUpdate,
-            onHorizontalDragEnd: _handleHorizontalDragEnd,
-            onHorizontalDragCancel: _handleHorizontalDragCancel,
-            child: SizedBox(
-              key: _viewportKey,
-              child: ClipRect(
-                child: Stack(
-                  children: [
-                    for (final index in visibleIndices)
-                      Transform.translate(
-                        offset: Offset((index - _page) * _viewportWidth, 0),
-                        child: _cachedChild(context, index),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          child: _buildDragSurface(context, visibleIndices),
         );
       },
     );
+  }
+}
+
+class _AndroidVerticalPriorityHorizontalDragGestureRecognizer
+    extends HorizontalDragGestureRecognizer {
+  _AndroidVerticalPriorityHorizontalDragGestureRecognizer() {
+    onlyAcceptDragOnThreshold = true;
+  }
+
+  static const double _minimumAcceptanceSlop = 18.0;
+  static const double _acceptanceMultiplier = 1.35;
+  static const double _dominanceRatio = 1.35;
+
+  Offset? _initialGlobalPosition;
+  Offset? _latestGlobalPosition;
+
+  @override
+  void addAllowedPointer(PointerDownEvent event) {
+    _initialGlobalPosition = event.position;
+    _latestGlobalPosition = event.position;
+    super.addAllowedPointer(event);
+  }
+
+  @override
+  void handleEvent(PointerEvent event) {
+    if (event is PointerMoveEvent) {
+      _latestGlobalPosition = event.position;
+    } else if (event is PointerUpEvent || event is PointerCancelEvent) {
+      _latestGlobalPosition = event.position;
+    }
+
+    super.handleEvent(event);
+
+    if (event is PointerUpEvent || event is PointerCancelEvent) {
+      _initialGlobalPosition = null;
+      _latestGlobalPosition = null;
+    }
+  }
+
+  @override
+  bool hasSufficientGlobalDistanceToAccept(
+    PointerDeviceKind pointerDeviceKind,
+    double? deviceTouchSlop,
+  ) {
+    final initialGlobalPosition = _initialGlobalPosition;
+    final latestGlobalPosition = _latestGlobalPosition;
+    if (initialGlobalPosition == null || latestGlobalPosition == null) {
+      return false;
+    }
+
+    final delta = latestGlobalPosition - initialGlobalPosition;
+    final absDx = delta.dx.abs();
+    final absDy = delta.dy.abs();
+    final horizontalAcceptanceSlop =
+        math.max(computeHitSlop(pointerDeviceKind, gestureSettings), 18.0) *
+            _acceptanceMultiplier;
+
+    return absDx > horizontalAcceptanceSlop && absDx > absDy * _dominanceRatio;
   }
 }
 

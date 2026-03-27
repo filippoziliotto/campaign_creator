@@ -68,6 +68,108 @@ void main() {
   );
 
   testWidgets(
+    'InteractiveHorizontalSectionPager ignores diagonal drags in android vertical-priority mode',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: SizedBox(
+                width: 320,
+                height: 240,
+                child: InteractiveHorizontalSectionPager(
+                  currentIndex: 0,
+                  itemCount: 3,
+                  duration: const Duration(milliseconds: 240),
+                  horizontalGestureMode:
+                      HorizontalGestureMode.androidVerticalPriority,
+                  itemBuilder: (context, index) {
+                    return ColoredBox(
+                      key: ValueKey<String>('pager-page-$index'),
+                      color: Colors.primaries[index],
+                      child: Center(child: Text('Page $index')),
+                    );
+                  },
+                  onIndexChanged: (_) {},
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pump();
+
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byKey(const ValueKey<String>('pager-page-0'))),
+      );
+      await gesture.moveBy(const Offset(-42, 96));
+      await tester.pump();
+      await gesture.moveBy(const Offset(-42, 96));
+      await tester.pump();
+      await gesture.up();
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byKey(const ValueKey<String>('pager-page-0')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey<String>('pager-page-1')),
+        findsNothing,
+      );
+    },
+  );
+
+  testWidgets(
+    'InteractiveHorizontalSectionPager still accepts clear horizontal drags in android vertical-priority mode',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: SizedBox(
+                width: 320,
+                height: 240,
+                child: InteractiveHorizontalSectionPager(
+                  currentIndex: 0,
+                  itemCount: 3,
+                  duration: const Duration(milliseconds: 240),
+                  horizontalGestureMode:
+                      HorizontalGestureMode.androidVerticalPriority,
+                  itemBuilder: (context, index) {
+                    return ColoredBox(
+                      key: ValueKey<String>('pager-page-$index'),
+                      color: Colors.primaries[index],
+                      child: Center(child: Text('Page $index')),
+                    );
+                  },
+                  onIndexChanged: (_) {},
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pump();
+
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byKey(const ValueKey<String>('pager-page-0'))),
+      );
+      await gesture.moveBy(const Offset(-72, 12));
+      await tester.pump();
+      await gesture.moveBy(const Offset(-72, 12));
+      await tester.pump();
+
+      expect(
+        find.byKey(const ValueKey<String>('pager-page-1')),
+        findsOneWidget,
+      );
+    },
+  );
+
+  testWidgets(
     'InteractiveHorizontalSectionPager refreshes cached children after parent rebuilds',
     (tester) async {
       await tester

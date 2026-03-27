@@ -145,6 +145,9 @@ extension on _CampaignBuilderPageState {
       currentIndex: _forgeSectionIndex(_forgeSection),
       itemCount: _ForgeSection.values.length,
       duration: _touchForgeSettleDuration(atmosphere.sectionTransitionDuration),
+      horizontalGestureMode: defaultTargetPlatform == TargetPlatform.android
+          ? HorizontalGestureMode.androidVerticalPriority
+          : HorizontalGestureMode.standard,
       itemBuilder: (context, index) {
         return _buildForgeSectionViewportChild(
           _ForgeSection.values[index],
@@ -156,6 +159,7 @@ extension on _CampaignBuilderPageState {
           _setForgeSection(_ForgeSection.values[index]);
         });
       },
+      onSwipePastStart: _retreatForge,
     );
   }
 
