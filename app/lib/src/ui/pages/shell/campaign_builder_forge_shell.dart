@@ -1,5 +1,7 @@
 part of 'campaign_builder_page.dart';
 
+final EmojiParser _forgeSectionEmojiParser = EmojiParser();
+
 extension on _CampaignBuilderPageState {
   Widget _buildForgeStage(CampaignOptions options) {
     final atmosphere = _currentAtmosphere(options);
@@ -82,7 +84,13 @@ extension on _CampaignBuilderPageState {
               ),
               icon: completed
                   ? Icon(Icons.check_circle_rounded, size: iconSize)
-                  : Icon(_forgeSectionIcon(forgeSection), size: iconSize),
+                  : Text(
+                      _forgeSectionEmoji(forgeSection),
+                      style: TextStyle(
+                        fontSize: iconSize + 1,
+                        height: 1,
+                      ),
+                    ),
             );
           }).toList();
           final button = SegmentedButton<_ForgeSection>(
@@ -128,15 +136,23 @@ extension on _CampaignBuilderPageState {
     );
   }
 
-  IconData _forgeSectionIcon(_ForgeSection section) {
+  String _forgeSectionEmoji(_ForgeSection section) {
     switch (section) {
       case _ForgeSection.world:
-        return Icons.public_rounded;
+        return _emojiCode('earth_africa', fallback: '🌍');
       case _ForgeSection.party:
-        return Icons.groups_rounded;
+        return _emojiCode('crossed_swords', fallback: '⚔️');
       case _ForgeSection.narrative:
-        return Icons.auto_stories_rounded;
+        return _emojiCode('scroll', fallback: '📜');
     }
+  }
+
+  String _emojiCode(String name, {required String fallback}) {
+    final emoji = _forgeSectionEmojiParser.get(name);
+    if (emoji == Emoji.None || emoji.code.isEmpty) {
+      return fallback;
+    }
+    return emoji.code;
   }
 
   Widget _buildActiveForgeSection(CampaignOptions options) {

@@ -44,29 +44,14 @@ void main() {
         findsOneWidget);
 
     expect(
-      find.descendant(
-        of: ribbon,
-        matching: find.byIcon(Icons.public_rounded),
-      ),
-      findsOneWidget,
-    );
+        find.descendant(of: ribbon, matching: find.text('🌍')), findsOneWidget);
     expect(
-      find.descendant(
-        of: ribbon,
-        matching: find.byIcon(Icons.groups_rounded),
-      ),
-      findsOneWidget,
-    );
+        find.descendant(of: ribbon, matching: find.text('👥')), findsOneWidget);
     expect(
-      find.descendant(
-        of: ribbon,
-        matching: find.byIcon(Icons.auto_stories_rounded),
-      ),
-      findsOneWidget,
-    );
+        find.descendant(of: ribbon, matching: find.text('📜')), findsOneWidget);
   },
       variant: const TargetPlatformVariant(
-          <TargetPlatform>{TargetPlatform.android}));
+          <TargetPlatform>{TargetPlatform.android, TargetPlatform.iOS}));
 }
 
 class _TestApp extends StatelessWidget {

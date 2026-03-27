@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:animations/animations.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/services.dart';
