@@ -112,6 +112,7 @@ class _InteractiveHorizontalSectionPagerState
     extends State<InteractiveHorizontalSectionPager>
     with SingleTickerProviderStateMixin {
   final GlobalKey _viewportKey = GlobalKey();
+  final Map<int, Widget> _childCache = <int, Widget>{};
   late final AnimationController _settleController;
   Animation<double>? _pageAnimation;
   late double _page;
@@ -139,6 +140,13 @@ class _InteractiveHorizontalSectionPagerState
     super.didUpdateWidget(oldWidget);
     if (oldWidget.duration != widget.duration) {
       _settleController.duration = widget.duration;
+    }
+    if (oldWidget.itemBuilder != widget.itemBuilder ||
+        oldWidget.itemCount != widget.itemCount) {
+      _childCache.clear();
+      final maxPage =
+          (widget.itemCount - 1).clamp(0, widget.itemCount).toDouble();
+      _page = _page.clamp(0.0, maxPage);
     }
 
     final targetPage = widget.currentIndex.toDouble();
@@ -371,6 +379,15 @@ class _InteractiveHorizontalSectionPagerState
     }
   }
 
+  Widget _cachedChild(BuildContext context, int index) {
+    return _childCache.putIfAbsent(
+      index,
+      () => RepaintBoundary(
+        child: widget.itemBuilder(context, index),
+      ),
+    );
+  }
+
   double _resolveViewportWidth(BuildContext context, double fallbackWidth) {
     final renderObject = _viewportKey.currentContext?.findRenderObject();
     if (renderObject is RenderBox && renderObject.hasSize) {
@@ -413,7 +430,7 @@ class _InteractiveHorizontalSectionPagerState
                     for (final index in visibleIndices)
                       Transform.translate(
                         offset: Offset((index - _page) * _viewportWidth, 0),
-                        child: widget.itemBuilder(context, index),
+                        child: _cachedChild(context, index),
                       ),
                   ],
                 ),

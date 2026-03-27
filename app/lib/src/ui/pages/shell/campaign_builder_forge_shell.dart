@@ -144,7 +144,7 @@ extension on _CampaignBuilderPageState {
     return InteractiveHorizontalSectionPager(
       currentIndex: _forgeSectionIndex(_forgeSection),
       itemCount: _ForgeSection.values.length,
-      duration: atmosphere.sectionTransitionDuration,
+      duration: _touchForgeSettleDuration(atmosphere.sectionTransitionDuration),
       itemBuilder: (context, index) {
         return _buildForgeSectionViewportChild(
           _ForgeSection.values[index],
@@ -157,6 +157,11 @@ extension on _CampaignBuilderPageState {
         });
       },
     );
+  }
+
+  Duration _touchForgeSettleDuration(Duration baseDuration) {
+    final milliseconds = (baseDuration.inMilliseconds - 48).clamp(180, 240);
+    return Duration(milliseconds: milliseconds);
   }
 
   Widget _buildForgeSectionViewportChild(

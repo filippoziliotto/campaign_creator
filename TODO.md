@@ -4,13 +4,6 @@ app/lib/src/ui/pages/shell/campaign_builder_page.dart
 Fix this huge files and maybe make multiple files to reduce the lenght.
 Apply this fix to all files that are above 1000 lines if possible.
 
-# 7
-Add some possibilities for twists and other stuff with a "crown" symbol next to it that 
-can be sbloccata by going with the "no ad version" (in that case all crowns are remoed) or by loading an ad and in that case the crown is removed once? (maybe we can improve this idea??).
-
-
-# 10
-The badge on the fixed upper part (the one showing the current choices and where you are 1,2,3,) shoul be the same as the badges of the entry cards (the ones on the upper left)
 
 # 11
 Fix the premium stuff
@@ -23,4 +16,6 @@ leaving the text as it is.
 Can we add a parallel app or a new app for something similar when choosing the character class, race, style etc..
 
 # 14
-Fix the heigh-spacing etc.. of the two different ambientaione e twist wheelers
+in other campaing types in the party and level selection
+the "premium" colors are not showing and the high levels are always white
+this applies also to the number of characters
