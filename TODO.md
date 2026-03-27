@@ -16,6 +16,3 @@ Can we add a parallel app or a new app for something similar when choosing the c
 in other campaing types in the party and level selection
 the "premium" colors are not showing and the high levels are always white
 this applies also to the number of characters
-
-# 19
-Fix when i should have the button pressable before selecting anything, or if i leave it always pressable

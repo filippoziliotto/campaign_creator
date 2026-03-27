@@ -10,26 +10,26 @@ extension on _CampaignBuilderPageState {
 
     return ForgeRoutePage(
       scrollController: _forgeScrollController,
-      errorBanner: ValueListenableBuilder<_ForgeDraftViewState>(
-        valueListenable: _forgeDraftViewState,
-        builder: (context, _, __) {
-          if (_errorMessage == null) {
+      errorBanner: ValueListenableBuilder<String?>(
+        valueListenable: _forgeErrorNotifier,
+        builder: (context, errorMessage, __) {
+          if (errorMessage == null) {
             return const SizedBox.shrink();
           }
           return _revealed(
             delay: 0.1,
             atmosphere: atmosphere,
-            child: _buildErrorBanner(_errorMessage!),
+            child: _buildErrorBanner(errorMessage),
           );
         },
       ),
-      sectionRibbon: ValueListenableBuilder<_ForgeDraftViewState>(
-        valueListenable: _forgeDraftViewState,
-        builder: (context, _, __) {
+      sectionRibbon: ValueListenableBuilder<_ForgeSection>(
+        valueListenable: _forgeSectionNotifier,
+        builder: (context, section, __) {
           return _revealed(
             delay: 0.12,
             atmosphere: atmosphere,
-            child: _buildForgeSectionRibbon(),
+            child: _buildForgeSectionRibbon(section),
           );
         },
       ),
@@ -45,22 +45,22 @@ extension on _CampaignBuilderPageState {
           );
         },
       ),
-      controlPanel: ValueListenableBuilder<_ForgeDraftViewState>(
-        valueListenable: _forgeDraftViewState,
-        builder: (context, _, __) {
+      controlPanel: ValueListenableBuilder<_ForgeControlState>(
+        valueListenable: _forgeControlNotifier,
+        builder: (context, state, __) {
           return _revealed(
             delay: 0.22,
             atmosphere: atmosphere,
             child: isTouchPlatform
-                ? _buildPinnedForgePrimaryButton(atmosphere)
-                : _buildForgeControlPanel(),
+                ? _buildPinnedForgePrimaryButton(atmosphere, state)
+                : _buildForgeControlPanel(state),
           );
         },
       ),
     );
   }
 
-  Widget _buildForgeSectionRibbon() {
+  Widget _buildForgeSectionRibbon(_ForgeSection currentSection) {
     final theme = _resolvedAtmosphereTheme();
 
     return Theme(
@@ -69,20 +69,20 @@ extension on _CampaignBuilderPageState {
         builder: (context, constraints) {
           final isCompactRibbon = constraints.maxWidth < 420;
           final iconSize = isCompactRibbon ? 16.0 : 18.0;
-          final segments = _ForgeSection.values.map((section) {
-            final index = _ForgeSection.values.indexOf(section);
+          final segments = _ForgeSection.values.map((forgeSection) {
+            final index = _ForgeSection.values.indexOf(forgeSection);
             final completed =
-                index < _ForgeSection.values.indexOf(_forgeSection);
+                index < _ForgeSection.values.indexOf(currentSection);
             return ButtonSegment<_ForgeSection>(
-              value: section,
+              value: forgeSection,
               label: Text(
-                _forgeSectionLabel(section),
+                _forgeSectionLabel(forgeSection),
                 overflow: TextOverflow.fade,
                 softWrap: false,
               ),
               icon: completed
                   ? Icon(Icons.check_circle_rounded, size: iconSize)
-                  : Icon(_forgeSectionIcon(section), size: iconSize),
+                  : Icon(_forgeSectionIcon(forgeSection), size: iconSize),
             );
           }).toList();
           final button = SegmentedButton<_ForgeSection>(
@@ -106,7 +106,7 @@ extension on _CampaignBuilderPageState {
                 ),
               ),
             ),
-            selected: {_forgeSection},
+            selected: {currentSection},
             onSelectionChanged: (selection) {
               _selectForgeSectionFromRibbon(selection.first);
             },
@@ -246,35 +246,30 @@ extension on _CampaignBuilderPageState {
     );
   }
 
-  Widget _buildForgeControlPanel() {
+  Widget _buildForgeControlPanel(_ForgeControlState state) {
     final atmosphere = _currentAtmosphere();
-    final primaryActionEnabled = _isForgePrimaryActionEnabled();
-    final parchmentReady = (_generatedPrompt ?? '').trim().isNotEmpty;
 
     return ForgeActionStrip(
       atmosphere: atmosphere,
-      readinessHint: _forgeReadinessHint(),
-      isPrimaryEnabled: primaryActionEnabled,
-      isGenerating: _isGenerating,
-      primaryLabel: _isGenerating
-          ? context.l10n.forgeButtonForging
-          : _nextForgeActionLabel(),
-      primaryCompactLabel:
-          _isGenerating ? null : _nextForgeActionCompactLabel(),
-      primaryIcon: _forgeSection == _ForgeSection.narrative
-          ? Icons.auto_awesome_rounded
-          : Icons.arrow_forward_rounded,
+      readinessHint: state.readinessHint,
+      isPrimaryEnabled: state.isPrimaryEnabled,
+      isGenerating: state.isGenerating,
+      primaryLabel: state.primaryLabel,
+      primaryCompactLabel: state.primaryCompactLabel,
+      primaryIcon: state.primaryIcon,
       onRetreat: _retreatForge,
       onAdvance: _advanceForge,
-      parchmentReady: parchmentReady,
-      hasUnsavedChanges: _hasUnsavedChanges,
+      parchmentReady: state.parchmentReady,
+      hasUnsavedChanges: state.hasUnsavedChanges,
       onOpenParchment: () => _goToStage(_AppStage.parchment),
-      savedDraftLabel: _savedDraftLabel(),
+      savedDraftLabel: state.savedDraftLabel,
     );
   }
 
-  Widget _buildPinnedForgePrimaryButton(CampaignAtmosphereData atmosphere) {
-    final primaryActionEnabled = _isForgePrimaryActionEnabled();
+  Widget _buildPinnedForgePrimaryButton(
+    CampaignAtmosphereData atmosphere,
+    _ForgeControlState state,
+  ) {
     const outerOverlayLaneWidth = 60.0;
 
     return LayoutBuilder(
@@ -292,17 +287,12 @@ extension on _CampaignBuilderPageState {
               width: buttonWidth,
               child: ForgePrimaryActionButton(
                 atmosphere: atmosphere,
-                label: _isGenerating
-                    ? context.l10n.forgeButtonForging
-                    : _nextForgeActionLabel(),
-                compactLabel:
-                    _isGenerating ? null : _nextForgeActionCompactLabel(),
-                icon: _forgeSection == _ForgeSection.narrative
-                    ? Icons.auto_awesome_rounded
-                    : Icons.arrow_forward_rounded,
-                isLoading: _isGenerating,
-                shouldPulse: primaryActionEnabled,
-                onPressed: (_isGenerating || !primaryActionEnabled)
+                label: state.primaryLabel,
+                compactLabel: state.primaryCompactLabel,
+                icon: state.primaryIcon,
+                isLoading: state.isGenerating,
+                shouldPulse: state.isPrimaryEnabled,
+                onPressed: (state.isGenerating || !state.isPrimaryEnabled)
                     ? null
                     : _advanceForge,
               ),
@@ -918,7 +908,8 @@ extension on _CampaignBuilderPageState {
                                           Navigator.pop(stableContext);
                                           _handleGoAdFree();
                                         },
-                                        showAdOption: _rewardedAdService.isReady,
+                                        showAdOption:
+                                            _rewardedAdService.isReady,
                                       ),
                                     );
                                   }

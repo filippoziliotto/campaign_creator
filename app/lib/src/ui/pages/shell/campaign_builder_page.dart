@@ -100,6 +100,62 @@ class _ForgeDraftViewState {
 }
 
 @immutable
+class _ForgeControlState {
+  const _ForgeControlState({
+    required this.section,
+    required this.isGenerating,
+    required this.isPrimaryEnabled,
+    required this.parchmentReady,
+    required this.hasUnsavedChanges,
+    required this.readinessHint,
+    required this.savedDraftLabel,
+    required this.primaryLabel,
+    required this.primaryCompactLabel,
+    required this.primaryIcon,
+  });
+
+  final _ForgeSection section;
+  final bool isGenerating;
+  final bool isPrimaryEnabled;
+  final bool parchmentReady;
+  final bool hasUnsavedChanges;
+  final String readinessHint;
+  final String? savedDraftLabel;
+  final String primaryLabel;
+  final String? primaryCompactLabel;
+  final IconData primaryIcon;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _ForgeControlState &&
+          section == other.section &&
+          isGenerating == other.isGenerating &&
+          isPrimaryEnabled == other.isPrimaryEnabled &&
+          parchmentReady == other.parchmentReady &&
+          hasUnsavedChanges == other.hasUnsavedChanges &&
+          readinessHint == other.readinessHint &&
+          savedDraftLabel == other.savedDraftLabel &&
+          primaryLabel == other.primaryLabel &&
+          primaryCompactLabel == other.primaryCompactLabel &&
+          primaryIcon == other.primaryIcon;
+
+  @override
+  int get hashCode => Object.hash(
+        section,
+        isGenerating,
+        isPrimaryEnabled,
+        parchmentReady,
+        hasUnsavedChanges,
+        readinessHint,
+        savedDraftLabel,
+        primaryLabel,
+        primaryCompactLabel,
+        primaryIcon,
+      );
+}
+
+@immutable
 class _ShellChromeViewState {
   const _ShellChromeViewState({
     required this.appStage,
@@ -474,18 +530,22 @@ _CampaignTypeKind _campaignTypeKindFor(String? campaignType) {
     case 'Mini-campaña':
     case 'Mini-campagne':
     case 'Mini-Kampagne':
+    case 'Mini-campanha':
       return _CampaignTypeKind.miniCampaign;
     case 'Campagna lunga':
     case 'Long campaign':
     case 'Campaña larga':
     case 'Longue campagne':
     case 'Lange Kampagne':
+    case 'Campanha longa':
       return _CampaignTypeKind.longCampaign;
     case 'Esplorazione dungeon':
     case 'Dungeon crawl':
     case 'Exploración de mazmorra':
     case 'Exploration de donjon':
     case 'Dungeon-Erkundung':
+    case 'Exploração de masmorra':
+    case 'Exploracao de masmorra':
       return _CampaignTypeKind.dungeon;
     default:
       return _CampaignTypeKind.custom;
@@ -577,6 +637,10 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   String? _adFreePrice;
   late final List<TextEditingController> _textControllers;
   late final ValueNotifier<_ForgeDraftViewState> _forgeDraftViewState;
+  late final ValueNotifier<String?> _forgeErrorNotifier;
+  late final ValueNotifier<_ForgeSection> _forgeSectionNotifier;
+  late final ValueNotifier<_ForgeControlState> _forgeControlNotifier;
+  bool _hasInitializedForgeViewNotifiers = false;
   final ScrollController _entryScrollController = ScrollController();
   final ScrollController _forgeScrollController = ScrollController();
   final ScrollController _parchmentScrollController = ScrollController();
@@ -661,9 +725,6 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       _encounterFocusController,
       _safetyNotesController,
     ];
-    _forgeDraftViewState = ValueNotifier<_ForgeDraftViewState>(
-      _buildForgeDraftViewState(),
-    );
     for (final controller in _textControllers) {
       controller.addListener(_handleDraftInputChanged);
     }
@@ -672,12 +733,34 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_hasInitializedForgeViewNotifiers) {
+      return;
+    }
+    _forgeDraftViewState = ValueNotifier<_ForgeDraftViewState>(
+      _buildForgeDraftViewState(),
+    );
+    _forgeErrorNotifier = ValueNotifier<String?>(_errorMessage);
+    _forgeSectionNotifier = ValueNotifier<_ForgeSection>(_forgeSection);
+    _forgeControlNotifier = ValueNotifier<_ForgeControlState>(
+      _buildForgeControlState(),
+    );
+    _hasInitializedForgeViewNotifiers = true;
+  }
+
+  @override
   void dispose() {
     for (final controller in _textControllers) {
       controller.removeListener(_handleDraftInputChanged);
       controller.dispose();
     }
-    _forgeDraftViewState.dispose();
+    if (_hasInitializedForgeViewNotifiers) {
+      _forgeDraftViewState.dispose();
+      _forgeErrorNotifier.dispose();
+      _forgeSectionNotifier.dispose();
+      _forgeControlNotifier.dispose();
+    }
     _purchaseSubscription?.cancel();
     _interstitialAdService.dispose();
     _rewardedAdService.dispose();
@@ -695,7 +778,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         widget.currentLocale.languageCode) {
       _setShellState(
         _clearLocaleSelections,
-        syncForgeDraftViewState: true,
+        syncForgeViewState: true,
       );
       _loadOptions();
     }
@@ -751,6 +834,26 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     );
   }
 
+  _ForgeControlState _buildForgeControlState() {
+    final isGenerating = _isGenerating;
+    return _ForgeControlState(
+      section: _forgeSection,
+      isGenerating: isGenerating,
+      isPrimaryEnabled: _isForgePrimaryActionEnabled(),
+      parchmentReady: (_generatedPrompt ?? '').trim().isNotEmpty,
+      hasUnsavedChanges: _hasUnsavedChanges,
+      readinessHint: _forgeReadinessHint(),
+      savedDraftLabel: _savedDraftLabel(),
+      primaryLabel: isGenerating
+          ? context.l10n.forgeButtonForging
+          : _nextForgeActionLabel(),
+      primaryCompactLabel: isGenerating ? null : _nextForgeActionCompactLabel(),
+      primaryIcon: _forgeSection == _ForgeSection.narrative
+          ? Icons.auto_awesome_rounded
+          : Icons.arrow_forward_rounded,
+    );
+  }
+
   _ShellChromeViewState _buildShellChromeViewState() {
     final hasGeneratedPrompt = (_generatedPrompt ?? '').trim().isNotEmpty;
     return _ShellChromeViewState(
@@ -761,17 +864,26 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     );
   }
 
-  void _publishForgeDraftViewState() {
+  void _publishForgeViewState() {
+    if (!_hasInitializedForgeViewNotifiers) {
+      return;
+    }
     _forgeDraftViewState.value = _buildForgeDraftViewState();
+    _forgeErrorNotifier.value = _errorMessage;
+    _forgeSectionNotifier.value = _forgeSection;
+    final nextControlState = _buildForgeControlState();
+    if (nextControlState != _forgeControlNotifier.value) {
+      _forgeControlNotifier.value = nextControlState;
+    }
   }
 
   void _setShellState(
     VoidCallback update, {
-    bool syncForgeDraftViewState = false,
+    bool syncForgeViewState = false,
   }) {
     setState(update);
-    if (syncForgeDraftViewState) {
-      _publishForgeDraftViewState();
+    if (syncForgeViewState) {
+      _publishForgeViewState();
     }
   }
 
@@ -788,7 +900,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     if (chromeBefore != chromeAfter) {
       setState(() {});
     }
-    _publishForgeDraftViewState();
+    _publishForgeViewState();
   }
 
   void _clearTextControllersSilently() {
@@ -804,17 +916,33 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   }
 
   void _showSnackBar(String message) {
+    _showSnackBarWithStyle(message);
+  }
+
+  void _showCompactSnackBar(String message) {
+    _showSnackBarWithStyle(message, compact: true);
+  }
+
+  void _showSnackBarWithStyle(String message, {bool compact = false}) {
     if (!mounted) {
       return;
     }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        behavior: compact ? SnackBarBehavior.floating : null,
+        width: compact ? _compactSnackBarWidth() : null,
         content: Text(
           message,
           textAlign: TextAlign.center,
         ),
       ),
     );
+  }
+
+  double _compactSnackBarWidth() {
+    const maxWidth = 320.0;
+    final availableWidth = MediaQuery.sizeOf(context).width - 32;
+    return availableWidth.clamp(0.0, maxWidth).toDouble();
   }
 
   Future<void> _handleWatchAdForPremiumUnlock() async {
@@ -844,7 +972,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     _applyShellState(() {
       _premiumTemporaryUnlockGrantedAt = DateTime.now();
     });
-    _showSnackBar(context.l10n.appSnackPremiumUnlockedTemporary);
+    _showCompactSnackBar(context.l10n.appSnackPremiumUnlockedTemporary);
   }
 
   void _markDirty([VoidCallback? update]) {
@@ -890,14 +1018,14 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         _forgeTransitionReverse = false;
         _appStage = _AppStage.entry;
         _forgeSection = _ForgeSection.world;
-      }, syncForgeDraftViewState: true);
+      }, syncForgeViewState: true);
     } catch (exc) {
       if (!mounted) {
         return;
       }
       _setShellState(() {
         _errorMessage = context.l10n.appLoadOptionsError(exc.toString());
-      }, syncForgeDraftViewState: true);
+      }, syncForgeViewState: true);
     } finally {
       if (mounted) {
         setState(() {
@@ -1042,7 +1170,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         _generatedPrompt = prompt;
         _hasUnsavedChanges = false;
         _setAppStage(_AppStage.parchment);
-      }, syncForgeDraftViewState: true);
+      }, syncForgeViewState: true);
       _triggerMediumImpact();
       unawaited(_forgeSoundPlayer.playForgeSound());
       await _copyPrompt(showFeedback: false);
@@ -1079,14 +1207,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       return;
     }
     _triggerLightImpact();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          context.l10n.appSnackPromptCopied,
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
+    _showCompactSnackBar(context.l10n.appSnackPromptCopied);
   }
 
   Future<void> _sharePrompt({Rect? shareOrigin}) async {
@@ -1172,7 +1293,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       if (savedSetting != null && savedSetting.trim().isNotEmpty) {
         _selectedSetting = savedSetting;
       }
-    }, syncForgeDraftViewState: true);
+    }, syncForgeViewState: true);
   }
 
   Future<bool> _savePromptDraft({bool showFeedback = true}) async {
@@ -1210,7 +1331,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     _setShellState(() {
       _savedDraftPrompt = prompt;
       _savedDraftSavedAt = savedAt;
-    }, syncForgeDraftViewState: true);
+    }, syncForgeViewState: true);
     if (showFeedback) {
       _showSnackBar(
         persisted
@@ -1261,8 +1382,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       _forgeTransitionReverse = false;
       _appStage = _AppStage.entry;
       _forgeSection = _ForgeSection.world;
-    }, syncForgeDraftViewState: true);
-    _showSnackBar(context.l10n.entryResetDraftConfirm);
+    }, syncForgeViewState: true);
+    _showCompactSnackBar(context.l10n.entryResetDraftConfirm);
   }
 
   Future<void> _handleNewSession() async {
@@ -1359,7 +1480,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
           _isAdFree = true;
           _isPurchaseBusy = false;
         });
-        _showSnackBar(context.l10n.settingsAdFreeActive);
+        _showCompactSnackBar(context.l10n.settingsAdFreeActive);
       case PurchaseEntitlementEvent.restored:
         setState(() {
           _isAdFree = true;
@@ -1412,7 +1533,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     });
     await _monetizationCoordinator.restorePurchases();
     if (mounted) {
-      _showSnackBar(context.l10n.settingsRestorePurchasesStarted);
+      _showCompactSnackBar(context.l10n.settingsRestorePurchasesStarted);
     }
     // Safety timeout: if no purchase update clears _isPurchaseBusy within 15s,
     // reset it so the UI doesn't get stuck.
@@ -1517,7 +1638,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       if (hasChanged) {
         _hasUnsavedChanges = true;
       }
-    }, syncForgeDraftViewState: true);
+    }, syncForgeViewState: true);
     _triggerLightImpact();
   }
 
@@ -1531,7 +1652,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
           _forgeSection == _ForgeSection.narrative) {
         _setForgeSection(_ForgeSection.world);
       }
-    }, syncForgeDraftViewState: true);
+    }, syncForgeViewState: true);
   }
 
   void _goToForge([_ForgeSection section = _ForgeSection.world]) {
@@ -1541,7 +1662,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     _setShellState(() {
       _setAppStage(_AppStage.forge);
       _setForgeSection(section);
-    }, syncForgeDraftViewState: true);
+    }, syncForgeViewState: true);
   }
 
   void _handleResumeForgeTap([_ForgeSection section = _ForgeSection.world]) {
@@ -1985,7 +2106,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         default:
           break;
       }
-    }, syncForgeDraftViewState: true);
+    }, syncForgeViewState: true);
   }
 
   Widget _buildPersistentTopBar() {

@@ -587,6 +587,70 @@ void main() {
     expect(messageText.textAlign, TextAlign.center);
   });
 
+  testWidgets('short confirmation snack bars use a compact floating width', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: _buildPage(
+          initialPreferences: const <String, Object>{
+            'campaign_builder.saved_prompt': 'Prompt salvato',
+            'campaign_builder.saved_campaign_type': 'One-Shot',
+            'campaign_builder.saved_setting': 'Forgotten Realms',
+          },
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+
+    final newSessionButton = find.text('Nuova sessione');
+    await tester.ensureVisible(newSessionButton);
+    await tester.tap(newSessionButton);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump();
+
+    final snackBar = tester.widget<SnackBar>(find.byType(SnackBar).last);
+
+    expect(find.text('Bozza eliminata.'), findsOneWidget);
+    expect(snackBar.behavior, SnackBarBehavior.floating);
+    expect(snackBar.width, 320);
+  });
+
+  testWidgets('long snack bar messages keep the default full-width layout', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: _buildPage(
+          initialPreferences: const <String, Object>{
+            'app.review_prompted': true,
+          },
+          service: _FailingCampaignService(),
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openNarrativeSection(tester);
+
+    await _tapForgePrimaryAction(tester);
+
+    final snackBar = tester.widget<SnackBar>(find.byType(SnackBar).last);
+
+    expect(
+      find.text(
+        'Generazione fallita. Controlla il messaggio mostrato nella schermata.',
+      ),
+      findsOneWidget,
+    );
+    expect(snackBar.behavior, isNot(SnackBarBehavior.floating));
+    expect(snackBar.width, isNull);
+  });
+
   testWidgets('copy action triggers a light haptic impact', (tester) async {
     await _setLargeSurface(tester);
 

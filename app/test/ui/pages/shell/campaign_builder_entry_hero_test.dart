@@ -118,7 +118,9 @@ void main() {
     );
   });
 
-  testWidgets('German entry cards use distinct artwork and atmosphere per campaign type', (
+  testWidgets(
+      'German entry cards use distinct artwork and atmosphere per campaign type',
+      (
     tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));
@@ -164,6 +166,62 @@ void main() {
     expect(dungeonCard.artAsset, 'assets/entry_cards/dungeon.jpg');
     expect(dungeonCard.atmosphere.id, 'dungeon');
   });
+
+  testWidgets(
+    'Portuguese entry cards use distinct artwork and atmosphere per campaign type',
+    (tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 1600));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(
+        _TestApp(
+          locale: const Locale('pt'),
+          child: CampaignBuilderPage(
+            service: FakeCampaignService(_entryOptionsPt()),
+            currentLocale: const Locale('pt'),
+            onLocaleChanged: (_) {},
+          ),
+        ),
+      );
+
+      await _pumpUi(tester);
+
+      final oneShotCard = tester.widget<CampaignModeCard>(
+        find.byKey(const ValueKey<String>('entry-campaign-card-One-Shot')),
+      );
+      final miniCampaignCard = tester.widget<CampaignModeCard>(
+        find.byKey(
+          const ValueKey<String>('entry-campaign-card-Mini-campanha'),
+        ),
+      );
+      final longCampaignCard = tester.widget<CampaignModeCard>(
+        find.byKey(
+          const ValueKey<String>('entry-campaign-card-Campanha longa'),
+        ),
+      );
+      final dungeonCard = tester.widget<CampaignModeCard>(
+        find.byKey(
+          const ValueKey<String>(
+            'entry-campaign-card-Exploração de masmorra',
+          ),
+        ),
+      );
+
+      expect(oneShotCard.artAsset, 'assets/entry_cards/one_shot.jpg');
+      expect(oneShotCard.atmosphere.id, 'one-shot');
+
+      expect(
+          miniCampaignCard.artAsset, 'assets/entry_cards/campagna_corta.jpg');
+      expect(miniCampaignCard.atmosphere.id, 'mini-campaign');
+
+      expect(
+          longCampaignCard.artAsset, 'assets/entry_cards/campagna_lunga.jpg');
+      expect(longCampaignCard.atmosphere.id, 'long-campaign');
+
+      expect(dungeonCard.artAsset, 'assets/entry_cards/dungeon.jpg');
+      expect(dungeonCard.atmosphere.id, 'dungeon');
+    },
+  );
 
   testWidgets('new session resets forge selections back to defaults', (
     tester,
@@ -342,7 +400,8 @@ void main() {
     expect(find.bySemanticsLabel('Choose your Campaign'), findsOneWidget);
   });
 
-  testWidgets('entry cards use Spanish localized descriptions for campaign types', (
+  testWidgets(
+      'entry cards use Spanish localized descriptions for campaign types', (
     tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
@@ -381,7 +440,8 @@ void main() {
     );
   });
 
-  testWidgets('entry cards use French localized descriptions for campaign types', (
+  testWidgets(
+      'entry cards use French localized descriptions for campaign types', (
     tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
@@ -524,6 +584,27 @@ CampaignOptions _entryOptionsDe() {
     twists: const ['Verrat'],
     presets: const {},
     settingDescriptions: const {'Forgotten Realms': 'Klassische High Fantasy.'},
+    presetDescriptions: const {},
+    presetNames: const {},
+  );
+}
+
+CampaignOptions _entryOptionsPt() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms'],
+    campaignTypes: const [
+      'One-Shot',
+      'Mini-campanha',
+      'Campanha longa',
+      'Exploração de masmorra',
+    ],
+    themes: const ['Intriga'],
+    tones: const ['Épico'],
+    styles: const ['Linear'],
+    partyArchetypes: const ['Tanque'],
+    twists: const ['Traição'],
+    presets: const {},
+    settingDescriptions: const {'Forgotten Realms': 'Fantasia clássica.'},
     presetDescriptions: const {},
     presetNames: const {},
   );
