@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_motion.dart';
+import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_primitives.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/routes/parchment_page.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
@@ -188,6 +189,60 @@ void main() {
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('forge-section-party')),
         findsNothing);
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets('touch forge uses only a bare pinned primary button', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(430, 932));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    final oneShotCard = find.byKey(
+      const ValueKey<String>('entry-campaign-card-One-Shot'),
+    );
+    await tester.ensureVisible(oneShotCard);
+    await tester.tap(oneShotCard);
+    await _pumpUi(tester);
+
+    expect(find.byType(ForgePrimaryActionButton), findsOneWidget);
+    expect(find.byType(ForgeActionStrip), findsNothing);
+
+    final buttonRect = tester.getRect(
+      find.byKey(const ValueKey<String>('forge-pinned-primary-button')),
+    );
+    final buttonWrapper = tester.widget<SizedBox>(
+      find.byKey(const ValueKey<String>('forge-pinned-primary-button')),
+    );
+    final settingsRect = tester.getRect(
+      find.byKey(const ValueKey<String>('info-settings-button')),
+    );
+    final helpRect = tester.getRect(
+      find.byKey(const ValueKey<String>('help-guide-button')),
+    );
+    final leftGap = buttonRect.left - settingsRect.right;
+    final rightGap = helpRect.left - buttonRect.right;
+    const minimumOverlayGap = 12.0;
+
+    expect(buttonWrapper.width, greaterThan(0));
+    expect(buttonRect.height, lessThan(52));
+    expect(leftGap, greaterThanOrEqualTo(minimumOverlayGap));
+    expect(rightGap, greaterThanOrEqualTo(minimumOverlayGap));
+    expect((leftGap - rightGap).abs(), lessThan(1.0));
+    expect(buttonRect.center.dy, greaterThan(932 * 0.75));
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));

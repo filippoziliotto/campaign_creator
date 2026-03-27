@@ -319,7 +319,7 @@ class _ParchmentSummonRevealState extends State<ParchmentSummonReveal>
   }
 }
 
-class PremiumParchmentSheet extends StatelessWidget {
+class PremiumParchmentSheet extends StatefulWidget {
   const PremiumParchmentSheet({
     super.key,
     required this.atmosphere,
@@ -336,13 +336,36 @@ class PremiumParchmentSheet extends StatelessWidget {
   final VoidCallback onSealTap;
 
   @override
+  State<PremiumParchmentSheet> createState() => _PremiumParchmentSheetState();
+}
+
+class _PremiumParchmentSheetState extends State<PremiumParchmentSheet> {
+  late int _wordCount;
+
+  @override
+  void initState() {
+    super.initState();
+    _wordCount = _computeWordCount(widget.prompt);
+  }
+
+  @override
+  void didUpdateWidget(covariant PremiumParchmentSheet oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.prompt != widget.prompt) {
+      _wordCount = _computeWordCount(widget.prompt);
+    }
+  }
+
+  static int _computeWordCount(String prompt) => prompt
+      .split(RegExp(r'\s+'))
+      .where((token) => token.trim().isNotEmpty)
+      .length;
+
+  @override
   Widget build(BuildContext context) {
-    final highlightChapters = chapters.take(3).toList(growable: false);
+    final theme = Theme.of(context);
+    final highlightChapters = widget.chapters.take(3).toList(growable: false);
     final palette = context.fantasy;
-    final words = prompt
-        .split(RegExp(r'\s+'))
-        .where((token) => token.trim().isNotEmpty)
-        .length;
 
     return Container(
       key: const ValueKey('parchment-outer-shell'),
@@ -362,15 +385,15 @@ class PremiumParchmentSheet extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           border: Border.all(
-            color: atmosphere.primary.withValues(alpha: 0.2),
+            color: widget.atmosphere.primary.withValues(alpha: 0.2),
           ),
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: <Color>[
-              Color.lerp(palette.card, atmosphere.cardTint, 0.12)!
+              Color.lerp(palette.card, widget.atmosphere.cardTint, 0.12)!
                   .withValues(alpha: 0.98),
-              Color.lerp(palette.cardSoft, atmosphere.cardTint, 0.2)!
+              Color.lerp(palette.cardSoft, widget.atmosphere.cardTint, 0.2)!
                   .withValues(alpha: 0.98),
             ],
           ),
@@ -385,26 +408,26 @@ class PremiumParchmentSheet extends StatelessWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 _ParchmentStatChip(
-                  label: '${chapters.length} capitoli',
+                  label: '${widget.chapters.length} capitoli',
                   icon: Icons.library_books_rounded,
-                  atmosphere: atmosphere,
+                  atmosphere: widget.atmosphere,
                 ),
                 _ParchmentStatChip(
-                  label: '$words parole',
+                  label: '$_wordCount parole',
                   icon: Icons.text_fields_rounded,
-                  atmosphere: atmosphere,
+                  atmosphere: widget.atmosphere,
                 ),
                 _ParchmentStatChip(
-                  label: atmosphere.label,
+                  label: widget.atmosphere.label,
                   icon: Icons.auto_awesome_rounded,
-                  atmosphere: atmosphere,
+                  atmosphere: widget.atmosphere,
                 ),
               ],
             ),
             const SizedBox(height: 18),
-            if (isStale) ...[
+            if (widget.isStale) ...[
               _ParchmentBanner(
-                atmosphere: atmosphere,
+                atmosphere: widget.atmosphere,
                 icon: Icons.refresh_rounded,
                 text:
                     'Hai modificato la forgia dopo l ultima generazione. La pergamena visibile e precedente rispetto allo stato attuale.',
@@ -419,7 +442,7 @@ class PremiumParchmentSheet extends StatelessWidget {
                   children: [
                     Text(
                       'Capitoli in evidenza',
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: theme.textTheme.titleMedium,
                     ),
                     const SizedBox(height: 12),
                     Wrap(
@@ -429,7 +452,7 @@ class PremiumParchmentSheet extends StatelessWidget {
                         return SizedBox(
                           width: 240,
                           child: _ParchmentHighlightCard(
-                            atmosphere: atmosphere,
+                            atmosphere: widget.atmosphere,
                             chapter: chapter,
                           ),
                         );
@@ -442,7 +465,7 @@ class PremiumParchmentSheet extends StatelessWidget {
             ],
             _ParchmentBodyFrame(
               key: const ValueKey('parchment-body-frame'),
-              atmosphere: atmosphere,
+              atmosphere: widget.atmosphere,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -454,34 +477,27 @@ class PremiumParchmentSheet extends StatelessWidget {
                         children: [
                           Text(
                             'Pergamena del Cronista',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium
-                                ?.copyWith(
-                                  color: FantasyPalette.ink,
-                                ),
+                            style: theme.textTheme.headlineMedium?.copyWith(
+                              color: FantasyPalette.ink,
+                            ),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             'Una lettura strutturata del prompt finale, con capitoli richiudibili e punti chiave messi in rilievo.',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: FantasyPalette.ink
-                                      .withValues(alpha: 0.76),
-                                ),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: FantasyPalette.ink.withValues(alpha: 0.76),
+                            ),
                           ),
                         ],
                       );
 
                       final seal = _WaxSealReveal(
                         key: const ValueKey('parchment-wax-seal-reveal'),
-                        atmosphere: atmosphere,
+                        atmosphere: widget.atmosphere,
                         child: _WaxSealButton(
                           key: const ValueKey('parchment-wax-seal-full'),
-                          atmosphere: atmosphere,
-                          onTap: onSealTap,
+                          atmosphere: widget.atmosphere,
+                          onTap: widget.onSealTap,
                         ),
                       );
 
@@ -507,18 +523,18 @@ class PremiumParchmentSheet extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 18),
-                  ...chapters.map((chapter) {
+                  ...widget.chapters.map((chapter) {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 14),
                       child: _PromptChapterTile(
-                        atmosphere: atmosphere,
+                        atmosphere: widget.atmosphere,
                         chapter: chapter,
                       ),
                     );
                   }),
                   _PromptRawTextTile(
-                    atmosphere: atmosphere,
-                    prompt: prompt,
+                    atmosphere: widget.atmosphere,
+                    prompt: widget.prompt,
                   ),
                 ],
               ),

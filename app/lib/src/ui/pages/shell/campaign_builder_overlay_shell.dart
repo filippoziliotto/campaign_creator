@@ -100,19 +100,22 @@ class _OverlaySheetButtonState extends State<_OverlaySheetButton>
 
   @override
   Widget build(BuildContext context) {
-    final palette = context.fantasy;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return IconButton.filled(
       key: widget.buttonKey,
       style: IconButton.styleFrom(
-        backgroundColor: palette.cardSoft,
-        foregroundColor: palette.accent,
-        side: BorderSide(color: palette.outline, width: 1.5),
+        backgroundColor: colorScheme.primaryContainer.withValues(alpha: 0.92),
+        foregroundColor: colorScheme.tertiary,
+        side: BorderSide(
+          color: colorScheme.primary.withValues(alpha: 0.55),
+          width: 1.5,
+        ),
         minimumSize: const Size(44, 44),
         shape: const CircleBorder(),
       ).copyWith(
         overlayColor: WidgetStatePropertyAll(
-          palette.accent.withValues(alpha: 0.12),
+          colorScheme.primary.withValues(alpha: 0.14),
         ),
       ),
       icon: Icon(widget.icon, size: 20),

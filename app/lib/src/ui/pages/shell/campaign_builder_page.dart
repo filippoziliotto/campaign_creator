@@ -1832,7 +1832,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                       padding: const EdgeInsets.fromLTRB(20, 18, 20, 0),
                       child: _buildPersistentTopBar(),
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 6),
                     Expanded(
                       child: Navigator(
                         pages: _buildStagePages(options),
@@ -1858,7 +1858,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
             if (options != null)
               Positioned(
                 left: 20,
-                bottom: 24,
+                bottom: 16,
                 child: SafeArea(
                   child: _InfoButton(
                     currentLocale: widget.currentLocale,
@@ -1876,7 +1876,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
             if (options != null)
               Positioned(
                 right: 20,
-                bottom: 24,
+                bottom: 16,
                 child: SafeArea(
                   child: _HelpButton(
                     currentThemeMode: widget.currentThemeMode,

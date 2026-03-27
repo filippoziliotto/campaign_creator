@@ -80,6 +80,46 @@ void main() {
     expect((iconButton.icon as Icon).icon, Icons.menu_book_rounded);
   });
 
+  testWidgets('overlay buttons use atmosphere colors and sit slightly lower',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    final settingsFinder = find.byKey(
+      const ValueKey<String>('info-settings-button'),
+    );
+    final helpFinder = find.byKey(
+      const ValueKey<String>('help-guide-button'),
+    );
+    final settingsButton = tester.widget<IconButton>(settingsFinder);
+    final settingsContext = tester.element(settingsFinder);
+    final colorScheme = Theme.of(settingsContext).colorScheme;
+    final settingsRect = tester.getRect(settingsFinder);
+    final helpRect = tester.getRect(helpFinder);
+
+    expect(
+      settingsButton.style?.backgroundColor?.resolve(<WidgetState>{}),
+      colorScheme.primaryContainer.withValues(alpha: 0.92),
+    );
+    expect(
+      settingsButton.style?.foregroundColor?.resolve(<WidgetState>{}),
+      colorScheme.tertiary,
+    );
+    expect(
+      settingsButton.style?.side?.resolve(<WidgetState>{}),
+      BorderSide(
+        color: colorScheme.primary.withValues(alpha: 0.55),
+        width: 1.5,
+      ),
+    );
+    expect(settingsRect.bottom, 828);
+    expect(helpRect.bottom, 828);
+  });
+
   testWidgets('help sheet shows campaign types and tips sections',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));

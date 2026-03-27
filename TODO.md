@@ -23,3 +23,9 @@ this applies also to the number of characters
 # 16
 In my android phone the wheeler widgets in settings,twists and presets does not seem to have haptic feedback; or if it has it is basically un-noticed. 
 Can we make this haptic a little stronger, or if not there implement it?
+
+# 17
+The messages on the screen, e.g. "bozza eliminata", should be centered; right now they start from the left side of the page.
+
+# 19
+Fix when i should have the button pressable before selecting anything, or if i leave it always pressable

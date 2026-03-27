@@ -1161,6 +1161,10 @@ class _ForgePrimaryActionButtonState extends State<ForgePrimaryActionButton>
     final baseGlowAlpha = canPulse ? 0.16 : 0.08;
 
     final button = FilledButton.icon(
+      style: FilledButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
       onPressed: widget.isLoading ? null : widget.onPressed,
       icon: widget.isLoading
           ? const SizedBox(

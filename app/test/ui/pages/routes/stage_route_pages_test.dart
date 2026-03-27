@@ -47,6 +47,91 @@ void main() {
   );
 
   testWidgets(
+    'ForgeRoutePage keeps ribbon and controls pinned on compact layouts',
+    (tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 844));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ForgeRoutePage(
+              sectionRibbon: const SizedBox(
+                key: ValueKey('forge-ribbon'),
+                height: 48,
+                child: Text('ribbon'),
+              ),
+              activeSection: Container(
+                height: 1800,
+                color: Colors.amber,
+                alignment: Alignment.topLeft,
+                child: const Text('active'),
+              ),
+              controlPanel: const SizedBox(
+                key: ValueKey('forge-controls'),
+                height: 96,
+                child: Text('controls'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      final ribbonFinder = find.byKey(const ValueKey('forge-ribbon'));
+      final controlsFinder = find.byKey(const ValueKey('forge-controls'));
+      final scrollFinder = find.byType(SingleChildScrollView);
+
+      final ribbonBefore = tester.getTopLeft(ribbonFinder);
+      final controlsBefore = tester.getTopLeft(controlsFinder);
+
+      expect(ribbonBefore.dy, greaterThanOrEqualTo(0));
+
+      await tester.drag(scrollFinder.first, const Offset(0, -300));
+      await tester.pumpAndSettle();
+
+      expect(tester.getTopLeft(ribbonFinder).dy, ribbonBefore.dy);
+      expect(tester.getTopLeft(controlsFinder).dy, controlsBefore.dy);
+      expect(find.text('active'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'ForgeRoutePage overlays compact controls on top of the scroll viewport',
+    (tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 844));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ForgeRoutePage(
+              sectionRibbon: const SizedBox(height: 48, child: Text('ribbon')),
+              activeSection: Container(
+                height: 1800,
+                color: Colors.amber,
+                alignment: Alignment.topLeft,
+                child: const Text('active'),
+              ),
+              controlPanel: const SizedBox(
+                key: ValueKey('forge-controls'),
+                height: 72,
+                child: Text('controls'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      final scrollRect = tester.getRect(find.byType(SingleChildScrollView));
+      final controlsRect = tester.getRect(
+        find.byKey(const ValueKey('forge-controls')),
+      );
+
+      expect(scrollRect.bottom, greaterThan(controlsRect.top));
+    },
+  );
+
+  testWidgets(
     'ParchmentRoutePage can render without sheet content',
     (tester) async {
       const atmosphere = CampaignAtmosphereData(

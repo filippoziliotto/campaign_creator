@@ -3,6 +3,7 @@ import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:campaign_creator_flutter/src/theme/fantasy_theme.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_atmosphere.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_primitives.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -100,6 +101,51 @@ void main() {
 
       expect(find.text('Apri la forgia'), findsOneWidget);
     },
+  );
+
+  testWidgets(
+    'CampaignModeCard reveals CTA on desktop hover',
+    (tester) async {
+      final gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
+      addTearDown(gesture.removePointer);
+
+      await tester.pumpWidget(
+        _localizedTestApp(
+          child: Center(
+            child: SizedBox(
+              width: 399.2,
+              child: CampaignModeCard(
+                atmosphere: _testAtmosphere,
+                title: 'One-Shot',
+                description: 'Una missione ad alto impatto.',
+                emblemAsset: 'assets/entry_cards/one_shot_emblem.svg',
+                fallbackIcon: Icons.bolt_rounded,
+                colors: const <Color>[
+                  Color(0xFFB03A2E),
+                  Color(0xFF6D2018),
+                ],
+                artAsset: 'assets/entry_cards/one_shot.jpg',
+                selected: false,
+                onTap: () {},
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await gesture.addPointer(location: const Offset(1, 1));
+      await tester.pump();
+
+      expect(find.text('Apri la forgia'), findsNothing);
+
+      await gesture.moveTo(tester.getCenter(find.byType(CampaignModeCard)));
+      await tester.pump(const Duration(milliseconds: 250));
+
+      expect(find.text('Apri la forgia'), findsOneWidget);
+    },
+    variant: const TargetPlatformVariant(<TargetPlatform>{
+      TargetPlatform.macOS,
+    }),
   );
 
   testWidgets(
@@ -318,7 +364,84 @@ void main() {
 
       expect(find.text('Precedente'), findsNothing);
       expect(find.byIcon(Icons.arrow_back_rounded), findsNothing);
+      expect(find.text('Pronto a forgiare.'), findsNothing);
       expect(find.text('Avanza'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'ForgeActionStrip uses compact panel padding',
+    (tester) async {
+      await tester.pumpWidget(
+        _localizedTestApp(
+          child: SizedBox(
+            width: 300,
+            child: ForgeActionStrip(
+              atmosphere: _testAtmosphere,
+              readinessHint: 'Pronto a forgiare.',
+              isPrimaryEnabled: true,
+              isGenerating: false,
+              primaryLabel: 'Avanza',
+              primaryIcon: Icons.arrow_forward_rounded,
+              onRetreat: () {},
+              onAdvance: () {},
+              parchmentReady: true,
+              hasUnsavedChanges: true,
+              onOpenParchment: () {},
+              savedDraftLabel: 'Bozza salvata poco fa',
+            ),
+          ),
+        ),
+      );
+
+      await tester.pump();
+
+      final panelPaddings = tester
+          .widgetList<Padding>(
+            find.descendant(
+              of: find.byType(ForgeActionStrip),
+              matching: find.byType(Padding),
+            ),
+          )
+          .map((padding) => padding.padding)
+          .toList(growable: false);
+
+      expect(panelPaddings, isNot(contains(const EdgeInsets.all(16))));
+      expect(panelPaddings, contains(const EdgeInsets.all(14)));
+    },
+  );
+
+  testWidgets(
+    'ForgeActionStrip centers the lower saved-draft copy',
+    (tester) async {
+      await tester.pumpWidget(
+        _localizedTestApp(
+          child: SizedBox(
+            width: 300,
+            child: ForgeActionStrip(
+              atmosphere: _testAtmosphere,
+              readinessHint: 'Pronto a forgiare.',
+              isPrimaryEnabled: true,
+              isGenerating: false,
+              primaryLabel: 'Avanza',
+              primaryIcon: Icons.arrow_forward_rounded,
+              onRetreat: () {},
+              onAdvance: () {},
+              parchmentReady: true,
+              hasUnsavedChanges: true,
+              onOpenParchment: () {},
+              savedDraftLabel: 'Bozza salvata poco fa',
+            ),
+          ),
+        ),
+      );
+
+      await tester.pump();
+
+      final savedDraftText =
+          tester.widget<Text>(find.text('Bozza salvata poco fa'));
+
+      expect(savedDraftText.textAlign, TextAlign.center);
     },
   );
 

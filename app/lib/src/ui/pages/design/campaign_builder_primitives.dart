@@ -41,7 +41,8 @@ class _CampaignStageRoute extends PageRoute<void> {
 
   @override
   Duration get transitionDuration =>
-      _page.transitionDurationOverride ?? _page.atmosphere.routeTransitionDuration;
+      _page.transitionDurationOverride ??
+      _page.atmosphere.routeTransitionDuration;
 
   @override
   Duration get reverseTransitionDuration =>
@@ -230,7 +231,7 @@ class _HeroCopy extends StatelessWidget {
   }
 }
 
-class CampaignModeCard extends StatefulWidget {
+class CampaignModeCard extends StatelessWidget {
   const CampaignModeCard({
     super.key,
     required this.atmosphere,
@@ -255,17 +256,9 @@ class CampaignModeCard extends StatefulWidget {
   final VoidCallback onTap;
 
   @override
-  State<CampaignModeCard> createState() => _CampaignModeCardState();
-}
-
-class _CampaignModeCardState extends State<CampaignModeCard> {
-  bool _hovered = false;
-  bool _pressed = false;
-  Offset _hoverVector = Offset.zero;
-
-  @override
   Widget build(BuildContext context) {
     final palette = context.fantasy;
+    final theme = Theme.of(context);
     final reducedMotion =
         MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     final isTouch = const {TargetPlatform.android, TargetPlatform.iOS}
@@ -275,39 +268,117 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
     final framePadding = 2.5;
     final outerBorderRadius = BorderRadius.circular(24);
     final innerBorderRadius = BorderRadius.circular(24 - framePadding);
+
+    return _CardInteractionLayer(
+      atmosphere: atmosphere,
+      title: title,
+      description: description,
+      emblemAsset: emblemAsset,
+      fallbackIcon: fallbackIcon,
+      colors: colors,
+      artAsset: artAsset,
+      selected: selected,
+      onTap: onTap,
+      reducedMotion: reducedMotion,
+      isTouch: isTouch,
+      cardHeight: cardHeight,
+      framePadding: framePadding,
+      outerBorderRadius: outerBorderRadius,
+      innerBorderRadius: innerBorderRadius,
+      titleStyle: theme.textTheme.titleLarge?.copyWith(
+        color: palette.onArtwork,
+      ),
+      descriptionStyle: theme.textTheme.bodySmall?.copyWith(
+        color: palette.onArtworkMuted.withValues(alpha: 0.84),
+      ),
+      ctaTextStyle: theme.textTheme.labelLarge,
+      motionDuration: reducedMotion
+          ? const Duration(milliseconds: 120)
+          : const Duration(milliseconds: 220),
+      selectedScale: reducedMotion ? 1.0 : (selected ? 1.02 : 1.0),
+    );
+  }
+}
+
+class _CardInteractionLayer extends StatefulWidget {
+  const _CardInteractionLayer({
+    required this.atmosphere,
+    required this.title,
+    required this.description,
+    required this.emblemAsset,
+    required this.fallbackIcon,
+    required this.colors,
+    required this.artAsset,
+    required this.selected,
+    required this.onTap,
+    required this.reducedMotion,
+    required this.isTouch,
+    required this.cardHeight,
+    required this.framePadding,
+    required this.outerBorderRadius,
+    required this.innerBorderRadius,
+    required this.titleStyle,
+    required this.descriptionStyle,
+    required this.ctaTextStyle,
+    required this.motionDuration,
+    required this.selectedScale,
+  });
+
+  final CampaignAtmosphereData atmosphere;
+  final String title;
+  final String description;
+  final String emblemAsset;
+  final IconData fallbackIcon;
+  final List<Color> colors;
+  final String artAsset;
+  final bool selected;
+  final VoidCallback onTap;
+  final bool reducedMotion;
+  final bool isTouch;
+  final double cardHeight;
+  final double framePadding;
+  final BorderRadius outerBorderRadius;
+  final BorderRadius innerBorderRadius;
+  final TextStyle? titleStyle;
+  final TextStyle? descriptionStyle;
+  final TextStyle? ctaTextStyle;
+  final Duration motionDuration;
+  final double selectedScale;
+
+  @override
+  State<_CardInteractionLayer> createState() => _CardInteractionLayerState();
+}
+
+class _CardInteractionLayerState extends State<_CardInteractionLayer> {
+  bool _hovered = false;
+  bool _pressed = false;
+  Offset _hoverVector = Offset.zero;
+
+  @override
+  Widget build(BuildContext context) {
     final descriptionMaxLines = 3;
-    final titleStyle = Theme.of(
-      context,
-    ).textTheme.titleLarge?.copyWith(color: palette.onArtwork);
-    final descriptionStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: palette.onArtworkMuted.withValues(alpha: 0.84),
-        );
     final showCallToAction = widget.selected || _hovered;
-    final targetProgress = (reducedMotion || isTouch)
+    final targetProgress = (widget.reducedMotion || widget.isTouch)
         ? 0.0
         : (_pressed ? 0.5 : (_hovered ? 1.0 : 0.0));
-    final motionDuration = reducedMotion
-        ? const Duration(milliseconds: 120)
-        : const Duration(milliseconds: 220);
-    final selectedScale = reducedMotion ? 1.0 : (widget.selected ? 1.02 : 1.0);
 
     Widget cardBody = GestureDetector(
       onTapDown: (_) {
-        if (!reducedMotion) {
+        if (!widget.reducedMotion) {
           setState(() {
             _pressed = true;
           });
         }
       },
       onTapUp: (_) {
-        if (!reducedMotion) {
+        if (!widget.reducedMotion) {
           setState(() {
             _pressed = false;
           });
         }
       },
       onTapCancel: () {
-        if (!reducedMotion) {
+        if (!widget.reducedMotion) {
           setState(() {
             _pressed = false;
           });
@@ -315,7 +386,7 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
       },
       child: TweenAnimationBuilder<double>(
         tween: Tween<double>(begin: 0, end: targetProgress),
-        duration: motionDuration,
+        duration: widget.motionDuration,
         curve: Curves.easeOutCubic,
         builder: (context, value, child) {
           final lift = widget.atmosphere.cardHoverLift * value;
@@ -341,38 +412,30 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
           );
         },
         child: AnimatedScale(
-          scale: selectedScale,
-          duration: motionDuration,
+          scale: widget.selectedScale,
+          duration: widget.motionDuration,
           curve: Curves.easeOutCubic,
           child: AnimatedContainer(
-            duration: motionDuration,
+            duration: widget.motionDuration,
             curve: Curves.easeOutCubic,
-            padding: EdgeInsets.all(framePadding),
+            padding: EdgeInsets.all(widget.framePadding),
             decoration: BoxDecoration(
-              borderRadius: outerBorderRadius,
+              borderRadius: widget.outerBorderRadius,
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: <Color>[
                   widget.atmosphere.highlight.withValues(
-                    alpha: widget.selected
-                        ? 0.95
-                        : (_hovered ? 0.7 : 0.55),
+                    alpha: widget.selected ? 0.95 : (_hovered ? 0.7 : 0.55),
                   ),
                   widget.atmosphere.primary.withValues(
-                    alpha: widget.selected
-                        ? 1.0
-                        : (_hovered ? 0.88 : 0.8),
+                    alpha: widget.selected ? 1.0 : (_hovered ? 0.88 : 0.8),
                   ),
                   widget.atmosphere.secondary.withValues(
-                    alpha: widget.selected
-                        ? 0.85
-                        : (_hovered ? 0.62 : 0.5),
+                    alpha: widget.selected ? 0.85 : (_hovered ? 0.62 : 0.5),
                   ),
                   widget.atmosphere.highlight.withValues(
-                    alpha: widget.selected
-                        ? 0.7
-                        : (_hovered ? 0.44 : 0.35),
+                    alpha: widget.selected ? 0.7 : (_hovered ? 0.44 : 0.35),
                   ),
                 ],
                 stops: const <double>[0.0, 0.35, 0.65, 1.0],
@@ -389,22 +452,23 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
             ),
             child: InkWell(
               onTap: widget.onTap,
-              borderRadius: innerBorderRadius,
+              borderRadius: widget.innerBorderRadius,
               child: AnimatedContainer(
-                duration: motionDuration,
+                duration: widget.motionDuration,
                 curve: Curves.easeOutCubic,
                 decoration: BoxDecoration(
-                  borderRadius: innerBorderRadius,
+                  borderRadius: widget.innerBorderRadius,
                 ),
                 child: ClipRRect(
-                  borderRadius: innerBorderRadius,
+                  borderRadius: widget.innerBorderRadius,
                   child: Stack(
                     children: [
                       Positioned.fill(
                         child: _CampaignCardArtwork(
                           artAsset: widget.artAsset,
-                          fallbackColor:
-                              widget.colors.last.withValues(alpha: 0.9),
+                          fallbackColor: widget.colors.last.withValues(
+                            alpha: 0.9,
+                          ),
                         ),
                       ),
                       Positioned.fill(
@@ -440,7 +504,7 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
                         ),
                       ),
                       SizedBox(
-                        height: cardHeight,
+                        height: widget.cardHeight,
                         child: Padding(
                           padding: const EdgeInsets.all(14),
                           child: Column(
@@ -456,21 +520,21 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
                                     selected: widget.selected,
                                     hovered: _hovered,
                                     pressed: _pressed,
-                                    duration: motionDuration,
+                                    duration: widget.motionDuration,
                                   ),
                                 ],
                               ),
                               const Spacer(),
                               Text(
                                 widget.title,
-                                style: titleStyle,
+                                style: widget.titleStyle,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               const SizedBox(height: 2),
                               Text(
                                 widget.description,
-                                style: descriptionStyle,
+                                style: widget.descriptionStyle,
                                 maxLines:
                                     showCallToAction ? 1 : descriptionMaxLines,
                                 overflow: TextOverflow.ellipsis,
@@ -481,8 +545,7 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
                                   children: [
                                     Text(
                                       context.l10n.entryOpenForge,
-                                      style:
-                                          Theme.of(context).textTheme.labelLarge,
+                                      style: widget.ctaTextStyle,
                                     ),
                                     const SizedBox(width: 4),
                                     Icon(
@@ -507,11 +570,11 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
       ),
     );
 
-    if (isTouch) return cardBody;
+    if (widget.isTouch) return cardBody;
 
     return MouseRegion(
       onEnter: (_) {
-        if (!reducedMotion) {
+        if (!widget.reducedMotion) {
           setState(() {
             _hovered = true;
           });
@@ -525,7 +588,7 @@ class _CampaignModeCardState extends State<CampaignModeCard> {
         });
       },
       onHover: (event) {
-        if (reducedMotion) return;
+        if (widget.reducedMotion) return;
         final size = context.size;
         if (size == null || size.width == 0 || size.height == 0) return;
         final dx = ((event.localPosition.dx / size.width) * 2) - 1;
@@ -1492,6 +1555,10 @@ class ForgeActionStrip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final metaTextStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+          fontSize: 12,
+          height: 1.0,
+        );
     final showParchmentRow = parchmentReady || hasUnsavedChanges;
     final parchmentStatusIcon = parchmentReady && !hasUnsavedChanges
         ? Icons.check_circle_outline
@@ -1507,14 +1574,14 @@ class ForgeActionStrip extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: colorScheme.outline.withValues(alpha: 0.2),
         ),
         color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1533,45 +1600,22 @@ class ForgeActionStrip extends StatelessWidget {
                 if (compact) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        readinessHint,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                      ),
-                      const SizedBox(height: 12),
-                      primaryButton,
-                    ],
+                    children: [primaryButton],
                   );
                 }
-                return Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        readinessHint,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    primaryButton,
-                  ],
+                return Align(
+                  alignment: Alignment.centerRight,
+                  child: primaryButton,
                 );
               },
             ),
             if (showParchmentRow) ...[
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               Container(
                 height: 1,
                 color: colorScheme.outline.withValues(alpha: 0.16),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   Icon(parchmentStatusIcon,
@@ -1579,30 +1623,30 @@ class ForgeActionStrip extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           parchmentStatusText,
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: parchmentStatusColor,
-                                  ),
+                          textAlign: TextAlign.center,
+                          style: metaTextStyle?.copyWith(
+                            color: parchmentStatusColor,
+                          ),
                         ),
                         if (savedDraftLabel != null) ...[
                           const SizedBox(height: 2),
                           Text(
                             savedDraftLabel!,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: colorScheme.onSurfaceVariant,
-                                    ),
+                            textAlign: TextAlign.center,
+                            style: metaTextStyle?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                            ),
                           ),
                         ],
                       ],
                     ),
                   ),
                   if (parchmentReady) ...[
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 10),
                     OutlinedButton.icon(
                       onPressed: onOpenParchment,
                       icon: const Icon(Icons.visibility_rounded, size: 16),

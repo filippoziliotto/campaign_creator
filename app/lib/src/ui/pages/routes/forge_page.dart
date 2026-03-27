@@ -23,9 +23,9 @@ class ForgeRoutePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasMainSplit = MediaQuery.of(context).size.width >= 1240;
-
-    return StageRouteScaffold(
-      scrollController: scrollController,
+    const compactControlPanelScrollClearance = 88.0;
+    final compactForgeBody = SizedBox(
+      width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -34,31 +34,70 @@ class ForgeRoutePage extends StatelessWidget {
             if (hero != null) const SizedBox(height: 16),
             errorBanner!,
           ],
-          const SizedBox(height: 12),
+          const SizedBox(height: 1),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
             child: sectionRibbon,
           ),
-          const SizedBox(height: 12),
-          if (hasMainSplit)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          const SizedBox(height: 4),
+          Expanded(
+            child: Stack(
               children: [
-                Expanded(flex: 10, child: activeSection),
-                const SizedBox(width: 16),
-                Expanded(flex: 6, child: controlPanel),
-              ],
-            )
-          else
-            Column(
-              children: [
-                activeSection,
-                const SizedBox(height: 16),
-                controlPanel,
+                Positioned.fill(
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    primary: false,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: compactControlPanelScrollClearance,
+                      ),
+                      child: activeSection,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: controlPanel,
+                ),
               ],
             ),
+          ),
         ],
       ),
+    );
+
+    return StageRouteScaffold(
+      useIntrinsicScroll: hasMainSplit,
+      scrollController: scrollController,
+      child: hasMainSplit
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (hero != null) hero!,
+                if (errorBanner != null) ...[
+                  if (hero != null) const SizedBox(height: 16),
+                  errorBanner!,
+                ],
+                const SizedBox(height: 12),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 2,
+                    vertical: 4,
+                  ),
+                  child: sectionRibbon,
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(flex: 10, child: activeSection),
+                    const SizedBox(width: 16),
+                    Expanded(flex: 6, child: controlPanel),
+                  ],
+                ),
+              ],
+            )
+          : compactForgeBody,
     );
   }
 }

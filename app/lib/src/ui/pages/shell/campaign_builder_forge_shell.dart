@@ -3,6 +3,10 @@ part of 'campaign_builder_page.dart';
 extension on _CampaignBuilderPageState {
   Widget _buildForgeStage(CampaignOptions options) {
     final atmosphere = _currentAtmosphere(options);
+    final isTouchPlatform = const {
+      TargetPlatform.android,
+      TargetPlatform.iOS,
+    }.contains(defaultTargetPlatform);
 
     return ForgeRoutePage(
       scrollController: _forgeScrollController,
@@ -32,10 +36,6 @@ extension on _CampaignBuilderPageState {
       activeSection: ValueListenableBuilder<_ForgeDraftViewState>(
         valueListenable: _forgeDraftViewState,
         builder: (context, _, __) {
-          final isTouchPlatform = const {
-            TargetPlatform.android,
-            TargetPlatform.iOS,
-          }.contains(defaultTargetPlatform);
           return _revealed(
             delay: 0.18,
             atmosphere: atmosphere,
@@ -51,7 +51,9 @@ extension on _CampaignBuilderPageState {
           return _revealed(
             delay: 0.22,
             atmosphere: atmosphere,
-            child: _buildForgeControlPanel(),
+            child: isTouchPlatform
+                ? _buildPinnedForgePrimaryButton(atmosphere)
+                : _buildForgeControlPanel(),
           );
         },
       ),
@@ -266,6 +268,44 @@ extension on _CampaignBuilderPageState {
       hasUnsavedChanges: _hasUnsavedChanges,
       onOpenParchment: () => _goToStage(_AppStage.parchment),
       savedDraftLabel: _savedDraftLabel(),
+    );
+  }
+
+  Widget _buildPinnedForgePrimaryButton(CampaignAtmosphereData atmosphere) {
+    final primaryActionEnabled = _isForgePrimaryActionEnabled();
+    const outerOverlayLaneWidth = 60.0;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final buttonWidth = (constraints.maxWidth - (outerOverlayLaneWidth * 2))
+            .clamp(0.0, constraints.maxWidth)
+            .toDouble();
+
+        return SizedBox(
+          width: constraints.maxWidth,
+          child: Center(
+            heightFactor: 1.2,
+            child: SizedBox(
+              key: const ValueKey<String>('forge-pinned-primary-button'),
+              width: buttonWidth,
+              child: ForgePrimaryActionButton(
+                atmosphere: atmosphere,
+                label: _isGenerating
+                    ? context.l10n.forgeButtonForging
+                    : _nextForgeActionLabel(),
+                icon: _forgeSection == _ForgeSection.narrative
+                    ? Icons.auto_awesome_rounded
+                    : Icons.arrow_forward_rounded,
+                isLoading: _isGenerating,
+                shouldPulse: primaryActionEnabled,
+                onPressed: (_isGenerating || !primaryActionEnabled)
+                    ? null
+                    : _advanceForge,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -1004,7 +1044,7 @@ extension on _CampaignBuilderPageState {
                                 diameterRatio: wheelConfig.diameterRatio,
                                 physics: const FixedExtentScrollPhysics(),
                                 onSelectedItemChanged: (i) {
-                                  HapticFeedback.selectionClick();
+                                  HapticFeedback.lightImpact();
                                   setState(() => selectedIndex = i);
                                 },
                                 children: allOptions.map((option) {
