@@ -56,6 +56,7 @@ app/lib/l10n/app_localizations_it.dart
 *.swo
 .vscode/
 docs/superpowers/
+.worktrees/
 
 # ── OS ────────────────────────────────────────────────────────────────────────
 .DS_Store
