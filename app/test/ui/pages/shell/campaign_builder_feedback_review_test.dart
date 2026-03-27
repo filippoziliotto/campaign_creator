@@ -373,7 +373,6 @@ void main() {
     ));
     await _pumpUi(tester);
     await _openPartySection(tester);
-    final l10n = _l10n(tester);
 
     await tester.tap(
       find.descendant(

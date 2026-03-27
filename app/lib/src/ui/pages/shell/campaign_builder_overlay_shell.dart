@@ -1018,8 +1018,10 @@ class _LanguageMark extends StatelessWidget {
         ),
         child: CountryFlag.fromCountryCode(
           countryCode,
-          width: 16,
-          height: 12,
+          theme: const ImageTheme(
+            width: 16,
+            height: 12,
+          ),
         ),
       ),
     );
