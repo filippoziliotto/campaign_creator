@@ -155,18 +155,20 @@ class InteractiveHorizontalSectionPager extends StatefulWidget {
     required this.itemBuilder,
     required this.onIndexChanged,
     required this.duration,
+    this.itemCacheKeys,
     this.commitThresholdFraction = 0.22,
     this.commitVelocityPagesPerSecond = 1.0,
     this.horizontalGestureMode = HorizontalGestureMode.standard,
     this.onSwipePastStart,
     this.onSwipePastEnd,
-  });
+  }) : assert(itemCacheKeys == null || itemCacheKeys.length == itemCount);
 
   final int currentIndex;
   final int itemCount;
   final IndexedChildWidgetBuilder itemBuilder;
   final ValueChanged<int> onIndexChanged;
   final Duration duration;
+  final List<Object?>? itemCacheKeys;
   final double commitThresholdFraction;
   final double commitVelocityPagesPerSecond;
   final HorizontalGestureMode horizontalGestureMode;
@@ -213,12 +215,24 @@ class _InteractiveHorizontalSectionPagerState
     if (oldWidget.duration != widget.duration) {
       _settleController.duration = widget.duration;
     }
-    if (oldWidget.itemBuilder != widget.itemBuilder ||
-        oldWidget.itemCount != widget.itemCount) {
+    if (oldWidget.itemCount != widget.itemCount) {
       _childCache.clear();
       final maxPage =
           (widget.itemCount - 1).clamp(0, widget.itemCount).toDouble();
       _page = _page.clamp(0.0, maxPage);
+    } else {
+      final oldCacheKeys = oldWidget.itemCacheKeys;
+      final newCacheKeys = widget.itemCacheKeys;
+      if (oldCacheKeys != null && newCacheKeys != null) {
+        for (var index = 0; index < widget.itemCount; index += 1) {
+          if (oldCacheKeys[index] != newCacheKeys[index]) {
+            _childCache.remove(index);
+          }
+        }
+      } else if (oldCacheKeys != newCacheKeys ||
+          oldWidget.itemBuilder != widget.itemBuilder) {
+        _childCache.clear();
+      }
     }
 
     final targetPage = widget.currentIndex.toDouble();

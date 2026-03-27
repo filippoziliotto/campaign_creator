@@ -164,6 +164,7 @@ extension on _CampaignBuilderPageState {
     return InteractiveHorizontalSectionPager(
       currentIndex: _forgeSectionIndex(_forgeSection),
       itemCount: _ForgeSection.values.length,
+      itemCacheKeys: _forgeSectionCacheKeys(options),
       duration: _touchForgeSettleDuration(atmosphere.sectionTransitionDuration),
       horizontalGestureMode: defaultTargetPlatform == TargetPlatform.android
           ? HorizontalGestureMode.androidVerticalPriority
@@ -186,6 +187,45 @@ extension on _CampaignBuilderPageState {
   Duration _touchForgeSettleDuration(Duration baseDuration) {
     final milliseconds = (baseDuration.inMilliseconds - 48).clamp(180, 240);
     return Duration(milliseconds: milliseconds);
+  }
+
+  List<Object> _forgeSectionCacheKeys(CampaignOptions options) {
+    final atmosphereId = _currentAtmosphere(options).id;
+    final localeCode = widget.currentLocale.languageCode;
+    final premiumUnlocked = _isPremiumUnlocked;
+
+    return <Object>[
+      Object.hash(
+        localeCode,
+        atmosphereId,
+        premiumUnlocked,
+        _selectedCampaignType,
+        _selectedSetting,
+        _selectedTwist,
+        _selectedPreset,
+        _appliedPreset,
+        Object.hashAllUnordered(_selectedThemes),
+        Object.hashAllUnordered(_customThemeEntries),
+        Object.hashAllUnordered(_selectedTones),
+        Object.hashAllUnordered(_customToneEntries),
+        Object.hashAllUnordered(_selectedStyles),
+        Object.hashAllUnordered(_customStyleEntries),
+      ),
+      Object.hash(
+        localeCode,
+        atmosphereId,
+        premiumUnlocked,
+        _partyLevel,
+        _partySize,
+        Object.hashAllUnordered(_selectedArchetypes),
+      ),
+      Object.hash(
+        localeCode,
+        atmosphereId,
+        _includeNpcs,
+        _includeEncounters,
+      ),
+    ];
   }
 
   Widget _buildForgeSectionViewportChild(

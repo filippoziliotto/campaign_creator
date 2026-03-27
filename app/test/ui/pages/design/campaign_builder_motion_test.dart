@@ -203,6 +203,49 @@ void main() {
       expect(find.text('Page 1 v2'), findsOneWidget);
     },
   );
+
+  testWidgets(
+    'InteractiveHorizontalSectionPager keeps off-screen cached children across unrelated parent rebuilds',
+    (tester) async {
+      final hostKey = GlobalKey<_PagerOffstageCacheRetentionHostState>();
+      await tester.pumpWidget(
+          MaterialApp(home: _PagerOffstageCacheRetentionHost(key: hostKey)));
+      await tester.pump();
+
+      expect(find.text('Page 0 built 1x'), findsOneWidget);
+      expect(hostKey.currentState!._buildCounts[1], 0);
+
+      final firstGesture = await tester.startGesture(
+        tester.getCenter(find.text('Page 0 built 1x')),
+      );
+      await firstGesture.moveBy(const Offset(-96, 0));
+      await tester.pump();
+      expect(hostKey.currentState!._buildCounts[1], 1);
+      await firstGesture.up();
+      await tester.pumpAndSettle();
+
+      final pageOneBuildCountAfterFirstReveal =
+          hostKey.currentState!._buildCounts[1];
+
+      await tester.tap(find.text('Rebuild parent'));
+      await tester.pumpAndSettle();
+      expect(
+        hostKey.currentState!._buildCounts[1],
+        pageOneBuildCountAfterFirstReveal,
+      );
+
+      final secondGesture = await tester.startGesture(
+        tester.getCenter(find.byType(InteractiveHorizontalSectionPager)),
+      );
+      await secondGesture.moveBy(const Offset(-96, 0));
+      await tester.pump();
+
+      expect(
+        hostKey.currentState!._buildCounts[1],
+        pageOneBuildCountAfterFirstReveal,
+      );
+    },
+  );
 }
 
 class _PagerCacheInvalidationHost extends StatefulWidget {
@@ -241,11 +284,87 @@ class _PagerCacheInvalidationHostState
                   currentIndex: _currentIndex,
                   itemCount: 3,
                   duration: const Duration(milliseconds: 240),
+                  itemCacheKeys: List<Object?>.filled(3, _version),
                   itemBuilder: (context, index) {
                     return ColoredBox(
                       color: Colors.primaries[index],
                       child: Center(
                         child: Text('Page $index v$_version'),
+                      ),
+                    );
+                  },
+                  onIndexChanged: (index) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PagerOffstageCacheRetentionHost extends StatefulWidget {
+  const _PagerOffstageCacheRetentionHost({super.key});
+
+  @override
+  State<_PagerOffstageCacheRetentionHost> createState() =>
+      _PagerOffstageCacheRetentionHostState();
+}
+
+class _PagerOffstageCacheRetentionHostState
+    extends State<_PagerOffstageCacheRetentionHost> {
+  int _currentIndex = 0;
+  int _irrelevantCounter = 0;
+  final Map<int, int> _buildCounts = <int, int>{0: 0, 1: 0, 2: 0};
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _currentIndex = 0;
+                  });
+                },
+                child: const Text('Go to page 0'),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _irrelevantCounter += 1;
+                  });
+                },
+                child: const Text('Rebuild parent'),
+              ),
+            ],
+          ),
+          Text('Counter $_irrelevantCounter'),
+          Expanded(
+            child: Center(
+              child: SizedBox(
+                width: 320,
+                height: 240,
+                child: InteractiveHorizontalSectionPager(
+                  currentIndex: _currentIndex,
+                  itemCount: 3,
+                  duration: const Duration(milliseconds: 240),
+                  itemCacheKeys: const <Object?>[0, 1, 2],
+                  itemBuilder: (context, index) {
+                    _buildCounts[index] = (_buildCounts[index] ?? 0) + 1;
+                    return ColoredBox(
+                      color: Colors.primaries[index],
+                      child: Center(
+                        child:
+                            Text('Page $index built ${_buildCounts[index]}x'),
                       ),
                     );
                   },
