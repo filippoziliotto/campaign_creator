@@ -271,6 +271,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get forgeForgeParchment => 'Pergament schmieden';
 
   @override
+  String get forgeReforgeParchmentCompact => 'Pergament neu schmieden';
+
+  @override
+  String get forgeForgeParchmentCompact => 'Pergament schmieden';
+
+  @override
   String get forgeAdvanceBlockedWorld =>
       'Lege mindestens Ton, Stil oder Themen fest, bevor du zur Gruppe gehst.';
 

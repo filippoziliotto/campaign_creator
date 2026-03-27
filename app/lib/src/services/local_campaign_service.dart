@@ -5,12 +5,31 @@ import '../models/campaign_models.dart';
 import 'campaign_service.dart';
 
 class LocalCampaignService implements CampaignService {
+  static final Map<String, CampaignOptions> _optionsCache = {};
+  static final Map<String, String> _templateCache = {};
+  static final _whitespaceRegExp = RegExp(r'\s+');
+  static final _forLoopRegExp = RegExp(
+    r'\{%-?\s*for\s+(\w+)\s+in\s+(\w+)\s*-?%\}\n?(.*?)\{%-?\s*endfor\s*-?%\}\n?',
+    dotAll: true,
+  );
+  static final _ifBlockRegExp = RegExp(
+    r'\{%-?\s*if\s+(\w+)\s*-?%\}\n?(.*?)\{%-?\s*endif\s*-?%\}\n?',
+    dotAll: true,
+  );
+  static final _varRegExp = RegExp(r'\{\{\s*(\w+)\s*\}\}');
+  static final _excessNewlinesRegExp = RegExp(r'\n{3,}');
+
   @override
   Future<CampaignOptions> getOptions({String localeCode = 'it'}) async {
     final resolvedLocale = _resolveLocaleCode(localeCode);
+    if (_optionsCache.containsKey(resolvedLocale)) {
+      return _optionsCache[resolvedLocale]!;
+    }
     final raw =
         await rootBundle.loadString('assets/data/options_$resolvedLocale.yaml');
-    return CampaignOptions.fromYaml(loadYaml(raw) as YamlMap);
+    final options = CampaignOptions.fromYaml(loadYaml(raw) as YamlMap);
+    _optionsCache[resolvedLocale] = options;
+    return options;
   }
 
   @override
@@ -23,7 +42,7 @@ class LocalCampaignService implements CampaignService {
 
     final ctx = _buildContext(req);
     final templateAsset = _selectTemplate(req.campaignType, req.localeCode);
-    final rawTemplate =
+    final rawTemplate = _templateCache[templateAsset] ??=
         await rootBundle.loadString('assets/templates/$templateAsset');
     final rendered = _render(rawTemplate, ctx);
     return _postProcess(rendered);
@@ -414,7 +433,7 @@ class LocalCampaignService implements CampaignService {
   static String _selectTemplate(String campaignType, String localeCode) {
     final resolvedLocale = _resolveLocaleCode(localeCode);
     final normalized =
-        campaignType.trim().toLowerCase().replaceAll(RegExp(r'\s+'), ' ');
+        campaignType.trim().toLowerCase().replaceAll(_whitespaceRegExp, ' ');
     final family = _templateFamilyByCampaignType[normalized] ?? 'generic';
     final basePath = _templatePathByFamily[family] ?? _templatePathByFamily['generic']!;
     return '${basePath}_$resolvedLocale.md';
@@ -424,7 +443,10 @@ class LocalCampaignService implements CampaignService {
     final localeCode = _resolveLocaleCode(req.localeCode);
     final bundle = _bundles[localeCode] ?? _bundles['en']!;
     final family = _templateFamilyByCampaignType[
-            req.campaignType.trim().toLowerCase().replaceAll(RegExp(r'\s+'), ' ')] ??
+            req.campaignType
+                .trim()
+                .toLowerCase()
+                .replaceAll(_whitespaceRegExp, ' ')] ??
         'generic';
     final normalizedTwist = _normalizeTwist(req.twist);
     final hasTwist = normalizedTwist.isNotEmpty;
@@ -538,10 +560,7 @@ class LocalCampaignService implements CampaignService {
 
   static String _render(String template, Map<String, Object> ctx) {
     template = template.replaceAllMapped(
-      RegExp(
-        r'\{%-?\s*for\s+(\w+)\s+in\s+(\w+)\s*-?%\}\n?(.*?)\{%-?\s*endfor\s*-?%\}\n?',
-        dotAll: true,
-      ),
+      _forLoopRegExp,
       (m) {
         final itemVar = m.group(1)!;
         final listKey = m.group(2)!;
@@ -555,10 +574,7 @@ class LocalCampaignService implements CampaignService {
     );
 
     template = template.replaceAllMapped(
-      RegExp(
-        r'\{%-?\s*if\s+(\w+)\s*-?%\}\n?(.*?)\{%-?\s*endif\s*-?%\}\n?',
-        dotAll: true,
-      ),
+      _ifBlockRegExp,
       (m) {
         final key = m.group(1)!;
         final body = m.group(2)!;
@@ -575,7 +591,7 @@ class LocalCampaignService implements CampaignService {
     );
 
     template = template.replaceAllMapped(
-      RegExp(r'\{\{\s*(\w+)\s*\}\}'),
+      _varRegExp,
       (m) => ctx[m.group(1)]?.toString() ?? '',
     );
 
@@ -584,7 +600,7 @@ class LocalCampaignService implements CampaignService {
 
   static String _postProcess(String text) {
     text = text.split('\n').map((l) => l.trimRight()).join('\n');
-    text = text.replaceAll(RegExp(r'\n{3,}'), '\n\n');
+    text = text.replaceAll(_excessNewlinesRegExp, '\n\n');
     return '${text.trim()}\n';
   }
 }

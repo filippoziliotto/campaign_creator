@@ -1390,24 +1390,19 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     });
     final result = await _monetizationCoordinator.startAdFreePurchase();
     if (!mounted) return;
+    if (result == PurchaseStartResult.started) return;
+    setState(() {
+      _isPurchaseBusy = false;
+    });
     switch (result) {
-      case PurchaseStartResult.started:
-        break;
       case PurchaseStartResult.unavailable:
-        setState(() {
-          _isPurchaseBusy = false;
-        });
         _showSnackBar(context.l10n.settingsIapUnavailable);
       case PurchaseStartResult.productNotFound:
-        setState(() {
-          _isPurchaseBusy = false;
-        });
         _showSnackBar(context.l10n.settingsIapProductNotFound);
       case PurchaseStartResult.error:
-        setState(() {
-          _isPurchaseBusy = false;
-        });
         _showSnackBar(context.l10n.settingsPurchaseFailed);
+      case PurchaseStartResult.started:
+        break;
     }
   }
 

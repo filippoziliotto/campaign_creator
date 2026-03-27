@@ -140,6 +140,8 @@
   "forgeNextNarrative": "Zur Geschichte",
   "forgeReforgeParchment": "Pergament neu schmieden",
   "forgeForgeParchment": "Pergament schmieden",
+  "forgeReforgeParchmentCompact": "Pergament neu schmieden",
+  "forgeForgeParchmentCompact": "Pergament schmieden",
   "forgeAdvanceBlockedWorld": "Lege mindestens Ton, Stil oder Themen fest, bevor du zur Gruppe gehst.",
   "forgeAdvanceBlockedParty": "Prüfe Gruppenstufe, Größe und Archetypen, bevor du fortfährst.",
   "forgeAdvanceBlockedNarrative": "Füge mindestens ein narratives Detail hinzu, bevor du das Pergament schmiedest.",

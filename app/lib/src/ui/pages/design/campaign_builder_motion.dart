@@ -1081,6 +1081,7 @@ class ForgePrimaryActionButton extends StatefulWidget {
     super.key,
     required this.atmosphere,
     required this.label,
+    this.compactLabel,
     required this.icon,
     required this.isLoading,
     required this.shouldPulse,
@@ -1089,6 +1090,7 @@ class ForgePrimaryActionButton extends StatefulWidget {
 
   final CampaignAtmosphereData atmosphere;
   final String label;
+  final String? compactLabel;
   final IconData icon;
   final bool isLoading;
   final bool shouldPulse;
@@ -1160,20 +1162,38 @@ class _ForgePrimaryActionButtonState extends State<ForgePrimaryActionButton>
         widget.shouldPulse && widget.onPressed != null && !widget.isLoading;
     final baseGlowAlpha = canPulse ? 0.16 : 0.08;
 
-    final button = FilledButton.icon(
-      style: FilledButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      ),
-      onPressed: widget.isLoading ? null : widget.onPressed,
-      icon: widget.isLoading
-          ? const SizedBox(
-              width: 18,
-              height: 18,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
-          : Icon(widget.icon),
-      label: Text(widget.label),
+    final button = LayoutBuilder(
+      builder: (context, constraints) {
+        final useCompactLabel = widget.compactLabel != null &&
+            constraints.maxWidth > 0 &&
+            constraints.maxWidth < 290;
+        final resolvedLabel =
+            useCompactLabel ? widget.compactLabel! : widget.label;
+
+        return FilledButton.icon(
+          style: FilledButton.styleFrom(
+            padding: EdgeInsets.symmetric(
+              horizontal: useCompactLabel ? 18 : 22,
+              vertical: 14,
+            ),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          onPressed: widget.isLoading ? null : widget.onPressed,
+          icon: widget.isLoading
+              ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Icon(widget.icon),
+          label: Text(
+            resolvedLabel,
+            maxLines: 1,
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+          ),
+        );
+      },
     );
 
     return AnimatedBuilder(

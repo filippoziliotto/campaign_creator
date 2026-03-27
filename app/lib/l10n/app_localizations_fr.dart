@@ -271,6 +271,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get forgeForgeParchment => 'Forger le parchemin';
 
   @override
+  String get forgeReforgeParchmentCompact => 'Reforger le parchemin';
+
+  @override
+  String get forgeForgeParchmentCompact => 'Forger le parchemin';
+
+  @override
   String get forgeAdvanceBlockedWorld =>
       'Define at least tone, style, or themes before moving to the party.';
 

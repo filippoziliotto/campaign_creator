@@ -1530,6 +1530,7 @@ class ForgeActionStrip extends StatelessWidget {
     required this.isPrimaryEnabled,
     required this.isGenerating,
     required this.primaryLabel,
+    this.primaryCompactLabel,
     required this.primaryIcon,
     required this.onRetreat,
     required this.onAdvance,
@@ -1544,6 +1545,7 @@ class ForgeActionStrip extends StatelessWidget {
   final bool isPrimaryEnabled;
   final bool isGenerating;
   final String primaryLabel;
+  final String? primaryCompactLabel;
   final IconData primaryIcon;
   final VoidCallback onRetreat;
   final VoidCallback? onAdvance;
@@ -1591,6 +1593,7 @@ class ForgeActionStrip extends StatelessWidget {
                 final primaryButton = ForgePrimaryActionButton(
                   atmosphere: atmosphere,
                   label: primaryLabel,
+                  compactLabel: primaryCompactLabel,
                   icon: primaryIcon,
                   isLoading: isGenerating,
                   shouldPulse: isPrimaryEnabled,

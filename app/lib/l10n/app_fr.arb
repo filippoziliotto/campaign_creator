@@ -140,6 +140,8 @@
   "forgeNextNarrative": "Aller à l’histoire",
   "forgeReforgeParchment": "Reforger le parchemin",
   "forgeForgeParchment": "Forger le parchemin",
+  "forgeReforgeParchmentCompact": "Reforger le parchemin",
+  "forgeForgeParchmentCompact": "Forger le parchemin",
   "forgeAdvanceBlockedWorld": "Define at least tone, style, or themes before moving to the party.",
   "forgeAdvanceBlockedParty": "Check party level, size, and archetypes before continuing.",
   "forgeAdvanceBlockedNarrative": "Add at least one narrative detail before forging the parchment.",

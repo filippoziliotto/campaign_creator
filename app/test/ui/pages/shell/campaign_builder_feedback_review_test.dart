@@ -487,6 +487,27 @@ void main() {
     expect(find.byKey(const ValueKey('parchment-action-copy')), findsOneWidget);
   });
 
+  testWidgets('narrative forge action uses compact label on narrow screens', (
+    tester,
+  ) async {
+    await _setSmallSurface(tester);
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: _buildPage(
+          initialPreferences: const <String, Object>{
+            'app.review_prompted': true,
+          },
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openNarrativeSection(tester);
+
+    expect(find.text('Forgia Pergamena'), findsOneWidget);
+    expect(find.text('Forgia la Pergamena'), findsNothing);
+  });
+
   testWidgets('successful generation requests the forge sound once', (
     tester,
   ) async {
@@ -743,7 +764,9 @@ Future<void> _openNarrativeSection(
   String sectionLabel = 'Trama',
 }) async {
   await _openWorldSection(tester);
-  await tester.tap(find.text(sectionLabel));
+  final sectionFinder = find.text(sectionLabel);
+  await tester.ensureVisible(sectionFinder);
+  await tester.tap(sectionFinder, warnIfMissed: false);
   await _pumpUi(tester);
 
   expect(
@@ -790,6 +813,11 @@ Future<void> _tapForgePrimaryAction(WidgetTester tester) async {
 
 Future<void> _setLargeSurface(WidgetTester tester) async {
   await tester.binding.setSurfaceSize(const Size(1200, 1600));
+  addTearDown(() => tester.binding.setSurfaceSize(null));
+}
+
+Future<void> _setSmallSurface(WidgetTester tester) async {
+  await tester.binding.setSurfaceSize(const Size(360, 844));
   addTearDown(() => tester.binding.setSurfaceSize(null));
 }
 

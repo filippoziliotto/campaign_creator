@@ -270,6 +270,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get forgeForgeParchment => 'Forjar pergamino';
 
   @override
+  String get forgeReforgeParchmentCompact => 'Reforjar pergamino';
+
+  @override
+  String get forgeForgeParchmentCompact => 'Forjar pergamino';
+
+  @override
   String get forgeAdvanceBlockedWorld =>
       'Define at least tone, style, or themes before moving to the party.';
 

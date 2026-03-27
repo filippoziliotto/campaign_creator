@@ -38,6 +38,8 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
     Locale('fr'),
     Locale('de'),
   ];
+  static final _lightTheme = buildFantasyLightTheme();
+  static final _darkTheme = buildFantasyTheme();
 
   late Locale _locale;
   ThemeMode _themeMode = ThemeMode.dark;
@@ -170,8 +172,8 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: buildFantasyLightTheme(),
-      darkTheme: buildFantasyTheme(),
+      theme: _lightTheme,
+      darkTheme: _darkTheme,
       themeMode: _themeMode,
       locale: _locale,
       onGenerateTitle: (context) => context.l10n.appTitle,

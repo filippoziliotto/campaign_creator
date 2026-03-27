@@ -120,6 +120,43 @@ void main() {
       expect(fakeAdService.showCallCount, 0);
     });
 
+    test('paid entitlement clears any pending interstitial and keeps skipping',
+        () async {
+      final preferences = await SharedPreferences.getInstance();
+      fakeAdService.shouldBeReady = false;
+
+      for (var i = 1; i <= 5; i++) {
+        await coordinator.recordSuccessfulGeneration(
+          preferences: preferences,
+        );
+      }
+
+      expect(
+        await coordinator.recordSuccessfulGeneration(
+          preferences: preferences,
+        ),
+        InterstitialAdOutcome.adNotReady,
+      );
+
+      await coordinator.handlePurchaseUpdates(
+        updates: const [
+          NormalizedPurchaseUpdate(
+            status: PurchaseUpdateStatus.purchased,
+            productId: 'ad_free_upgrade',
+          ),
+        ],
+        preferences: preferences,
+      );
+
+      fakeAdService.shouldBeReady = true;
+      final outcome = await coordinator.recordSuccessfulGeneration(
+        preferences: preferences,
+      );
+
+      expect(outcome, InterstitialAdOutcome.skipped);
+      expect(fakeAdService.showCallCount, 0);
+    });
+
     test('preloads after showing an ad', () async {
       final preferences = await SharedPreferences.getInstance();
       fakeAdService.shouldBeReady = true;

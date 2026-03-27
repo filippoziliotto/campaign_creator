@@ -140,6 +140,8 @@
   "forgeNextNarrative": "Vai alla Trama",
   "forgeReforgeParchment": "Riforgia la Pergamena",
   "forgeForgeParchment": "Forgia la Pergamena",
+  "forgeReforgeParchmentCompact": "Riforgia Pergamena",
+  "forgeForgeParchmentCompact": "Forgia Pergamena",
   "forgeAdvanceBlockedWorld": "Definisci almeno tono, stile o temi prima di passare al party.",
   "forgeAdvanceBlockedParty": "Controlla livello, dimensione e archetipi del party prima di procedere.",
   "forgeAdvanceBlockedNarrative": "Aggiungi almeno un dettaglio narrativo prima di forgiare la pergamena.",

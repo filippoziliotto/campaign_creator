@@ -97,6 +97,22 @@ void main() {
     });
 
     test(
+        'returns the same CampaignOptions instance for repeated calls with the same locale',
+        () async {
+      final service = LocalCampaignService();
+
+      final first = await service.getOptions(localeCode: 'en');
+      final second = await service.getOptions(localeCode: 'en');
+
+      expect(
+        identical(first, second),
+        isTrue,
+        reason:
+            'second call should return the cached instance without re-parsing',
+      );
+    });
+
+    test(
         'bundled assets include long campaign presets in Italian, English, Spanish, French, and German',
         () async {
       final service = LocalCampaignService();

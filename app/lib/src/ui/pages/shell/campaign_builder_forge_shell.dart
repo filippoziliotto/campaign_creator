@@ -259,6 +259,8 @@ extension on _CampaignBuilderPageState {
       primaryLabel: _isGenerating
           ? context.l10n.forgeButtonForging
           : _nextForgeActionLabel(),
+      primaryCompactLabel:
+          _isGenerating ? null : _nextForgeActionCompactLabel(),
       primaryIcon: _forgeSection == _ForgeSection.narrative
           ? Icons.auto_awesome_rounded
           : Icons.arrow_forward_rounded,
@@ -293,6 +295,8 @@ extension on _CampaignBuilderPageState {
                 label: _isGenerating
                     ? context.l10n.forgeButtonForging
                     : _nextForgeActionLabel(),
+                compactLabel:
+                    _isGenerating ? null : _nextForgeActionCompactLabel(),
                 icon: _forgeSection == _ForgeSection.narrative
                     ? Icons.auto_awesome_rounded
                     : Icons.arrow_forward_rounded,
@@ -329,6 +333,18 @@ extension on _CampaignBuilderPageState {
           readyText: context.l10n.forgeReadinessNarrativeReady,
           pendingText: context.l10n.forgeReadinessNarrativePending,
         );
+    }
+  }
+
+  String? _nextForgeActionCompactLabel() {
+    switch (_forgeSection) {
+      case _ForgeSection.world:
+      case _ForgeSection.party:
+        return null;
+      case _ForgeSection.narrative:
+        return _hasUnsavedChanges && _generatedPrompt != null
+            ? context.l10n.forgeReforgeParchmentCompact
+            : context.l10n.forgeForgeParchmentCompact;
     }
   }
 

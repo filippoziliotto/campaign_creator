@@ -140,6 +140,8 @@
   "forgeNextNarrative": "Ir a la Historia",
   "forgeReforgeParchment": "Reforjar pergamino",
   "forgeForgeParchment": "Forjar pergamino",
+  "forgeReforgeParchmentCompact": "Reforjar pergamino",
+  "forgeForgeParchmentCompact": "Forjar pergamino",
   "forgeAdvanceBlockedWorld": "Define at least tone, style, or themes before moving to the party.",
   "forgeAdvanceBlockedParty": "Check party level, size, and archetypes before continuing.",
   "forgeAdvanceBlockedNarrative": "Add at least one narrative detail before forging the parchment.",
