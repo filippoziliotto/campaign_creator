@@ -965,6 +965,7 @@ class _TestApp extends StatelessWidget {
 class _FakeForgeSoundPlayer implements ForgeSoundPlayer {
   int playCount = 0;
   int newSessionPlayCount = 0;
+  int themeSwitchPlayCount = 0;
   bool disposed = false;
 
   @override
@@ -975,6 +976,11 @@ class _FakeForgeSoundPlayer implements ForgeSoundPlayer {
   @override
   Future<void> playNewSessionSound() async {
     newSessionPlayCount += 1;
+  }
+
+  @override
+  Future<void> playThemeSwitchSound() async {
+    themeSwitchPlayCount += 1;
   }
 
   @override

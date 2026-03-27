@@ -5,6 +5,7 @@ import 'package:audioplayers/audioplayers.dart';
 abstract class ForgeSoundPlayer {
   Future<void> playForgeSound();
   Future<void> playNewSessionSound();
+  Future<void> playThemeSwitchSound();
 
   void dispose();
 }
@@ -21,6 +22,11 @@ class DefaultForgeSoundPlayer implements ForgeSoundPlayer {
   @override
   Future<void> playNewSessionSound() async {
     await _playAsset('audio/new_session.wav');
+  }
+
+  @override
+  Future<void> playThemeSwitchSound() async {
+    await _playAsset('audio/light_mode.wav');
   }
 
   Future<void> _playAsset(String assetPath) async {

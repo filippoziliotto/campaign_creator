@@ -2034,6 +2034,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                     onLocaleChanged: widget.onLocaleChanged,
                     currentThemeMode: widget.currentThemeMode,
                     onThemeModeChanged: widget.onThemeModeChanged,
+                    onThemeSwitchSound: () =>
+                        unawaited(_forgeSoundPlayer.playThemeSwitchSound()),
                     isAdFree: _isAdFree,
                     isPurchaseBusy: _isPurchaseBusy,
                     adFreePrice: _adFreePrice,

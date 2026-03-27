@@ -6,6 +6,7 @@ class _InfoButton extends StatelessWidget {
     required this.onLocaleChanged,
     required this.currentThemeMode,
     required this.onThemeModeChanged,
+    this.onThemeSwitchSound,
     required this.isAdFree,
     required this.isPurchaseBusy,
     this.adFreePrice,
@@ -17,6 +18,7 @@ class _InfoButton extends StatelessWidget {
   final ValueChanged<Locale> onLocaleChanged;
   final ThemeMode currentThemeMode;
   final ValueChanged<ThemeMode>? onThemeModeChanged;
+  final VoidCallback? onThemeSwitchSound;
   final bool isAdFree;
   final bool isPurchaseBusy;
   final String? adFreePrice;
@@ -33,6 +35,7 @@ class _InfoButton extends StatelessWidget {
         onLocaleChanged: onLocaleChanged,
         currentThemeMode: currentThemeMode,
         onThemeModeChanged: onThemeModeChanged,
+        onThemeSwitchSound: onThemeSwitchSound,
         isAdFree: isAdFree,
         isPurchaseBusy: isPurchaseBusy,
         adFreePrice: adFreePrice,
@@ -332,6 +335,7 @@ class _SettingsSheet extends StatefulWidget {
     required this.onLocaleChanged,
     required this.currentThemeMode,
     required this.onThemeModeChanged,
+    this.onThemeSwitchSound,
     required this.isAdFree,
     required this.isPurchaseBusy,
     this.adFreePrice,
@@ -343,6 +347,7 @@ class _SettingsSheet extends StatefulWidget {
   final ValueChanged<Locale> onLocaleChanged;
   final ThemeMode currentThemeMode;
   final ValueChanged<ThemeMode>? onThemeModeChanged;
+  final VoidCallback? onThemeSwitchSound;
   final bool isAdFree;
   final bool isPurchaseBusy;
   final String? adFreePrice;
@@ -367,6 +372,7 @@ class _SettingsSheetState extends State<_SettingsSheet> {
       return;
     }
 
+    widget.onThemeSwitchSound?.call();
     setState(() {
       _selectedThemeMode = themeMode;
     });

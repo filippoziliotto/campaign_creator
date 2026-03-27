@@ -1,4 +1,5 @@
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
+import 'package:campaign_creator_flutter/src/audio/forge_sound_player.dart';
 import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
 import 'package:campaign_creator_flutter/src/theme/fantasy_theme.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
@@ -639,6 +640,37 @@ void main() {
         find.byKey(const ValueKey<String>('settings-sheet')), findsOneWidget);
   });
 
+  testWidgets('settings sheet theme control plays theme switch sound once',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    final soundPlayer = _FakeForgeSoundPlayer();
+
+    await tester.pumpWidget(
+      _testApp(
+        currentThemeMode: ThemeMode.dark,
+        forgeSoundPlayer: soundPlayer,
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('settings-theme-control')),
+        matching: find.byIcon(Icons.wb_sunny_rounded),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(soundPlayer.themeSwitchCallCount, 1);
+  });
+
   testWidgets(
       'settings sheet language control triggers callback and closes sheet',
       (tester) async {
@@ -850,6 +882,7 @@ Widget _testApp({
   ValueChanged<Locale>? onLocaleChanged,
   ThemeMode currentThemeMode = ThemeMode.dark,
   ValueChanged<ThemeMode>? onThemeModeChanged,
+  ForgeSoundPlayer? forgeSoundPlayer,
   bool disableAnimations = false,
   TextScaler textScaler = TextScaler.noScaling,
 }) =>
@@ -866,12 +899,37 @@ Widget _testApp({
       },
       home: CampaignBuilderPage(
         service: FakeCampaignService(minimalOptions()),
+        forgeSoundPlayer: forgeSoundPlayer,
         currentLocale: currentLocale,
         onLocaleChanged: onLocaleChanged ?? (_) {},
         currentThemeMode: currentThemeMode,
         onThemeModeChanged: onThemeModeChanged,
       ),
     );
+
+class _FakeForgeSoundPlayer implements ForgeSoundPlayer {
+  int forgeCallCount = 0;
+  int newSessionCallCount = 0;
+  int themeSwitchCallCount = 0;
+
+  @override
+  Future<void> playForgeSound() async {
+    forgeCallCount += 1;
+  }
+
+  @override
+  Future<void> playNewSessionSound() async {
+    newSessionCallCount += 1;
+  }
+
+  @override
+  Future<void> playThemeSwitchSound() async {
+    themeSwitchCallCount += 1;
+  }
+
+  @override
+  void dispose() {}
+}
 
 class _ThemeReactiveTestApp extends StatefulWidget {
   const _ThemeReactiveTestApp();
