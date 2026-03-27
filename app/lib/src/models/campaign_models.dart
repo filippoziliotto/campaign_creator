@@ -17,6 +17,7 @@ class CampaignOptions {
     Set<String>? premiumThemes,
     Set<String>? premiumTones,
     Set<String>? premiumStyles,
+    Set<String>? premiumPartyArchetypes,
     Set<String>? premiumTwists,
   })  : premiumSettings = Set<String>.unmodifiable(
           premiumSettings ?? const <String>{},
@@ -29,6 +30,9 @@ class CampaignOptions {
         ),
         premiumStyles = Set<String>.unmodifiable(
           premiumStyles ?? const <String>{},
+        ),
+        premiumPartyArchetypes = Set<String>.unmodifiable(
+          premiumPartyArchetypes ?? const <String>{},
         ),
         premiumTwists = Set<String>.unmodifiable(
           premiumTwists ?? const <String>{},
@@ -49,6 +53,7 @@ class CampaignOptions {
   final Set<String> premiumThemes;
   final Set<String> premiumTones;
   final Set<String> premiumStyles;
+  final Set<String> premiumPartyArchetypes;
   final Set<String> premiumTwists;
 
   factory CampaignOptions.fromJson(Map<String, dynamic> json) {
@@ -77,6 +82,8 @@ class CampaignOptions {
       premiumThemes: _stringList(rawPremiumOptionIds['themes']).toSet(),
       premiumTones: _stringList(rawPremiumOptionIds['tones']).toSet(),
       premiumStyles: _stringList(rawPremiumOptionIds['styles']).toSet(),
+      premiumPartyArchetypes:
+          _stringList(rawPremiumOptionIds['party_archetypes']).toSet(),
       premiumTwists: _stringList(rawPremiumOptionIds['twists']).toSet(),
     );
   }
@@ -126,6 +133,8 @@ class CampaignOptions {
       premiumThemes: yamlStringSet(premiumOptionIds?['themes']),
       premiumTones: yamlStringSet(premiumOptionIds?['tones']),
       premiumStyles: yamlStringSet(premiumOptionIds?['styles']),
+      premiumPartyArchetypes:
+          yamlStringSet(premiumOptionIds?['party_archetypes']),
       premiumTwists: yamlStringSet(premiumOptionIds?['twists']),
     );
   }
@@ -168,6 +177,9 @@ class CampaignOptions {
   bool isPremiumTone(String value) => premiumTones.contains(value);
 
   bool isPremiumStyle(String value) => premiumStyles.contains(value);
+
+  bool isPremiumPartyArchetype(String value) =>
+      premiumPartyArchetypes.contains(value);
 
   bool isPremiumTwist(String value) => premiumTwists.contains(value);
 

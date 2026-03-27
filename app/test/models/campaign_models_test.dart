@@ -49,6 +49,9 @@ premium_option_ids:
     - Cupo
   styles:
     - Sandbox
+  party_archetypes:
+    - Tank
+    - Supporto
   twists:
     - Portale
 ''') as YamlMap,
@@ -72,6 +75,8 @@ premium_option_ids:
       expect(options.isPremiumTheme('Intrigo'), isTrue);
       expect(options.isPremiumTone('Cupo'), isTrue);
       expect(options.isPremiumStyle('Sandbox'), isTrue);
+      expect(options.isPremiumPartyArchetype('Tank'), isTrue);
+      expect(options.isPremiumPartyArchetype('Supporto'), isTrue);
       expect(options.isPremiumTwist('Portale'), isTrue);
       expect(options.isPremiumPreset('Ritorno al Faro'), isTrue);
       expect(options.isPremiumPreset('Ascesa delle Casate'), isFalse);
@@ -98,6 +103,7 @@ premium_option_ids:
   tones:
     bad: shape
   styles: 3
+  party_archetypes: invalid
   twists:
 ''') as YamlMap,
       );
@@ -116,6 +122,7 @@ premium_option_ids:
       expect(options.premiumThemes, isEmpty);
       expect(options.premiumTones, isEmpty);
       expect(options.premiumStyles, isEmpty);
+      expect(options.premiumPartyArchetypes, isEmpty);
       expect(options.premiumTwists, isEmpty);
     });
 

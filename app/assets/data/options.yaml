@@ -91,6 +91,8 @@ party_archetypes:
   - Monaco
   - Barbaro
   - Artefice
+  - Sciamano
+  - Negromante
 
 twists:
   - Nessun colpo di scena
@@ -109,6 +111,12 @@ twists:
   - I mostri stanno fuggendo da un predatore di scala cataclismica
   - L'intera regione è una simulazione magica o il sogno di un dio dormiente
   - La cura per la piaga richiede il sacrificio della persona che l'ha commissionata
+
+premium_option_ids:
+  party_archetypes:
+    - Artefice
+    - Sciamano
+    - Negromante
 
 
 presets:

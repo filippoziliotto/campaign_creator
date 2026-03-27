@@ -1,6 +1,7 @@
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:campaign_creator_flutter/src/audio/forge_sound_player.dart';
 import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
+import 'package:campaign_creator_flutter/src/monetization/rewarded_ad_service.dart';
 import 'package:campaign_creator_flutter/src/services/campaign_service.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_motion.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
@@ -422,6 +423,47 @@ void main() {
     );
   });
 
+  testWidgets(
+      'premium party pills keep their premium color after rewarded unlock',
+      (tester) async {
+    await _setLargeSurface(tester);
+    final rewardedAdService = _FakeRewardedAdService()
+      ..shouldBeReady = true
+      ..showResult = true;
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('en'),
+        child: _buildPage(
+          locale: const Locale('en'),
+          rewardedAdService: rewardedAdService,
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openPartySection(tester);
+
+    final l10n = _l10n(tester);
+    final premiumLevelFinder =
+        find.byKey(const ValueKey<String>('party-level-pill-6'));
+
+    final colorBeforeUnlock =
+        tester.widget<Text>(premiumLevelFinder).style?.color;
+    expect(colorBeforeUnlock, isNotNull);
+
+    await tester.tap(premiumLevelFinder);
+    await _pumpUi(tester);
+    await tester
+        .tap(find.widgetWithText(FilledButton, l10n.premiumUnlockWatchAd));
+    await _pumpUi(tester);
+
+    expect(rewardedAdService.showCallCount, 1);
+
+    final colorAfterUnlock =
+        tester.widget<Text>(premiumLevelFinder).style?.color;
+    expect(colorAfterUnlock, colorBeforeUnlock);
+  });
+
   testWidgets('reducing party size trims selected archetypes', (tester) async {
     await _setLargeSurface(tester);
 
@@ -811,6 +853,7 @@ Widget _buildPage({
   AppReviewPrompter? reviewPrompter,
   CampaignService? service,
   ForgeSoundPlayer? forgeSoundPlayer,
+  RewardedAdService? rewardedAdService,
   Locale locale = const Locale('it'),
 }) {
   if (initialPreferences != null) {
@@ -823,6 +866,7 @@ Widget _buildPage({
     onLocaleChanged: (_) {},
     reviewPrompter: reviewPrompter,
     forgeSoundPlayer: forgeSoundPlayer,
+    rewardedAdService: rewardedAdService,
   );
 }
 
@@ -937,6 +981,27 @@ class _FakeForgeSoundPlayer implements ForgeSoundPlayer {
   void dispose() {
     disposed = true;
   }
+}
+
+class _FakeRewardedAdService implements RewardedAdService {
+  int showCallCount = 0;
+  bool shouldBeReady = true;
+  bool showResult = true;
+
+  @override
+  bool get isReady => shouldBeReady;
+
+  @override
+  Future<void> preload() async {}
+
+  @override
+  Future<bool> show() async {
+    showCallCount += 1;
+    return showResult;
+  }
+
+  @override
+  void dispose() {}
 }
 
 class _FailingCampaignService extends FakeCampaignService {

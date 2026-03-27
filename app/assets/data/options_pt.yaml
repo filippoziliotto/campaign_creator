@@ -114,6 +114,8 @@ party_archetypes:
   - Monge
   - Bárbaro
   - Artífice
+  - Xamã
+  - Necromante
 
 twists:
   - Sem reviravolta
@@ -179,6 +181,10 @@ premium_option_ids:
     - Open-world
     - Tático
     - Mítico
+  party_archetypes:
+    - Artífice
+    - Xamã
+    - Necromante
   twists:
     - A verdadeira ameaça é uma instituição benevolente (igreja, guilda, academia)
     - O mundo está preso num subtil loop temporal

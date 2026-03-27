@@ -113,6 +113,8 @@ party_archetypes:
 - Moine
 - Barbare
 - Artificier
+- Chaman
+- Nécromancien
 twists:
 - Sans rebondissement
 - La prophétie est fausse
@@ -176,6 +178,10 @@ premium_option_ids:
     - Open-world
     - Tactique
     - Mythique
+  party_archetypes:
+    - Artificier
+    - Chaman
+    - Nécromancien
   twists:
     - La vraie menace est une institution bienveillante (église, guilde, académie)
     - Le monde est piégé dans une subtile boucle temporelle

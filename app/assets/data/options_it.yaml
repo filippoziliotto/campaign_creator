@@ -114,6 +114,8 @@ party_archetypes:
   - Monaco
   - Barbaro
   - Artefice
+  - Sciamano
+  - Negromante
 
 twists:
   - Nessun colpo di scena
@@ -179,6 +181,10 @@ premium_option_ids:
     - Open-world
     - Tattico
     - Mitico
+  party_archetypes:
+    - Artefice
+    - Sciamano
+    - Negromante
   twists:
     - La vera minaccia è un'istituzione benefica (chiesa, gilda, accademia)
     - Il mondo è bloccato in un sottile loop temporale

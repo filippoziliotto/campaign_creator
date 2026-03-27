@@ -1433,11 +1433,13 @@ extension on _CampaignBuilderPageState {
         max - min + 1,
         (index) {
           final value = min + index;
-          final isLocked = !_isPremiumUnlocked && value > freeMax;
+          final isPremium = value > freeMax;
+          final isLocked = !_isPremiumUnlocked && isPremium;
           return SegmentedValuePillItem(
             key: ValueKey<String>('$keyPrefix-$value'),
             label: value.toString(),
             selected: currentValue == value,
+            premium: isPremium,
             locked: isLocked,
             onTap: () {
               if (isLocked) {
@@ -1475,9 +1477,7 @@ extension on _CampaignBuilderPageState {
                 }
               });
             },
-            premiumOptionIds: options.partyArchetypes.isNotEmpty
-                ? {options.partyArchetypes.last}
-                : const {},
+            premiumOptionIds: options.premiumPartyArchetypes,
             premiumCrownColor: _currentAtmosphere().glow,
           ),
           if (_selectedArchetypes.length >= _partySize) ...[

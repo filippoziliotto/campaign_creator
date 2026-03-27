@@ -808,12 +808,14 @@ class SegmentedValuePillItem {
     required this.label,
     required this.selected,
     required this.onTap,
+    this.premium = false,
     this.locked = false,
   });
 
   final Key key;
   final String label;
   final bool selected;
+  final bool premium;
   final bool locked;
   final VoidCallback onTap;
 }
@@ -916,7 +918,7 @@ class AnimatedRuneSegmentedValueSelector extends StatelessWidget {
               item.label,
               key: item.key,
               style: TextStyle(
-                color: item.locked
+                color: (item.locked || item.premium)
                     ? (lockedColor ??
                         Theme.of(context)
                             .colorScheme

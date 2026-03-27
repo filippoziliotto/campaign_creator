@@ -114,6 +114,8 @@ party_archetypes:
   - Monk
   - Barbarian
   - Artificer
+  - Shaman
+  - Necromancer
 
 twists:
   - No twist
@@ -179,6 +181,10 @@ premium_option_ids:
     - Open-world
     - Tactical
     - Mythic
+  party_archetypes:
+    - Artificer
+    - Shaman
+    - Necromancer
   twists:
     - The true threat is a benevolent institution (church, guild, academy)
     - The world is trapped in a subtle time loop

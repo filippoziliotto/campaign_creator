@@ -111,6 +111,8 @@ party_archetypes:
 - Monje
 - Bárbaro
 - Artífice
+- Chamán
+- Nigromante
 twists:
 - Sin giro
 - La profecía es falsa
@@ -174,6 +176,10 @@ premium_option_ids:
     - Open-world
     - Táctico
     - Mítico
+  party_archetypes:
+    - Artífice
+    - Chamán
+    - Nigromante
   twists:
     - La verdadera amenaza es una institución benévola (iglesia, gremio, academia)
     - El mundo está atrapado en un sutil bucle temporal
