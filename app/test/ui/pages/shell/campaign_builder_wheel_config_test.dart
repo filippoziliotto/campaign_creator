@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('setting, twist, and preset wheel configs are independently tuned', () {
+  test('setting, twist, and preset wheel configs reflect current tuning', () {
     expect(settingWheelPickerConfig.sheetHeight, 260);
     expect(settingWheelPickerConfig.itemExtent, 54);
     expect(settingWheelPickerConfig.diameterRatio, 2.45);
@@ -22,11 +22,11 @@ void main() {
     expect(twistWheelPickerConfig.fontWeight, FontWeight.w600);
     expect(twistWheelPickerConfig.maxLines, 3);
 
-    expect(presetWheelPickerConfig.sheetHeight, 300);
+    expect(presetWheelPickerConfig.sheetHeight, 260);
     expect(presetWheelPickerConfig.itemExtent, 66);
     expect(presetWheelPickerConfig.diameterRatio, 2.9);
     expect(presetWheelPickerConfig.perspective, 0.0038);
-    expect(presetWheelPickerConfig.fontSize, 14);
+    expect(presetWheelPickerConfig.fontSize, 16);
     expect(presetWheelPickerConfig.letterSpacing, 1.08);
     expect(presetWheelPickerConfig.fontWeight, FontWeight.w700);
     expect(presetWheelPickerConfig.maxLines, 2);
@@ -64,8 +64,8 @@ void main() {
       isNot(twistWheelPickerConfig.maxLines),
     );
     expect(
-      presetWheelPickerConfig.sheetHeight,
-      isNot(settingWheelPickerConfig.sheetHeight),
+      presetWheelPickerConfig.itemExtent,
+      isNot(settingWheelPickerConfig.itemExtent),
     );
     expect(
       presetWheelPickerConfig.itemExtent,
@@ -77,11 +77,15 @@ void main() {
     );
     expect(
       presetWheelPickerConfig.perspective,
+      isNot(settingWheelPickerConfig.perspective),
+    );
+    expect(
+      presetWheelPickerConfig.perspective,
       isNot(twistWheelPickerConfig.perspective),
     );
     expect(
-      presetWheelPickerConfig.fontSize,
-      isNot(settingWheelPickerConfig.fontSize),
+      presetWheelPickerConfig.letterSpacing,
+      isNot(settingWheelPickerConfig.letterSpacing),
     );
     expect(
       presetWheelPickerConfig.letterSpacing,

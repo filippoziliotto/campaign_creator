@@ -801,7 +801,12 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       return;
     }
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 
@@ -1033,7 +1038,12 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     }
     _triggerLightImpact();
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(context.l10n.appSnackPromptCopied)),
+      SnackBar(
+        content: Text(
+          context.l10n.appSnackPromptCopied,
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 

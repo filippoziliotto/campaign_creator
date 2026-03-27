@@ -136,7 +136,8 @@ void main() {
       variant:
           const TargetPlatformVariant(<TargetPlatform>{TargetPlatform.iOS}));
 
-  testWidgets('share keeps the existing no-parchment snackbar', (tester) async {
+  testWidgets('forge without parchment does not expose the parchment share action',
+      (tester) async {
     SharedPreferences.setMockInitialValues(<String, Object>{});
 
     await tester.binding.setSurfaceSize(const Size(430, 932));
@@ -148,7 +149,6 @@ void main() {
           service: FakeCampaignService(minimalOptions()),
           currentLocale: const Locale('it'),
           onLocaleChanged: (_) {},
-          sharePrompt: (_) async => ShareResult.unavailable,
         ),
       ),
     );
@@ -183,15 +183,8 @@ void main() {
     );
     await _pumpUi(tester);
 
-    final shareButton = find.text('Condividi');
-    await tester.ensureVisible(shareButton);
-    await tester.tap(shareButton);
-    await _pumpUi(tester);
-
-    expect(
-      find.text("Non c'è ancora una pergamena da condividere."),
-      findsOneWidget,
-    );
+    expect(find.byKey(const ValueKey('parchment-action-share')), findsNothing);
+    expect(find.text('Condividi'), findsNothing);
   },
       variant:
           const TargetPlatformVariant(<TargetPlatform>{TargetPlatform.iOS}));

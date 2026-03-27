@@ -540,6 +540,32 @@ void main() {
     );
   });
 
+  testWidgets('snack bar messages are center aligned', (tester) async {
+    await _setLargeSurface(tester);
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: _buildPage(
+          initialPreferences: const <String, Object>{
+            'app.review_prompted': true,
+          },
+          service: _FailingCampaignService(),
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openNarrativeSection(tester);
+
+    await _tapForgePrimaryAction(tester);
+
+    final message = find.text(
+      'Generazione fallita. Controlla il messaggio mostrato nella schermata.',
+    );
+    final messageText = tester.widget<Text>(message);
+
+    expect(messageText.textAlign, TextAlign.center);
+  });
+
   testWidgets('copy action triggers a light haptic impact', (tester) async {
     await _setLargeSurface(tester);
 
