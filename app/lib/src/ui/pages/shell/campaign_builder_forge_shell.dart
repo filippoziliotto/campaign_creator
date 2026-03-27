@@ -1208,7 +1208,7 @@ extension on _CampaignBuilderPageState {
                               ),
                               child: Text(
                                 isLockedSelected
-                                    ? 'Unlock Premium'
+                                    ? context.l10n.settingsGoAdFreePrice
                                     : isCustomSelected
                                         ? 'Enter Custom'
                                         : 'Select',

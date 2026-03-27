@@ -347,11 +347,12 @@ void main() {
     ));
     await _pumpUi(tester);
     await _openPartySection(tester);
+    final l10n = _l10n(tester);
 
     await tester.tap(find.byKey(const ValueKey<String>('party-level-pill-6')));
     await _pumpUi(tester);
 
-    expect(find.text('Unlock Premium'), findsWidgets);
+    expect(find.text(l10n.settingsGoAdFreePrice), findsWidgets);
     expect(
       tester
           .widget<Text>(find.byKey(const ValueKey<String>('party-level-label')))
@@ -371,6 +372,7 @@ void main() {
     ));
     await _pumpUi(tester);
     await _openPartySection(tester);
+    final l10n = _l10n(tester);
 
     await tester.tap(
       find.descendant(
@@ -401,6 +403,7 @@ void main() {
     ));
     await _pumpUi(tester);
     await _openPartySection(tester);
+    final l10n = _l10n(tester);
 
     await tester.tap(
       find.descendant(
@@ -410,7 +413,7 @@ void main() {
     );
     await _pumpUi(tester);
 
-    expect(find.text('Unlock Premium'), findsWidgets);
+    expect(find.text(l10n.settingsGoAdFreePrice), findsWidgets);
     expect(
       tester
           .widget<Text>(find.byKey(const ValueKey<String>('party-size-label')))
@@ -883,6 +886,10 @@ Future<void> _setLargeSurface(WidgetTester tester) async {
 Future<void> _setSmallSurface(WidgetTester tester) async {
   await tester.binding.setSurfaceSize(const Size(360, 844));
   addTearDown(() => tester.binding.setSurfaceSize(null));
+}
+
+AppLocalizations _l10n(WidgetTester tester) {
+  return AppLocalizations.of(tester.element(find.byType(CampaignBuilderPage)));
 }
 
 class _TestApp extends StatelessWidget {

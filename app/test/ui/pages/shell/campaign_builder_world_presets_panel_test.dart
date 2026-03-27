@@ -403,11 +403,16 @@ void main() {
     await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -150));
     await _pumpUi(tester);
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Unlock Premium'));
+    final l10n = _l10n(tester);
+
+    await tester.tap(
+      find.widgetWithText(FilledButton, l10n.settingsGoAdFreePrice),
+    );
     await _pumpUi(tester);
 
-    expect(find.text('Watch Ad (5 min)'), findsOneWidget);
-    expect(find.text('Unlock Premium'), findsWidgets);
+    expect(find.text(l10n.premiumUnlockTitle), findsOneWidget);
+    expect(find.text(l10n.premiumUnlockWatchAd), findsOneWidget);
+    expect(find.text(l10n.settingsGoAdFreePrice), findsWidgets);
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
@@ -486,10 +491,14 @@ void main() {
     await _pumpUi(tester);
     expect(find.text('VOID THRONES'), findsWidgets);
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Unlock Premium'));
+    final l10n = _l10n(tester);
+
+    await tester.tap(
+      find.widgetWithText(FilledButton, l10n.settingsGoAdFreePrice),
+    );
     await _pumpUi(tester);
 
-    expect(find.text('Watch Ad (5 min)'), findsOneWidget);
+    expect(find.text(l10n.premiumUnlockWatchAd), findsOneWidget);
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
@@ -527,9 +536,14 @@ void main() {
     await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -70));
     await _pumpUi(tester);
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Unlock Premium'));
+    final l10n = _l10n(tester);
+
+    await tester.tap(
+      find.widgetWithText(FilledButton, l10n.settingsGoAdFreePrice),
+    );
     await _pumpUi(tester);
-    await tester.tap(find.widgetWithText(FilledButton, 'Watch Ad (5 min)'));
+    await tester
+        .tap(find.widgetWithText(FilledButton, l10n.premiumUnlockWatchAd));
     await _pumpUi(tester);
 
     expect(rewardedAdService.showCallCount, 1);
@@ -579,9 +593,14 @@ void main() {
     await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -70));
     await _pumpUi(tester);
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Unlock Premium'));
+    final l10n = _l10n(tester);
+
+    await tester.tap(
+      find.widgetWithText(FilledButton, l10n.settingsGoAdFreePrice),
+    );
     await _pumpUi(tester);
-    await tester.tap(find.widgetWithText(FilledButton, 'Watch Ad (5 min)'));
+    await tester
+        .tap(find.widgetWithText(FilledButton, l10n.premiumUnlockWatchAd));
     await _pumpUi(tester);
 
     expect(rewardedAdService.showCallCount, 1);
@@ -592,9 +611,11 @@ void main() {
     await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -70));
     await _pumpUi(tester);
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Unlock Premium'));
+    await tester.tap(
+      find.widgetWithText(FilledButton, l10n.settingsGoAdFreePrice),
+    );
     await _pumpUi(tester);
-    expect(find.text('Watch Ad (5 min)'), findsOneWidget);
+    expect(find.text(l10n.premiumUnlockWatchAd), findsOneWidget);
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
@@ -723,6 +744,10 @@ class _TestApp extends StatelessWidget {
       home: child,
     );
   }
+}
+
+AppLocalizations _l10n(WidgetTester tester) {
+  return AppLocalizations.of(tester.element(find.byType(CampaignBuilderPage)));
 }
 
 Future<void> _pumpUi(WidgetTester tester) async {

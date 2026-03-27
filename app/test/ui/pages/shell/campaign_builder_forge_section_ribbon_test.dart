@@ -46,7 +46,7 @@ void main() {
     expect(
         find.descendant(of: ribbon, matching: find.text('🌍')), findsOneWidget);
     expect(
-        find.descendant(of: ribbon, matching: find.text('👥')), findsOneWidget);
+        find.descendant(of: ribbon, matching: find.text('⚔️')), findsOneWidget);
     expect(
         find.descendant(of: ribbon, matching: find.text('📜')), findsOneWidget);
   },

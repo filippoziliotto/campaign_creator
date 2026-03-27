@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../l10n_extension.dart';
 import '../theme/fantasy_theme.dart';
 import '../ui/pages/design/campaign_builder_atmosphere.dart';
 import 'monetization_prefs.dart';
@@ -247,6 +248,7 @@ class PremiumUnlockPrompt extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.fantasy;
     final textTheme = Theme.of(context).textTheme;
+    final l10n = context.l10n;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
@@ -254,7 +256,8 @@ class PremiumUnlockPrompt extends StatelessWidget {
         color: colors.card,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         border: Border(
-          top: BorderSide(color: colors.outline.withValues(alpha: 0.4), width: 1),
+          top: BorderSide(
+              color: colors.outline.withValues(alpha: 0.4), width: 1),
         ),
       ),
       child: Column(
@@ -270,7 +273,7 @@ class PremiumUnlockPrompt extends StatelessWidget {
 
           // Title
           Text(
-            'Premium Feature',
+            l10n.premiumUnlockTitle,
             style: textTheme.titleMedium?.copyWith(
               color: colors.foreground,
               fontWeight: FontWeight.w700,
@@ -282,9 +285,8 @@ class PremiumUnlockPrompt extends StatelessWidget {
           // Description
           Text(
             showAdOption
-                ? 'Watch an ad to access premium features for 5 minutes,\n'
-                    'or directly unlock Premium to access everything permanently.'
-                : 'Unlock Premium to access this feature permanently.',
+                ? l10n.premiumUnlockBodyWithAd
+                : l10n.premiumUnlockBodyNoAd,
             textAlign: TextAlign.center,
             style: textTheme.bodySmall?.copyWith(
               color: colors.foregroundMuted,
@@ -300,7 +302,7 @@ class PremiumUnlockPrompt extends StatelessWidget {
               child: FilledButton.icon(
                 onPressed: onWatchAd,
                 icon: const Icon(Icons.play_circle_outline, size: 18),
-                label: const Text('Watch Ad (5 min)'),
+                label: Text(l10n.premiumUnlockWatchAd),
                 style: FilledButton.styleFrom(
                   backgroundColor: highlightColor,
                   foregroundColor: Colors.black.withValues(alpha: 0.87),
@@ -324,7 +326,7 @@ class PremiumUnlockPrompt extends StatelessWidget {
                 color: highlightColor,
               ),
               label: Text(
-                'Unlock Premium',
+                l10n.settingsGoAdFreePrice,
                 style: textTheme.labelLarge?.copyWith(
                   color: highlightColor,
                   fontWeight: FontWeight.w600,

@@ -707,6 +707,20 @@ class AppLocalizationsEs extends AppLocalizations {
       'La compra ha fallado. Inténtalo de nuevo.';
 
   @override
+  String get premiumUnlockTitle => 'Función premium';
+
+  @override
+  String get premiumUnlockBodyWithAd =>
+      'Mira un anuncio para desbloquear todas las funciones premium durante 5 minutos, o desbloquea Premium para acceder a todo de forma permanente.';
+
+  @override
+  String get premiumUnlockBodyNoAd =>
+      'Desbloquea Premium para acceder a esta función de forma permanente.';
+
+  @override
+  String get premiumUnlockWatchAd => 'Ver anuncio (5 min)';
+
+  @override
   String get helpTitle => 'Guía';
 
   @override

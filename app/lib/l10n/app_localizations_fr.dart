@@ -705,6 +705,20 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsPurchaseFailed => 'Échec de l’achat. Veuillez réessayer.';
 
   @override
+  String get premiumUnlockTitle => 'Fonction premium';
+
+  @override
+  String get premiumUnlockBodyWithAd =>
+      'Regardez une publicité pour débloquer toutes les fonctionnalités premium pendant 5 minutes, ou débloquez Premium pour tout débloquer définitivement.';
+
+  @override
+  String get premiumUnlockBodyNoAd =>
+      'Débloquez Premium pour accéder définitivement à cette fonctionnalité.';
+
+  @override
+  String get premiumUnlockWatchAd => 'Regarder une pub (5 min)';
+
+  @override
   String get helpTitle => 'Guide';
 
   @override
