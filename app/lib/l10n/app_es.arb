@@ -315,6 +315,8 @@
   "helpCampaignTypeDungeonTitle": "Exploración de mazmorras",
   "helpCampaignTypeDungeonBody": "Una campaña centrada en mapas, descubrimiento, desgaste y secretos ocultos en lugares peligrosos. Funciona muy bien si buscas presión, exploración y un lugar con identidad fuerte.",
   "helpTipsTitle": "Consejos y buenas prácticas",
+  "helpTipWorld": "Empieza por la ambientación y el tema: son los límites que dan coherencia al resto.",
+  "helpTipTheme": "Usa 1 o 2 temas fuertes en vez de acumular demasiadas ideas parecidas.",
   "helpTipTwist": "Elige un giro para dar tensión inmediata a la trama.",
   "helpTipContrast": "Prueba a combinar tonos en contraste para obtener prompts menos previsibles.",
   "helpTipPreset": "Usa los presets cuando quieras inspiración rápida o una base sólida desde la que partir.",

@@ -745,6 +745,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String get helpTipsTitle => 'Tipps & Best Practices';
 
   @override
+  String get helpTipWorld =>
+      'Starte mit Setting und Thema: Das sind die Leitplanken, die allem Kohärenz geben.';
+
+  @override
+  String get helpTipTheme =>
+      'Nutze 1 bis 2 starke Themen, statt zu viele ähnliche Ideen anzuhäufen.';
+
+  @override
   String get helpTipTwist =>
       'Wähle einen Twist, um der Handlung sofort Spannung zu geben.';
 

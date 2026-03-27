@@ -315,6 +315,8 @@
   "helpCampaignTypeDungeonTitle": "Dungeon-Erkundung",
   "helpCampaignTypeDungeonBody": "Eine Kampagne rund um Karten, Entdeckung, Ressourcenverschleiß und Geheimnisse in gefährlichen Orten. Besonders geeignet, wenn du Druck, Erkundung und ein starkes Ortsgefühl willst.",
   "helpTipsTitle": "Tipps & Best Practices",
+  "helpTipWorld": "Starte mit Setting und Thema: Das sind die Leitplanken, die allem Kohärenz geben.",
+  "helpTipTheme": "Nutze 1 bis 2 starke Themen, statt zu viele ähnliche Ideen anzuhäufen.",
   "helpTipTwist": "Wähle einen Twist, um der Handlung sofort Spannung zu geben.",
   "helpTipContrast": "Kombiniere gegensätzliche Töne, um weniger vorhersehbare Prompts zu erhalten.",
   "helpTipPreset": "Nutze Presets, wenn du schnelle Inspiration oder eine starke Ausgangsbasis willst.",

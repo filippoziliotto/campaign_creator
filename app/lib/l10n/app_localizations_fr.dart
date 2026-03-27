@@ -739,6 +739,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get helpTipsTitle => 'Conseils et bonnes pratiques';
 
   @override
+  String get helpTipWorld =>
+      'Pars du cadre et du thème : ce sont les contraintes qui donnent de la cohérence au reste.';
+
+  @override
+  String get helpTipTheme =>
+      'Utilise 1 ou 2 thèmes forts plutôt que d’empiler trop d’idées similaires.';
+
+  @override
   String get helpTipTwist =>
       'Choisis un twist pour donner tout de suite de la tension à l’intrigue.';
 

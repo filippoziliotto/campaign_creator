@@ -315,6 +315,8 @@
   "helpCampaignTypeDungeonTitle": "Esplorazione dungeon",
   "helpCampaignTypeDungeonBody": "Una campagna centrata su mappe, scoperta, attrito e segreti nascosti in luoghi pericolosi. Ottima se vuoi pressione costante, esplorazione e forte senso del luogo.",
   "helpTipsTitle": "Consigli e buone pratiche",
+  "helpTipWorld": "Parti da ambientazione e tema: sono i vincoli che danno coerenza al resto.",
+  "helpTipTheme": "Usa 1-2 temi forti invece di accumulare troppe idee simili.",
   "helpTipTwist": "Scegli un twist per dare subito tensione alla trama.",
   "helpTipContrast": "Prova a combinare toni in contrasto per ottenere prompt meno prevedibili.",
   "helpTipPreset": "Usa i preset quando vuoi ispirazione rapida o una base solida da rifinire.",

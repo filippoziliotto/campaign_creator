@@ -315,6 +315,8 @@
   "helpCampaignTypeDungeonTitle": "Dungeon Exploration",
   "helpCampaignTypeDungeonBody": "A campaign focused on maps, discovery, attrition, and secrets hidden in dangerous places. Perfect when you want pressure, exploration, and a strong sense of place.",
   "helpTipsTitle": "Tips & best practices",
+  "helpTipWorld": "Start from setting and theme: they are the constraints that keep everything coherent.",
+  "helpTipTheme": "Use 1 or 2 strong themes instead of piling on too many similar ideas.",
   "helpTipTwist": "Pick a twist to give the plot immediate tension.",
   "helpTipContrast": "Try combining contrasting tones to get less predictable prompts.",
   "helpTipPreset": "Use presets when you want quick inspiration or a strong starting point.",

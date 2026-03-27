@@ -315,6 +315,8 @@
   "helpCampaignTypeDungeonTitle": "Exploration de donjon",
   "helpCampaignTypeDungeonBody": "Une campagne centrée sur les cartes, la découverte, l’attrition et les secrets enfouis dans des lieux dangereux. Très adaptée si tu cherches de la pression, de l’exploration et un fort sens du lieu.",
   "helpTipsTitle": "Conseils et bonnes pratiques",
+  "helpTipWorld": "Pars du cadre et du thème : ce sont les contraintes qui donnent de la cohérence au reste.",
+  "helpTipTheme": "Utilise 1 ou 2 thèmes forts plutôt que d’empiler trop d’idées similaires.",
   "helpTipTwist": "Choisis un twist pour donner tout de suite de la tension à l’intrigue.",
   "helpTipContrast": "Essaie de combiner des tons contrastés pour obtenir des prompts moins prévisibles.",
   "helpTipPreset": "Utilise les presets quand tu veux une inspiration rapide ou une base solide à affiner.",

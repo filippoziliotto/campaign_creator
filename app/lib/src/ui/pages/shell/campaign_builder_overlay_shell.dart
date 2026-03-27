@@ -772,6 +772,16 @@ class _HelpSheet extends StatelessWidget {
               palette: palette,
             ),
             _HelpTipRow(
+              text: context.l10n.helpTipWorld,
+              textTheme: textTheme,
+              palette: palette,
+            ),
+            _HelpTipRow(
+              text: context.l10n.helpTipTheme,
+              textTheme: textTheme,
+              palette: palette,
+            ),
+            _HelpTipRow(
               text: context.l10n.helpTipTwist,
               textTheme: textTheme,
               palette: palette,

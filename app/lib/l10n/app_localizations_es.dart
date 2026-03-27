@@ -741,6 +741,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get helpTipsTitle => 'Consejos y buenas prácticas';
 
   @override
+  String get helpTipWorld =>
+      'Empieza por la ambientación y el tema: son los límites que dan coherencia al resto.';
+
+  @override
+  String get helpTipTheme =>
+      'Usa 1 o 2 temas fuertes en vez de acumular demasiadas ideas parecidas.';
+
+  @override
   String get helpTipTwist =>
       'Elige un giro para dar tensión inmediata a la trama.';
 
