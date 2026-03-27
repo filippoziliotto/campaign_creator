@@ -31,6 +31,7 @@ twists:
 presets:
   Ritorno al Faro:
     campaign_type: one-shot
+    theme: Intrigo
   Ascesa delle Casate:
     campaign_type: Campagna Lunga
   Cronache del Porto:
@@ -39,6 +40,17 @@ setting_descriptions:
   Forgotten Realms: Classico high fantasy.
 preset_descriptions:
   Ritorno al Faro: Indagine costiera.
+premium_option_ids:
+  settings:
+    - Eberron
+  themes:
+    - Intrigo
+  tones:
+    - Cupo
+  styles:
+    - Sandbox
+  twists:
+    - Portale
 ''') as YamlMap,
       );
 
@@ -56,6 +68,13 @@ preset_descriptions:
         options.settingDescriptions['Forgotten Realms'],
         'Classico high fantasy.',
       );
+      expect(options.isPremiumSetting('Eberron'), isTrue);
+      expect(options.isPremiumTheme('Intrigo'), isTrue);
+      expect(options.isPremiumTone('Cupo'), isTrue);
+      expect(options.isPremiumStyle('Sandbox'), isTrue);
+      expect(options.isPremiumTwist('Portale'), isTrue);
+      expect(options.isPremiumPreset('Ritorno al Faro'), isTrue);
+      expect(options.isPremiumPreset('Ascesa delle Casate'), isFalse);
     });
 
     test('falls back to empty collections for malformed YAML fields', () {
@@ -73,6 +92,13 @@ presets:
 setting_descriptions:
   - bad
 preset_descriptions: bad
+premium_option_ids:
+  settings: invalid
+  themes: false
+  tones:
+    bad: shape
+  styles: 3
+  twists:
 ''') as YamlMap,
       );
 
@@ -86,6 +112,69 @@ preset_descriptions: bad
       expect(options.presets, isEmpty);
       expect(options.settingDescriptions, isEmpty);
       expect(options.presetDescriptions, isEmpty);
+      expect(options.premiumSettings, isEmpty);
+      expect(options.premiumThemes, isEmpty);
+      expect(options.premiumTones, isEmpty);
+      expect(options.premiumStyles, isEmpty);
+      expect(options.premiumTwists, isEmpty);
+    });
+
+    test('orders presets by free first and premium second within campaign type',
+        () {
+      final options = CampaignOptions.fromYaml(
+        loadYaml('''
+settings:
+  - Forgotten Realms
+  - Ravnica
+campaign_types:
+  - One-Shot
+themes:
+  - Classic fantasy
+  - Urban heist
+tones:
+  - Mysterious
+  - Noir
+styles:
+  - Investigative
+  - Cinematic
+party_archetypes:
+  - Tank
+twists:
+  - No twist
+  - The party is unknowingly serving the villain
+presets:
+  Ashen Crown:
+    campaign_type: One-Shot
+    setting: Ravnica
+    theme: Urban heist
+    tone: Noir
+    style: Cinematic
+    twist: The party is unknowingly serving the villain
+  Zephyr Harbor:
+    campaign_type: One-Shot
+    setting: Forgotten Realms
+    theme: Classic fantasy
+    tone: Mysterious
+    style: Investigative
+    twist: No twist
+premium_option_ids:
+  settings:
+    - Ravnica
+  themes:
+    - Urban heist
+  tones:
+    - Noir
+  styles:
+    - Cinematic
+  twists:
+    - The party is unknowingly serving the villain
+''') as YamlMap,
+      );
+
+      expect(
+        options.presetsForCampaignType('One-Shot'),
+        ['Zephyr Harbor', 'Ashen Crown'],
+      );
     });
   });
 }

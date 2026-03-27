@@ -376,6 +376,7 @@ extension on _CampaignBuilderPageState {
           density: FrameDensity.featured,
           emphasis: PanelEmphasis.secondary,
           child: _buildPresetsPanel(
+            options,
             presets,
             effectiveSelectedPreset,
             presetDescription,
@@ -410,9 +411,7 @@ extension on _CampaignBuilderPageState {
             options: options.settings,
             keyPrefix: 'setting-selector',
             uppercaseText: true,
-            premiumOptionIds: options.settings.length >= 6
-                ? options.settings.skip(options.settings.length - 6).toSet()
-                : const {},
+            premiumOptionIds: options.premiumSettings,
             premiumHighlightColor: _currentAtmosphere(options).glow,
             useWheelPicker: true,
             wheelConfig: settingWheelPickerConfig,
@@ -446,6 +445,7 @@ extension on _CampaignBuilderPageState {
   }
 
   Widget _buildPresetsPanel(
+    CampaignOptions options,
     List<String> presets,
     String? effectiveSelectedPreset,
     String? presetDescription,
@@ -473,6 +473,8 @@ extension on _CampaignBuilderPageState {
                 uppercaseText: true,
                 emptyText: context.l10n.forgeNoPresetSelected,
                 defaultToFirstOption: false,
+                premiumOptionIds:
+                    presets.where(options.isPremiumPreset).toSet(),
                 premiumHighlightColor: _currentAtmosphere().glow,
                 useWheelPicker: true,
                 wheelConfig: presetWheelPickerConfig,
@@ -501,7 +503,7 @@ extension on _CampaignBuilderPageState {
                             ),
                             onPressed: effectiveSelectedPreset == null
                                 ? null
-                                : _applyPreset,
+                                : () => _applyPreset(),
                             child: Text(context.l10n.forgeApplyPreset),
                           ),
                         ],
@@ -523,7 +525,7 @@ extension on _CampaignBuilderPageState {
                           ),
                           onPressed: effectiveSelectedPreset == null
                               ? null
-                              : _applyPreset,
+                              : () => _applyPreset(),
                           child: Text(context.l10n.forgeApply),
                         ),
                       ],
@@ -559,9 +561,7 @@ extension on _CampaignBuilderPageState {
             options: options.twists,
             keyPrefix: 'twist-selector',
             emptyText: context.l10n.appTwistPending,
-            premiumOptionIds: options.twists.length >= 5
-                ? options.twists.sublist(options.twists.length - 5).toSet()
-                : options.twists.toSet(),
+            premiumOptionIds: options.premiumTwists,
             premiumHighlightColor: _currentAtmosphere().glow,
             useWheelPicker: true,
             wheelConfig: twistWheelPickerConfig,
@@ -1692,13 +1692,9 @@ extension on _CampaignBuilderPageState {
     required void Function(String) onRemoveCustom,
     required String dialogTitle,
     required String dialogHint,
+    Set<String> premiumOptionIds = const {},
   }) {
     final atmosphere = _currentAtmosphere();
-    final premiumOptionIds = options.length >= 2
-        ? {options[options.length - 2], options.last}
-        : options.isNotEmpty
-            ? {options.last}
-            : const <String>{};
 
     return Wrap(
       spacing: 8,
@@ -1859,6 +1855,7 @@ extension on _CampaignBuilderPageState {
         onRemoveCustom: (v) => _customThemeEntries.remove(v),
         dialogTitle: 'Custom Theme',
         dialogHint: 'e.g. Noir, Cosmic Horror…',
+        premiumOptionIds: options.premiumThemes,
       );
 
   Widget _buildTonesChipSection(CampaignOptions options) =>
@@ -1871,6 +1868,7 @@ extension on _CampaignBuilderPageState {
         onRemoveCustom: (v) => _customToneEntries.remove(v),
         dialogTitle: 'Custom Tone',
         dialogHint: 'e.g. Melancholic, Tense…',
+        premiumOptionIds: options.premiumTones,
       );
 
   Widget _buildStylesChipSection(CampaignOptions options) =>
@@ -1883,6 +1881,7 @@ extension on _CampaignBuilderPageState {
         onRemoveCustom: (v) => _customStyleEntries.remove(v),
         dialogTitle: 'Custom Style',
         dialogHint: 'e.g. Gritty Realism, Fairy Tale…',
+        premiumOptionIds: options.premiumStyles,
       );
 
   void _showCustomEntryDialog({

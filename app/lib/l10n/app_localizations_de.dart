@@ -650,7 +650,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsGoAdFree => 'Werbung';
 
   @override
-  String get settingsGoAdFreePrice => 'Werbefrei';
+  String get settingsGoAdFreePrice => 'Premium Freischalten';
 
   @override
   String get settingsGoAdFreeSubtitle => 'Einmalkauf · £1.99';
@@ -662,7 +662,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String settingsGoAdFreePriceWithAmount(String price) {
-    return 'Werbefrei — $price';
+    return 'Premium freischalten — $price';
   }
 
   @override

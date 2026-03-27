@@ -13,7 +13,26 @@ class CampaignOptions {
     required this.settingDescriptions,
     required this.presetDescriptions,
     required this.presetNames,
-  });
+    Set<String>? premiumSettings,
+    Set<String>? premiumThemes,
+    Set<String>? premiumTones,
+    Set<String>? premiumStyles,
+    Set<String>? premiumTwists,
+  })  : premiumSettings = Set<String>.unmodifiable(
+          premiumSettings ?? const <String>{},
+        ),
+        premiumThemes = Set<String>.unmodifiable(
+          premiumThemes ?? const <String>{},
+        ),
+        premiumTones = Set<String>.unmodifiable(
+          premiumTones ?? const <String>{},
+        ),
+        premiumStyles = Set<String>.unmodifiable(
+          premiumStyles ?? const <String>{},
+        ),
+        premiumTwists = Set<String>.unmodifiable(
+          premiumTwists ?? const <String>{},
+        );
 
   final List<String> settings;
   final List<String> campaignTypes;
@@ -26,10 +45,18 @@ class CampaignOptions {
   final Map<String, String> settingDescriptions;
   final Map<String, String> presetDescriptions;
   final Map<String, String> presetNames;
+  final Set<String> premiumSettings;
+  final Set<String> premiumThemes;
+  final Set<String> premiumTones;
+  final Set<String> premiumStyles;
+  final Set<String> premiumTwists;
 
   factory CampaignOptions.fromJson(Map<String, dynamic> json) {
     final rawPresets =
         (json['presets'] as Map<String, dynamic>? ?? <String, dynamic>{});
+    final rawPremiumOptionIds =
+        (json['premium_option_ids'] as Map<String, dynamic>? ??
+            <String, dynamic>{});
 
     return CampaignOptions(
       settings: _stringList(json['settings']),
@@ -46,6 +73,11 @@ class CampaignOptions {
       settingDescriptions: _stringMap(json['setting_descriptions']),
       presetDescriptions: _stringMap(json['preset_descriptions']),
       presetNames: _stringMap(json['preset_names']),
+      premiumSettings: _stringList(rawPremiumOptionIds['settings']).toSet(),
+      premiumThemes: _stringList(rawPremiumOptionIds['themes']).toSet(),
+      premiumTones: _stringList(rawPremiumOptionIds['tones']).toSet(),
+      premiumStyles: _stringList(rawPremiumOptionIds['styles']).toSet(),
+      premiumTwists: _stringList(rawPremiumOptionIds['twists']).toSet(),
     );
   }
 
@@ -56,6 +88,11 @@ class CampaignOptions {
     Map<String, String> yamlStringMap(dynamic v) {
       if (v is! YamlMap) return {};
       return v.map((k, val) => MapEntry(k.toString(), val.toString()));
+    }
+
+    Set<String> yamlStringSet(dynamic v) {
+      if (v is! YamlList) return const <String>{};
+      return v.map((e) => e.toString()).toSet();
     }
 
     final rawPresets = yaml['presets'];
@@ -69,6 +106,10 @@ class CampaignOptions {
       }
     }
 
+    final rawPremiumOptionIds = yaml['premium_option_ids'];
+    final premiumOptionIds =
+        rawPremiumOptionIds is YamlMap ? rawPremiumOptionIds : null;
+
     return CampaignOptions(
       settings: yamlList(yaml['settings']),
       campaignTypes: yamlList(yaml['campaign_types']),
@@ -81,6 +122,11 @@ class CampaignOptions {
       settingDescriptions: yamlStringMap(yaml['setting_descriptions']),
       presetDescriptions: yamlStringMap(yaml['preset_descriptions']),
       presetNames: yamlStringMap(yaml['preset_names']),
+      premiumSettings: yamlStringSet(premiumOptionIds?['settings']),
+      premiumThemes: yamlStringSet(premiumOptionIds?['themes']),
+      premiumTones: yamlStringSet(premiumOptionIds?['tones']),
+      premiumStyles: yamlStringSet(premiumOptionIds?['styles']),
+      premiumTwists: yamlStringSet(premiumOptionIds?['twists']),
     );
   }
 
@@ -98,11 +144,45 @@ class CampaignOptions {
         .map((entry) => entry.key)
         .toList();
 
-    filtered.sort();
+    filtered.sort((left, right) {
+      final leftPremium = isPremiumPreset(left);
+      final rightPremium = isPremiumPreset(right);
+
+      if (leftPremium != rightPremium) {
+        return leftPremium ? 1 : -1;
+      }
+
+      final leftLabel = presetNames[left] ?? left;
+      final rightLabel = presetNames[right] ?? right;
+      return leftLabel.toLowerCase().compareTo(rightLabel.toLowerCase());
+    });
     return filtered;
   }
 
   Map<String, dynamic>? presetByName(String name) => presets[name];
+
+  bool isPremiumSetting(String value) => premiumSettings.contains(value);
+
+  bool isPremiumTheme(String value) => premiumThemes.contains(value);
+
+  bool isPremiumTone(String value) => premiumTones.contains(value);
+
+  bool isPremiumStyle(String value) => premiumStyles.contains(value);
+
+  bool isPremiumTwist(String value) => premiumTwists.contains(value);
+
+  bool isPremiumPreset(String name) {
+    final preset = presets[name];
+    if (preset == null) {
+      return false;
+    }
+
+    return isPremiumSetting(preset['setting']?.toString() ?? '') ||
+        isPremiumTheme(preset['theme']?.toString() ?? '') ||
+        isPremiumTone(preset['tone']?.toString() ?? '') ||
+        isPremiumStyle(preset['style']?.toString() ?? '') ||
+        isPremiumTwist(preset['twist']?.toString() ?? '');
+  }
 }
 
 class CampaignGenerateRequest {

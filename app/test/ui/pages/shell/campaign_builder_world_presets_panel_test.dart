@@ -369,7 +369,7 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
-  testWidgets('setting selector treats Shadowfell as a premium option',
+  testWidgets('setting selector treats Ravnica as a premium option',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -397,16 +397,94 @@ void main() {
 
     expect(find.byType(ListWheelScrollView), findsWidgets);
 
-    await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -170));
+    await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -150));
     await _pumpUi(tester);
-
-    expect(find.text('SHADOWFELL'), findsWidgets);
 
     await tester.tap(find.widgetWithText(FilledButton, 'Unlock Premium'));
     await _pumpUi(tester);
 
     expect(find.text('Watch Ad (5 min)'), findsOneWidget);
     expect(find.text('Unlock Premium'), findsWidgets);
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets('setting selector allows selecting a free option from metadata',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('en'),
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(premiumSettingsOptions()),
+          currentLocale: const Locale('en'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final settingField =
+        find.byKey(const ValueKey<String>('setting-selector-field'));
+
+    await tester.ensureVisible(settingField);
+    await tester.tap(settingField);
+    await _pumpUi(tester);
+
+    expect(find.byType(ListWheelScrollView), findsWidgets);
+    await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -70));
+    await _pumpUi(tester);
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Select'));
+    await _pumpUi(tester);
+
+    expect(
+      find.descendant(of: settingField, matching: find.text('GREYHAWK')),
+      findsOneWidget,
+    );
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets('premium preset inherits lock from premium ingredients',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('en'),
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(premiumPresetsOptions()),
+          currentLocale: const Locale('en'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final presetField =
+        find.byKey(const ValueKey<String>('preset-selector-field'));
+
+    await tester.ensureVisible(presetField);
+    await tester.tap(presetField);
+    await _pumpUi(tester);
+
+    expect(find.byType(ListWheelScrollView), findsWidgets);
+    await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -70));
+    await _pumpUi(tester);
+    expect(find.text('VOID THRONES'), findsWidgets);
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Unlock Premium'));
+    await _pumpUi(tester);
+
+    expect(find.text('Watch Ad (5 min)'), findsOneWidget);
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
@@ -676,14 +754,8 @@ CampaignOptions premiumSettingsOptions() {
   return CampaignOptions(
     settings: const [
       'Forgotten Realms',
-      'Eberron',
-      'Ravenloft',
-      'Shadowfell',
-      'Radiant Citadel',
-      'Avernus',
-      'Sigil',
       'Greyhawk',
-      'Ghosts of Saltmarsh Coast',
+      'Ravnica',
     ],
     campaignTypes: const ['One-Shot'],
     themes: const ['Intrigue'],
@@ -694,16 +766,62 @@ CampaignOptions premiumSettingsOptions() {
     presets: const {},
     settingDescriptions: const {
       'Forgotten Realms': 'Classic high fantasy.',
-      'Eberron': 'Arcane pulp noir.',
-      'Ravenloft': 'Gothic dread.',
-      'Shadowfell': 'Bleak mirrored world of decay.',
-      'Radiant Citadel': 'Radiant hub of many cultures.',
-      'Avernus': 'Infernal battlefield of iron and fire.',
-      'Sigil': 'Planar city of infinite doors.',
+      'Ravnica': 'Guild city of political conflict.',
       'Greyhawk': 'Classic old-school fantasy.',
-      'Ghosts of Saltmarsh Coast': 'Rugged coast of smugglers and storms.',
     },
     presetDescriptions: const {},
     presetNames: const {},
+    premiumSettings: const {'Ravnica'},
+  );
+}
+
+CampaignOptions premiumPresetsOptions() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms', 'Ravnica'],
+    campaignTypes: const ['One-Shot'],
+    themes: const ['Classic fantasy', 'Urban heist'],
+    tones: const ['Mysterious', 'Noir'],
+    styles: const ['Investigative', 'Cinematic'],
+    partyArchetypes: const ['Tank'],
+    twists: const ['No twist', 'The party is unknowingly serving the villain'],
+    presets: const {
+      'Harbor Lights': {
+        'campaign_type': 'One-Shot',
+        'setting': 'Forgotten Realms',
+        'theme': 'Classic fantasy',
+        'tone': 'Mysterious',
+        'style': 'Investigative',
+        'party_level': 4,
+        'party_size': 4,
+        'twist': 'No twist',
+      },
+      'Void Thrones': {
+        'campaign_type': 'One-Shot',
+        'setting': 'Ravnica',
+        'theme': 'Urban heist',
+        'tone': 'Noir',
+        'style': 'Cinematic',
+        'party_level': 5,
+        'party_size': 4,
+        'twist': 'The party is unknowingly serving the villain',
+      },
+    },
+    settingDescriptions: const {
+      'Forgotten Realms': 'Classic high fantasy.',
+      'Ravnica': 'Guild city of political conflict.',
+    },
+    presetDescriptions: const {
+      'Harbor Lights': 'Free preset.',
+      'Void Thrones': 'Premium preset.',
+    },
+    presetNames: const {
+      'Harbor Lights': 'HARBOR LIGHTS',
+      'Void Thrones': 'VOID THRONES',
+    },
+    premiumSettings: const {'Ravnica'},
+    premiumThemes: const {'Urban heist'},
+    premiumTones: const {'Noir'},
+    premiumStyles: const {'Cinematic'},
+    premiumTwists: const {'The party is unknowingly serving the villain'},
   );
 }

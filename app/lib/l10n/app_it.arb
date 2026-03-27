@@ -274,7 +274,7 @@
   "settingsInfoLabel": "Info",
   "settingsVersion": "Versione",
   "settingsGoAdFree": "Pubblicità",
-  "settingsGoAdFreePrice": "Rimuovi le pubblicità",
+  "settingsGoAdFreePrice": "Sblocca Premium",
   "settingsGoAdFreeSubtitle": "Acquisto una tantum · £1.99",
   "settingsGoAdFreeSubtitleWithAmount": "Acquisto una tantum · {price}",
   "@settingsGoAdFreeSubtitleWithAmount": {
@@ -284,7 +284,7 @@
       }
     }
   },
-  "settingsGoAdFreePriceWithAmount": "Rimuovi le pubblicità — {price}",
+  "settingsGoAdFreePriceWithAmount": "Sblocca premium — {price}",
   "@settingsGoAdFreePriceWithAmount": {
     "placeholders": {
       "price": {

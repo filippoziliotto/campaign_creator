@@ -5,21 +5,21 @@ settings:
 - Exandria
 - Continent maison
 - Dragonlance
+- Feywild
+- Frontière
+- Greyhawk
+- Ghosts of Saltmarsh Coast
 - Ravnica
 - Spelljammer
 - Theros
 - Dark Sun
 - Wildemount
-- Feywild
 - Planescape
 - Underdark
-- Frontière
 - Shadowfell
 - Radiant Citadel
 - Avernus
 - Sigil
-- Greyhawk
-- Ghosts of Saltmarsh Coast
 setting_descriptions:
   Forgotten Realms: Monde classique de fantasy héroïque, riche en royaumes, magie ancienne et aventures légendaires.
   Eberron: Univers pulp-noir avec technologie arcanique, intrigue politique et mystères métropolitains.
@@ -54,51 +54,51 @@ campaign_types:
 - Exploration de donjon
 themes:
 - Fantasy classique
-- Coup urbain
 - Horreur gothique
-- Voyage planaire
 - Intrigue politique
 - Survie
-- Aventure nautique
-- Guerre de factions
 - Chasse aux monstres
-- Steampunk médiéval
 - Ruines antiques
 - Sauvetage
 - Expédition
-- Tournoi
 - Chasse au trésor
+- Coup urbain
+- Voyage planaire
+- Aventure nautique
+- Guerre de factions
+- Steampunk médiéval
+- Tournoi
 - Post-apocalyptique
 - Rébellion
 tones:
 - Héroïque
 - Sombre
-- Ironique
 - Mystérieux
-- Tragique
 - Comique
-- Noir
-- Bizarre
 - Tendu
 - Plein d’espoir
+- Funeste
+- Ironique
+- Tragique
+- Noir
+- Bizarre
 - Onirique
 - Chaotique
-- Funeste
 styles:
 - Épique
 - Cinématographique
 - Réaliste
 - Rugueux
 - High fantasy
-- Low fantasy
 - Investigatif
+- Mystère
+- Low fantasy
 - Conte de fées
 - Sandbox
 - Survie
 - Open-world
 - Tactique
 - Mythique
-- Mystère
 party_archetypes:
 - Guerrier
 - Mage
@@ -120,10 +120,11 @@ twists:
 - L’antagoniste cherche à éviter une catastrophe pire
 - Le groupe partage une origine oubliée
 - L’artefact principal est conscient et manipulateur
-- La vraie menace est une institution bienveillante (église, guilde, académie)
-- Le monde est piégé dans une subtile boucle temporelle
 - Le donjon est un organisme vivant
 - La cible de la mission ne veut pas être sauvée
+- La personne disparue a orchestré sa propre disparition
+- La vraie menace est une institution bienveillante (église, guilde, académie)
+- Le monde est piégé dans une subtile boucle temporelle
 - Les PJ sont déjà morts et ne le savent pas
 - Le méchant a déjà gagné et la mission consiste à limiter les dégâts
 - Le groupe sert le méchant sans le savoir
@@ -138,7 +139,60 @@ twists:
 - La prison a été construite pour empêcher quelque chose d’entrer
 - Les souvenirs du groupe ont été modifiés pour une raison
 - Le commanditaire est mort avant même que la mission ne commence
-- La personne disparue a orchestré sa propre disparition
+premium_option_ids:
+  settings:
+    - Ravnica
+    - Spelljammer
+    - Theros
+    - Dark Sun
+    - Wildemount
+    - Planescape
+    - Underdark
+    - Shadowfell
+    - Radiant Citadel
+    - Avernus
+    - Sigil
+  themes:
+    - Coup urbain
+    - Voyage planaire
+    - Aventure nautique
+    - Guerre de factions
+    - Steampunk médiéval
+    - Tournoi
+    - Post-apocalyptique
+    - Rébellion
+  tones:
+    - Ironique
+    - Tragique
+    - Noir
+    - Bizarre
+    - Onirique
+    - Chaotique
+  styles:
+    - Low fantasy
+    - Conte de fées
+    - Sandbox
+    - Survie
+    - Open-world
+    - Tactique
+    - Mythique
+  twists:
+    - La vraie menace est une institution bienveillante (église, guilde, académie)
+    - Le monde est piégé dans une subtile boucle temporelle
+    - Les PJ sont déjà morts et ne le savent pas
+    - Le méchant a déjà gagné et la mission consiste à limiter les dégâts
+    - Le groupe sert le méchant sans le savoir
+    - Les monstres fuient un prédateur d’échelle cataclysmique
+    - Toute la région est une simulation magique ou le rêve d’un dieu endormi
+    - Le remède à la peste exige le sacrifice de la personne qui l’a commandé
+    - La faction ennemie est composée des survivants futurs de l’échec du groupe
+    - L’apocalypse a déjà eu lieu ; le monde vit à l’intérieur du sort de réparation
+    - La prophétie est exacte, mais elle concerne les méchants, pas les héros
+    - La Mort a disparu, et autre chose fait son travail très mal
+    - Un dieu ment sur ce qu’il veut
+    - La prison a été construite pour empêcher quelque chose d’entrer
+    - Les souvenirs du groupe ont été modifiés pour une raison
+    - Le commanditaire est mort avant même que la mission ne commence
 presets:
   NULLA NELLE TORRI:
     setting: Eberron

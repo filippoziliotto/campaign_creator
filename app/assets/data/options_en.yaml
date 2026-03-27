@@ -5,21 +5,21 @@ settings:
   - Exandria
   - Homebrew continent
   - Dragonlance
+  - Feywild
+  - Frontier
+  - Greyhawk
+  - Ghosts of Saltmarsh Coast
   - Ravnica
   - Spelljammer
   - Theros
   - Dark Sun
   - Wildemount
-  - Feywild
   - Planescape
   - Underdark
-  - Frontier
   - Shadowfell
   - Radiant Citadel
   - Avernus
   - Sigil
-  - Greyhawk
-  - Ghosts of Saltmarsh Coast
 
 setting_descriptions:
   Forgotten Realms: Classic high-fantasy world, rich with kingdoms, ancient magic, and heroic adventures.
@@ -52,37 +52,37 @@ campaign_types:
 
 themes:
   - Classic fantasy
-  - Urban heist
   - Gothic horror
-  - Planar journey
   - Political intrigue
   - Wilderness
-  - Nautical adventure
-  - Faction war
   - Monster hunt
-  - Medieval steampunk
   - Ancient ruins
   - Rescue
   - Expedition
-  - Tournament
   - Treasure hunt
+  - Urban heist
+  - Planar journey
+  - Nautical adventure
+  - Faction war
+  - Medieval steampunk
+  - Tournament
   - Post-apocalyptic
   - Rebellion
 
 tones:
   - Heroic
   - Dark
-  - Ironic
   - Mysterious
-  - Tragic
   - Comic
-  - Noir
-  - Bizarre
   - Tense
   - Hopeful
+  - Ominous
+  - Ironic
+  - Tragic
+  - Noir
+  - Bizarre
   - Dreamlike
   - Chaotic
-  - Ominous
 
 styles:
   - Epic
@@ -90,15 +90,15 @@ styles:
   - Realistic
   - Gritty
   - High fantasy
-  - Low fantasy
   - Investigative
+  - Mystery
+  - Low fantasy
   - Fairytale
   - Sandbox
   - Survival
   - Open-world
   - Tactical
   - Mythic
-  - Mystery
 
 party_archetypes:
   - Fighter
@@ -122,10 +122,11 @@ twists:
   - The antagonist is trying to prevent a worse catastrophe
   - The party shares a forgotten origin
   - The main artifact is sentient and manipulative
-  - The true threat is a benevolent institution (church, guild, academy)
-  - The world is trapped in a subtle time loop
   - The dungeon is a living organism
   - The mission target doesn't want to be saved
+  - The missing person orchestrated their own disappearance
+  - The true threat is a benevolent institution (church, guild, academy)
+  - The world is trapped in a subtle time loop
   - The PCs are already dead and don't know it
   - The villain has already won and the mission is damage control
   - The party is unknowingly serving the villain
@@ -140,7 +141,61 @@ twists:
   - The prison was built to keep something out
   - The party's memories were edited for a reason
   - The patron has been dead since before the mission began
-  - The missing person orchestrated their own disappearance
+
+premium_option_ids:
+  settings:
+    - Ravnica
+    - Spelljammer
+    - Theros
+    - Dark Sun
+    - Wildemount
+    - Planescape
+    - Underdark
+    - Shadowfell
+    - Radiant Citadel
+    - Avernus
+    - Sigil
+  themes:
+    - Urban heist
+    - Planar journey
+    - Nautical adventure
+    - Faction war
+    - Medieval steampunk
+    - Tournament
+    - Post-apocalyptic
+    - Rebellion
+  tones:
+    - Ironic
+    - Tragic
+    - Noir
+    - Bizarre
+    - Dreamlike
+    - Chaotic
+  styles:
+    - Low fantasy
+    - Fairytale
+    - Sandbox
+    - Survival
+    - Open-world
+    - Tactical
+    - Mythic
+  twists:
+    - The true threat is a benevolent institution (church, guild, academy)
+    - The world is trapped in a subtle time loop
+    - The PCs are already dead and don't know it
+    - The villain has already won and the mission is damage control
+    - The party is unknowingly serving the villain
+    - The monsters are fleeing from a cataclysmic-scale predator
+    - The entire region is a magical simulation or the dream of a sleeping god
+    - The cure for the plague requires the sacrifice of the person who commissioned it
+    - The enemy faction is made of future survivors of the party's failure
+    - The apocalypse already happened; the world is living inside the repair spell
+    - The prophecy is accurate, but it refers to the villains, not the heroes
+    - Death has gone missing, and something else is doing the job badly
+    - A god is lying about what they want
+    - The prison was built to keep something out
+    - The party's memories were edited for a reason
+    - The patron has been dead since before the mission began
 
 
 presets:

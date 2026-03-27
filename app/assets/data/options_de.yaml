@@ -5,21 +5,21 @@ settings:
   - Exandria
   - Eigenkontinent
   - Dragonlance
+  - Feywild
+  - Grenzland
+  - Greyhawk
+  - Ghosts of Saltmarsh Coast
   - Ravnica
   - Spelljammer
   - Theros
   - Dark Sun
   - Wildemount
-  - Feywild
   - Planescape
   - Underdark
-  - Grenzland
   - Shadowfell
   - Radiant Citadel
   - Avernus
   - Sigil
-  - Greyhawk
-  - Ghosts of Saltmarsh Coast
 
 setting_descriptions:
   Forgotten Realms: Klassische High-Fantasy-Welt voller Reiche, uralter Magie und heroischer Abenteuer.
@@ -52,37 +52,37 @@ campaign_types:
 
 themes:
   - Klassische Fantasy
-  - Urbaner Raubzug
   - Gotischer Horror
-  - Planare Reise
   - Politische Intrige
   - Wildnis
-  - Nautisches Abenteuer
-  - Fraktionskrieg
   - Monsterjagd
-  - Mittelalterlicher Steampunk
   - Antike Ruinen
   - Rettungsmission
   - Expedition
-  - Turnier
   - Schatzjagd
+  - Urbaner Raubzug
+  - Planare Reise
+  - Nautisches Abenteuer
+  - Fraktionskrieg
+  - Mittelalterlicher Steampunk
+  - Turnier
   - Postapokalyptisch
   - Rebellion
 
 tones:
   - Heldenhaft
   - Düster
-  - Ironisch
   - Geheimnisvoll
-  - Tragisch
   - Komisch
-  - Noir
-  - Bizarr
   - Angespannt
   - Hoffnungsvoll
+  - Unheilvoll
+  - Ironisch
+  - Tragisch
+  - Noir
+  - Bizarr
   - Traumhaft
   - Chaotisch
-  - Unheilvoll
 
 styles:
   - Episch
@@ -90,15 +90,15 @@ styles:
   - Realistisch
   - Rau
   - High Fantasy
-  - Low Fantasy
   - Ermittlerisch
+  - Mysterium
+  - Low Fantasy
   - Märchenhaft
   - Sandbox
   - Überlebensorientiert
   - Open-world
   - Taktisch
   - Mythisch
-  - Mysterium
 
 party_archetypes:
   - Fighter
@@ -122,10 +122,11 @@ twists:
   - Der Antagonist versucht, eine schlimmere Katastrophe zu verhindern
   - Die Gruppe teilt einen vergessenen Ursprung
   - Das zentrale Artefakt ist empfindungsfähig und manipulativ
-  - Die wahre Bedrohung ist eine wohlwollende Institution (Kirche, Gilde, Akademie)
-  - Die Welt steckt in einer subtilen Zeitschleife fest
   - Der Dungeon ist ein lebender Organismus
   - Das Missionsziel will nicht gerettet werden
+  - Die vermisste Person hat ihr eigenes Verschwinden inszeniert
+  - Die wahre Bedrohung ist eine wohlwollende Institution (Kirche, Gilde, Akademie)
+  - Die Welt steckt in einer subtilen Zeitschleife fest
   - Die SC sind bereits tot und wissen es nicht
   - Der Bösewicht hat bereits gewonnen, und die Mission dient nur noch der Schadensbegrenzung
   - Die Gruppe dient dem Bösewicht, ohne es zu wissen
@@ -140,7 +141,61 @@ twists:
   - Das Gefängnis wurde gebaut, um etwas draußen zu halten
   - Die Erinnerungen der Gruppe wurden aus einem Grund verändert
   - Der Auftraggeber ist schon vor Beginn der Mission gestorben
-  - Die vermisste Person hat ihr eigenes Verschwinden inszeniert
+
+premium_option_ids:
+  settings:
+    - Ravnica
+    - Spelljammer
+    - Theros
+    - Dark Sun
+    - Wildemount
+    - Planescape
+    - Underdark
+    - Shadowfell
+    - Radiant Citadel
+    - Avernus
+    - Sigil
+  themes:
+    - Urbaner Raubzug
+    - Planare Reise
+    - Nautisches Abenteuer
+    - Fraktionskrieg
+    - Mittelalterlicher Steampunk
+    - Turnier
+    - Postapokalyptisch
+    - Rebellion
+  tones:
+    - Ironisch
+    - Tragisch
+    - Noir
+    - Bizarr
+    - Traumhaft
+    - Chaotisch
+  styles:
+    - Low Fantasy
+    - Märchenhaft
+    - Sandbox
+    - Überlebensorientiert
+    - Open-world
+    - Taktisch
+    - Mythisch
+  twists:
+    - Die wahre Bedrohung ist eine wohlwollende Institution (Kirche, Gilde, Akademie)
+    - Die Welt steckt in einer subtilen Zeitschleife fest
+    - Die SC sind bereits tot und wissen es nicht
+    - Der Bösewicht hat bereits gewonnen, und die Mission dient nur noch der Schadensbegrenzung
+    - Die Gruppe dient dem Bösewicht, ohne es zu wissen
+    - Die Monster fliehen vor einem Raubtier kataklysmischen Ausmaßes
+    - Die gesamte Region ist eine magische Simulation oder der Traum eines schlafenden Gottes
+    - Die Heilung der Seuche erfordert das Opfer der Person, die den Auftrag gegeben hat
+    - Die feindliche Fraktion besteht aus zukünftigen Überlebenden des Scheiterns der Gruppe
+    - Die Apokalypse hat bereits stattgefunden; die Welt lebt innerhalb des Reparaturzaubers
+    - Die Prophezeiung ist korrekt, aber sie bezieht sich auf die Bösewichte, nicht auf die Helden
+    - Der Tod ist verschwunden, und etwas anderes erledigt seinen Job schlecht
+    - Ein Gott lügt über das, was er will
+    - Das Gefängnis wurde gebaut, um etwas draußen zu halten
+    - Die Erinnerungen der Gruppe wurden aus einem Grund verändert
+    - Der Auftraggeber ist schon vor Beginn der Mission gestorben
 
 
 presets:

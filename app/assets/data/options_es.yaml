@@ -5,21 +5,21 @@ settings:
 - Exandria
 - Continente casero
 - Dragonlance
+- Feywild
+- Frontera
+- Greyhawk
+- Ghosts of Saltmarsh Coast
 - Ravnica
 - Spelljammer
 - Theros
 - Dark Sun
 - Wildemount
-- Feywild
 - Planescape
 - Underdark
-- Frontera
 - Shadowfell
 - Radiant Citadel
 - Avernus
 - Sigil
-- Greyhawk
-- Ghosts of Saltmarsh Coast
 setting_descriptions:
   Forgotten Realms: Mundo clásico de fantasía heroica, lleno de reinos, magia antigua y aventuras legendarias.
   Eberron: Ambientación pulp-noir con tecnología arcana, intriga política y misterios metropolitanos.
@@ -52,51 +52,51 @@ campaign_types:
 - Exploración de mazmorra
 themes:
 - Fantasía clásica
-- Golpe urbano
 - Horror gótico
-- Viaje planar
 - Intriga política
 - Supervivencia
-- Aventura náutica
-- Guerra entre facciones
 - Caza de monstruos
-- Steampunk medieval
 - Ruinas antiguas
 - Rescate
 - Expedición
-- Torneo
 - Búsqueda del tesoro
+- Golpe urbano
+- Viaje planar
+- Aventura náutica
+- Guerra entre facciones
+- Steampunk medieval
+- Torneo
 - Postapocalíptico
 - Rebelión
 tones:
 - Heroico
 - Sombrío
-- Irónico
 - Misterioso
-- Trágico
 - Cómico
-- Noir
-- Extraño
 - Tenso
 - Esperanzador
+- Ominoso
+- Irónico
+- Trágico
+- Noir
+- Extraño
 - Onírico
 - Caótico
-- Ominoso
 styles:
 - Épico
 - Cinematográfico
 - Realista
 - Crudo
 - Alta fantasía
-- Baja fantasía
 - Investigativo
+- Misterio
+- Baja fantasía
 - Feérico
 - Sandbox
 - Supervivencia
 - Open-world
 - Táctico
 - Mítico
-- Misterio
 party_archetypes:
 - Guerrero
 - Mago
@@ -118,10 +118,11 @@ twists:
 - El antagonista intenta evitar una catástrofe peor
 - El grupo comparte un origen olvidado
 - El artefacto principal es consciente y manipulador
-- La verdadera amenaza es una institución benévola (iglesia, gremio, academia)
-- El mundo está atrapado en un sutil bucle temporal
 - La mazmorra es un organismo viviente
 - El objetivo de la misión no quiere ser rescatado
+- La persona desaparecida orquestó su propia desaparición
+- La verdadera amenaza es una institución benévola (iglesia, gremio, academia)
+- El mundo está atrapado en un sutil bucle temporal
 - Los PJ ya están muertos y no lo saben
 - El villano ya ha ganado y la misión consiste en limitar los daños
 - El grupo sirve al villano sin saberlo
@@ -136,7 +137,60 @@ twists:
 - La prisión fue construida para mantener algo fuera
 - Los recuerdos del grupo fueron editados por una razón
 - El mecenas lleva muerto desde antes de que comenzara la misión
-- La persona desaparecida orquestó su propia desaparición
+premium_option_ids:
+  settings:
+    - Ravnica
+    - Spelljammer
+    - Theros
+    - Dark Sun
+    - Wildemount
+    - Planescape
+    - Underdark
+    - Shadowfell
+    - Radiant Citadel
+    - Avernus
+    - Sigil
+  themes:
+    - Golpe urbano
+    - Viaje planar
+    - Aventura náutica
+    - Guerra entre facciones
+    - Steampunk medieval
+    - Torneo
+    - Postapocalíptico
+    - Rebelión
+  tones:
+    - Irónico
+    - Trágico
+    - Noir
+    - Extraño
+    - Onírico
+    - Caótico
+  styles:
+    - Baja fantasía
+    - Feérico
+    - Sandbox
+    - Supervivencia
+    - Open-world
+    - Táctico
+    - Mítico
+  twists:
+    - La verdadera amenaza es una institución benévola (iglesia, gremio, academia)
+    - El mundo está atrapado en un sutil bucle temporal
+    - Los PJ ya están muertos y no lo saben
+    - El villano ya ha ganado y la misión consiste en limitar los daños
+    - El grupo sirve al villano sin saberlo
+    - Los monstruos huyen de un depredador de escala cataclísmica
+    - Toda la región es una simulación mágica o el sueño de un dios dormido
+    - La cura de la plaga exige el sacrificio de la persona que la encargó
+    - La facción enemiga está formada por supervivientes futuros del fracaso del grupo
+    - El apocalipsis ya ocurrió; el mundo vive dentro del hechizo de reparación
+    - La profecía es exacta, pero se refiere a los villanos, no a los héroes
+    - La Muerte ha desaparecido, y otra cosa está haciendo su trabajo muy mal
+    - Un dios está mintiendo sobre lo que quiere
+    - La prisión fue construida para mantener algo fuera
+    - Los recuerdos del grupo fueron editados por una razón
+    - El mecenas lleva muerto desde antes de que comenzara la misión
 presets:
   NULLA NELLE TORRI:
     setting: Eberron

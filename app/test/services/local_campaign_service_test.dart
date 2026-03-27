@@ -122,26 +122,59 @@ void main() {
       final enOptions = await service.getOptions(localeCode: 'en');
       final itOptions = await service.getOptions(localeCode: 'it');
 
+      const expectedFreeSettings = <String>[
+        'Forgotten Realms',
+        'Eberron',
+        'Ravenloft',
+        'Exandria',
+        'Homebrew continent',
+        'Dragonlance',
+        'Feywild',
+        'Frontier',
+        'Greyhawk',
+        'Ghosts of Saltmarsh Coast',
+      ];
       const expectedPremiumSettings = <String>[
+        'Ravnica',
+        'Spelljammer',
+        'Theros',
+        'Dark Sun',
+        'Wildemount',
+        'Planescape',
+        'Underdark',
         'Shadowfell',
         'Radiant Citadel',
         'Avernus',
         'Sigil',
-        'Greyhawk',
-        'Ghosts of Saltmarsh Coast',
       ];
 
       expect(
-        enOptions.settings.sublist(
-          enOptions.settings.length - expectedPremiumSettings.length,
-        ),
-        expectedPremiumSettings,
+        enOptions.settings,
+        <String>[...expectedFreeSettings, ...expectedPremiumSettings],
       );
       expect(
-        itOptions.settings.sublist(
-          itOptions.settings.length - expectedPremiumSettings.length,
-        ),
-        expectedPremiumSettings,
+        itOptions.settings,
+        isNot(<String>[...expectedFreeSettings, ...expectedPremiumSettings]),
+      );
+      expect(
+        enOptions.premiumSettings,
+        expectedPremiumSettings.toSet(),
+      );
+      expect(
+        itOptions.premiumSettings,
+        <String>{
+          'Ravnica',
+          'Spelljammer',
+          'Theros',
+          'Dark Sun',
+          'Wildemount',
+          'Planescape',
+          'Underdark',
+          'Shadowfell',
+          'Radiant Citadel',
+          'Avernus',
+          'Sigil',
+        },
       );
       expect(
         enOptions.settingDescriptions['Shadowfell'],
@@ -157,8 +190,7 @@ void main() {
       );
     });
 
-    test(
-        'bundled themes tones and styles include the new localized options',
+    test('bundled themes tones and styles include the new localized options',
         () async {
       final service = LocalCampaignService();
 
@@ -227,6 +259,52 @@ void main() {
           'Taktisch',
           'Mythisch',
           'Mysterium',
+        ]),
+      );
+
+      expect(
+        enOptions.premiumThemes,
+        containsAll(<String>[
+          'Urban heist',
+          'Planar journey',
+          'Nautical adventure',
+          'Faction war',
+          'Medieval steampunk',
+          'Tournament',
+          'Post-apocalyptic',
+          'Rebellion',
+        ]),
+      );
+      expect(
+        enOptions.premiumTones,
+        containsAll(<String>[
+          'Ironic',
+          'Tragic',
+          'Noir',
+          'Bizarre',
+          'Dreamlike',
+          'Chaotic',
+        ]),
+      );
+      expect(
+        enOptions.premiumStyles,
+        containsAll(<String>[
+          'Low fantasy',
+          'Fairytale',
+          'Sandbox',
+          'Survival',
+          'Open-world',
+          'Tactical',
+          'Mythic',
+        ]),
+      );
+      expect(
+        enOptions.premiumTwists,
+        containsAll(<String>[
+          'The true threat is a benevolent institution (church, guild, academy)',
+          'The world is trapped in a subtle time loop',
+          "The PCs are already dead and don't know it",
+          'The party is unknowingly serving the villain',
         ]),
       );
     });
@@ -362,7 +440,8 @@ void main() {
 
         expect(prompt, contains('- Ganci richiesti: funerale interrotto'));
         expect(prompt, contains('- Note personaggi: uno dei PG perde memoria'));
-        expect(prompt, isNot(contains('funerale interrotto**Note personaggi:**')));
+        expect(
+            prompt, isNot(contains('funerale interrotto**Note personaggi:**')));
       });
 
       test(
@@ -455,7 +534,8 @@ void main() {
         final prompt = await service.generatePrompt(buildRequest(
           localeCode: 'it',
           setting: 'Forgotten Realms',
-          settingSummary: 'High fantasy classico in un mondo vasto e ricco di conflitti.',
+          settingSummary:
+              'High fantasy classico in un mondo vasto e ricco di conflitti.',
         ));
 
         expect(
@@ -476,7 +556,8 @@ void main() {
           settingSummary: '',
         ));
 
-        expect(prompt, contains('| Ambientazione | Mia Ambientazione Originale |'));
+        expect(prompt,
+            contains('| Ambientazione | Mia Ambientazione Originale |'));
         expect(prompt, isNot(contains('| Sintesi ambientazione |')));
       });
 
@@ -552,8 +633,7 @@ void main() {
         expect(prompt, isNot(contains('PHASE 1 — FIVE CONCEPTS')));
       });
 
-      test('French generic requests use the French generic template',
-          () async {
+      test('French generic requests use the French generic template', () async {
         final service = LocalCampaignService();
 
         final prompt = await service.generatePrompt(buildRequest(
@@ -578,8 +658,7 @@ void main() {
         expect(prompt, isNot(contains('PHASE 1 — FIVE CONCEPTS')));
       });
 
-      test('German generic requests use the German generic template',
-          () async {
+      test('German generic requests use the German generic template', () async {
         final service = LocalCampaignService();
 
         final prompt = await service.generatePrompt(buildRequest(

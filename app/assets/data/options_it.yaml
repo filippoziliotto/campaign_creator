@@ -5,21 +5,21 @@ settings:
   - Exandria
   - Continente homebrew
   - Dragonlance
+  - Feywild
+  - Frontiera
+  - Greyhawk
+  - Ghosts of Saltmarsh Coast
   - Ravnica
   - Spelljammer
   - Theros
   - Dark Sun
   - Wildemount
-  - Feywild
   - Planescape
   - Underdark
-  - Frontiera
   - Shadowfell
   - Radiant Citadel
   - Avernus
   - Sigil
-  - Greyhawk
-  - Ghosts of Saltmarsh Coast
 
 setting_descriptions:
   Forgotten Realms: Mondo fantasy classico, ricco di regni, magie antiche e avventure eroiche.
@@ -52,37 +52,37 @@ campaign_types:
 
 themes:
   - Fantasy classico
-  - Colpo urbano
   - Horror gotico
-  - Viaggio planare
   - Intrigo politico
   - Sopravvivenza
-  - Avventura nautica
-  - Guerra tra fazioni
   - Caccia ai mostri
-  - Steampunk medievale
   - Rovine antiche
   - Salvataggio
   - Spedizione
-  - Torneo
   - Caccia al tesoro
+  - Colpo urbano
+  - Viaggio planare
+  - Avventura nautica
+  - Guerra tra fazioni
+  - Steampunk medievale
+  - Torneo
   - Post-apocalittico
   - Ribellione
 
 tones:
   - Eroico
   - Cupo
-  - Ironico
   - Misterioso
-  - Tragico
   - Comico
-  - Noir
-  - Bizzaro
   - Teso
   - Speranzoso
+  - Minaccioso
+  - Ironico
+  - Tragico
+  - Noir
+  - Bizzaro
   - Onirico
   - Caotico
-  - Minaccioso
 
 styles:
   - Epico
@@ -90,15 +90,15 @@ styles:
   - Realistico
   - Crudo
   - High fantasy
-  - Low fantasy
   - Investigativo
+  - Mistero
+  - Low fantasy
   - Fiabesco
   - Sandbox
   - Sopravvivenza
   - Open-world
   - Tattico
   - Mitico
-  - Mistero
 
 party_archetypes:
   - Guerriero
@@ -122,10 +122,11 @@ twists:
   - L'antagonista vuole evitare una catastrofe peggiore
   - Il party condivide un'origine dimenticata
   - Il manufatto principale è senziente e manipolatore
-  - La vera minaccia è un'istituzione benefica (chiesa, gilda, accademia)
-  - Il mondo è bloccato in un sottile loop temporale
   - Il dungeon è un organismo vivente
   - L'obiettivo della missione è una persona che non vuole essere salvata
+  - La persona scomparsa ha orchestrato la propria sparizione
+  - La vera minaccia è un'istituzione benefica (chiesa, gilda, accademia)
+  - Il mondo è bloccato in un sottile loop temporale
   - I PG sono già morti e non lo sanno
   - Il villain ha già vinto e la missione è limitare i danni
   - Il party è inconsapevolmente al servizio del villain
@@ -140,7 +141,61 @@ twists:
   - La prigione è stata costruita per tenere fuori qualcosa
   - I ricordi del party sono stati modificati per una ragione
   - Il committente è morto prima ancora che iniziasse la missione
-  - La persona scomparsa ha orchestrato la propria sparizione
+
+premium_option_ids:
+  settings:
+    - Ravnica
+    - Spelljammer
+    - Theros
+    - Dark Sun
+    - Wildemount
+    - Planescape
+    - Underdark
+    - Shadowfell
+    - Radiant Citadel
+    - Avernus
+    - Sigil
+  themes:
+    - Colpo urbano
+    - Viaggio planare
+    - Avventura nautica
+    - Guerra tra fazioni
+    - Steampunk medievale
+    - Torneo
+    - Post-apocalittico
+    - Ribellione
+  tones:
+    - Ironico
+    - Tragico
+    - Noir
+    - Bizzaro
+    - Onirico
+    - Caotico
+  styles:
+    - Low fantasy
+    - Fiabesco
+    - Sandbox
+    - Sopravvivenza
+    - Open-world
+    - Tattico
+    - Mitico
+  twists:
+    - La vera minaccia è un'istituzione benefica (chiesa, gilda, accademia)
+    - Il mondo è bloccato in un sottile loop temporale
+    - I PG sono già morti e non lo sanno
+    - Il villain ha già vinto e la missione è limitare i danni
+    - Il party è inconsapevolmente al servizio del villain
+    - I mostri stanno fuggendo da un predatore di scala cataclismica
+    - L'intera regione è una simulazione magica o il sogno di un dio dormiente
+    - La cura per la piaga richiede il sacrificio della persona che l'ha commissionata
+    - La fazione nemica è composta dai sopravvissuti futuri al fallimento del party
+    - L'apocalisse è già avvenuta; il mondo vive all'interno dell'incantesimo di riparazione
+    - La profezia è accurata, ma si riferisce ai villain, non agli eroi
+    - La Morte è scomparsa, e qualcos'altro sta svolgendo il lavoro nel peggiore dei modi
+    - Un dio sta mentendo su ciò che vuole
+    - La prigione è stata costruita per tenere fuori qualcosa
+    - I ricordi del party sono stati modificati per una ragione
+    - Il committente è morto prima ancora che iniziasse la missione
 
 
 presets:

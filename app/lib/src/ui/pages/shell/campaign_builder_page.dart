@@ -884,6 +884,11 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       return;
     }
 
+    if (options.isPremiumPreset(presetName) && !_isPremiumUnlocked) {
+      _showPremiumUnlockForChip(_currentAtmosphere(options).glow);
+      return;
+    }
+
     final preset = options.presetByName(presetName);
     if (preset == null) {
       return;
