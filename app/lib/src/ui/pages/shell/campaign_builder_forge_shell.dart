@@ -686,6 +686,7 @@ extension on _CampaignBuilderPageState {
           summary,
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 13),
         ),
       ),
     );
