@@ -606,6 +606,33 @@ void main() {
     );
   });
 
+  testWidgets('seal action requests the forge sound once more', (tester) async {
+    await _setLargeSurface(tester);
+    final soundPlayer = _FakeForgeSoundPlayer();
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: _buildPage(
+          initialPreferences: const <String, Object>{
+            'app.review_prompted': true,
+          },
+          forgeSoundPlayer: soundPlayer,
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openNarrativeSection(tester);
+    await _tapForgePrimaryAction(tester);
+
+    final playCountAfterForge = soundPlayer.playCount;
+
+    await tester.ensureVisible(find.text('SIGILLA'));
+    await tester.tap(find.text('SIGILLA'));
+    await _pumpUi(tester);
+
+    expect(soundPlayer.playCount, playCountAfterForge + 1);
+  });
+
   testWidgets('snack bar messages are center aligned', (tester) async {
     await _setLargeSurface(tester);
 

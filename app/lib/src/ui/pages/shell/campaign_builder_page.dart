@@ -1398,6 +1398,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   }
 
   Future<void> _sealCurrentParchment() async {
+    unawaited(_forgeSoundPlayer.playForgeSound());
     final persisted = await _savePromptDraft(showFeedback: false);
     await _copyPrompt(showFeedback: false);
     if (!mounted) {
