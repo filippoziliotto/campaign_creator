@@ -3,37 +3,57 @@ part of 'campaign_builder_page.dart';
 extension on _CampaignBuilderPageState {
   Widget _buildForgeStage(CampaignOptions options) {
     final atmosphere = _currentAtmosphere(options);
-    final isTouchPlatform = const {
-      TargetPlatform.android,
-      TargetPlatform.iOS,
-    }.contains(defaultTargetPlatform);
-    final activeSection = _revealed(
-      delay: 0.18,
-      atmosphere: atmosphere,
-      child: isTouchPlatform
-          ? _buildInteractiveForgeSection(options)
-          : _buildActiveForgeSection(options),
-    );
 
     return ForgeRoutePage(
       scrollController: _forgeScrollController,
-      errorBanner: _errorMessage == null
-          ? null
-          : _revealed(
-              delay: 0.1,
-              atmosphere: atmosphere,
-              child: _buildErrorBanner(_errorMessage!),
-            ),
-      sectionRibbon: _revealed(
-        delay: 0.12,
-        atmosphere: atmosphere,
-        child: _buildForgeSectionRibbon(),
+      errorBanner: ValueListenableBuilder<_ForgeDraftViewState>(
+        valueListenable: _forgeDraftViewState,
+        builder: (context, _, __) {
+          if (_errorMessage == null) {
+            return const SizedBox.shrink();
+          }
+          return _revealed(
+            delay: 0.1,
+            atmosphere: atmosphere,
+            child: _buildErrorBanner(_errorMessage!),
+          );
+        },
       ),
-      activeSection: activeSection,
-      controlPanel: _revealed(
-        delay: 0.22,
-        atmosphere: atmosphere,
-        child: _buildForgeControlPanel(),
+      sectionRibbon: ValueListenableBuilder<_ForgeDraftViewState>(
+        valueListenable: _forgeDraftViewState,
+        builder: (context, _, __) {
+          return _revealed(
+            delay: 0.12,
+            atmosphere: atmosphere,
+            child: _buildForgeSectionRibbon(),
+          );
+        },
+      ),
+      activeSection: ValueListenableBuilder<_ForgeDraftViewState>(
+        valueListenable: _forgeDraftViewState,
+        builder: (context, _, __) {
+          final isTouchPlatform = const {
+            TargetPlatform.android,
+            TargetPlatform.iOS,
+          }.contains(defaultTargetPlatform);
+          return _revealed(
+            delay: 0.18,
+            atmosphere: atmosphere,
+            child: isTouchPlatform
+                ? _buildInteractiveForgeSection(options)
+                : _buildActiveForgeSection(options),
+          );
+        },
+      ),
+      controlPanel: ValueListenableBuilder<_ForgeDraftViewState>(
+        valueListenable: _forgeDraftViewState,
+        builder: (context, _, __) {
+          return _revealed(
+            delay: 0.22,
+            atmosphere: atmosphere,
+            child: _buildForgeControlPanel(),
+          );
+        },
       ),
     );
   }

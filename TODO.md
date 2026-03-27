@@ -19,3 +19,13 @@ Can we add a parallel app or a new app for something similar when choosing the c
 in other campaing types in the party and level selection
 the "premium" colors are not showing and the high levels are always white
 this applies also to the number of characters
+
+# 15
+In party level selection there is a horizontal wheeler style widget.
+The issue is that if we horizontally scroll a lot, the system thinks we are
+scrolling the panel and passess to the Story section. 
+Can we have that the horizontal panel scroll is deactivate only in the area where the horizontal wheeler is?
+
+# 16
+In my android phone the wheeler widgets in settings,twists and presets does not seem to have haptic feedback; or if it has it is basically un-noticed. 
+Can we make this haptic a little stronger, or if not there implement it?

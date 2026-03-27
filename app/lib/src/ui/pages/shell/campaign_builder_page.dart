@@ -44,6 +44,96 @@ enum _AppStage { entry, forge, parchment }
 enum _ForgeSection { world, party, narrative }
 
 @immutable
+class _ForgeDraftViewState {
+  const _ForgeDraftViewState({
+    required this.section,
+    required this.isTransitionReversed,
+    required this.selectedCampaignType,
+    required this.selectedSetting,
+    required this.selectedTwist,
+    required this.selectedPreset,
+    required this.appliedPreset,
+    required this.selectedThemes,
+    required this.customThemeEntries,
+    required this.selectedTones,
+    required this.customToneEntries,
+    required this.selectedStyles,
+    required this.customStyleEntries,
+    required this.selectedArchetypes,
+    required this.partyLevel,
+    required this.partySize,
+    required this.includeNpcs,
+    required this.includeEncounters,
+    required this.isGenerating,
+    required this.hasUnsavedChanges,
+    required this.errorMessage,
+    required this.generatedPrompt,
+    required this.savedDraftPrompt,
+    required this.savedDraftSavedAt,
+  });
+
+  final _ForgeSection section;
+  final bool isTransitionReversed;
+  final String? selectedCampaignType;
+  final String? selectedSetting;
+  final String? selectedTwist;
+  final String? selectedPreset;
+  final String? appliedPreset;
+  final Set<String> selectedThemes;
+  final Set<String> customThemeEntries;
+  final Set<String> selectedTones;
+  final Set<String> customToneEntries;
+  final Set<String> selectedStyles;
+  final Set<String> customStyleEntries;
+  final Set<String> selectedArchetypes;
+  final int partyLevel;
+  final int partySize;
+  final bool includeNpcs;
+  final bool includeEncounters;
+  final bool isGenerating;
+  final bool hasUnsavedChanges;
+  final String? errorMessage;
+  final String? generatedPrompt;
+  final String? savedDraftPrompt;
+  final int? savedDraftSavedAt;
+}
+
+@immutable
+class _ShellChromeViewState {
+  const _ShellChromeViewState({
+    required this.appStage,
+    required this.campaignType,
+    required this.forgeCompleted,
+    required this.parchmentCompleted,
+  });
+
+  final _AppStage appStage;
+  final String? campaignType;
+  final bool forgeCompleted;
+  final bool parchmentCompleted;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    return other is _ShellChromeViewState &&
+        other.appStage == appStage &&
+        other.campaignType == campaignType &&
+        other.forgeCompleted == forgeCompleted &&
+        other.parchmentCompleted == parchmentCompleted;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        appStage,
+        campaignType,
+        forgeCompleted,
+        parchmentCompleted,
+      );
+}
+
+@immutable
 class WheelPickerConfig {
   const WheelPickerConfig({
     required this.sheetHeight,
@@ -482,6 +572,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
   String? _adFreePrice;
   late final List<TextEditingController> _textControllers;
+  late final ValueNotifier<_ForgeDraftViewState> _forgeDraftViewState;
   final ScrollController _entryScrollController = ScrollController();
   final ScrollController _forgeScrollController = ScrollController();
   final ScrollController _parchmentScrollController = ScrollController();
@@ -564,6 +655,9 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       _encounterFocusController,
       _safetyNotesController,
     ];
+    _forgeDraftViewState = ValueNotifier<_ForgeDraftViewState>(
+      _buildForgeDraftViewState(),
+    );
     for (final controller in _textControllers) {
       controller.addListener(_handleDraftInputChanged);
     }
@@ -577,6 +671,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       controller.removeListener(_handleDraftInputChanged);
       controller.dispose();
     }
+    _forgeDraftViewState.dispose();
     _purchaseSubscription?.cancel();
     _interstitialAdService.dispose();
     _forgeSoundPlayer.dispose();
@@ -591,7 +686,10 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.currentLocale.languageCode !=
         widget.currentLocale.languageCode) {
-      setState(_clearLocaleSelections);
+      _setShellState(
+        _clearLocaleSelections,
+        syncForgeDraftViewState: true,
+      );
       _loadOptions();
     }
   }
@@ -611,12 +709,79 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   }
 
   void _handleDraftInputChanged() {
-    if (!mounted) {
+    if (!mounted || _hasUnsavedChanges) {
       return;
     }
-    setState(() {
+    _applyForgeDraftMutation(markDirty: true);
+  }
+
+  _ForgeDraftViewState _buildForgeDraftViewState() {
+    return _ForgeDraftViewState(
+      section: _forgeSection,
+      isTransitionReversed: _forgeTransitionReverse,
+      selectedCampaignType: _selectedCampaignType,
+      selectedSetting: _selectedSetting,
+      selectedTwist: _selectedTwist,
+      selectedPreset: _selectedPreset,
+      appliedPreset: _appliedPreset,
+      selectedThemes: Set<String>.unmodifiable(_selectedThemes),
+      customThemeEntries: Set<String>.unmodifiable(_customThemeEntries),
+      selectedTones: Set<String>.unmodifiable(_selectedTones),
+      customToneEntries: Set<String>.unmodifiable(_customToneEntries),
+      selectedStyles: Set<String>.unmodifiable(_selectedStyles),
+      customStyleEntries: Set<String>.unmodifiable(_customStyleEntries),
+      selectedArchetypes: Set<String>.unmodifiable(_selectedArchetypes),
+      partyLevel: _partyLevel,
+      partySize: _partySize,
+      includeNpcs: _includeNpcs,
+      includeEncounters: _includeEncounters,
+      isGenerating: _isGenerating,
+      hasUnsavedChanges: _hasUnsavedChanges,
+      errorMessage: _errorMessage,
+      generatedPrompt: _generatedPrompt,
+      savedDraftPrompt: _savedDraftPrompt,
+      savedDraftSavedAt: _savedDraftSavedAt,
+    );
+  }
+
+  _ShellChromeViewState _buildShellChromeViewState() {
+    final hasGeneratedPrompt = (_generatedPrompt ?? '').trim().isNotEmpty;
+    return _ShellChromeViewState(
+      appStage: _appStage,
+      campaignType: _selectedCampaignType,
+      forgeCompleted: hasGeneratedPrompt,
+      parchmentCompleted: hasGeneratedPrompt && !_hasUnsavedChanges,
+    );
+  }
+
+  void _publishForgeDraftViewState() {
+    _forgeDraftViewState.value = _buildForgeDraftViewState();
+  }
+
+  void _setShellState(
+    VoidCallback update, {
+    bool syncForgeDraftViewState = false,
+  }) {
+    setState(update);
+    if (syncForgeDraftViewState) {
+      _publishForgeDraftViewState();
+    }
+  }
+
+  void _applyForgeDraftMutation({
+    VoidCallback? update,
+    bool markDirty = false,
+  }) {
+    final chromeBefore = _buildShellChromeViewState();
+    update?.call();
+    if (markDirty) {
       _hasUnsavedChanges = true;
-    });
+    }
+    final chromeAfter = _buildShellChromeViewState();
+    if (chromeBefore != chromeAfter) {
+      setState(() {});
+    }
+    _publishForgeDraftViewState();
   }
 
   void _clearTextControllersSilently() {
@@ -641,14 +806,14 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   }
 
   void _markDirty([VoidCallback? update]) {
-    setState(() {
-      update?.call();
-      _hasUnsavedChanges = true;
-    });
+    _applyForgeDraftMutation(
+      update: update,
+      markDirty: true,
+    );
   }
 
   void _applyShellState(VoidCallback update) {
-    setState(update);
+    _applyForgeDraftMutation(update: update);
   }
 
   Future<void> _loadOptions() async {
@@ -665,7 +830,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         return;
       }
 
-      setState(() {
+      _setShellState(() {
         _options = options;
         _selectedSetting = options.settings.contains(_selectedSetting)
             ? _selectedSetting
@@ -683,14 +848,14 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         _forgeTransitionReverse = false;
         _appStage = _AppStage.entry;
         _forgeSection = _ForgeSection.world;
-      });
+      }, syncForgeDraftViewState: true);
     } catch (exc) {
       if (!mounted) {
         return;
       }
-      setState(() {
+      _setShellState(() {
         _errorMessage = context.l10n.appLoadOptionsError(exc.toString());
-      });
+      }, syncForgeDraftViewState: true);
     } finally {
       if (mounted) {
         setState(() {
@@ -807,14 +972,14 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         _selectedArchetypes.length,
         _partySize,
       );
-      setState(() {
+      _applyShellState(() {
         _errorMessage = message;
       });
       _showSnackBar(message);
       return;
     }
 
-    setState(() {
+    _applyShellState(() {
       _isGenerating = true;
       _errorMessage = null;
     });
@@ -826,11 +991,11 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       if (!mounted) {
         return;
       }
-      setState(() {
+      _setShellState(() {
         _generatedPrompt = prompt;
         _hasUnsavedChanges = false;
         _setAppStage(_AppStage.parchment);
-      });
+      }, syncForgeDraftViewState: true);
       _triggerMediumImpact();
       unawaited(_forgeSoundPlayer.playForgeSound());
       await _copyPrompt(showFeedback: false);
@@ -843,13 +1008,13 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       if (!mounted) {
         return;
       }
-      setState(() {
+      _applyShellState(() {
         _errorMessage = context.l10n.appGenerationFailedError(exc.toString());
       });
       _showSnackBar(context.l10n.appSnackGenerationFailed);
     } finally {
       if (mounted) {
-        setState(() {
+        _applyShellState(() {
           _isGenerating = false;
         });
       }
@@ -945,7 +1110,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       return;
     }
 
-    setState(() {
+    _setShellState(() {
       _savedDraftPrompt = savedPrompt;
       _savedDraftSavedAt = savedAt;
       _generatedPrompt = savedPrompt;
@@ -955,7 +1120,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       if (savedSetting != null && savedSetting.trim().isNotEmpty) {
         _selectedSetting = savedSetting;
       }
-    });
+    }, syncForgeDraftViewState: true);
   }
 
   Future<bool> _savePromptDraft({bool showFeedback = true}) async {
@@ -990,10 +1155,10 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       return persisted;
     }
 
-    setState(() {
+    _setShellState(() {
       _savedDraftPrompt = prompt;
       _savedDraftSavedAt = savedAt;
-    });
+    }, syncForgeDraftViewState: true);
     if (showFeedback) {
       _showSnackBar(
         persisted
@@ -1013,7 +1178,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       await preferences.remove(_draftSettingKey);
     }
     if (!mounted) return;
-    setState(() {
+    _setShellState(() {
       final options = _options;
       _clearTextControllersSilently();
       _generatedPrompt = null;
@@ -1044,7 +1209,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       _forgeTransitionReverse = false;
       _appStage = _AppStage.entry;
       _forgeSection = _ForgeSection.world;
-    });
+    }, syncForgeDraftViewState: true);
     _showSnackBar(context.l10n.entryResetDraftConfirm);
   }
 
@@ -1288,7 +1453,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       return;
     }
 
-    setState(() {
+    _applyShellState(() {
       _setForgeSection(section);
     });
     _triggerLightImpact();
@@ -1296,7 +1461,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
   void _selectCampaignType(String campaignType) {
     final hasChanged = campaignType != _selectedCampaignType;
-    setState(() {
+    _setShellState(() {
       _selectedCampaignType = campaignType;
       _selectedPreset = null;
       _appliedPreset = null;
@@ -1305,7 +1470,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       if (hasChanged) {
         _hasUnsavedChanges = true;
       }
-    });
+    }, syncForgeDraftViewState: true);
     _triggerLightImpact();
   }
 
@@ -1313,23 +1478,23 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     if (!_isStageUnlocked(stage)) {
       return;
     }
-    setState(() {
+    _setShellState(() {
       _setAppStage(stage);
       if (stage == _AppStage.forge &&
           _forgeSection == _ForgeSection.narrative) {
         _setForgeSection(_ForgeSection.world);
       }
-    });
+    }, syncForgeDraftViewState: true);
   }
 
   void _goToForge([_ForgeSection section = _ForgeSection.world]) {
     if (!_isStageUnlocked(_AppStage.forge)) {
       return;
     }
-    setState(() {
+    _setShellState(() {
       _setAppStage(_AppStage.forge);
       _setForgeSection(section);
-    });
+    }, syncForgeDraftViewState: true);
   }
 
   void _handleResumeForgeTap([_ForgeSection section = _ForgeSection.world]) {
@@ -1368,7 +1533,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         _ForgeSection.party => context.l10n.forgeAdvanceBlockedParty,
         _ForgeSection.narrative => context.l10n.forgeAdvanceBlockedNarrative,
       };
-      setState(() {
+      _applyShellState(() {
         _errorMessage = message;
       });
       _showSnackBar(message);
@@ -1377,13 +1542,13 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
     switch (_forgeSection) {
       case _ForgeSection.world:
-        setState(() {
+        _applyShellState(() {
           _setForgeSection(_ForgeSection.party);
         });
         _triggerLightImpact();
         return;
       case _ForgeSection.party:
-        setState(() {
+        _applyShellState(() {
           _setForgeSection(_ForgeSection.narrative);
         });
         _triggerLightImpact();
@@ -1408,12 +1573,12 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         _goToStage(_AppStage.entry);
         return;
       case _ForgeSection.party:
-        setState(() {
+        _applyShellState(() {
           _setForgeSection(_ForgeSection.world);
         });
         return;
       case _ForgeSection.narrative:
-        setState(() {
+        _applyShellState(() {
           _setForgeSection(_ForgeSection.party);
         });
         return;
@@ -1762,7 +1927,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   }
 
   void _handleStagePageRemoved(Page<Object?> page) {
-    setState(() {
+    _setShellState(() {
       switch (page.name) {
         case '/parchment':
           _setAppStage(_AppStage.forge);
@@ -1773,7 +1938,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         default:
           break;
       }
-    });
+    }, syncForgeDraftViewState: true);
   }
 
   Widget _buildPersistentTopBar() {
