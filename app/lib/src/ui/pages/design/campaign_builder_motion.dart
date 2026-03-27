@@ -87,6 +87,66 @@ enum HorizontalGestureMode {
   androidVerticalPriority,
 }
 
+class _ScrollZoneInherited extends InheritedWidget {
+  const _ScrollZoneInherited({
+    required this.register,
+    required this.unregister,
+    required super.child,
+  });
+
+  final void Function(GlobalKey) register;
+  final void Function(GlobalKey) unregister;
+
+  static _ScrollZoneInherited? of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_ScrollZoneInherited>();
+
+  @override
+  bool updateShouldNotify(_ScrollZoneInherited oldWidget) => false;
+}
+
+class HorizontalScrollZone extends StatefulWidget {
+  const HorizontalScrollZone({
+    super.key,
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  State<HorizontalScrollZone> createState() => _HorizontalScrollZoneState();
+}
+
+class _HorizontalScrollZoneState extends State<HorizontalScrollZone> {
+  final GlobalKey _zoneKey = GlobalKey();
+  _ScrollZoneInherited? _scope;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final nextScope = _ScrollZoneInherited.of(context);
+    if (_scope == nextScope) {
+      return;
+    }
+    _scope?.unregister(_zoneKey);
+    _scope = nextScope;
+    _scope?.register(_zoneKey);
+  }
+
+  @override
+  void dispose() {
+    _scope?.unregister(_zoneKey);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      key: _zoneKey,
+      child: widget.child,
+    );
+  }
+}
+
 class InteractiveHorizontalSectionPager extends StatefulWidget {
   const InteractiveHorizontalSectionPager({
     super.key,
@@ -123,6 +183,7 @@ class _InteractiveHorizontalSectionPagerState
     with SingleTickerProviderStateMixin {
   final GlobalKey _viewportKey = GlobalKey();
   final Map<int, Widget> _childCache = <int, Widget>{};
+  final Set<GlobalKey> _scrollZoneKeys = <GlobalKey>{};
   late final AnimationController _settleController;
   Animation<double>? _pageAnimation;
   late double _page;
@@ -132,6 +193,7 @@ class _InteractiveHorizontalSectionPagerState
   VoidCallback? _pendingEdgeAction;
   Offset? _pointerDownPosition;
   Duration? _pointerDownTime;
+  bool _pointerInScrollZone = false;
 
   @override
   void initState() {
@@ -240,6 +302,9 @@ class _InteractiveHorizontalSectionPagerState
   }
 
   void _handleHorizontalDragStart(DragStartDetails details) {
+    if (_pointerInScrollZone) {
+      return;
+    }
     _isDragging = true;
     _pendingIndex = null;
     _pendingEdgeAction = null;
@@ -247,7 +312,7 @@ class _InteractiveHorizontalSectionPagerState
   }
 
   void _handleHorizontalDragUpdate(DragUpdateDetails details) {
-    if (_viewportWidth <= 0) {
+    if (!_isDragging || _viewportWidth <= 0) {
       return;
     }
 
@@ -261,12 +326,19 @@ class _InteractiveHorizontalSectionPagerState
   }
 
   void _handleHorizontalDragCancel() {
+    if (!_isDragging) {
+      return;
+    }
     _isDragging = false;
     _animateToPage(widget.currentIndex.toDouble());
   }
 
   void _handleHorizontalDragEnd(DragEndDetails details) {
+    final wasDragging = _isDragging;
     _isDragging = false;
+    if (!wasDragging) {
+      return;
+    }
     final currentIndex = widget.currentIndex;
     final currentPage = currentIndex.toDouble();
     final pageDelta = _page - currentPage;
@@ -310,23 +382,56 @@ class _InteractiveHorizontalSectionPagerState
     );
   }
 
+  void _registerScrollZone(GlobalKey key) {
+    _scrollZoneKeys.add(key);
+  }
+
+  void _unregisterScrollZone(GlobalKey key) {
+    _scrollZoneKeys.remove(key);
+  }
+
+  bool _isPositionInScrollZone(Offset globalPosition) {
+    for (final key in _scrollZoneKeys) {
+      final context = key.currentContext;
+      if (context == null) {
+        continue;
+      }
+      final renderObject = context.findRenderObject();
+      if (renderObject is! RenderBox || !renderObject.hasSize) {
+        continue;
+      }
+      final localPosition = renderObject.globalToLocal(globalPosition);
+      if (renderObject.paintBounds.contains(localPosition)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   void _handlePointerDown(PointerDownEvent event) {
     _pointerDownPosition = event.position;
     _pointerDownTime = event.timeStamp;
+    _pointerInScrollZone = _isPositionInScrollZone(event.position);
   }
 
   void _handlePointerCancel(PointerCancelEvent event) {
     _pointerDownPosition = null;
     _pointerDownTime = null;
+    _pointerInScrollZone = false;
   }
 
   void _handlePointerUp(PointerUpEvent event) {
     final startPosition = _pointerDownPosition;
     final startTime = _pointerDownTime;
+    final pointerInScrollZone = _pointerInScrollZone;
     _pointerDownPosition = null;
     _pointerDownTime = null;
+    _pointerInScrollZone = false;
 
-    if (_isDragging || startPosition == null || startTime == null) {
+    if (_isDragging ||
+        pointerInScrollZone ||
+        startPosition == null ||
+        startTime == null) {
       return;
     }
 
@@ -472,11 +577,15 @@ class _InteractiveHorizontalSectionPagerState
         _viewportWidth = _resolveViewportWidth(context, constraints.maxWidth);
         final visibleIndices = _visibleIndices().toList(growable: false);
 
-        return Listener(
-          onPointerDown: _handlePointerDown,
-          onPointerUp: _handlePointerUp,
-          onPointerCancel: _handlePointerCancel,
-          child: _buildDragSurface(context, visibleIndices),
+        return _ScrollZoneInherited(
+          register: _registerScrollZone,
+          unregister: _unregisterScrollZone,
+          child: Listener(
+            onPointerDown: _handlePointerDown,
+            onPointerUp: _handlePointerUp,
+            onPointerCancel: _handlePointerCancel,
+            child: _buildDragSurface(context, visibleIndices),
+          ),
         );
       },
     );
@@ -489,7 +598,6 @@ class _AndroidVerticalPriorityHorizontalDragGestureRecognizer
     onlyAcceptDragOnThreshold = true;
   }
 
-  static const double _minimumAcceptanceSlop = 18.0;
   static const double _acceptanceMultiplier = 1.35;
   static const double _dominanceRatio = 1.35;
 
@@ -722,10 +830,12 @@ class AnimatedRuneSegmentedValueSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (layout == SegmentedValueSelectorLayout.segmentedButtonScrollable) {
-      return SingleChildScrollView(
-        key: controlKey,
-        scrollDirection: Axis.horizontal,
-        child: _buildSegmentedButton(context),
+      return HorizontalScrollZone(
+        child: SingleChildScrollView(
+          key: controlKey,
+          scrollDirection: Axis.horizontal,
+          child: _buildSegmentedButton(context),
+        ),
       );
     }
 

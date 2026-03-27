@@ -528,6 +528,103 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
+  testWidgets(
+      'dragging inside the party level scroller does not reveal adjacent forge sections',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(430, 932));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openPartySection(tester);
+
+    final levelControl = find.byKey(
+      const ValueKey<String>('party-level-control'),
+    );
+    await tester.ensureVisible(levelControl);
+
+    final rect = tester.getRect(levelControl);
+    final gesture = await tester.startGesture(
+      Offset(rect.right - 24, rect.center.dy),
+    );
+    await gesture.moveBy(const Offset(-72, 0));
+    await tester.pump();
+    await gesture.moveBy(const Offset(-72, 0));
+    await tester.pump();
+
+    expect(
+      find.byKey(const ValueKey<String>('forge-section-world')),
+      findsNothing,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('forge-section-narrative')),
+      findsNothing,
+    );
+
+    await gesture.up();
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('forge-section-party')),
+      findsOneWidget,
+    );
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets(
+      'flinging inside the party level scroller does not change the forge section',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(430, 932));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openPartySection(tester);
+
+    final levelControl = find.byKey(
+      const ValueKey<String>('party-level-control'),
+    );
+    await tester.ensureVisible(levelControl);
+
+    final rect = tester.getRect(levelControl);
+    await tester.flingFrom(
+      Offset(rect.right - 24, rect.center.dy),
+      const Offset(-420, 0),
+      1600,
+    );
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('forge-section-party')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('forge-section-narrative')),
+      findsNothing,
+    );
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
   testWidgets('swiping right from parchment returns to narrative', (
     tester,
   ) async {
@@ -615,4 +712,16 @@ Future<void> _flingSection(
   final rect = tester.getRect(finder);
   final start = Offset(rect.left + 48, rect.top + 48);
   await tester.flingFrom(start, offset, 1000);
+}
+
+Future<void> _openPartySection(WidgetTester tester) async {
+  final oneShotCard = find.byKey(
+    const ValueKey<String>('entry-campaign-card-One-Shot'),
+  );
+  await tester.ensureVisible(oneShotCard);
+  await tester.tap(oneShotCard);
+  await _pumpUi(tester);
+
+  await tester.tap(find.text('Party'));
+  await _pumpUi(tester);
 }
