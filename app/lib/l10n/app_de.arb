@@ -87,6 +87,7 @@
   "appSnackChatGptOpened": "ChatGPT geöffnet. Der Prompt liegt bereits in der Zwischenablage.",
   "appSnackChatGptCopiedOnly": "ChatGPT konnte nicht geöffnet werden, aber der Prompt wurde kopiert.",
   "appSnackPremiumUnlockedTemporary": "Premium für 5 Minuten freigeschaltet",
+  "appSnackRewardedAdUnavailable": "Die Werbung ist im Moment nicht verfügbar. Versuche es gleich noch einmal.",
   "appSnackNoParchmentToSave": "Es gibt kein Pergament zum Speichern.",
   "appSnackDraftSaved": "Pergament-Entwurf lokal gespeichert.",
   "appSnackDraftMemoryOnly": "Entwurf nur im Speicher gesichert. Starte die App vollständig neu, um lokale Persistenz zu aktivieren.",

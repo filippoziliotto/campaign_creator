@@ -60,6 +60,149 @@ void main() {
   },
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android, TargetPlatform.iOS}));
+
+  testWidgets('forge swipe helper renders under the ribbon on narrow screens',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(360, 800));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: _noopLocaleChanged,
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final ribbon = find.byKey(const ValueKey<String>('forge-section-ribbon'));
+    final helper = find.byKey(const ValueKey<String>('forge-swipe-helper'));
+
+    expect(helper, findsOneWidget);
+    expect(
+      find.descendant(
+        of: helper,
+        matching: find.byKey(const ValueKey<String>('forge-swipe-mark-world')),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: helper,
+        matching: find.byKey(const ValueKey<String>('forge-swipe-mark-party')),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: helper,
+        matching:
+            find.byKey(const ValueKey<String>('forge-swipe-mark-narrative')),
+      ),
+      findsOneWidget,
+    );
+
+    expect(tester.getTopLeft(helper).dy,
+        greaterThan(tester.getBottomLeft(ribbon).dy));
+  });
+
+  testWidgets(
+      'forge swipe helper updates active mark when ribbon selection changes',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(360, 800));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: _noopLocaleChanged,
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('forge-swipe-mark-world-active')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('forge-swipe-mark-party-active')),
+      findsNothing,
+    );
+
+    final ribbon = find.byKey(const ValueKey<String>('forge-section-ribbon'));
+    await tester.tap(find.descendant(of: ribbon, matching: find.text('Party')));
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('forge-swipe-mark-world-active')),
+      findsNothing,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('forge-swipe-mark-party-active')),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('forge swipe helper remains visible on wide layouts',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: _noopLocaleChanged,
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    expect(find.byKey(const ValueKey<String>('forge-swipe-helper')),
+        findsOneWidget);
+  });
+
+  testWidgets(
+      'forge swipe helper uses a thin active dash and compact inactive marks',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(360, 800));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: _noopLocaleChanged,
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final activeMark = find.byKey(
+      const ValueKey<String>('forge-swipe-mark-world-active'),
+    );
+    final inactiveMark = find.byKey(
+      const ValueKey<String>('forge-swipe-mark-party-inactive'),
+    );
+
+    expect(tester.getSize(activeMark), const Size(22, 2.5));
+    expect(tester.getSize(inactiveMark), const Size(7, 2.5));
+  });
 }
 
 class _TestApp extends StatelessWidget {

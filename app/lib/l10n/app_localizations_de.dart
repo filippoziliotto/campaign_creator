@@ -136,6 +136,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Premium für 5 Minuten freigeschaltet';
 
   @override
+  String get appSnackRewardedAdUnavailable =>
+      'Die Werbung ist im Moment nicht verfügbar. Versuche es gleich noch einmal.';
+
+  @override
   String get appSnackNoParchmentToSave =>
       'Es gibt kein Pergament zum Speichern.';
 

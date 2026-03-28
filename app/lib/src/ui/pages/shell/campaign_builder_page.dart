@@ -1020,7 +1020,17 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   }
 
   Future<void> _handleWatchAdForPremiumUnlock() async {
+    if (!_rewardedAdService.isSupported) {
+      _showCompactSnackBar(context.l10n.appSnackRewardedAdUnavailable);
+      return;
+    }
+
     if (!_rewardedAdService.isReady) {
+      await _rewardedAdService.preload();
+    }
+
+    if (!_rewardedAdService.isReady) {
+      _showCompactSnackBar(context.l10n.appSnackRewardedAdUnavailable);
       return;
     }
 
@@ -1032,6 +1042,9 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     final rewardEarned = await _rewardedAdService.show();
     unawaited(_rewardedAdService.preload());
     if (!rewardEarned || !mounted) {
+      if (mounted) {
+        _showCompactSnackBar(context.l10n.appSnackRewardedAdUnavailable);
+      }
       return;
     }
 

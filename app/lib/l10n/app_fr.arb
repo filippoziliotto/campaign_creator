@@ -87,6 +87,7 @@
   "appSnackChatGptOpened": "ChatGPT a été ouvert. Le prompt est déjà dans le presse-papiers.",
   "appSnackChatGptCopiedOnly": "Impossible d'ouvrir ChatGPT, mais le prompt a été copié.",
   "appSnackPremiumUnlockedTemporary": "Premium débloqué pendant 5 minutes",
+  "appSnackRewardedAdUnavailable": "La publicité n'est pas disponible pour le moment. Réessayez dans un instant.",
   "appSnackNoParchmentToSave": "There is no parchment to save.",
   "appSnackDraftSaved": "Brouillon du parchemin enregistré localement.",
   "appSnackDraftMemoryOnly": "Brouillon enregistré uniquement en mémoire. Redémarrez complètement l'application pour activer la persistance locale.",

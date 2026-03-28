@@ -6,6 +6,7 @@ import 'ad_units.dart';
 
 abstract class RewardedAdService {
   Future<void> preload();
+  bool get isSupported;
   bool get isReady;
   Future<bool> show();
   void dispose();
@@ -16,6 +17,9 @@ class DefaultRewardedAdService implements RewardedAdService {
   bool _isReady = false;
   bool _isLoading = false;
   bool _disposed = false;
+
+  @override
+  bool get isSupported => MonetizationIds.rewardedAdUnitId.isNotEmpty;
 
   @override
   bool get isReady => _isReady && !_disposed;

@@ -665,6 +665,84 @@ void main() {
   });
 
   testWidgets(
+      'locked premium flow still shows watch ad when rewarded ad is not preloaded yet',
+      (tester) async {
+    await _setLargeSurface(tester);
+    final rewardedAdService = _FakeRewardedAdService()
+      ..shouldBeReady = false
+      ..readyOnPreloadAttempt = 2
+      ..showResult = true;
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('en'),
+        child: _buildPage(
+          locale: const Locale('en'),
+          rewardedAdService: rewardedAdService,
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openPartySection(tester);
+    final l10n = _l10n(tester);
+
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('party-size-control')),
+        matching: find.byKey(const ValueKey<String>('party-size-pill-5')),
+      ),
+    );
+    await _pumpUi(tester);
+
+    expect(find.widgetWithText(FilledButton, l10n.premiumUnlockWatchAd),
+        findsOneWidget);
+
+    await tester
+        .tap(find.widgetWithText(FilledButton, l10n.premiumUnlockWatchAd));
+    await _pumpUi(tester);
+
+    expect(rewardedAdService.preloadCallCount, greaterThanOrEqualTo(2));
+    expect(rewardedAdService.showCallCount, 1);
+  });
+
+  testWidgets(
+      'watch ad shows a localized message when rewarded ad stays unavailable',
+      (tester) async {
+    await _setLargeSurface(tester);
+    final rewardedAdService = _FakeRewardedAdService()
+      ..shouldBeReady = false
+      ..showResult = false;
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('en'),
+        child: _buildPage(
+          locale: const Locale('en'),
+          rewardedAdService: rewardedAdService,
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openPartySection(tester);
+    final l10n = _l10n(tester);
+
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('party-size-control')),
+        matching: find.byKey(const ValueKey<String>('party-size-pill-5')),
+      ),
+    );
+    await _pumpUi(tester);
+
+    await tester
+        .tap(find.widgetWithText(FilledButton, l10n.premiumUnlockWatchAd));
+    await _pumpUi(tester);
+
+    expect(find.text(l10n.appSnackRewardedAdUnavailable), findsOneWidget);
+    expect(rewardedAdService.showCallCount, 0);
+  });
+
+  testWidgets(
       'premium party pills keep their premium color after rewarded unlock',
       (tester) async {
     await _setLargeSurface(tester);
@@ -1292,15 +1370,25 @@ class _FakeForgeSoundPlayer implements ForgeSoundPlayer {
 }
 
 class _FakeRewardedAdService implements RewardedAdService {
+  int preloadCallCount = 0;
   int showCallCount = 0;
   bool shouldBeReady = true;
+  int? readyOnPreloadAttempt;
   bool showResult = true;
+
+  @override
+  bool get isSupported => true;
 
   @override
   bool get isReady => shouldBeReady;
 
   @override
-  Future<void> preload() async {}
+  Future<void> preload() async {
+    preloadCallCount += 1;
+    if (readyOnPreloadAttempt == preloadCallCount) {
+      shouldBeReady = true;
+    }
+  }
 
   @override
   Future<bool> show() async {

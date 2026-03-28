@@ -137,6 +137,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Premium desbloqueado por 5 minutos';
 
   @override
+  String get appSnackRewardedAdUnavailable =>
+      'O anúncio não está disponível neste momento. Tenta novamente dentro de instantes.';
+
+  @override
   String get appSnackNoParchmentToSave =>
       'Não há nenhum pergaminho para guardar.';
 

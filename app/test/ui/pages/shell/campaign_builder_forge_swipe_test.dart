@@ -193,6 +193,54 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
+  testWidgets('swiping updates the forge swipe helper active mark',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(430, 932));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    final oneShotCard = find.byKey(
+      const ValueKey<String>('entry-campaign-card-One-Shot'),
+    );
+    await tester.ensureVisible(oneShotCard);
+    await tester.tap(oneShotCard);
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('forge-swipe-mark-world-active')),
+      findsOneWidget,
+    );
+
+    await _flingSection(
+      tester,
+      find.byKey(const ValueKey<String>('forge-section-world')),
+      const Offset(-500, 0),
+    );
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey<String>('forge-swipe-mark-party-active')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('forge-swipe-mark-world-active')),
+      findsNothing,
+    );
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
   testWidgets('touch forge uses only a bare pinned primary button', (
     tester,
   ) async {

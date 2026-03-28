@@ -968,6 +968,9 @@ class FakeRewardedAdService implements RewardedAdService {
   bool showResult = true;
 
   @override
+  bool get isSupported => true;
+
+  @override
   bool get isReady => shouldBeReady;
 
   @override

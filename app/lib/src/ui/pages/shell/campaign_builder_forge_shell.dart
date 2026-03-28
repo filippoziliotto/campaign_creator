@@ -35,6 +35,16 @@ extension on _CampaignBuilderPageState {
           );
         },
       ),
+      sectionHelper: ValueListenableBuilder<_ForgeSection>(
+        valueListenable: _forgeSectionNotifier,
+        builder: (context, section, __) {
+          return _revealed(
+            delay: 0.14,
+            atmosphere: atmosphere,
+            child: _buildForgeSwipeIndicator(section),
+          );
+        },
+      ),
       activeSection: ValueListenableBuilder<_ForgeDraftViewState>(
         valueListenable: _forgeDraftViewState,
         builder: (context, _, __) {
@@ -58,6 +68,67 @@ extension on _CampaignBuilderPageState {
                 : _buildForgeControlPanel(state),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildForgeSwipeIndicator(_ForgeSection currentSection) {
+    final theme = _resolvedAtmosphereTheme();
+    final colorScheme = theme.colorScheme;
+    final atmosphere = _currentAtmosphere();
+
+    return Theme(
+      data: theme,
+      child: Center(
+        child: Container(
+          key: const ValueKey<String>('forge-swipe-helper'),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(999),
+            color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.14),
+            border: Border.all(
+              color: colorScheme.outline.withValues(alpha: 0.08),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: _ForgeSection.values.map((section) {
+              final isActive = section == currentSection;
+              final sectionName = section.name;
+              return Padding(
+                key: ValueKey<String>('forge-swipe-mark-$sectionName'),
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: AnimatedContainer(
+                  key: ValueKey<String>(
+                    'forge-swipe-mark-$sectionName-${isActive ? 'active' : 'inactive'}',
+                  ),
+                  duration: prefersReducedMotion(context)
+                      ? Duration.zero
+                      : const Duration(milliseconds: 220),
+                  curve: Curves.easeOutCubic,
+                  width: isActive ? 22 : 7,
+                  height: 2.5,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(999),
+                    color: isActive
+                        ? atmosphere.highlight.withValues(alpha: 0.98)
+                        : colorScheme.onSurfaceVariant.withValues(alpha: 0.28),
+                    boxShadow: isActive
+                        ? [
+                            BoxShadow(
+                              color:
+                                  atmosphere.highlight.withValues(alpha: 0.22),
+                              blurRadius: 6,
+                              spreadRadius: 0.2,
+                            ),
+                          ]
+                        : null,
+                  ),
+                ),
+              );
+            }).toList(growable: false),
+          ),
+        ),
       ),
     );
   }
@@ -854,7 +925,7 @@ extension on _CampaignBuilderPageState {
                                             _handleGoAdFree();
                                           },
                                           showAdOption:
-                                              _rewardedAdService.isReady,
+                                              _rewardedAdService.isSupported,
                                         ),
                                       );
                                     }
@@ -938,7 +1009,7 @@ extension on _CampaignBuilderPageState {
                                           _handleGoAdFree();
                                         },
                                         showAdOption:
-                                            _rewardedAdService.isReady,
+                                            _rewardedAdService.isSupported,
                                       ),
                                     );
                                   }
@@ -1195,7 +1266,8 @@ extension on _CampaignBuilderPageState {
                                         Navigator.pop(stableContext);
                                         _handleGoAdFree();
                                       },
-                                      showAdOption: _rewardedAdService.isReady,
+                                      showAdOption:
+                                          _rewardedAdService.isSupported,
                                     ),
                                   );
                                 } else if (isCustomSelected) {
@@ -1257,7 +1329,7 @@ extension on _CampaignBuilderPageState {
           Navigator.pop(context);
           _handleGoAdFree();
         },
-        showAdOption: _rewardedAdService.isReady,
+        showAdOption: _rewardedAdService.isSupported,
       ),
     );
   }

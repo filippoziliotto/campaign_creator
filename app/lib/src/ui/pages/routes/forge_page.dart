@@ -7,6 +7,7 @@ class ForgeRoutePage extends StatelessWidget {
     super.key,
     this.hero,
     required this.sectionRibbon,
+    this.sectionHelper,
     required this.activeSection,
     required this.controlPanel,
     this.errorBanner,
@@ -15,6 +16,7 @@ class ForgeRoutePage extends StatelessWidget {
 
   final Widget? hero;
   final Widget sectionRibbon;
+  final Widget? sectionHelper;
   final Widget activeSection;
   final Widget controlPanel;
   final Widget? errorBanner;
@@ -39,6 +41,13 @@ class ForgeRoutePage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
             child: sectionRibbon,
           ),
+          if (sectionHelper != null) ...[
+            const SizedBox(height: 4),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              child: sectionHelper!,
+            ),
+          ],
           const SizedBox(height: 4),
           Expanded(
             child: Stack(
@@ -86,6 +95,13 @@ class ForgeRoutePage extends StatelessWidget {
                   ),
                   child: sectionRibbon,
                 ),
+                if (sectionHelper != null) ...[
+                  const SizedBox(height: 4),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    child: sectionHelper!,
+                  ),
+                ],
                 const SizedBox(height: 12),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -87,6 +87,7 @@
   "appSnackChatGptOpened": "ChatGPT aberto. O prompt já está na área de transferência.",
   "appSnackChatGptCopiedOnly": "Não foi possível abrir o ChatGPT, mas o prompt foi copiado.",
   "appSnackPremiumUnlockedTemporary": "Premium desbloqueado por 5 minutos",
+  "appSnackRewardedAdUnavailable": "O anúncio não está disponível neste momento. Tenta novamente dentro de instantes.",
   "appSnackNoParchmentToSave": "Não há nenhum pergaminho para guardar.",
   "appSnackDraftSaved": "Rascunho do pergaminho guardado localmente.",
   "appSnackDraftMemoryOnly": "Rascunho guardado apenas em memória. Reinicia completamente a app para ativar a persistência local.",
