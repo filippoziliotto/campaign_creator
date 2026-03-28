@@ -22,8 +22,7 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
   static const List<_OnboardingSlideSpec> _slides = <_OnboardingSlideSpec>[
     _OnboardingSlideSpec(
       title: 'Choose Campaign',
-      body:
-          'Pick the kind of adventure you want to build.',
+      body: 'Pick the kind of adventure you want to build.',
       primaryLabel: 'Next',
       secondaryLabel: 'Skip',
       primaryAction: _OnboardingAction.next,
@@ -101,7 +100,7 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
     final screenSize = MediaQuery.sizeOf(context);
     final compact = screenSize.width < 720;
     final panelWidthFactor = compact ? 0.94 : 0.88;
-    final panelHeightFactor = compact ? 0.90 : 0.82;
+    final panelHeightFactor = compact ? 0.80 : 0.70;
 
     return Material(
       color: Colors.transparent,
@@ -557,6 +556,7 @@ class _CampaignTypePreview extends StatelessWidget {
         _PreviewPhotoTile(
           label: 'One-Shot',
           assetPath: 'assets/entry_cards/one_shot.jpg',
+          isSelected: true,
         ),
         _PreviewPhotoTile(
           label: 'Mini-campaign',
@@ -757,58 +757,107 @@ class _PreviewPhotoTile extends StatelessWidget {
   const _PreviewPhotoTile({
     required this.label,
     required this.assetPath,
+    this.isSelected = false,
   });
 
   final String label;
   final String assetPath;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final borderColor = isSelected
+        ? theme.colorScheme.tertiary.withValues(alpha: 0.78)
+        : theme.colorScheme.outline.withValues(alpha: 0.24);
+    final shadow = isSelected
+        ? <BoxShadow>[
+            BoxShadow(
+              color: theme.colorScheme.tertiary.withValues(alpha: 0.18),
+              blurRadius: 22,
+              offset: const Offset(0, 12),
+            ),
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.22),
+              blurRadius: 18,
+              offset: const Offset(0, 10),
+            ),
+          ]
+        : <BoxShadow>[
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.14),
+              blurRadius: 12,
+              offset: const Offset(0, 8),
+            ),
+          ];
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(22),
-      child: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          DecoratedBox(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(assetPath),
-                fit: BoxFit.cover,
-              ),
-            ),
+    return Semantics(
+      container: true,
+      label: '$label preview card',
+      selected: isSelected,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(
+            color: borderColor,
+            width: isSelected ? 2.0 : 1.0,
           ),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: <Color>[
-                  Colors.black.withValues(alpha: 0.10),
-                  Colors.black.withValues(alpha: 0.18),
-                  Colors.black.withValues(alpha: 0.58),
-                ],
+          boxShadow: shadow,
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(21),
+          child: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(assetPath),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-            ),
-          ),
-          Positioned(
-            left: 10,
-            right: 10,
-            bottom: 10,
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: FantasyPalette.parchment,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.2,
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[
+                      Colors.black.withValues(alpha: isSelected ? 0.04 : 0.14),
+                      Colors.black.withValues(alpha: isSelected ? 0.10 : 0.24),
+                      Colors.black.withValues(alpha: isSelected ? 0.42 : 0.72),
+                    ],
+                  ),
+                ),
               ),
-            ),
+              if (!isSelected)
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.10),
+                  ),
+                ),
+              Positioned(
+                left: 10,
+                right: 10,
+                bottom: 10,
+                child: ExcludeSemantics(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: FantasyPalette.parchment,
+                      fontSize: 11,
+                      fontWeight:
+                          isSelected ? FontWeight.w800 : FontWeight.w700,
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

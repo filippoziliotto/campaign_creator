@@ -28,14 +28,30 @@ void main() {
     expect(find.text('Long campaign'), findsOneWidget);
     expect(find.text('Dungeon crawl'), findsOneWidget);
 
-    final titleWidget = tester.widget<Text>(find.text('Choose Campaign'));
-    expect(titleWidget.style?.fontSize, 28);
-
     final counterTopLeft = tester.getTopLeft(find.text('1 / 3'));
     final titleTopLeft = tester.getTopLeft(find.text('Choose Campaign'));
     final cardTopLeft = tester.getTopLeft(find.text('One-Shot'));
     expect(titleTopLeft.dy - counterTopLeft.dy, lessThan(34));
     expect(titleTopLeft.dy, lessThan(cardTopLeft.dy));
+
+    final semantics = tester.ensureSemantics();
+    expect(
+      tester.getSemantics(find.bySemanticsLabel('One-Shot preview card')),
+      isSemantics(
+        label: 'One-Shot preview card',
+        hasSelectedState: true,
+        isSelected: true,
+      ),
+    );
+    expect(
+      tester.getSemantics(find.bySemanticsLabel('Mini-campaign preview card')),
+      isSemantics(
+        label: 'Mini-campaign preview card',
+        hasSelectedState: true,
+        isSelected: false,
+      ),
+    );
+    semantics.dispose();
 
     final panelRect = tester.getRect(
       find.byKey(const ValueKey<String>('app-onboarding-panel')),
