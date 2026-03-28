@@ -643,6 +643,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   late final ValueNotifier<_ForgeSection> _forgeSectionNotifier;
   late final ValueNotifier<_ForgeControlState> _forgeControlNotifier;
   bool _hasInitializedForgeViewNotifiers = false;
+  final Map<TextEditingController, String> _exampleTexts = {};
   final ScrollController _entryScrollController = ScrollController();
   final ScrollController _forgeScrollController = ScrollController();
   final ScrollController _parchmentScrollController = ScrollController();
@@ -749,6 +750,34 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       _buildForgeControlState(),
     );
     _hasInitializedForgeViewNotifiers = true;
+    _initExampleTexts();
+  }
+
+  void _initExampleTexts() {
+    final l10n = context.l10n;
+    final mappings = <TextEditingController, String>{
+      _narrativeHooksController: l10n.forgeNarrativeHooksHint,
+      _characterNotesController: l10n.forgeCharacterNotesHint,
+      _constraintsController: l10n.forgeConstraintsHint,
+      _factionsController: l10n.forgeFactionsHint,
+      _npcFocusController: l10n.forgeNpcFocusHint,
+      _encounterFocusController: l10n.forgeEncounterFocusHint,
+      _safetyNotesController: l10n.forgeSafetyNotesHint,
+    };
+    for (final entry in mappings.entries) {
+      _exampleTexts[entry.key] = entry.value;
+    }
+    for (final controller in mappings.keys) {
+      controller.removeListener(_handleDraftInputChanged);
+    }
+    for (final entry in mappings.entries) {
+      if (entry.key.text.isEmpty) {
+        entry.key.text = entry.value;
+      }
+    }
+    for (final controller in mappings.keys) {
+      controller.addListener(_handleDraftInputChanged);
+    }
   }
 
   @override
@@ -903,6 +932,12 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       setState(() {});
     }
     _publishForgeViewState();
+  }
+
+  String _effectiveControllerText(TextEditingController controller) {
+    final text = controller.text.trim();
+    final example = _exampleTexts[controller]?.trim() ?? '';
+    return text == example ? '' : text;
   }
 
   void _clearTextControllersSilently() {
@@ -1125,13 +1160,13 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       partySize: _partySize,
       partyArchetypes: _selectedArchetypes.toList(growable: false),
       twist: _selectedTwist ?? '',
-      narrativeHooks: _narrativeHooksController.text.trim(),
-      characterNotes: _characterNotesController.text.trim(),
-      constraints: _constraintsController.text.trim(),
-      factions: _factionsController.text.trim(),
-      npcFocus: _npcFocusController.text.trim(),
-      encounterFocus: _encounterFocusController.text.trim(),
-      safetyNotes: _safetyNotesController.text.trim(),
+      narrativeHooks: _effectiveControllerText(_narrativeHooksController),
+      characterNotes: _effectiveControllerText(_characterNotesController),
+      constraints: _effectiveControllerText(_constraintsController),
+      factions: _effectiveControllerText(_factionsController),
+      npcFocus: _effectiveControllerText(_npcFocusController),
+      encounterFocus: _effectiveControllerText(_encounterFocusController),
+      safetyNotes: _effectiveControllerText(_safetyNotesController),
       includeNpcs: _includeNpcs,
       includeEncounters: _includeEncounters,
       localeCode: widget.currentLocale.languageCode,

@@ -64,7 +64,7 @@ void main() {
     expect(panelRect.height, greaterThan(rootRect.height * 0.55));
   });
 
-  testWidgets('next, back, and skip navigate and dismiss onboarding', (
+  testWidgets('footer shows only primary action and supports forward flow', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -78,22 +78,13 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Choose Campaign'), findsOneWidget);
+    expect(find.text('Back'), findsNothing);
+    expect(find.text('Skip'), findsNothing);
 
     await tester.tap(find.text('Next'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Define the world and key details'), findsOneWidget);
-
-    await tester.tap(find.text('Back'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Choose Campaign'), findsOneWidget);
-
-    await tester.tap(find.text('Skip'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Choose Campaign'), findsNothing);
-    expect(find.text('home-probe'), findsOneWidget);
+    expect(find.text('Define Key Details'), findsOneWidget);
   });
 
   testWidgets('slide 2 stacks copy panel above the choices panel', (
@@ -112,15 +103,15 @@ void main() {
     await tester.tap(find.text('Next'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Define the world and key details'), findsOneWidget);
+    expect(find.text('Define Key Details'), findsOneWidget);
     expect(find.text('2 / 3'), findsOneWidget);
-    expect(find.text('Shadowed frontier'), findsOneWidget);
+    expect(find.text('Forgotten Realms'), findsOneWidget);
 
     final titleTopLeft = tester.getTopLeft(
-      find.text('Define the world and key details'),
+      find.text('Define Key Details'),
     );
     final titleBottomLeft = tester.getBottomLeft(
-      find.text('Define the world and key details'),
+      find.text('Define Key Details'),
     );
     final settingChipTopLeft = tester.getTopLeft(find.text('Setting').first);
 
@@ -146,7 +137,7 @@ void main() {
     await tester.drag(find.byType(PageView), const Offset(-420, 0));
     await tester.pumpAndSettle();
 
-    expect(find.text('Define the world and key details'), findsOneWidget);
+    expect(find.text('Define Key Details'), findsOneWidget);
     expect(find.text('2 / 3'), findsOneWidget);
 
     await tester.drag(find.byType(PageView), const Offset(420, 0));
@@ -156,7 +147,7 @@ void main() {
     expect(find.text('1 / 3'), findsOneWidget);
   });
 
-  testWidgets('final slide shows Open in ChatGPT and start forging dismisses', (
+  testWidgets('final slide shows the copy-to-ChatGPT handoff and dismisses', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -176,7 +167,9 @@ void main() {
 
     expect(find.text('Forge the prompt'), findsOneWidget);
     expect(find.text('3 / 3'), findsOneWidget);
+    expect(find.text('Copy Prompt'), findsOneWidget);
     expect(find.text('Open in ChatGPT'), findsOneWidget);
+    expect(find.text('Share'), findsNothing);
 
     await tester.tap(find.text('Start Forging'));
     await tester.pumpAndSettle();
@@ -218,7 +211,11 @@ void main() {
 
     await pumpGate(key: const ValueKey<String>('gate-a'));
 
-    await tester.tap(find.text('Skip'));
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start Forging'));
     await tester.pumpAndSettle();
 
     expect(find.text('Choose your campaign'), findsNothing);

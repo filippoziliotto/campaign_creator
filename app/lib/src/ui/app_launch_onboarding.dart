@@ -32,8 +32,7 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
     ),
     _OnboardingSlideSpec(
       title: 'Define Key Details',
-      body:
-          'Build your unique story settings.',
+      body: 'Build your unique story settings.',
       primaryLabel: 'Next',
       secondaryLabel: 'Back',
       primaryAction: _OnboardingAction.next,
@@ -43,13 +42,13 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
     ),
     _OnboardingSlideSpec(
       title: 'Forge the prompt',
-      body:
-          'Generate the prompt, then copy it, share it, or open it directly in your AI workflow from the parchment actions.',
+      body: 'Build you parchment, then paste it into ChatGPT.',
       primaryLabel: 'Start Forging',
       secondaryLabel: 'Back',
       primaryAction: _OnboardingAction.dismiss,
       secondaryAction: _OnboardingAction.back,
       visualKind: _OnboardingVisualKind.parchmentActions,
+      titleFontSizeOffset: -9,
     ),
   ];
 
@@ -163,9 +162,9 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
-                      child: Column(
+                      child: Stack(
                         children: <Widget>[
-                          Expanded(
+                          Positioned.fill(
                             child: PageView.builder(
                               controller: _pageController,
                               itemCount: _slides.length,
@@ -184,8 +183,12 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
                               },
                             ),
                           ),
-                          const SizedBox(height: 14),
-                          _buildFooter(context),
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            child: _buildFooter(context),
+                          ),
                         ],
                       ),
                     ),
@@ -214,9 +217,9 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
               duration: prefersReducedMotion(context)
                   ? Duration.zero
                   : const Duration(milliseconds: 220),
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: index == _currentPageIndex ? 22 : 8,
-              height: 8,
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              width: index == _currentPageIndex ? 22 : 7,
+              height: 7,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(999),
                 color: index == _currentPageIndex
@@ -226,24 +229,25 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
             ),
           ),
         ),
-        const SizedBox(height: 18),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () => _handleAction(slide.secondaryAction),
-                child: Text(slide.secondaryLabel),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              flex: 2,
+        const SizedBox(height: 10),
+        Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 220),
+            child: SizedBox(
+              width: double.infinity,
               child: FilledButton(
                 onPressed: () => _handleAction(slide.primaryAction),
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size.fromHeight(42),
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  elevation: 0,
+                  shadowColor: Colors.transparent,
+                  surfaceTintColor: Colors.transparent,
+                ),
                 child: Text(slide.primaryLabel),
               ),
             ),
-          ],
+          ),
         ),
       ],
     );
@@ -343,7 +347,10 @@ class _OnboardingSlide extends StatelessWidget {
                 slide.visualKind == _OnboardingVisualKind.campaignType;
             final isForgeSettingsSlide =
                 slide.visualKind == _OnboardingVisualKind.forgeSettings;
-            final usesStackedPanels = isCampaignSlide || isForgeSettingsSlide;
+            final isParchmentSlide =
+                slide.visualKind == _OnboardingVisualKind.parchmentActions;
+            final usesStackedPanels =
+                isCampaignSlide || isForgeSettingsSlide || isParchmentSlide;
             final visual = _OnboardingVisualCard(kind: slide.visualKind);
             final copy = _OnboardingCopy(
               slide: slide,
@@ -352,8 +359,8 @@ class _OnboardingSlide extends StatelessWidget {
             final compactVisualHeight = isCampaignSlide
                 ? constraints.maxWidth.clamp(300.0, 390.0).toDouble()
                 : isForgeSettingsSlide
-                    ? constraints.maxWidth.clamp(290.0, 360.0).toDouble()
-                    : 460.0;
+                    ? constraints.maxWidth.clamp(300.0, 380.0).toDouble()
+                    : constraints.maxWidth.clamp(300.0, 380.0).toDouble();
             final compactVisualSpacing = usesStackedPanels ? 16.0 : 24.0;
 
             if (useColumn) {
@@ -426,6 +433,10 @@ class _OnboardingCopy extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.fantasy;
+    final subtitleColor =
+        slide.visualKind == _OnboardingVisualKind.parchmentActions
+            ? palette.foreground.withValues(alpha: 0.92)
+            : theme.colorScheme.tertiary;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -462,7 +473,7 @@ class _OnboardingCopy extends StatelessWidget {
         Text(
           slide.body,
           style: theme.textTheme.titleMedium?.copyWith(
-            color: palette.foreground.withValues(alpha: 0.92),
+            color: subtitleColor,
             height: 1.45,
           ),
         ),
@@ -492,7 +503,7 @@ class _OnboardingCopyPanel extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(28),
+        padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
         child: child,
       ),
     );
@@ -510,6 +521,11 @@ class _OnboardingVisualCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.fantasy;
+    final bottomInset = switch (kind) {
+      _OnboardingVisualKind.campaignType => 56.0,
+      _OnboardingVisualKind.forgeSettings => 0.0,
+      _OnboardingVisualKind.parchmentActions => 0.0,
+    };
 
     return Container(
       constraints: const BoxConstraints(minHeight: 320),
@@ -535,7 +551,7 @@ class _OnboardingVisualCard extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.fromLTRB(24, 24, 24, bottomInset),
         child: switch (kind) {
           _OnboardingVisualKind.campaignType => const _CampaignTypePreview(),
           _OnboardingVisualKind.forgeSettings => const _ForgeSettingsPreview(),
@@ -552,29 +568,47 @@ class _CampaignTypePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      physics: NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      mainAxisSpacing: 14,
-      crossAxisSpacing: 14,
-      childAspectRatio: 1,
-      children: <Widget>[
-        _PreviewPhotoTile(
-          label: 'One-Shot',
-          assetPath: 'assets/entry_cards/one_shot.jpg',
-          isSelected: true,
+    return Column(
+      children: const <Widget>[
+        Expanded(
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: _PreviewPhotoTile(
+                  label: 'One-Shot',
+                  assetPath: 'assets/entry_cards/one_shot.jpg',
+                  isSelected: true,
+                ),
+              ),
+              SizedBox(width: 14),
+              Expanded(
+                child: _PreviewPhotoTile(
+                  label: 'Mini-campaign',
+                  assetPath: 'assets/entry_cards/campagna_corta.jpg',
+                ),
+              ),
+            ],
+          ),
         ),
-        _PreviewPhotoTile(
-          label: 'Mini-campaign',
-          assetPath: 'assets/entry_cards/campagna_corta.jpg',
-        ),
-        _PreviewPhotoTile(
-          label: 'Long campaign',
-          assetPath: 'assets/entry_cards/campagna_lunga.jpg',
-        ),
-        _PreviewPhotoTile(
-          label: 'Dungeon crawl',
-          assetPath: 'assets/entry_cards/dungeon.jpg',
+        SizedBox(height: 14),
+        Expanded(
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: _PreviewPhotoTile(
+                  label: 'Long campaign',
+                  assetPath: 'assets/entry_cards/campagna_lunga.jpg',
+                ),
+              ),
+              SizedBox(width: 14),
+              Expanded(
+                child: _PreviewPhotoTile(
+                  label: 'Dungeon crawl',
+                  assetPath: 'assets/entry_cards/dungeon.jpg',
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -587,40 +621,56 @@ class _ForgeSettingsPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final palette = theme.fantasy;
     final summaryCard = Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.54),
-        border: Border.all(
-          color: theme.colorScheme.outline.withValues(alpha: 0.24),
+        borderRadius: BorderRadius.circular(22),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[
+            palette.cardSoft.withValues(alpha: 0.92),
+            Color.lerp(palette.cardSoft, FantasyPalette.ember, 0.08)!
+                .withValues(alpha: 0.94),
+          ],
         ),
+        border: Border.all(
+          color: theme.colorScheme.tertiary.withValues(alpha: 0.18),
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.16),
+            blurRadius: 16,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
       child: const Padding(
-        padding: EdgeInsets.all(18),
+        padding: EdgeInsets.fromLTRB(14, 14, 14, 12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _PreviewField(
               label: 'Setting',
-              value: 'Shadowed frontier',
+              value: 'Forgotten Realms',
               isActive: true,
             ),
-            SizedBox(height: 12),
+            SizedBox(height: 8),
             _PreviewField(label: 'Themes', value: 'Political tension'),
-            SizedBox(height: 12),
-            _PreviewField(label: 'Tone', value: 'Dark but adventurous'),
-            SizedBox(height: 12),
-            _PreviewField(label: 'Style', value: 'Grounded fantasy'),
+            SizedBox(height: 6),
+            _PreviewField(label: 'Tone', value: 'Dark & Noir'),
+            SizedBox(height: 6),
+            _PreviewField(label: 'Style', value: 'Low fantasy'),
           ],
         ),
       ),
     );
 
     final chips = Wrap(
-      spacing: 10,
-      runSpacing: 10,
+      spacing: 2,
+      runSpacing: 7,
       children: const <Widget>[
         _PreviewRune(label: 'Setting', isActive: true),
         _PreviewRune(label: 'Themes'),
@@ -651,8 +701,26 @@ class _ForgeSettingsPreview extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             chips,
-            const SizedBox(height: 20),
-            Expanded(child: summaryCard),
+            const SizedBox(height: 14),
+            Expanded(
+              child: LayoutBuilder(
+                builder:
+                    (BuildContext context, BoxConstraints summaryConstraints) {
+                  const footerBleed = 200.0;
+
+                  return OverflowBox(
+                    alignment: Alignment.topCenter,
+                    minHeight: summaryConstraints.maxHeight + footerBleed,
+                    maxHeight: summaryConstraints.maxHeight + footerBleed,
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: summaryConstraints.maxHeight + footerBleed,
+                      child: summaryCard,
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         );
       },
@@ -667,112 +735,342 @@ class _ParchmentActionsPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.fantasy;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const _PreviewHeading(
-          title: 'Parchment ready',
-          subtitle: 'Generate, then use the final action rail.',
+    final handoffPanel = Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[
+            Color.lerp(palette.cardSoft, FantasyPalette.ember, 0.08)!
+                .withValues(alpha: 0.96),
+            Color.lerp(palette.card, FantasyPalette.ink, 0.16)!.withValues(
+              alpha: 0.98,
+            ),
+          ],
         ),
-        const SizedBox(height: 20),
-        Expanded(
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                flex: 10,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    color: palette.paper.withValues(alpha: 0.95),
-                    border: Border.all(
-                      color: theme.colorScheme.tertiary.withValues(alpha: 0.35),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(18),
+        border: Border.all(
+          color: theme.colorScheme.tertiary.withValues(alpha: 0.22),
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.20),
+            blurRadius: 20,
+            offset: const Offset(0, 12),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 16, 12, 18),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints panelConstraints) {
+            final compactContent = panelConstraints.maxWidth < 560;
+            final content = compactContent
+                ? const SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          'Campaign prompt',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            color: palette.paperInk,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        const _PreviewParagraph(),
-                        const SizedBox(height: 10),
-                        const _PreviewParagraph(widthFactor: 0.88),
-                        const SizedBox(height: 10),
-                        const _PreviewParagraph(widthFactor: 0.72),
+                        _PromptPreviewCard(),
+                        SizedBox(height: 14),
+                        _ParchmentActionFlow(),
                       ],
                     ),
+                  )
+                : Row(
+                    children: const <Widget>[
+                      Expanded(
+                        flex: 11,
+                        child: _PromptPreviewCard(),
+                      ),
+                      SizedBox(width: 16),
+                      Expanded(
+                        flex: 9,
+                        child: _ParchmentActionFlow(),
+                      ),
+                    ],
+                  );
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  physics: BouncingScrollPhysics(),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      _PreviewStepChip(step: '1', label: 'Forge'),
+                      SizedBox(width: 5),
+                      _PreviewStepChip(
+                        step: '2',
+                        label: 'Copy',
+                        isActive: true,
+                      ),
+                      SizedBox(width: 5),
+                      _PreviewStepChip(
+                        step: '3',
+                        label: 'ChatGPT',
+                        isCurrent: true,
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                flex: 7,
-                child: Column(
-                  children: const <Widget>[
-                    _PreviewActionTile(
-                      title: 'Copy',
-                      subtitle: 'Keep the prompt ready to paste',
-                    ),
-                    SizedBox(height: 12),
-                    _PreviewActionTile(
-                      title: 'Share',
-                      subtitle: 'Send it to another app',
-                    ),
-                    SizedBox(height: 12),
-                    _PreviewActionTile(
-                      title: 'Open in ChatGPT',
-                      subtitle: 'Open the linked AI workflow',
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+                const SizedBox(height: 16),
+                Expanded(child: content),
+              ],
+            );
+          },
         ),
-      ],
+      ),
+    );
+
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return OverflowBox(
+          alignment: Alignment.topCenter,
+          minHeight: constraints.maxHeight + 72,
+          maxHeight: constraints.maxHeight + 72,
+          child: SizedBox(
+            width: double.infinity,
+            height: constraints.maxHeight + 72,
+            child: handoffPanel,
+          ),
+        );
+      },
     );
   }
 }
 
-class _PreviewHeading extends StatelessWidget {
-  const _PreviewHeading({
-    required this.title,
-    required this.subtitle,
-  });
-
-  final String title;
-  final String subtitle;
+class _PromptPreviewCard extends StatelessWidget {
+  const _PromptPreviewCard();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.fantasy;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          title,
-          style: theme.textTheme.headlineLarge?.copyWith(
-            color: palette.foreground,
-          ),
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: <Color>[
+            palette.paper.withValues(alpha: 0.98),
+            Color.lerp(palette.paper, FantasyPalette.parchment, 0.18)!,
+          ],
         ),
-        const SizedBox(height: 6),
-        Text(
-          subtitle,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: palette.foregroundMuted,
-            height: 1.35,
+        border: Border.all(
+          color: theme.colorScheme.tertiary.withValues(alpha: 0.34),
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.10),
+            blurRadius: 12,
+            offset: const Offset(0, 8),
           ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(18, 18, 18, 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Generated prompt',
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: palette.paperInk,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'World, tone, party, and twist are forged into one final brief.',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: palette.paperInk.withValues(alpha: 0.72),
+                height: 1.35,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const _PreviewParagraph(),
+            const SizedBox(height: 8),
+            const _PreviewParagraph(widthFactor: 0.90),
+            const SizedBox(height: 8),
+            const _PreviewParagraph(widthFactor: 0.82),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: const <Widget>[
+                _PromptTag(label: 'Setting'),
+                _PromptTag(label: 'Tone'),
+                _PromptTag(label: 'Party'),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PromptTag extends StatelessWidget {
+  const _PromptTag({
+    required this.label,
+  });
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.fantasy;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(999),
+        color: palette.paperInk.withValues(alpha: 0.08),
+        border: Border.all(
+          color: palette.paperInk.withValues(alpha: 0.12),
+        ),
+      ),
+      child: Text(
+        label,
+        style: theme.textTheme.labelMedium?.copyWith(
+          color: palette.paperInk.withValues(alpha: 0.78),
+        ),
+      ),
+    );
+  }
+}
+
+class _ParchmentActionFlow extends StatelessWidget {
+  const _ParchmentActionFlow();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        _PreviewActionTile(
+          title: 'Copy Prompt',
+          subtitle: 'Keep the forged prompt ready to paste.',
+          emphasis: _PreviewActionTileEmphasis.secondary,
+        ),
+        SizedBox(height: 10),
+        _PreviewFlowConnector(),
+        SizedBox(height: 10),
+        _PreviewActionTile(
+          title: 'Open in ChatGPT',
+          subtitle: 'Paste the generated prompt there.',
+          emphasis: _PreviewActionTileEmphasis.primary,
         ),
       ],
+    );
+  }
+}
+
+class _PreviewStepChip extends StatelessWidget {
+  const _PreviewStepChip({
+    required this.step,
+    required this.label,
+    this.isActive = false,
+    this.isCurrent = false,
+  });
+
+  final String step;
+  final String label;
+  final bool isActive;
+  final bool isCurrent;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final palette = theme.fantasy;
+
+    final gradient = isCurrent
+        ? <Color>[
+            theme.colorScheme.tertiary.withValues(alpha: 0.96),
+            theme.colorScheme.primary.withValues(alpha: 0.86),
+          ]
+        : isActive
+            ? <Color>[
+                theme.colorScheme.tertiaryContainer.withValues(alpha: 0.72),
+                theme.colorScheme.primaryContainer.withValues(alpha: 0.58),
+              ]
+            : <Color>[
+                palette.card.withValues(alpha: 0.72),
+                palette.cardSoft.withValues(alpha: 0.84),
+              ];
+
+    final borderColor = isCurrent
+        ? theme.colorScheme.tertiary.withValues(alpha: 0.60)
+        : isActive
+            ? theme.colorScheme.tertiary.withValues(alpha: 0.36)
+            : theme.colorScheme.outline.withValues(alpha: 0.18);
+
+    final textColor = isCurrent
+        ? theme.colorScheme.onTertiary
+        : isActive
+            ? theme.colorScheme.tertiary
+            : palette.foregroundMuted;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(999),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: gradient,
+        ),
+        border: Border.all(color: borderColor),
+        boxShadow: isCurrent
+            ? <BoxShadow>[
+                BoxShadow(
+                  color: theme.colorScheme.tertiary.withValues(alpha: 0.18),
+                  blurRadius: 14,
+                  offset: const Offset(0, 8),
+                ),
+              ]
+            : null,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            width: 16,
+            height: 16,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: isCurrent
+                  ? Colors.black.withValues(alpha: 0.16)
+                  : theme.colorScheme.tertiary.withValues(alpha: 0.12),
+            ),
+            child: Text(
+              step,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: textColor,
+                fontSize: 10,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          const SizedBox(width: 7),
+          Text(
+            label,
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: textColor,
+              fontSize: label == 'ChatGPT' ? 10 : 11,
+              fontWeight: isCurrent ? FontWeight.w700 : FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -901,23 +1199,35 @@ class _PreviewRune extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(999),
-        color: isActive
-            ? theme.colorScheme.primaryContainer.withValues(alpha: 0.84)
-            : theme.colorScheme.primaryContainer.withValues(alpha: 0.42),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isActive
+              ? <Color>[
+                  theme.colorScheme.primaryContainer.withValues(alpha: 0.88),
+                  theme.colorScheme.tertiaryContainer.withValues(alpha: 0.58),
+                ]
+              : <Color>[
+                  theme.colorScheme.primaryContainer.withValues(alpha: 0.30),
+                  theme.colorScheme.surfaceContainerHighest.withValues(
+                    alpha: 0.22,
+                  ),
+                ],
+        ),
         border: Border.all(
           color: isActive
-              ? theme.colorScheme.tertiary.withValues(alpha: 0.42)
-              : theme.colorScheme.primary.withValues(alpha: 0.16),
+              ? theme.colorScheme.tertiary.withValues(alpha: 0.55)
+              : theme.colorScheme.outline.withValues(alpha: 0.18),
         ),
         boxShadow: isActive
             ? <BoxShadow>[
                 BoxShadow(
-                  color: theme.colorScheme.tertiary.withValues(alpha: 0.12),
-                  blurRadius: 14,
-                  offset: const Offset(0, 8),
+                  color: theme.colorScheme.tertiary.withValues(alpha: 0.14),
+                  blurRadius: 12,
+                  offset: const Offset(0, 7),
                 ),
               ]
             : null,
@@ -927,8 +1237,10 @@ class _PreviewRune extends StatelessWidget {
         style: theme.textTheme.labelLarge?.copyWith(
           color: isActive
               ? theme.colorScheme.tertiary
-              : theme.colorScheme.tertiary.withValues(alpha: 0.76),
+              : theme.colorScheme.tertiary.withValues(alpha: 0.68),
           fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
+          fontSize: 12,
+          letterSpacing: 0.15,
         ),
       ),
     );
@@ -953,16 +1265,17 @@ class _PreviewField extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
         color: isActive
-            ? theme.colorScheme.tertiaryContainer.withValues(alpha: 0.24)
+            ? theme.colorScheme.tertiaryContainer.withValues(alpha: 0.18)
             : Colors.transparent,
         border: Border.all(
           color: isActive
-              ? theme.colorScheme.tertiary.withValues(alpha: 0.28)
-              : Colors.transparent,
+              ? theme.colorScheme.tertiary.withValues(alpha: 0.24)
+              : theme.colorScheme.outline.withValues(alpha: 0.10),
+          width: isActive ? 1.0 : 0.6,
         ),
       ),
       child: Column(
@@ -973,15 +1286,18 @@ class _PreviewField extends StatelessWidget {
             style: theme.textTheme.labelLarge?.copyWith(
               color: isActive
                   ? theme.colorScheme.tertiary
-                  : theme.colorScheme.tertiary.withValues(alpha: 0.82),
+                  : theme.colorScheme.tertiary.withValues(alpha: 0.64),
+              fontSize: 11,
+              letterSpacing: 0.18,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
           Text(
             value,
             style: theme.textTheme.titleSmall?.copyWith(
               color: palette.foreground,
               fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
+              height: 1.12,
             ),
           ),
         ],
@@ -1012,47 +1328,116 @@ class _PreviewParagraph extends StatelessWidget {
   }
 }
 
+enum _PreviewActionTileEmphasis {
+  secondary,
+  primary,
+}
+
 class _PreviewActionTile extends StatelessWidget {
   const _PreviewActionTile({
     required this.title,
     required this.subtitle,
+    this.emphasis = _PreviewActionTileEmphasis.secondary,
   });
 
   final String title;
   final String subtitle;
+  final _PreviewActionTileEmphasis emphasis;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isPrimary = emphasis == _PreviewActionTileEmphasis.primary;
+    final backgroundGradient = isPrimary
+        ? <Color>[
+            theme.colorScheme.tertiary.withValues(alpha: 0.94),
+            theme.colorScheme.primary.withValues(alpha: 0.84),
+          ]
+        : <Color>[
+            theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.42),
+            theme.colorScheme.primaryContainer.withValues(alpha: 0.18),
+          ];
+    final borderColor = isPrimary
+        ? theme.colorScheme.tertiary.withValues(alpha: 0.58)
+        : theme.colorScheme.outline.withValues(alpha: 0.24);
+    final titleColor =
+        isPrimary ? theme.colorScheme.onTertiary : theme.colorScheme.tertiary;
+    final subtitleColor = isPrimary
+        ? theme.colorScheme.onTertiary.withValues(alpha: 0.82)
+        : theme.colorScheme.onSurface.withValues(alpha: 0.78);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: backgroundGradient,
+        ),
+        border: Border.all(color: borderColor),
+        boxShadow: isPrimary
+            ? <BoxShadow>[
+                BoxShadow(
+                  color: theme.colorScheme.tertiary.withValues(alpha: 0.16),
+                  blurRadius: 16,
+                  offset: const Offset(0, 10),
+                ),
+              ]
+            : null,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: titleColor,
+              fontWeight: isPrimary ? FontWeight.w700 : FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 7),
+          Text(
+            subtitle,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: subtitleColor,
+              height: 1.35,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PreviewFlowConnector extends StatelessWidget {
+  const _PreviewFlowConnector();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Expanded(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color:
-              theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.52),
-          border: Border.all(
-            color: theme.colorScheme.outline.withValues(alpha: 0.24),
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            width: 1,
+            height: 10,
+            color: theme.colorScheme.tertiary.withValues(alpha: 0.22),
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              title,
-              style: theme.textTheme.titleSmall?.copyWith(
-                color: theme.colorScheme.tertiary,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              subtitle,
-              style: theme.textTheme.bodySmall,
-            ),
-          ],
-        ),
+          Icon(
+            Icons.south_rounded,
+            size: 18,
+            color: theme.colorScheme.tertiary.withValues(alpha: 0.56),
+          ),
+          Container(
+            width: 1,
+            height: 10,
+            color: theme.colorScheme.tertiary.withValues(alpha: 0.22),
+          ),
+        ],
       ),
     );
   }

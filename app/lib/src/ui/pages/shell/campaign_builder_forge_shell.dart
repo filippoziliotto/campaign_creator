@@ -1607,36 +1607,71 @@ extension on _CampaignBuilderPageState {
     Color? premiumCrownColor,
     VoidCallback? onPremiumLockedTap,
   }) {
-    final textField = TextField(
-      controller: controller,
-      minLines: minLines,
-      maxLines: maxLines,
-      autocorrect: enableSuggestions,
-      enableSuggestions: enableSuggestions,
-      enabled: !isPremiumLocked,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hintText,
-        labelStyle: isPremiumLocked && premiumCrownColor != null
-            ? TextStyle(color: premiumCrownColor)
+    final exampleText = _exampleTexts[controller];
+
+    Widget buildTextField(BuildContext context, {TextStyle? overrideStyle}) {
+      return TextField(
+        controller: controller,
+        minLines: minLines,
+        maxLines: maxLines,
+        autocorrect: enableSuggestions,
+        enableSuggestions: enableSuggestions,
+        enabled: !isPremiumLocked,
+        style: overrideStyle,
+        decoration: InputDecoration(
+          labelText: label,
+          hintText: hintText,
+          labelStyle: isPremiumLocked && premiumCrownColor != null
+              ? TextStyle(color: premiumCrownColor)
+              : null,
+          suffixIcon: isPremiumLocked && premiumCrownColor != null
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: FaIcon(
+                    FontAwesomeIcons.crown,
+                    size: 16,
+                    color: premiumCrownColor,
+                  ),
+                )
+              : null,
+        ),
+        onTap: exampleText != null
+            ? () {
+                if (controller.text == exampleText) {
+                  controller.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: controller.text.length,
+                  );
+                }
+              }
             : null,
-        suffixIcon: isPremiumLocked && premiumCrownColor != null
-            ? Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: FaIcon(
-                  FontAwesomeIcons.crown,
-                  size: 16,
-                  color: premiumCrownColor,
-                ),
-              )
-            : null,
-      ),
-      onChanged: (_) {
-        if (!_hasUnsavedChanges) {
-          _markDirty();
-        }
-      },
-    );
+        onChanged: (_) {
+          if (!_hasUnsavedChanges) {
+            _markDirty();
+          }
+        },
+      );
+    }
+
+    Widget textField;
+    if (exampleText != null) {
+      textField = ValueListenableBuilder<TextEditingValue>(
+        valueListenable: controller,
+        builder: (context, value, _) {
+          final isExample = value.text == exampleText;
+          final exampleStyle = TextStyle(
+            color: Theme.of(context).hintColor,
+            fontStyle: FontStyle.italic,
+          );
+          return buildTextField(context,
+              overrideStyle: isExample ? exampleStyle : null);
+        },
+      );
+    } else {
+      textField = Builder(
+        builder: (context) => buildTextField(context),
+      );
+    }
 
     if (!isPremiumLocked || onPremiumLockedTap == null) return textField;
 
