@@ -31,14 +31,15 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
       titleFontSizeOffset: -7,
     ),
     _OnboardingSlideSpec(
-      title: 'Define the world and key details',
+      title: 'Define Key Details',
       body:
-          'Set the setting, themes, tone, style, party, and twist. The more clearly you define these signals, the more focused and usable the final prompt becomes.',
+          'Build your unique story settings.',
       primaryLabel: 'Next',
       secondaryLabel: 'Back',
       primaryAction: _OnboardingAction.next,
       secondaryAction: _OnboardingAction.back,
       visualKind: _OnboardingVisualKind.forgeSettings,
+      titleFontSizeOffset: -9,
     ),
     _OnboardingSlideSpec(
       title: 'Forge the prompt',
@@ -340,6 +341,9 @@ class _OnboardingSlide extends StatelessWidget {
             final useColumn = isCompact || constraints.maxHeight < 620;
             final isCampaignSlide =
                 slide.visualKind == _OnboardingVisualKind.campaignType;
+            final isForgeSettingsSlide =
+                slide.visualKind == _OnboardingVisualKind.forgeSettings;
+            final usesStackedPanels = isCampaignSlide || isForgeSettingsSlide;
             final visual = _OnboardingVisualCard(kind: slide.visualKind);
             final copy = _OnboardingCopy(
               slide: slide,
@@ -347,15 +351,17 @@ class _OnboardingSlide extends StatelessWidget {
             );
             final compactVisualHeight = isCampaignSlide
                 ? constraints.maxWidth.clamp(300.0, 390.0).toDouble()
-                : 460.0;
-            final compactVisualSpacing = isCampaignSlide ? 16.0 : 24.0;
+                : isForgeSettingsSlide
+                    ? constraints.maxWidth.clamp(290.0, 360.0).toDouble()
+                    : 460.0;
+            final compactVisualSpacing = usesStackedPanels ? 16.0 : 24.0;
 
             if (useColumn) {
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    if (isCampaignSlide) ...<Widget>[
+                    if (usesStackedPanels) ...<Widget>[
                       _OnboardingCopyPanel(child: copy),
                       SizedBox(height: compactVisualSpacing),
                       SizedBox(
@@ -375,7 +381,7 @@ class _OnboardingSlide extends StatelessWidget {
               );
             }
 
-            if (isCampaignSlide) {
+            if (usesStackedPanels) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -581,57 +587,75 @@ class _ForgeSettingsPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const _PreviewHeading(
-          title: 'Forge inputs',
-          subtitle: 'Shape the world before you generate the prompt.',
+    final summaryCard = Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.54),
+        border: Border.all(
+          color: theme.colorScheme.outline.withValues(alpha: 0.24),
         ),
-        const SizedBox(height: 20),
-        Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: const <Widget>[
-            _PreviewRune(label: 'Setting'),
-            _PreviewRune(label: 'Themes'),
-            _PreviewRune(label: 'Tone'),
-            _PreviewRune(label: 'Style'),
-            _PreviewRune(label: 'Party'),
-            _PreviewRune(label: 'Twist'),
+      ),
+      child: const Padding(
+        padding: EdgeInsets.all(18),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _PreviewField(
+              label: 'Setting',
+              value: 'Shadowed frontier',
+              isActive: true,
+            ),
+            SizedBox(height: 12),
+            _PreviewField(label: 'Themes', value: 'Political tension'),
+            SizedBox(height: 12),
+            _PreviewField(label: 'Tone', value: 'Dark but adventurous'),
+            SizedBox(height: 12),
+            _PreviewField(label: 'Style', value: 'Grounded fantasy'),
           ],
         ),
-        const SizedBox(height: 22),
-        Expanded(
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              color: theme.colorScheme.surfaceContainerHighest
-                  .withValues(alpha: 0.54),
-              border: Border.all(
-                color: theme.colorScheme.outline.withValues(alpha: 0.24),
-              ),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.all(18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _PreviewField(label: 'Setting', value: 'Shadowed frontier'),
-                  SizedBox(height: 12),
-                  _PreviewField(label: 'Themes', value: 'Political tension'),
-                  SizedBox(height: 12),
-                  _PreviewField(label: 'Tone', value: 'Dark but adventurous'),
-                  SizedBox(height: 12),
-                  _PreviewField(label: 'Style', value: 'Grounded fantasy'),
-                ],
-              ),
-            ),
-          ),
-        ),
+      ),
+    );
+
+    final chips = Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      children: const <Widget>[
+        _PreviewRune(label: 'Setting', isActive: true),
+        _PreviewRune(label: 'Themes'),
+        _PreviewRune(label: 'Tone'),
+        _PreviewRune(label: 'Style'),
+        _PreviewRune(label: 'Party'),
+        _PreviewRune(label: 'Twist'),
       ],
+    );
+
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        if (constraints.maxHeight < 320) {
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                chips,
+                const SizedBox(height: 20),
+                summaryCard,
+              ],
+            ),
+          );
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            chips,
+            const SizedBox(height: 20),
+            Expanded(child: summaryCard),
+          ],
+        );
+      },
     );
   }
 }
@@ -866,9 +890,11 @@ class _PreviewPhotoTile extends StatelessWidget {
 class _PreviewRune extends StatelessWidget {
   const _PreviewRune({
     required this.label,
+    this.isActive = false,
   });
 
   final String label;
+  final bool isActive;
 
   @override
   Widget build(BuildContext context) {
@@ -878,15 +904,31 @@ class _PreviewRune extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(999),
-        color: theme.colorScheme.primaryContainer.withValues(alpha: 0.6),
+        color: isActive
+            ? theme.colorScheme.primaryContainer.withValues(alpha: 0.84)
+            : theme.colorScheme.primaryContainer.withValues(alpha: 0.42),
         border: Border.all(
-          color: theme.colorScheme.primary.withValues(alpha: 0.24),
+          color: isActive
+              ? theme.colorScheme.tertiary.withValues(alpha: 0.42)
+              : theme.colorScheme.primary.withValues(alpha: 0.16),
         ),
+        boxShadow: isActive
+            ? <BoxShadow>[
+                BoxShadow(
+                  color: theme.colorScheme.tertiary.withValues(alpha: 0.12),
+                  blurRadius: 14,
+                  offset: const Offset(0, 8),
+                ),
+              ]
+            : null,
       ),
       child: Text(
         label,
         style: theme.textTheme.labelLarge?.copyWith(
-          color: theme.colorScheme.tertiary,
+          color: isActive
+              ? theme.colorScheme.tertiary
+              : theme.colorScheme.tertiary.withValues(alpha: 0.76),
+          fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
         ),
       ),
     );
@@ -897,33 +939,53 @@ class _PreviewField extends StatelessWidget {
   const _PreviewField({
     required this.label,
     required this.value,
+    this.isActive = false,
   });
 
   final String label;
   final String value;
+  final bool isActive;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.fantasy;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          label,
-          style: theme.textTheme.labelLarge?.copyWith(
-            color: theme.colorScheme.tertiary,
-          ),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+        color: isActive
+            ? theme.colorScheme.tertiaryContainer.withValues(alpha: 0.24)
+            : Colors.transparent,
+        border: Border.all(
+          color: isActive
+              ? theme.colorScheme.tertiary.withValues(alpha: 0.28)
+              : Colors.transparent,
         ),
-        const SizedBox(height: 6),
-        Text(
-          value,
-          style: theme.textTheme.titleSmall?.copyWith(
-            color: palette.foreground,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            label,
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: isActive
+                  ? theme.colorScheme.tertiary
+                  : theme.colorScheme.tertiary.withValues(alpha: 0.82),
+            ),
           ),
-        ),
-      ],
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: palette.foreground,
+              fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

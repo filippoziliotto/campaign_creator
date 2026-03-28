@@ -96,6 +96,38 @@ void main() {
     expect(find.text('home-probe'), findsOneWidget);
   });
 
+  testWidgets('slide 2 stacks copy panel above the choices panel', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _TestHarness(
+        child: AppLaunchOnboardingGate(
+          child: const Scaffold(body: Text('home-probe')),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Define the world and key details'), findsOneWidget);
+    expect(find.text('2 / 3'), findsOneWidget);
+    expect(find.text('Shadowed frontier'), findsOneWidget);
+
+    final titleTopLeft = tester.getTopLeft(
+      find.text('Define the world and key details'),
+    );
+    final titleBottomLeft = tester.getBottomLeft(
+      find.text('Define the world and key details'),
+    );
+    final settingChipTopLeft = tester.getTopLeft(find.text('Setting').first);
+
+    expect((titleTopLeft.dx - settingChipTopLeft.dx).abs(), lessThan(120));
+    expect(titleBottomLeft.dy, lessThan(settingChipTopLeft.dy));
+  });
+
   testWidgets('swiping left goes to the next slide and right goes back', (
     tester,
   ) async {
