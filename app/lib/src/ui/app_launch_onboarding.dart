@@ -32,7 +32,7 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
     ),
     _OnboardingSlideSpec(
       title: 'Define Key Details',
-      body: 'Build your unique story settings.',
+      body: 'Build your unique story settings and flavour.',
       primaryLabel: 'Next',
       secondaryLabel: 'Back',
       primaryAction: _OnboardingAction.next,
@@ -706,7 +706,7 @@ class _ForgeSettingsPreview extends StatelessWidget {
               child: LayoutBuilder(
                 builder:
                     (BuildContext context, BoxConstraints summaryConstraints) {
-                  const footerBleed = 200.0;
+                  const footerBleed = 240.0;
 
                   return OverflowBox(
                     alignment: Alignment.topCenter,
@@ -733,81 +733,54 @@ class _ParchmentActionsPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.fantasy;
-    final handoffPanel = Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[
-            Color.lerp(palette.cardSoft, FantasyPalette.ember, 0.08)!
-                .withValues(alpha: 0.96),
-            Color.lerp(palette.card, FantasyPalette.ink, 0.16)!.withValues(
-              alpha: 0.98,
-            ),
-          ],
-        ),
-        border: Border.all(
-          color: theme.colorScheme.tertiary.withValues(alpha: 0.22),
-        ),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.20),
-            blurRadius: 20,
-            offset: const Offset(0, 12),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 16, 12, 18),
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints panelConstraints) {
-            final compactContent = panelConstraints.maxWidth < 560;
-            final content = compactContent
-                ? const SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        _PromptPreviewCard(),
-                        SizedBox(height: 14),
-                        _ParchmentActionFlow(),
-                      ],
-                    ),
-                  )
-                : Row(
-                    children: const <Widget>[
-                      Expanded(
-                        flex: 11,
-                        child: _PromptPreviewCard(),
-                      ),
-                      SizedBox(width: 16),
-                      Expanded(
-                        flex: 9,
-                        child: _ParchmentActionFlow(),
-                      ),
-                    ],
-                  );
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints panelConstraints) {
+        final compactContent = panelConstraints.maxWidth < 560;
+        final content = compactContent
+            ? const SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _PromptPreviewCard(),
+                    SizedBox(height: 14),
+                    _ParchmentActionFlow(),
+                  ],
+                ),
+              )
+            : Row(
+                children: const <Widget>[
+                  Expanded(
+                    flex: 11,
+                    child: _PromptPreviewCard(),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    flex: 9,
+                    child: _ParchmentActionFlow(),
+                  ),
+                ],
+              );
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const SingleChildScrollView(
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Center(
+                child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       _PreviewStepChip(step: '1', label: 'Forge'),
-                      SizedBox(width: 5),
+                      SizedBox(width: 8),
                       _PreviewStepChip(
                         step: '2',
                         label: 'Copy',
                         isActive: true,
                       ),
-                      SizedBox(width: 5),
+                      SizedBox(width: 8),
                       _PreviewStepChip(
                         step: '3',
                         label: 'ChatGPT',
@@ -816,25 +789,10 @@ class _ParchmentActionsPreview extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
-                Expanded(child: content),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        return OverflowBox(
-          alignment: Alignment.topCenter,
-          minHeight: constraints.maxHeight + 72,
-          maxHeight: constraints.maxHeight + 72,
-          child: SizedBox(
-            width: double.infinity,
-            height: constraints.maxHeight + 72,
-            child: handoffPanel,
+              ),
+              const SizedBox(height: 16),
+              Expanded(child: content),
+            ],
           ),
         );
       },
@@ -874,7 +832,7 @@ class _PromptPreviewCard extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 18, 18, 20),
+        padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
