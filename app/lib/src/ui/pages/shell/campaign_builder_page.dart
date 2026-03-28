@@ -638,6 +638,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
 
   String? _adFreePrice;
   late final List<TextEditingController> _textControllers;
+  late final Map<TextEditingController, FocusNode> _textFieldFocusNodes;
   late final ValueNotifier<_ForgeDraftViewState> _forgeDraftViewState;
   late final ValueNotifier<String?> _forgeErrorNotifier;
   late final ValueNotifier<_ForgeSection> _forgeSectionNotifier;
@@ -728,8 +729,16 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       _encounterFocusController,
       _safetyNotesController,
     ];
+    _textFieldFocusNodes = <TextEditingController, FocusNode>{
+      for (final controller in _textControllers) controller: FocusNode(),
+    };
     for (final controller in _textControllers) {
       controller.addListener(_handleDraftInputChanged);
+      _textFieldFocusNodes[controller]!.addListener(() {
+        if (!_textFieldFocusNodes[controller]!.hasFocus) {
+          _restoreExampleTextIfNeeded(controller);
+        }
+      });
     }
     _loadSavedDraftState();
     _loadOptions();
@@ -738,22 +747,22 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_hasInitializedForgeViewNotifiers) {
-      return;
+    if (!_hasInitializedForgeViewNotifiers) {
+      _forgeDraftViewState = ValueNotifier<_ForgeDraftViewState>(
+        _buildForgeDraftViewState(),
+      );
+      _forgeErrorNotifier = ValueNotifier<String?>(_errorMessage);
+      _forgeSectionNotifier = ValueNotifier<_ForgeSection>(_forgeSection);
+      _forgeControlNotifier = ValueNotifier<_ForgeControlState>(
+        _buildForgeControlState(),
+      );
+      _hasInitializedForgeViewNotifiers = true;
     }
-    _forgeDraftViewState = ValueNotifier<_ForgeDraftViewState>(
-      _buildForgeDraftViewState(),
-    );
-    _forgeErrorNotifier = ValueNotifier<String?>(_errorMessage);
-    _forgeSectionNotifier = ValueNotifier<_ForgeSection>(_forgeSection);
-    _forgeControlNotifier = ValueNotifier<_ForgeControlState>(
-      _buildForgeControlState(),
-    );
-    _hasInitializedForgeViewNotifiers = true;
-    _initExampleTexts();
+    _syncExampleTexts();
+    _publishForgeViewState();
   }
 
-  void _initExampleTexts() {
+  void _syncExampleTexts() {
     final l10n = context.l10n;
     final mappings = <TextEditingController, String>{
       _narrativeHooksController: l10n.forgeNarrativeHooksHint,
@@ -764,6 +773,9 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       _encounterFocusController: l10n.forgeEncounterFocusHint,
       _safetyNotesController: l10n.forgeSafetyNotesHint,
     };
+    final previousExamples = Map<TextEditingController, String>.from(
+      _exampleTexts,
+    );
     for (final entry in mappings.entries) {
       _exampleTexts[entry.key] = entry.value;
     }
@@ -771,8 +783,16 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       controller.removeListener(_handleDraftInputChanged);
     }
     for (final entry in mappings.entries) {
-      if (entry.key.text.isEmpty) {
-        entry.key.text = entry.value;
+      final currentText = entry.key.text;
+      final previousExample = previousExamples[entry.key];
+      final shouldReplaceExampleText = currentText.isEmpty ||
+          (previousExample != null && currentText == previousExample);
+      if (shouldReplaceExampleText) {
+        entry.key.value = entry.key.value.copyWith(
+          text: entry.value,
+          selection: TextSelection.collapsed(offset: entry.value.length),
+          composing: TextRange.empty,
+        );
       }
     }
     for (final controller in mappings.keys) {
@@ -785,6 +805,9 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     for (final controller in _textControllers) {
       controller.removeListener(_handleDraftInputChanged);
       controller.dispose();
+    }
+    for (final focusNode in _textFieldFocusNodes.values) {
+      focusNode.dispose();
     }
     if (_hasInitializedForgeViewNotifiers) {
       _forgeDraftViewState.dispose();
@@ -940,6 +963,19 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     return text == example ? '' : text;
   }
 
+  void _restoreExampleTextIfNeeded(TextEditingController controller) {
+    final exampleText = _exampleTexts[controller];
+    if (exampleText == null || controller.text.isNotEmpty) {
+      return;
+    }
+    controller.removeListener(_handleDraftInputChanged);
+    controller.value = TextEditingValue(
+      text: exampleText,
+      selection: TextSelection.collapsed(offset: exampleText.length),
+    );
+    controller.addListener(_handleDraftInputChanged);
+  }
+
   void _clearTextControllersSilently() {
     for (final controller in _textControllers) {
       controller.removeListener(_handleDraftInputChanged);
@@ -950,6 +986,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     for (final controller in _textControllers) {
       controller.addListener(_handleDraftInputChanged);
     }
+    _syncExampleTexts();
   }
 
   void _showSnackBar(String message) {

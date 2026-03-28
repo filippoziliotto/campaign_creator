@@ -1608,10 +1608,12 @@ extension on _CampaignBuilderPageState {
     VoidCallback? onPremiumLockedTap,
   }) {
     final exampleText = _exampleTexts[controller];
+    final focusNode = _textFieldFocusNodes[controller];
 
     Widget buildTextField(BuildContext context, {TextStyle? overrideStyle}) {
       return TextField(
         controller: controller,
+        focusNode: focusNode,
         minLines: minLines,
         maxLines: maxLines,
         autocorrect: enableSuggestions,
@@ -1620,7 +1622,7 @@ extension on _CampaignBuilderPageState {
         style: overrideStyle,
         decoration: InputDecoration(
           labelText: label,
-          hintText: hintText,
+          hintText: exampleText == null ? hintText : null,
           labelStyle: isPremiumLocked && premiumCrownColor != null
               ? TextStyle(color: premiumCrownColor)
               : null,
@@ -1638,10 +1640,11 @@ extension on _CampaignBuilderPageState {
         onTap: exampleText != null
             ? () {
                 if (controller.text == exampleText) {
-                  controller.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: controller.text.length,
+                  controller.removeListener(_handleDraftInputChanged);
+                  controller.value = const TextEditingValue(
+                    selection: TextSelection.collapsed(offset: 0),
                   );
+                  controller.addListener(_handleDraftInputChanged);
                 }
               }
             : null,
@@ -1659,9 +1662,19 @@ extension on _CampaignBuilderPageState {
         valueListenable: controller,
         builder: (context, value, _) {
           final isExample = value.text == exampleText;
+          final theme = Theme.of(context);
+          final baseStyle =
+              theme.textTheme.bodyLarge ?? const TextStyle(fontSize: 16);
+          final baseFontSize = baseStyle.fontSize ?? 16;
           final exampleStyle = TextStyle(
-            color: Theme.of(context).hintColor,
+            color: theme.colorScheme.onSurfaceVariant,
+            fontSize: baseFontSize - 2,
             fontStyle: FontStyle.italic,
+            fontFamily: baseStyle.fontFamily,
+            fontFamilyFallback: baseStyle.fontFamilyFallback,
+            fontWeight: baseStyle.fontWeight,
+            letterSpacing: baseStyle.letterSpacing,
+            height: baseStyle.height,
           );
           return buildTextField(context,
               overrideStyle: isExample ? exampleStyle : null);

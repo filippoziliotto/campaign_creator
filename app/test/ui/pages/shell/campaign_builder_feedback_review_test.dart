@@ -98,6 +98,248 @@ void main() {
     },
   );
 
+  testWidgets(
+    'untouched visible example text localizes on language change',
+    (tester) async {
+      await _setLargeSurface(tester);
+
+      await tester.pumpWidget(
+        _TestApp(
+          locale: const Locale('en'),
+          child: _buildPage(locale: const Locale('en')),
+        ),
+      );
+      await _pumpUi(tester);
+      await _openNarrativeSection(
+        tester,
+        sectionLabel: 'Story',
+      );
+
+      expect(
+        _textFieldControllerText(tester, 'Key NPCs'),
+        'Ambiguous mentor, rival, patron, traitor...',
+      );
+
+      await tester.pumpWidget(
+        _TestApp(
+          locale: const Locale('it'),
+          child: _buildPage(locale: const Locale('it')),
+        ),
+      );
+      await _pumpUi(tester);
+      await _openNarrativeSection(tester);
+
+      expect(
+        _textFieldControllerText(tester, 'NPC chiave'),
+        'Mentore ambiguo, rivale, patrono, traditore...',
+      );
+    },
+  );
+
+  testWidgets(
+    'user-authored forge text survives language changes',
+    (tester) async {
+      await _setLargeSurface(tester);
+
+      await tester.pumpWidget(
+        _TestApp(
+          locale: const Locale('en'),
+          child: _buildPage(locale: const Locale('en')),
+        ),
+      );
+      await _pumpUi(tester);
+      await _openNarrativeSection(
+        tester,
+        sectionLabel: 'Story',
+      );
+
+      await tester.enterText(
+        _textFieldForLabel('Key NPCs'),
+        'Village elder with a hidden pact',
+      );
+      await _pumpUi(tester);
+
+      await tester.pumpWidget(
+        _TestApp(
+          locale: const Locale('it'),
+          child: _buildPage(locale: const Locale('it')),
+        ),
+      );
+      await _pumpUi(tester);
+      await _openNarrativeSection(tester);
+
+      expect(
+        _textFieldControllerText(tester, 'NPC chiave'),
+        'Village elder with a hidden pact',
+      );
+    },
+  );
+
+  testWidgets(
+    'visible example text stays out of the generated prompt until overwritten',
+    (tester) async {
+      await _setLargeSurface(tester);
+      final service = _CapturingCampaignService();
+
+      await tester.pumpWidget(
+        _TestApp(
+          locale: const Locale('en'),
+          child: _buildPage(
+            locale: const Locale('en'),
+            initialPreferences: const <String, Object>{
+              'app.review_prompted': true,
+            },
+            service: service,
+          ),
+        ),
+      );
+      await _pumpUi(tester);
+      await _openNarrativeSection(
+        tester,
+        sectionLabel: 'Story',
+      );
+
+      await _tapForgePrimaryAction(tester);
+
+      expect(service.lastRequest, isNotNull);
+      expect(service.lastRequest!.npcFocus, isEmpty);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+
+      final overwrittenService = _CapturingCampaignService();
+      await tester.pumpWidget(
+        _TestApp(
+          locale: const Locale('en'),
+          child: _buildPage(
+            locale: const Locale('en'),
+            initialPreferences: const <String, Object>{
+              'app.review_prompted': true,
+            },
+            service: overwrittenService,
+          ),
+        ),
+      );
+      await _pumpUi(tester);
+      await _openNarrativeSection(
+        tester,
+        sectionLabel: 'Story',
+      );
+
+      await tester.enterText(
+        _textFieldForLabel('Key NPCs'),
+        'Harbormaster hiding a cult debt',
+      );
+      await _pumpUi(tester);
+
+      await _tapForgePrimaryAction(tester);
+
+      expect(overwrittenService.lastRequest, isNotNull);
+      expect(
+        overwrittenService.lastRequest!.npcFocus,
+        'Harbormaster hiding a cult debt',
+      );
+    },
+  );
+
+  testWidgets(
+    'visible example text uses a smaller atmosphere-aware style',
+    (tester) async {
+      await _setLargeSurface(tester);
+
+      await tester.pumpWidget(
+        _TestApp(
+          locale: const Locale('en'),
+          child: _buildPage(locale: const Locale('en')),
+        ),
+      );
+      await _pumpUi(tester);
+      await _openNarrativeSection(
+        tester,
+        sectionLabel: 'Story',
+      );
+
+      final fieldFinder = _textFieldForLabel('Key NPCs');
+      final field = tester.widget<TextField>(fieldFinder);
+      final theme = Theme.of(tester.element(fieldFinder));
+
+      expect(field.style, isNotNull);
+      expect(field.style!.fontStyle, FontStyle.italic);
+      expect(field.style!.fontSize, 14);
+      expect(field.style!.color, theme.colorScheme.onSurfaceVariant);
+    },
+  );
+
+  testWidgets(
+    'tapping a visible example clears it so typing starts from an empty field',
+    (tester) async {
+      await _setLargeSurface(tester);
+
+      await tester.pumpWidget(
+        _TestApp(
+          locale: const Locale('en'),
+          child: _buildPage(locale: const Locale('en')),
+        ),
+      );
+      await _pumpUi(tester);
+      await _openNarrativeSection(
+        tester,
+        sectionLabel: 'Story',
+      );
+
+      final fieldFinder = _textFieldForLabel('Key NPCs');
+      expect(
+        _textFieldControllerText(tester, 'Key NPCs'),
+        'Ambiguous mentor, rival, patron, traitor...',
+      );
+
+      await tester.tap(fieldFinder);
+      await tester.pump();
+
+      expect(_textFieldControllerText(tester, 'Key NPCs'), isEmpty);
+
+      await tester.enterText(fieldFinder, 'Guild fixer');
+      await _pumpUi(tester);
+
+      expect(_textFieldControllerText(tester, 'Key NPCs'), 'Guild fixer');
+    },
+  );
+
+  testWidgets(
+    'untyped cleared example text is restored when focus moves away',
+    (tester) async {
+      await _setLargeSurface(tester);
+
+      await tester.pumpWidget(
+        _TestApp(
+          locale: const Locale('en'),
+          child: _buildPage(locale: const Locale('en')),
+        ),
+      );
+      await _pumpUi(tester);
+      await _openNarrativeSection(
+        tester,
+        sectionLabel: 'Story',
+      );
+
+      final keyNpcsField = _textFieldForLabel('Key NPCs');
+      final safetyNotesField = _textFieldForLabel('Safety notes');
+
+      await tester.tap(keyNpcsField);
+      await tester.pump();
+
+      expect(_textFieldControllerText(tester, 'Key NPCs'), isEmpty);
+
+      await tester.tap(safetyNotesField);
+      await tester.pump();
+
+      expect(
+        _textFieldControllerText(tester, 'Key NPCs'),
+        'Ambiguous mentor, rival, patron, traitor...',
+      );
+    },
+  );
+
   testWidgets('successful generation triggers only a medium haptic impact', (
     tester,
   ) async {
@@ -939,12 +1181,34 @@ Future<void> _pumpUi(WidgetTester tester) async {
 }
 
 Future<void> _tapForgePrimaryAction(WidgetTester tester) async {
-  final finder = find.text('Forgia la Pergamena').evaluate().isNotEmpty
-      ? find.text('Forgia la Pergamena')
-      : find.text('Riforgia la Pergamena');
-  expect(finder, findsOneWidget);
-  await tester.ensureVisible(finder);
-  await tester.tap(finder, warnIfMissed: false);
+  final l10n = _l10n(tester);
+  final primaryLabels = <String>[
+    l10n.forgeNextParty,
+    l10n.forgeNextNarrative,
+    l10n.forgeForgeParchment,
+    l10n.forgeReforgeParchment,
+    l10n.forgeForgeParchmentCompact,
+    l10n.forgeReforgeParchmentCompact,
+  ];
+  final matchingLabels = primaryLabels
+      .where((candidate) => find.text(candidate).evaluate().isNotEmpty)
+      .toList(growable: false);
+  if (matchingLabels.isNotEmpty) {
+    final finder = find.text(matchingLabels.first);
+    expect(finder, findsOneWidget);
+    await tester.ensureVisible(finder);
+    await tester.tap(finder, warnIfMissed: false);
+    await _pumpUi(tester);
+    return;
+  }
+
+  final primaryButtonFinder = find.byType(ForgePrimaryActionButton);
+  expect(primaryButtonFinder, findsWidgets);
+  final primaryButton = tester.widget<ForgePrimaryActionButton>(
+    primaryButtonFinder.first,
+  );
+  expect(primaryButton.onPressed, isNotNull);
+  primaryButton.onPressed!.call();
   await _pumpUi(tester);
 }
 
@@ -956,6 +1220,18 @@ Future<void> _setLargeSurface(WidgetTester tester) async {
 Future<void> _setSmallSurface(WidgetTester tester) async {
   await tester.binding.setSurfaceSize(const Size(360, 844));
   addTearDown(() => tester.binding.setSurfaceSize(null));
+}
+
+Finder _textFieldForLabel(String label) {
+  return find.ancestor(
+    of: find.text(label),
+    matching: find.byType(TextField),
+  );
+}
+
+String _textFieldControllerText(WidgetTester tester, String label) {
+  final field = tester.widget<TextField>(_textFieldForLabel(label));
+  return field.controller!.text;
 }
 
 AppLocalizations _l10n(WidgetTester tester) {
@@ -1042,6 +1318,18 @@ class _FailingCampaignService extends FakeCampaignService {
   @override
   Future<String> generatePrompt(CampaignGenerateRequest req) async {
     throw Exception('boom');
+  }
+}
+
+class _CapturingCampaignService extends FakeCampaignService {
+  _CapturingCampaignService() : super(minimalOptions());
+
+  CampaignGenerateRequest? lastRequest;
+
+  @override
+  Future<String> generatePrompt(CampaignGenerateRequest req) async {
+    lastRequest = req;
+    return super.generatePrompt(req);
   }
 }
 

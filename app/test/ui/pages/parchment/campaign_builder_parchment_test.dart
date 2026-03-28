@@ -109,6 +109,35 @@ Ingresso nel dungeon.
     });
   });
 
+  group('ParchmentActionRail', () {
+    testWidgets('places Open ChatGPT above Share', (tester) async {
+      await tester.pumpWidget(
+        _localizedParchmentApp(
+          child: ParchmentActionRail(
+            atmosphere: _testAtmosphere,
+            onCopy: () {},
+            onShare: (_) {},
+            onOpenChatGpt: () {},
+            onSaveDraft: () {},
+            onWaxSealTap: () {},
+            isCurrentDraftSaved: false,
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      final chatGptTopLeft = tester.getTopLeft(
+        find.byKey(const ValueKey('parchment-action-open-chatgpt')),
+      );
+      final shareTopLeft = tester.getTopLeft(
+        find.byKey(const ValueKey('parchment-action-share')),
+      );
+
+      expect(chatGptTopLeft.dy, lessThan(shareTopLeft.dy));
+    });
+  });
+
   group('PremiumParchmentSheet', () {
     testWidgets('renders keyed ceremonial frame surfaces', (tester) async {
       await tester.pumpWidget(
