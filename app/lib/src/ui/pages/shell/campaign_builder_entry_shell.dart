@@ -89,7 +89,12 @@ extension on _CampaignBuilderPageState {
     final title = context.l10n.entryHeroWelcomeTitle;
     if (widget.currentLocale.languageCode != 'en' ||
         title != 'Choose your Campaign') {
-      return Text(title, style: titleStyle);
+      return Text(
+        title,
+        style: GoogleFonts.medievalSharp(
+          textStyle: titleStyle,
+        ),
+      );
     }
 
     final resolvedStyle =
@@ -97,13 +102,15 @@ extension on _CampaignBuilderPageState {
     return Semantics(
       label: title,
       child: ExcludeSemantics(
-        child: RichText(
-          text: TextSpan(
-            style: resolvedStyle,
-            children: [
-              const TextSpan(text: 'Ch'),
-              WidgetSpan(
-                alignment: PlaceholderAlignment.baseline,
+      child: RichText(
+        text: TextSpan(
+          style: GoogleFonts.medievalSharp(
+            textStyle: resolvedStyle,
+          ),
+          children: [
+            const TextSpan(text: 'Ch'),
+            WidgetSpan(
+              alignment: PlaceholderAlignment.baseline,
                 baseline: TextBaseline.alphabetic,
                 child: _buildLinkedOo(resolvedStyle),
               ),

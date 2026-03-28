@@ -887,6 +887,7 @@ class SectionFrame extends StatelessWidget {
     this.eyebrow,
     this.subtitle,
     this.icon,
+    this.titleTextStyle,
     this.density = FrameDensity.compact,
     this.emphasis = PanelEmphasis.primary,
     this.showDivider = false,
@@ -896,6 +897,7 @@ class SectionFrame extends StatelessWidget {
   final String title;
   final String? subtitle;
   final IconData? icon;
+  final TextStyle? titleTextStyle;
   final Widget child;
   final FrameDensity density;
   final PanelEmphasis emphasis;
@@ -998,7 +1000,7 @@ class SectionFrame extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                         ],
-                        Text(title, style: sectionTitleStyle),
+                        Text(title, style: titleTextStyle ?? sectionTitleStyle),
                         if (subtitle != null) ...[
                           const SizedBox(height: 4),
                           Text(
@@ -1012,7 +1014,7 @@ class SectionFrame extends StatelessWidget {
                 ],
               ),
             ] else
-              Text(title, style: sectionTitleStyle),
+              Text(title, style: titleTextStyle ?? sectionTitleStyle),
             if (resolvedShowDivider) ...[
               SizedBox(height: headerSpacing),
               const RuneDivider(),

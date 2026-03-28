@@ -387,6 +387,9 @@ extension on _CampaignBuilderPageState {
       children: [
         SectionFrame(
           title: context.l10n.forgeWorldSectionTitle,
+          titleTextStyle: GoogleFonts.medievalSharp(
+            textStyle: Theme.of(context).textTheme.titleLarge,
+          ),
           subtitle: context.l10n.forgeWorldSectionSubtitle,
           density: FrameDensity.featured,
           emphasis: PanelEmphasis.primary,
@@ -1294,6 +1297,9 @@ extension on _CampaignBuilderPageState {
   Widget _buildPartySection(CampaignOptions options) {
     return SectionFrame(
       title: context.l10n.forgePartySectionTitle,
+      titleTextStyle: GoogleFonts.medievalSharp(
+        textStyle: Theme.of(context).textTheme.titleLarge,
+      ),
       subtitle: context.l10n.forgePartySectionSubtitle,
       density: FrameDensity.featured,
       emphasis: PanelEmphasis.primary,
@@ -1496,6 +1502,9 @@ extension on _CampaignBuilderPageState {
     return SectionFrame(
       eyebrow: context.l10n.commonOptional,
       title: context.l10n.forgeNarrativeSectionTitle,
+      titleTextStyle: GoogleFonts.medievalSharp(
+        textStyle: Theme.of(context).textTheme.titleLarge,
+      ),
       subtitle: context.l10n.forgeNarrativeSectionSubtitle,
       density: FrameDensity.featured,
       emphasis: PanelEmphasis.primary,
