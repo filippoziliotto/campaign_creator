@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'l10n_extension.dart';
 import 'theme/fantasy_theme.dart';
+import 'ui/app_launch_onboarding.dart';
 import 'ui/pages/shell/campaign_builder_page.dart';
 
 typedef CampaignCreatorHomeBuilder = Widget Function(
@@ -171,6 +172,19 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
 
   @override
   Widget build(BuildContext context) {
+    final builtHome = widget.homeBuilder?.call(
+          _locale,
+          _setLocale,
+          _themeMode,
+          _setThemeMode,
+        ) ??
+        CampaignBuilderPage(
+          currentLocale: _locale,
+          onLocaleChanged: _setLocale,
+          currentThemeMode: _themeMode,
+          onThemeModeChanged: _setThemeMode,
+        );
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: _lightTheme,
@@ -185,18 +199,9 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: _supportedLocales,
-      home: widget.homeBuilder?.call(
-            _locale,
-            _setLocale,
-            _themeMode,
-            _setThemeMode,
-          ) ??
-          CampaignBuilderPage(
-            currentLocale: _locale,
-            onLocaleChanged: _setLocale,
-            currentThemeMode: _themeMode,
-            onThemeModeChanged: _setThemeMode,
-          ),
+      home: widget.homeBuilder == null
+          ? AppLaunchOnboardingGate(child: builtHome)
+          : builtHome,
     );
   }
 }
