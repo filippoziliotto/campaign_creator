@@ -100,7 +100,7 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
     final screenSize = MediaQuery.sizeOf(context);
     final compact = screenSize.width < 720;
     final panelWidthFactor = compact ? 0.94 : 0.88;
-    final panelHeightFactor = compact ? 0.80 : 0.70;
+    final panelHeightFactor = compact ? 0.72 : 0.62;
 
     return Material(
       color: Colors.transparent,
@@ -128,7 +128,7 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(
                     maxWidth: 1180,
-                    maxHeight: 860,
+                    maxHeight: 820,
                   ),
                   child: Container(
                     key: const ValueKey<String>('app-onboarding-panel'),
@@ -620,54 +620,6 @@ class _ForgeSettingsPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final palette = theme.fantasy;
-    final summaryCard = Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(22),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[
-            palette.cardSoft.withValues(alpha: 0.92),
-            Color.lerp(palette.cardSoft, FantasyPalette.ember, 0.08)!
-                .withValues(alpha: 0.94),
-          ],
-        ),
-        border: Border.all(
-          color: theme.colorScheme.tertiary.withValues(alpha: 0.18),
-        ),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.16),
-            blurRadius: 16,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: const Padding(
-        padding: EdgeInsets.fromLTRB(14, 14, 14, 12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _PreviewField(
-              label: 'Setting',
-              value: 'Forgotten Realms',
-              isActive: true,
-            ),
-            SizedBox(height: 8),
-            _PreviewField(label: 'Themes', value: 'Political tension'),
-            SizedBox(height: 6),
-            _PreviewField(label: 'Tone', value: 'Dark & Noir'),
-            SizedBox(height: 6),
-            _PreviewField(label: 'Style', value: 'Low fantasy'),
-          ],
-        ),
-      ),
-    );
-
     final chips = Wrap(
       spacing: 2,
       runSpacing: 7,
@@ -681,47 +633,53 @@ class _ForgeSettingsPreview extends StatelessWidget {
       ],
     );
 
+    final summaryContent = Padding(
+      padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          chips,
+          const SizedBox(height: 14),
+          const _PreviewField(
+            label: 'Setting',
+            value: 'Forgotten Realms',
+            isActive: true,
+          ),
+          const SizedBox(height: 8),
+          const _PreviewField(label: 'Themes', value: 'Political tension'),
+          const SizedBox(height: 6),
+          const _PreviewField(label: 'Tone', value: 'Dark & Noir'),
+          const SizedBox(height: 6),
+          const _PreviewField(label: 'Style', value: 'Low fantasy'),
+        ],
+      ),
+    );
+
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         if (constraints.maxHeight < 320) {
-          return SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                chips,
-                const SizedBox(height: 20),
-                summaryCard,
-              ],
-            ),
-          );
+          return SingleChildScrollView(child: summaryContent);
         }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            chips,
-            const SizedBox(height: 14),
-            Expanded(
-              child: LayoutBuilder(
-                builder:
-                    (BuildContext context, BoxConstraints summaryConstraints) {
-                  const footerBleed = 240.0;
+        return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints summaryConstraints) {
+            const footerBleed = 30.0;
 
-                  return OverflowBox(
-                    alignment: Alignment.topCenter,
-                    minHeight: summaryConstraints.maxHeight + footerBleed,
-                    maxHeight: summaryConstraints.maxHeight + footerBleed,
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: summaryConstraints.maxHeight + footerBleed,
-                      child: summaryCard,
-                    ),
-                  );
-                },
+            return OverflowBox(
+              alignment: Alignment.topCenter,
+              minHeight: summaryConstraints.maxHeight + footerBleed,
+              maxHeight: summaryConstraints.maxHeight + footerBleed,
+              child: SizedBox(
+                width: double.infinity,
+                height: summaryConstraints.maxHeight + footerBleed,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: summaryContent,
+                ),
               ),
-            ),
-          ],
+            );
+          },
         );
       },
     );
@@ -913,14 +871,6 @@ class _ParchmentActionFlow extends StatelessWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        _PreviewActionTile(
-          title: 'Copy Prompt',
-          subtitle: 'Keep the forged prompt ready to paste.',
-          emphasis: _PreviewActionTileEmphasis.secondary,
-        ),
-        SizedBox(height: 10),
-        _PreviewFlowConnector(),
-        SizedBox(height: 10),
         _PreviewActionTile(
           title: 'Open in ChatGPT',
           subtitle: 'Paste the generated prompt there.',
@@ -1362,38 +1312,6 @@ class _PreviewActionTile extends StatelessWidget {
               color: subtitleColor,
               height: 1.35,
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PreviewFlowConnector extends StatelessWidget {
-  const _PreviewFlowConnector();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            width: 1,
-            height: 10,
-            color: theme.colorScheme.tertiary.withValues(alpha: 0.22),
-          ),
-          Icon(
-            Icons.south_rounded,
-            size: 18,
-            color: theme.colorScheme.tertiary.withValues(alpha: 0.56),
-          ),
-          Container(
-            width: 1,
-            height: 10,
-            color: theme.colorScheme.tertiary.withValues(alpha: 0.22),
           ),
         ],
       ),

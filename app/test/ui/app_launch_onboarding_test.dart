@@ -167,7 +167,7 @@ void main() {
 
     expect(find.text('Forge the prompt'), findsOneWidget);
     expect(find.text('3 / 3'), findsOneWidget);
-    expect(find.text('Copy Prompt'), findsOneWidget);
+    expect(find.text('Copy Prompt'), findsNothing);
     expect(find.text('Open in ChatGPT'), findsOneWidget);
     expect(find.text('Share'), findsNothing);
 
