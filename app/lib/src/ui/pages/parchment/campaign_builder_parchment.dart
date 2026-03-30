@@ -827,6 +827,7 @@ class ParchmentActionRail extends StatelessWidget {
     super.key,
     required this.atmosphere,
     required this.onCopy,
+    required this.onPreviewPrompt,
     required this.onShare,
     required this.onOpenChatGpt,
     required this.onSaveDraft,
@@ -837,6 +838,7 @@ class ParchmentActionRail extends StatelessWidget {
 
   final CampaignAtmosphereData atmosphere;
   final VoidCallback onCopy;
+  final VoidCallback onPreviewPrompt;
   final ValueChanged<Rect> onShare;
   final VoidCallback onOpenChatGpt;
   final VoidCallback onSaveDraft;
@@ -857,7 +859,14 @@ class ParchmentActionRail extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
+            _PreviewPromptButton(
+              atmosphere: atmosphere,
+              tooltip: context.l10n.parchmentPreviewPromptTooltip,
+              onTap: onPreviewPrompt,
+            ),
+            const SizedBox(width: 8),
             _WaxSealButton(
+              key: const ValueKey('parchment-action-seal'),
               atmosphere: atmosphere,
               compact: true,
               onTap: onWaxSealTap,
@@ -1587,6 +1596,40 @@ class _WaxSealButton extends StatelessWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+class _PreviewPromptButton extends StatelessWidget {
+  const _PreviewPromptButton({
+    required this.atmosphere,
+    required this.onTap,
+    required this.tooltip,
+  });
+
+  final CampaignAtmosphereData atmosphere;
+  final VoidCallback onTap;
+  final String tooltip;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip,
+      child: IconButton(
+        key: const ValueKey('parchment-action-preview'),
+        onPressed: onTap,
+        icon: const Icon(Icons.visibility_rounded),
+        style: IconButton.styleFrom(
+          minimumSize: const Size(44, 44),
+          padding: EdgeInsets.zero,
+          foregroundColor: atmosphere.highlight,
+          backgroundColor: atmosphere.primary.withValues(alpha: 0.12),
+          shape: const CircleBorder(),
+          side: BorderSide(
+            color: atmosphere.primary.withValues(alpha: 0.35),
+          ),
+        ),
       ),
     );
   }

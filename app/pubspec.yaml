@@ -41,6 +41,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/entry_cards/
+    - assets/background/parchment.png
     - assets/icon/
     - assets/google_fonts/
     - assets/audio/

@@ -116,6 +116,7 @@ Ingresso nel dungeon.
           child: ParchmentActionRail(
             atmosphere: _testAtmosphere,
             onCopy: () {},
+            onPreviewPrompt: () {},
             onShare: (_) {},
             onOpenChatGpt: () {},
             onSaveDraft: () {},
@@ -135,6 +136,40 @@ Ingresso nel dungeon.
       );
 
       expect(chatGptTopLeft.dy, lessThan(shareTopLeft.dy));
+    });
+
+    testWidgets('places Preview immediately left of the seal button',
+        (tester) async {
+      await tester.pumpWidget(
+        _localizedParchmentApp(
+          child: ParchmentActionRail(
+            atmosphere: _testAtmosphere,
+            onCopy: () {},
+            onPreviewPrompt: () {},
+            onShare: (_) {},
+            onOpenChatGpt: () {},
+            onSaveDraft: () {},
+            onWaxSealTap: () {},
+            isCurrentDraftSaved: false,
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      final previewTopLeft = tester.getTopLeft(
+        find.byKey(const ValueKey('parchment-action-preview')),
+      );
+      final sealTopLeft = tester.getTopLeft(
+        find.byKey(const ValueKey('parchment-action-seal')),
+      );
+
+      expect(find.byTooltip('Anteprima prompt'), findsOneWidget);
+      expect(previewTopLeft.dx, lessThan(sealTopLeft.dx));
+      expect(
+        (previewTopLeft.dy - sealTopLeft.dy).abs(),
+        lessThanOrEqualTo(24),
+      );
     });
   });
 

@@ -557,6 +557,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get parchmentCopyPromptTitle => 'Copiar prompt';
 
   @override
+  String get parchmentPreviewPromptTooltip => 'Vista previa del prompt';
+
+  @override
+  String get parchmentPreviewSheetTitle => 'Vista previa del prompt';
+
+  @override
+  String get parchmentPreviewSheetSubtitle =>
+      'Revisa el prompt completo antes de copiarlo o pegarlo.';
+
+  @override
   String get parchmentCopyPromptSubtitle => 'Envía el prompt al portapapeles.';
 
   @override
