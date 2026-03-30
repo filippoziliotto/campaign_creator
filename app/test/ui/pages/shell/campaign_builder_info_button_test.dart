@@ -1,6 +1,7 @@
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:campaign_creator_flutter/src/audio/forge_sound_player.dart';
 import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
+import 'package:campaign_creator_flutter/src/monetization/app_consent_manager.dart';
 import 'package:campaign_creator_flutter/src/theme/fantasy_theme.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../../helpers/fake_campaign_service.dart';
 
@@ -284,6 +286,49 @@ void main() {
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-share-row')),
         findsOneWidget);
+  });
+
+  testWidgets('settings sheet shows privacy options row when required',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final consentManager = _FakeAppConsentManager()
+      ..privacyOptionsRequired = true;
+
+    await tester.pumpWidget(_testApp(consentManager: consentManager));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const ValueKey<String>('settings-privacy-options-row')),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('settings privacy row opens privacy options form', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final consentManager = _FakeAppConsentManager()
+      ..privacyOptionsRequired = true;
+
+    await tester.pumpWidget(_testApp(consentManager: consentManager));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+      find.byKey(const ValueKey<String>('settings-privacy-options-row')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(consentManager.showPrivacyOptionsFormCallCount, 1);
   });
 
   testWidgets('settings share passes a non-empty origin rect to share_plus',
@@ -883,6 +928,7 @@ Widget _testApp({
   ThemeMode currentThemeMode = ThemeMode.dark,
   ValueChanged<ThemeMode>? onThemeModeChanged,
   ForgeSoundPlayer? forgeSoundPlayer,
+  AppConsentManager? consentManager,
   bool disableAnimations = false,
   TextScaler textScaler = TextScaler.noScaling,
 }) =>
@@ -900,6 +946,7 @@ Widget _testApp({
       home: CampaignBuilderPage(
         service: FakeCampaignService(minimalOptions()),
         forgeSoundPlayer: forgeSoundPlayer,
+        consentManager: consentManager,
         currentLocale: currentLocale,
         onLocaleChanged: onLocaleChanged ?? (_) {},
         currentThemeMode: currentThemeMode,
@@ -929,6 +976,35 @@ class _FakeForgeSoundPlayer implements ForgeSoundPlayer {
 
   @override
   void dispose() {}
+}
+
+class _FakeAppConsentManager implements AppConsentManager {
+  bool privacyOptionsRequired = false;
+  bool canRequestAdsValue = true;
+  int gatherConsentCallCount = 0;
+  int initializeAdsIfAllowedCallCount = 0;
+  int showPrivacyOptionsFormCallCount = 0;
+
+  @override
+  Future<bool> canRequestAds() async => canRequestAdsValue;
+
+  @override
+  Future<void> gatherConsent() async {
+    gatherConsentCallCount += 1;
+  }
+
+  @override
+  Future<void> initializeAdsIfAllowed() async {
+    initializeAdsIfAllowedCallCount += 1;
+  }
+
+  @override
+  Future<bool> isPrivacyOptionsRequired() async => privacyOptionsRequired;
+
+  @override
+  Future<void> showPrivacyOptionsForm() async {
+    showPrivacyOptionsFormCallCount += 1;
+  }
 }
 
 class _ThemeReactiveTestApp extends StatefulWidget {

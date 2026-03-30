@@ -31,6 +31,7 @@ class CampaignCreatorApp extends StatefulWidget {
 class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
   static const String _localePreferenceKey = 'app.locale_code';
   static const String _themePreferenceKey = 'app.theme_mode';
+  static const String _onboardingCompletedKey = 'app.launch_onboarding_completed';
   static const Locale _fallbackLocale = Locale('en');
   static const List<Locale> _supportedLocales = <Locale>[
     Locale('en'),
@@ -45,6 +46,7 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
 
   late Locale _locale;
   ThemeMode _themeMode = ThemeMode.dark;
+  bool _showLaunchOnboarding = false;
 
   @override
   void initState() {
@@ -52,6 +54,7 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
     _locale = _resolveDeviceLocale();
     _restoreSavedLocale();
     _restoreSavedThemeMode();
+    _restoreLaunchOnboardingVisibility();
   }
 
   Future<void> _restoreSavedLocale() async {
@@ -91,6 +94,24 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
 
       setState(() {
         _themeMode = restoredThemeMode;
+      });
+    } on MissingPluginException {
+      return;
+    } on PlatformException {
+      return;
+    }
+  }
+
+  Future<void> _restoreLaunchOnboardingVisibility() async {
+    try {
+      final preferences = await SharedPreferences.getInstance();
+      final onboardingCompleted =
+          preferences.getBool(_onboardingCompletedKey) ?? false;
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _showLaunchOnboarding = !onboardingCompleted;
       });
     } on MissingPluginException {
       return;
@@ -170,6 +191,23 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
     }
   }
 
+  Future<void> _completeLaunchOnboarding() async {
+    if (_showLaunchOnboarding) {
+      setState(() {
+        _showLaunchOnboarding = false;
+      });
+    }
+
+    try {
+      final preferences = await SharedPreferences.getInstance();
+      await preferences.setBool(_onboardingCompletedKey, true);
+    } on MissingPluginException {
+      return;
+    } on PlatformException {
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final builtHome = widget.homeBuilder?.call(
@@ -200,7 +238,11 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
       ],
       supportedLocales: _supportedLocales,
       home: widget.homeBuilder == null
-          ? AppLaunchOnboardingGate(child: builtHome)
+          ? AppLaunchOnboardingGate(
+              showOnLaunch: _showLaunchOnboarding,
+              onDismissed: _completeLaunchOnboarding,
+              child: builtHome,
+            )
           : builtHome,
     );
   }

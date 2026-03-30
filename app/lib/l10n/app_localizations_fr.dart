@@ -213,6 +213,63 @@ class AppLocalizationsFr extends AppLocalizations {
   String get entryHeroChooseRitual => 'Sélectionnez un format pour commencer.';
 
   @override
+  String get onboardingHowItWorks => 'Comment ça marche';
+
+  @override
+  String get onboardingChooseCampaignTitle => 'Choisissez votre campagne';
+
+  @override
+  String get onboardingChooseCampaignBody =>
+      'Choisissez d\'abord le format de campagne pour que le reste de la configuration ait la bonne forme.';
+
+  @override
+  String get onboardingDefineDetailsTitle => 'Définissez les détails clés';
+
+  @override
+  String get onboardingDefineDetailsBody =>
+      'Définissez le monde, les thèmes, le ton, le style, le groupe et le rebondissement avant de forger le prompt.';
+
+  @override
+  String get onboardingForgePromptTitle => 'Forgez le prompt';
+
+  @override
+  String get onboardingForgePromptBody =>
+      'Générez le prompt final, ouvrez-le dans ChatGPT.';
+
+  @override
+  String get onboardingGeneratedPromptTitle => 'Prompt généré';
+
+  @override
+  String get onboardingPastePromptSubtitle => 'Colle-y le prompt généré.';
+
+  @override
+  String get onboardingNext => 'Suivant';
+
+  @override
+  String get onboardingBack => 'Retour';
+
+  @override
+  String get onboardingSkip => 'Passer';
+
+  @override
+  String get onboardingStartForging => 'Commencer la forge';
+
+  @override
+  String get onboardingCopyStep => 'Copier';
+
+  @override
+  String get onboardingSettingExample => 'Royaume frontalier';
+
+  @override
+  String get onboardingThemesExample => 'Tension politique';
+
+  @override
+  String get onboardingToneExample => 'Sombre et noir';
+
+  @override
+  String get onboardingStyleExample => 'Fantasy ancrée';
+
+  @override
   String get entryResetDraft => 'Nouvelle session';
 
   @override
@@ -640,6 +697,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsShareApp => 'Partager l’app';
+
+  @override
+  String get settingsPrivacyOptions =>
+      'Paramètres de confidentialité et de cookies';
 
   @override
   String get settingsShareText =>

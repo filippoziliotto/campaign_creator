@@ -925,7 +925,7 @@ extension on _CampaignBuilderPageState {
                                             _handleGoAdFree();
                                           },
                                           showAdOption:
-                                              _rewardedAdService.isSupported,
+                                              _rewardedAdService.isReady,
                                         ),
                                       );
                                     }
@@ -1009,7 +1009,7 @@ extension on _CampaignBuilderPageState {
                                           _handleGoAdFree();
                                         },
                                         showAdOption:
-                                            _rewardedAdService.isSupported,
+                                            _rewardedAdService.isReady,
                                       ),
                                     );
                                   }
@@ -1267,7 +1267,7 @@ extension on _CampaignBuilderPageState {
                                         _handleGoAdFree();
                                       },
                                       showAdOption:
-                                          _rewardedAdService.isSupported,
+                                          _rewardedAdService.isReady,
                                     ),
                                   );
                                 } else if (isCustomSelected) {
@@ -1329,7 +1329,7 @@ extension on _CampaignBuilderPageState {
           Navigator.pop(context);
           _handleGoAdFree();
         },
-        showAdOption: _rewardedAdService.isSupported,
+        showAdOption: _rewardedAdService.isReady,
       ),
     );
   }
@@ -1692,9 +1692,31 @@ extension on _CampaignBuilderPageState {
         enableSuggestions: enableSuggestions,
         enabled: !isPremiumLocked,
         style: overrideStyle,
+        inputFormatters: exampleText == null
+            ? null
+            : <TextInputFormatter>[
+                TextInputFormatter.withFunction((oldValue, newValue) {
+                  final example = exampleText;
+                  if (oldValue.text != example ||
+                      !newValue.text.startsWith(example) ||
+                      newValue.text == example) {
+                    return newValue;
+                  }
+
+                  final strippedText = newValue.text.substring(example.length);
+                  return TextEditingValue(
+                    text: strippedText,
+                    selection: TextSelection.collapsed(
+                      offset: strippedText.length,
+                    ),
+                    composing: TextRange.empty,
+                  );
+                }),
+              ],
         decoration: InputDecoration(
           labelText: label,
-          hintText: exampleText == null ? hintText : null,
+          hintText: hintText,
+          floatingLabelBehavior: FloatingLabelBehavior.always,
           labelStyle: isPremiumLocked && premiumCrownColor != null
               ? TextStyle(color: premiumCrownColor)
               : null,
@@ -1709,17 +1731,6 @@ extension on _CampaignBuilderPageState {
                 )
               : null,
         ),
-        onTap: exampleText != null
-            ? () {
-                if (controller.text == exampleText) {
-                  controller.removeListener(_handleDraftInputChanged);
-                  controller.value = const TextEditingValue(
-                    selection: TextSelection.collapsed(offset: 0),
-                  );
-                  controller.addListener(_handleDraftInputChanged);
-                }
-              }
-            : null,
         onChanged: (_) {
           if (!_hasUnsavedChanges) {
             _markDirty();

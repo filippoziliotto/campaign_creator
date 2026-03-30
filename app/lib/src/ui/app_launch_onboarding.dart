@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n_extension.dart';
 import '../theme/fantasy_theme.dart';
 import 'pages/design/campaign_builder_motion.dart';
 
@@ -8,10 +9,12 @@ class AppLaunchOnboardingGate extends StatefulWidget {
     super.key,
     required this.child,
     this.showOnLaunch = true,
+    this.onDismissed,
   });
 
   final Widget child;
   final bool showOnLaunch;
+  final VoidCallback? onDismissed;
 
   @override
   State<AppLaunchOnboardingGate> createState() =>
@@ -19,39 +22,6 @@ class AppLaunchOnboardingGate extends StatefulWidget {
 }
 
 class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
-  static const List<_OnboardingSlideSpec> _slides = <_OnboardingSlideSpec>[
-    _OnboardingSlideSpec(
-      title: 'Choose Campaign',
-      body: 'Pick the kind of adventure you want to build.',
-      primaryLabel: 'Next',
-      secondaryLabel: 'Skip',
-      primaryAction: _OnboardingAction.next,
-      secondaryAction: _OnboardingAction.dismiss,
-      visualKind: _OnboardingVisualKind.campaignType,
-      titleFontSizeOffset: -7,
-    ),
-    _OnboardingSlideSpec(
-      title: 'Define Key Details',
-      body: 'Build your unique story settings and flavour.',
-      primaryLabel: 'Next',
-      secondaryLabel: 'Back',
-      primaryAction: _OnboardingAction.next,
-      secondaryAction: _OnboardingAction.back,
-      visualKind: _OnboardingVisualKind.forgeSettings,
-      titleFontSizeOffset: -9,
-    ),
-    _OnboardingSlideSpec(
-      title: 'Forge the prompt',
-      body: 'Build you parchment, then paste it into ChatGPT.',
-      primaryLabel: 'Start Forging',
-      secondaryLabel: 'Back',
-      primaryAction: _OnboardingAction.dismiss,
-      secondaryAction: _OnboardingAction.back,
-      visualKind: _OnboardingVisualKind.parchmentActions,
-      titleFontSizeOffset: -9,
-    ),
-  ];
-
   late final PageController _pageController;
   bool _isVisible = false;
   int _currentPageIndex = 0;
@@ -71,14 +41,59 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
         _currentPageIndex = 0;
         _isVisible = true;
       });
-      _pageController.jumpToPage(0);
+      _resetToFirstPageWhenReady();
     }
+  }
+
+  void _resetToFirstPageWhenReady() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_pageController.hasClients) {
+        return;
+      }
+      _pageController.jumpToPage(0);
+    });
   }
 
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  List<_OnboardingSlideSpec> _slides(BuildContext context) {
+    final l10n = context.l10n;
+    return <_OnboardingSlideSpec>[
+      _OnboardingSlideSpec(
+        title: l10n.onboardingChooseCampaignTitle,
+        body: l10n.onboardingChooseCampaignBody,
+        primaryLabel: l10n.onboardingNext,
+        secondaryLabel: l10n.onboardingSkip,
+        primaryAction: _OnboardingAction.next,
+        secondaryAction: _OnboardingAction.dismiss,
+        visualKind: _OnboardingVisualKind.campaignType,
+        titleFontSizeOffset: -7,
+      ),
+      _OnboardingSlideSpec(
+        title: l10n.onboardingDefineDetailsTitle,
+        body: l10n.onboardingDefineDetailsBody,
+        primaryLabel: l10n.onboardingNext,
+        secondaryLabel: l10n.onboardingBack,
+        primaryAction: _OnboardingAction.next,
+        secondaryAction: _OnboardingAction.back,
+        visualKind: _OnboardingVisualKind.forgeSettings,
+        titleFontSizeOffset: -9,
+      ),
+      _OnboardingSlideSpec(
+        title: l10n.onboardingForgePromptTitle,
+        body: l10n.onboardingForgePromptBody,
+        primaryLabel: l10n.onboardingStartForging,
+        secondaryLabel: l10n.onboardingBack,
+        primaryAction: _OnboardingAction.dismiss,
+        secondaryAction: _OnboardingAction.back,
+        visualKind: _OnboardingVisualKind.parchmentActions,
+        titleFontSizeOffset: -9,
+      ),
+    ];
   }
 
   @override
@@ -97,6 +112,7 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
   Widget _buildOverlay(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.fantasy;
+    final slides = _slides(context);
     final screenSize = MediaQuery.sizeOf(context);
     final compact = screenSize.width < 720;
     final panelWidthFactor = compact ? 0.94 : 0.88;
@@ -167,7 +183,7 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
                           Positioned.fill(
                             child: PageView.builder(
                               controller: _pageController,
-                              itemCount: _slides.length,
+                              itemCount: slides.length,
                               onPageChanged: (int index) {
                                 setState(() {
                                   _currentPageIndex = index;
@@ -176,9 +192,9 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
                               itemBuilder: (BuildContext context, int index) {
                                 return _OnboardingSlide(
                                   key: ValueKey<int>(index),
-                                  slide: _slides[index],
+                                  slide: slides[index],
                                   slideCounterText:
-                                      '${_currentPageIndex + 1} / ${_slides.length}',
+                                      '${_currentPageIndex + 1} / ${slides.length}',
                                 );
                               },
                             ),
@@ -187,7 +203,7 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
                             left: 0,
                             right: 0,
                             bottom: 0,
-                            child: _buildFooter(context),
+                            child: _buildFooter(context, slides),
                           ),
                         ],
                       ),
@@ -202,8 +218,11 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
     );
   }
 
-  Widget _buildFooter(BuildContext context) {
-    final slide = _slides[_currentPageIndex];
+  Widget _buildFooter(
+    BuildContext context,
+    List<_OnboardingSlideSpec> slides,
+  ) {
+    final slide = slides[_currentPageIndex];
     final theme = Theme.of(context);
 
     return Column(
@@ -212,7 +231,7 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List<Widget>.generate(
-            _slides.length,
+            slides.length,
             (int index) => AnimatedContainer(
               duration: prefersReducedMotion(context)
                   ? Duration.zero
@@ -266,11 +285,12 @@ class _AppLaunchOnboardingGateState extends State<AppLaunchOnboardingGate> {
         setState(() {
           _isVisible = false;
         });
+        widget.onDismissed?.call();
     }
   }
 
   Future<void> _moveToPage(int index) async {
-    final clampedIndex = index.clamp(0, _slides.length - 1);
+    final clampedIndex = index.clamp(0, 2);
     if (clampedIndex == _currentPageIndex) {
       return;
     }
@@ -433,6 +453,7 @@ class _OnboardingCopy extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.fantasy;
+    final l10n = context.l10n;
     final subtitleColor =
         slide.visualKind == _OnboardingVisualKind.parchmentActions
             ? palette.foreground.withValues(alpha: 0.92)
@@ -445,7 +466,7 @@ class _OnboardingCopy extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'How it works',
+              l10n.onboardingHowItWorks,
               style: theme.textTheme.labelLarge?.copyWith(
                 color: theme.colorScheme.tertiary,
               ),
@@ -568,42 +589,44 @@ class _CampaignTypePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Column(
-      children: const <Widget>[
+      children: <Widget>[
         Expanded(
           child: Row(
             children: <Widget>[
               Expanded(
                 child: _PreviewPhotoTile(
-                  label: 'One-Shot',
+                  label: l10n.helpCampaignTypeOneShotTitle,
                   assetPath: 'assets/entry_cards/one_shot.jpg',
                   isSelected: true,
                 ),
               ),
-              SizedBox(width: 14),
+              const SizedBox(width: 14),
               Expanded(
                 child: _PreviewPhotoTile(
-                  label: 'Mini-campaign',
+                  label: l10n.helpCampaignTypeMiniCampaignTitle,
                   assetPath: 'assets/entry_cards/campagna_corta.jpg',
                 ),
               ),
             ],
           ),
         ),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
         Expanded(
           child: Row(
             children: <Widget>[
               Expanded(
                 child: _PreviewPhotoTile(
-                  label: 'Long campaign',
+                  label: l10n.helpCampaignTypeLongCampaignTitle,
                   assetPath: 'assets/entry_cards/campagna_lunga.jpg',
                 ),
               ),
-              SizedBox(width: 14),
+              const SizedBox(width: 14),
               Expanded(
                 child: _PreviewPhotoTile(
-                  label: 'Dungeon crawl',
+                  label: l10n.helpCampaignTypeDungeonTitle,
                   assetPath: 'assets/entry_cards/dungeon.jpg',
                 ),
               ),
@@ -620,16 +643,17 @@ class _ForgeSettingsPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final chips = Wrap(
       spacing: 2,
       runSpacing: 7,
-      children: const <Widget>[
-        _PreviewRune(label: 'Setting', isActive: true),
-        _PreviewRune(label: 'Themes'),
-        _PreviewRune(label: 'Tone'),
-        _PreviewRune(label: 'Style'),
-        _PreviewRune(label: 'Party'),
-        _PreviewRune(label: 'Twist'),
+      children: <Widget>[
+        _PreviewRune(label: l10n.forgeSettingLabel, isActive: true),
+        _PreviewRune(label: l10n.forgeThemesTitle),
+        _PreviewRune(label: l10n.forgeToneTitle),
+        _PreviewRune(label: l10n.forgeStyleTitle),
+        _PreviewRune(label: l10n.forgeSectionParty),
+        _PreviewRune(label: l10n.forgeTwistLabel),
       ],
     );
 
@@ -641,17 +665,26 @@ class _ForgeSettingsPreview extends StatelessWidget {
         children: <Widget>[
           chips,
           const SizedBox(height: 14),
-          const _PreviewField(
-            label: 'Setting',
-            value: 'Forgotten Realms',
+          _PreviewField(
+            label: l10n.forgeSettingLabel,
+            value: l10n.onboardingSettingExample,
             isActive: true,
           ),
           const SizedBox(height: 8),
-          const _PreviewField(label: 'Themes', value: 'Political tension'),
+          _PreviewField(
+            label: l10n.forgeThemesTitle,
+            value: l10n.onboardingThemesExample,
+          ),
           const SizedBox(height: 6),
-          const _PreviewField(label: 'Tone', value: 'Dark & Noir'),
+          _PreviewField(
+            label: l10n.forgeToneTitle,
+            value: l10n.onboardingToneExample,
+          ),
           const SizedBox(height: 6),
-          const _PreviewField(label: 'Style', value: 'Low fantasy'),
+          _PreviewField(
+            label: l10n.forgeStyleTitle,
+            value: l10n.onboardingStyleExample,
+          ),
         ],
       ),
     );
@@ -691,27 +724,28 @@ class _ParchmentActionsPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints panelConstraints) {
         final compactContent = panelConstraints.maxWidth < 560;
         final content = compactContent
-            ? const SingleChildScrollView(
+            ? SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     _PromptPreviewCard(),
-                    SizedBox(height: 14),
+                    const SizedBox(height: 14),
                     _ParchmentActionFlow(),
                   ],
                 ),
               )
             : Row(
-                children: const <Widget>[
+                children: <Widget>[
                   Expanded(
                     flex: 11,
                     child: _PromptPreviewCard(),
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
                     flex: 9,
                     child: _ParchmentActionFlow(),
@@ -724,21 +758,21 @@ class _ParchmentActionsPreview extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Center(
+              Center(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      _PreviewStepChip(step: '1', label: 'Forge'),
-                      SizedBox(width: 8),
+                      _PreviewStepChip(step: '1', label: l10n.appStageForge),
+                      const SizedBox(width: 8),
                       _PreviewStepChip(
                         step: '2',
-                        label: 'Copy',
+                        label: l10n.onboardingCopyStep,
                         isActive: true,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       _PreviewStepChip(
                         step: '3',
                         label: 'ChatGPT',
@@ -765,6 +799,7 @@ class _PromptPreviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final palette = theme.fantasy;
+    final l10n = context.l10n;
 
     return Container(
       width: double.infinity,
@@ -795,34 +830,26 @@ class _PromptPreviewCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'Generated prompt',
+              l10n.onboardingGeneratedPromptTitle,
               style: theme.textTheme.titleMedium?.copyWith(
                 color: palette.paperInk,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              'World, tone, party, and twist are forged into one final brief.',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: palette.paperInk.withValues(alpha: 0.72),
-                height: 1.35,
-              ),
-            ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             const _PreviewParagraph(),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             const _PreviewParagraph(widthFactor: 0.90),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             const _PreviewParagraph(widthFactor: 0.82),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: const <Widget>[
-                _PromptTag(label: 'Setting'),
-                _PromptTag(label: 'Tone'),
-                _PromptTag(label: 'Party'),
+              children: <Widget>[
+                _PromptTag(label: l10n.forgeSettingLabel),
+                _PromptTag(label: l10n.forgeToneTitle),
+                _PromptTag(label: l10n.forgeSectionParty),
               ],
             ),
           ],
@@ -868,12 +895,13 @@ class _ParchmentActionFlow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    final l10n = context.l10n;
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         _PreviewActionTile(
-          title: 'Open in ChatGPT',
-          subtitle: 'Paste the generated prompt there.',
+          title: l10n.parchmentOpenChatGptTitle,
+          subtitle: l10n.onboardingPastePromptSubtitle,
           emphasis: _PreviewActionTileEmphasis.primary,
         ),
       ],

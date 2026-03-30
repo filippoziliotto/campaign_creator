@@ -1,6 +1,7 @@
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:campaign_creator_flutter/src/audio/forge_sound_player.dart';
 import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
+import 'package:campaign_creator_flutter/src/monetization/premium_access.dart';
 import 'package:campaign_creator_flutter/src/monetization/rewarded_ad_service.dart';
 import 'package:campaign_creator_flutter/src/services/campaign_service.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_motion.dart';
@@ -99,7 +100,7 @@ void main() {
   );
 
   testWidgets(
-    'untouched visible example text localizes on language change',
+    'forge hints localize and inject example text on focus',
     (tester) async {
       await _setLargeSurface(tester);
 
@@ -115,10 +116,31 @@ void main() {
         sectionLabel: 'Story',
       );
 
+      final englishFieldFinder = _textFieldForLabel('Key NPCs');
+      final englishField = tester.widget<TextField>(englishFieldFinder);
+      expect(englishField.controller!.text, isEmpty);
+      expect(
+        englishField.decoration?.hintText,
+        'Ambiguous mentor, rival, patron, traitor...',
+      );
+      expect(
+        englishField.decoration?.floatingLabelBehavior,
+        FloatingLabelBehavior.always,
+      );
+      expect(
+        find.text('Ambiguous mentor, rival, patron, traitor...'),
+        findsOneWidget,
+      );
+
+      await tester.tap(englishFieldFinder);
+      await tester.pump();
+
       expect(
         _textFieldControllerText(tester, 'Key NPCs'),
         'Ambiguous mentor, rival, patron, traitor...',
       );
+      expect(tester.widget<TextField>(englishFieldFinder).style?.fontStyle,
+          FontStyle.italic);
 
       await tester.pumpWidget(
         _TestApp(
@@ -129,8 +151,14 @@ void main() {
       await _pumpUi(tester);
       await _openNarrativeSection(tester);
 
+      final italianFieldFinder = _textFieldForLabel('NPC chiave');
+      final italianField = tester.widget<TextField>(italianFieldFinder);
       expect(
-        _textFieldControllerText(tester, 'NPC chiave'),
+        italianField.controller!.text,
+        'Mentore ambiguo, rivale, patrono, traditore...',
+      );
+      expect(
+        italianField.decoration?.hintText,
         'Mentore ambiguo, rivale, patrono, traditore...',
       );
     },
@@ -176,7 +204,7 @@ void main() {
   );
 
   testWidgets(
-    'visible example text stays out of the generated prompt until overwritten',
+    'empty forge text stays out of the generated prompt until overwritten',
     (tester) async {
       await _setLargeSurface(tester);
       final service = _CapturingCampaignService();
@@ -197,6 +225,15 @@ void main() {
       await _openNarrativeSection(
         tester,
         sectionLabel: 'Story',
+      );
+
+      final fieldFinder = _textFieldForLabel('Key NPCs');
+      await tester.tap(fieldFinder);
+      await tester.pump();
+
+      expect(
+        _textFieldControllerText(tester, 'Key NPCs'),
+        'Ambiguous mentor, rival, patron, traitor...',
       );
 
       await _tapForgePrimaryAction(tester);
@@ -243,7 +280,7 @@ void main() {
   );
 
   testWidgets(
-    'visible example text uses a smaller atmosphere-aware style',
+    'forge fields show hints before focus and example text after focus',
     (tester) async {
       await _setLargeSurface(tester);
 
@@ -261,17 +298,22 @@ void main() {
 
       final fieldFinder = _textFieldForLabel('Key NPCs');
       final field = tester.widget<TextField>(fieldFinder);
-      final theme = Theme.of(tester.element(fieldFinder));
 
-      expect(field.style, isNotNull);
-      expect(field.style!.fontStyle, FontStyle.italic);
-      expect(field.style!.fontSize, 14);
-      expect(field.style!.color, theme.colorScheme.onSurfaceVariant);
+      expect(field.controller!.text, isEmpty);
+      expect(field.decoration?.hintText, isNotNull);
+
+      await tester.tap(fieldFinder);
+      await tester.pump();
+
+      expect(
+        _textFieldControllerText(tester, 'Key NPCs'),
+        'Ambiguous mentor, rival, patron, traitor...',
+      );
     },
   );
 
   testWidgets(
-    'tapping a visible example clears it so typing starts from an empty field',
+    'tapping a forge field injects and selects the starter text',
     (tester) async {
       await _setLargeSurface(tester);
 
@@ -288,25 +330,62 @@ void main() {
       );
 
       final fieldFinder = _textFieldForLabel('Key NPCs');
-      expect(
-        _textFieldControllerText(tester, 'Key NPCs'),
-        'Ambiguous mentor, rival, patron, traitor...',
-      );
+      expect(_textFieldControllerText(tester, 'Key NPCs'), isEmpty);
 
       await tester.tap(fieldFinder);
       await tester.pump();
 
-      expect(_textFieldControllerText(tester, 'Key NPCs'), isEmpty);
+      expect(
+        _textFieldControllerText(tester, 'Key NPCs'),
+        'Ambiguous mentor, rival, patron, traitor...',
+      );
+      final field = tester.widget<TextField>(fieldFinder);
+      expect(field.controller!.selection.baseOffset, 0);
+      expect(
+        field.controller!.selection.extentOffset,
+        field.controller!.text.length,
+      );
+    },
+  );
 
-      await tester.enterText(fieldFinder, 'Guild fixer');
+  testWidgets(
+    'typing over the starter text replaces it instead of appending',
+    (tester) async {
+      await _setLargeSurface(tester);
+
+      await tester.pumpWidget(
+        _TestApp(
+          locale: const Locale('en'),
+          child: _buildPage(locale: const Locale('en')),
+        ),
+      );
       await _pumpUi(tester);
+      await _openNarrativeSection(
+        tester,
+        sectionLabel: 'Story',
+      );
+
+      final fieldFinder = _textFieldForLabel('Key NPCs');
+      await tester.tap(fieldFinder);
+      await tester.pump();
+
+      final starterText = _textFieldControllerText(tester, 'Key NPCs');
+      tester.testTextInput.updateEditingValue(
+        TextEditingValue(
+          text: '${starterText}Guild fixer',
+          selection: TextSelection.collapsed(
+            offset: starterText.length + 'Guild fixer'.length,
+          ),
+        ),
+      );
+      await tester.pump();
 
       expect(_textFieldControllerText(tester, 'Key NPCs'), 'Guild fixer');
     },
   );
 
   testWidgets(
-    'untyped cleared example text is restored when focus moves away',
+    'starter text remains when focus moves away',
     (tester) async {
       await _setLargeSurface(tester);
 
@@ -328,7 +407,10 @@ void main() {
       await tester.tap(keyNpcsField);
       await tester.pump();
 
-      expect(_textFieldControllerText(tester, 'Key NPCs'), isEmpty);
+      expect(
+        _textFieldControllerText(tester, 'Key NPCs'),
+        'Ambiguous mentor, rival, patron, traitor...',
+      );
 
       await tester.tap(safetyNotesField);
       await tester.pump();
@@ -665,7 +747,7 @@ void main() {
   });
 
   testWidgets(
-      'locked premium flow still shows watch ad when rewarded ad is not preloaded yet',
+      'locked premium flow hides watch ad until rewarded ad is ready',
       (tester) async {
     await _setLargeSurface(tester);
     final rewardedAdService = _FakeRewardedAdService()
@@ -694,20 +776,16 @@ void main() {
     );
     await _pumpUi(tester);
 
-    expect(find.widgetWithText(FilledButton, l10n.premiumUnlockWatchAd),
-        findsOneWidget);
-
-    await tester
-        .tap(find.widgetWithText(FilledButton, l10n.premiumUnlockWatchAd));
-    await _pumpUi(tester);
-
-    expect(rewardedAdService.preloadCallCount, greaterThanOrEqualTo(2));
-    expect(rewardedAdService.showCallCount, 1);
+    expect(
+      find.widgetWithText(FilledButton, l10n.premiumUnlockWatchAd),
+      findsNothing,
+    );
+    expect(rewardedAdService.showCallCount, 0);
   });
 
-  testWidgets(
-      'watch ad shows a localized message when rewarded ad stays unavailable',
-      (tester) async {
+  testWidgets('watch ad stays hidden when rewarded ad is unavailable', (
+    tester,
+  ) async {
     await _setLargeSurface(tester);
     final rewardedAdService = _FakeRewardedAdService()
       ..shouldBeReady = false
@@ -734,11 +812,10 @@ void main() {
     );
     await _pumpUi(tester);
 
-    await tester
-        .tap(find.widgetWithText(FilledButton, l10n.premiumUnlockWatchAd));
-    await _pumpUi(tester);
-
-    expect(find.text(l10n.appSnackRewardedAdUnavailable), findsOneWidget);
+    expect(
+      find.widgetWithText(FilledButton, l10n.premiumUnlockWatchAd),
+      findsNothing,
+    );
     expect(rewardedAdService.showCallCount, 0);
   });
 
@@ -781,6 +858,37 @@ void main() {
     final colorAfterUnlock =
         tester.widget<Text>(premiumLevelFinder).style?.color;
     expect(colorAfterUnlock, colorBeforeUnlock);
+  });
+
+  testWidgets('restores rewarded premium unlock from persisted preferences', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('en'),
+        child: _buildPage(
+          locale: const Locale('en'),
+          initialPreferences: <String, Object>{
+            'app.premium_temporary_unlock_timestamp':
+                DateTime.now().millisecondsSinceEpoch,
+          },
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openPartySection(tester);
+
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('party-size-control')),
+        matching: find.byKey(const ValueKey<String>('party-size-pill-5')),
+      ),
+    );
+    await _pumpUi(tester);
+
+    expect(find.byType(PremiumUnlockPrompt), findsNothing);
   });
 
   testWidgets('reducing party size trims selected archetypes', (tester) async {

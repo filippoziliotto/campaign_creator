@@ -20,6 +20,7 @@ import '../../../audio/forge_sound_player.dart';
 import '../../../config/app_config.dart';
 import '../../../l10n_extension.dart';
 import '../../../models/campaign_models.dart';
+import '../../../monetization/app_consent_manager.dart';
 import '../../../monetization/interstitial_ad_service.dart';
 import '../../../monetization/monetization_coordinator.dart';
 import '../../../monetization/monetization_prefs.dart';
@@ -573,6 +574,7 @@ class CampaignBuilderPage extends StatefulWidget {
     this.interstitialAdService,
     this.rewardedAdService,
     this.purchaseService,
+    this.consentManager,
     this.forgeSoundPlayer,
     required this.currentLocale,
     required this.onLocaleChanged,
@@ -586,6 +588,7 @@ class CampaignBuilderPage extends StatefulWidget {
   final InterstitialAdService? interstitialAdService;
   final RewardedAdService? rewardedAdService;
   final PurchaseService? purchaseService;
+  final AppConsentManager? consentManager;
   final ForgeSoundPlayer? forgeSoundPlayer;
   final Locale currentLocale;
   final ValueChanged<Locale> onLocaleChanged;
@@ -621,9 +624,11 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   late final InterstitialAdService _interstitialAdService;
   late final RewardedAdService _rewardedAdService;
   late final PurchaseService _purchaseService;
+  late final AppConsentManager _consentManager;
   late final ForgeSoundPlayer _forgeSoundPlayer;
   late final MonetizationCoordinator _monetizationCoordinator;
   StreamSubscription<List<NormalizedPurchaseUpdate>>? _purchaseSubscription;
+  bool _adsPrepared = false;
   bool _isAdFree = false;
   bool _isPurchaseBusy = false;
   DateTime? _premiumTemporaryUnlockGrantedAt;
@@ -709,14 +714,14 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         widget.interstitialAdService ?? DefaultInterstitialAdService();
     _rewardedAdService = widget.rewardedAdService ?? DefaultRewardedAdService();
     _purchaseService = widget.purchaseService ?? DefaultPurchaseService();
+    _consentManager = widget.consentManager ?? appConsentManager;
     _forgeSoundPlayer = widget.forgeSoundPlayer ?? DefaultForgeSoundPlayer();
     _monetizationCoordinator = MonetizationCoordinator(
       adService: _interstitialAdService,
       purchaseService: _purchaseService,
       prefs: MonetizationPrefs(),
     );
-    unawaited(_interstitialAdService.preload());
-    unawaited(_rewardedAdService.preload());
+    unawaited(_prepareAds());
     unawaited(_restoreMonetizationState());
     _purchaseSubscription =
         _purchaseService.purchaseStream.listen(_handlePurchaseUpdates);
@@ -735,8 +740,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     for (final controller in _textControllers) {
       controller.addListener(_handleDraftInputChanged);
       _textFieldFocusNodes[controller]!.addListener(() {
-        if (!_textFieldFocusNodes[controller]!.hasFocus) {
-          _restoreExampleTextIfNeeded(controller);
+        if (_textFieldFocusNodes[controller]!.hasFocus) {
+          _prepareExampleTextForFocus(controller);
         }
       });
     }
@@ -776,27 +781,16 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     final previousExamples = Map<TextEditingController, String>.from(
       _exampleTexts,
     );
+    _exampleTexts
+      ..clear()
+      ..addAll(mappings);
+
     for (final entry in mappings.entries) {
-      _exampleTexts[entry.key] = entry.value;
-    }
-    for (final controller in mappings.keys) {
-      controller.removeListener(_handleDraftInputChanged);
-    }
-    for (final entry in mappings.entries) {
-      final currentText = entry.key.text;
-      final previousExample = previousExamples[entry.key];
-      final shouldReplaceExampleText = currentText.isEmpty ||
-          (previousExample != null && currentText == previousExample);
-      if (shouldReplaceExampleText) {
-        entry.key.value = entry.key.value.copyWith(
-          text: entry.value,
-          selection: TextSelection.collapsed(offset: entry.value.length),
-          composing: TextRange.empty,
-        );
+      final controller = entry.key;
+      final previousExample = previousExamples[controller];
+      if (previousExample != null && controller.text == previousExample) {
+        _setControllerTextSilently(controller, entry.value);
       }
-    }
-    for (final controller in mappings.keys) {
-      controller.addListener(_handleDraftInputChanged);
     }
   }
 
@@ -963,15 +957,47 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     return text == example ? '' : text;
   }
 
-  void _restoreExampleTextIfNeeded(TextEditingController controller) {
+  void _prepareExampleTextForFocus(TextEditingController controller) {
     final exampleText = _exampleTexts[controller];
-    if (exampleText == null || controller.text.isNotEmpty) {
+    if (exampleText == null) {
       return;
     }
+    if (controller.text.isEmpty) {
+      _setControllerTextSilently(controller, exampleText, selectAll: true);
+      return;
+    }
+    if (controller.text == exampleText) {
+      _setControllerSelectionSilently(
+        controller,
+        TextSelection(baseOffset: 0, extentOffset: exampleText.length),
+      );
+    }
+  }
+
+  void _setControllerTextSilently(
+    TextEditingController controller,
+    String text,
+    {bool selectAll = false}
+  ) {
     controller.removeListener(_handleDraftInputChanged);
     controller.value = TextEditingValue(
-      text: exampleText,
-      selection: TextSelection.collapsed(offset: exampleText.length),
+      text: text,
+      selection: selectAll
+          ? TextSelection(baseOffset: 0, extentOffset: text.length)
+          : TextSelection.collapsed(offset: text.length),
+      composing: TextRange.empty,
+    );
+    controller.addListener(_handleDraftInputChanged);
+  }
+
+  void _setControllerSelectionSilently(
+    TextEditingController controller,
+    TextSelection selection,
+  ) {
+    controller.removeListener(_handleDraftInputChanged);
+    controller.value = controller.value.copyWith(
+      selection: selection,
+      composing: TextRange.empty,
     );
     controller.addListener(_handleDraftInputChanged);
   }
@@ -986,7 +1012,6 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     for (final controller in _textControllers) {
       controller.addListener(_handleDraftInputChanged);
     }
-    _syncExampleTexts();
   }
 
   void _showSnackBar(String message) {
@@ -1537,9 +1562,21 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     final adFree = _monetizationCoordinator.restoreCachedEntitlement(
       preferences: preferences,
     );
+    final temporaryUnlockTimestamp =
+        MonetizationPrefs().getTemporaryUnlockTimestamp(preferences);
+    DateTime? temporaryUnlockGrantedAt;
+    if (temporaryUnlockTimestamp != null) {
+      final restoredGrantedAt =
+          DateTime.fromMillisecondsSinceEpoch(temporaryUnlockTimestamp);
+      if (DateTime.now().difference(restoredGrantedAt) <
+          PremiumAccessService.temporaryUnlockDuration) {
+        temporaryUnlockGrantedAt = restoredGrantedAt;
+      }
+    }
     if (mounted) {
       setState(() {
         _isAdFree = adFree;
+        _premiumTemporaryUnlockGrantedAt = temporaryUnlockGrantedAt;
       });
     }
     if (!adFree) {
@@ -1632,6 +1669,28 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         });
       }
     });
+  }
+
+  Future<void> _prepareAds() async {
+    await _consentManager.initializeAdsIfAllowed();
+    if (!await _consentManager.canRequestAds() || _adsPrepared) {
+      return;
+    }
+
+    _adsPrepared = true;
+    await _interstitialAdService.preload();
+    await _rewardedAdService.preload();
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  Future<void> _handlePrivacyOptionsTapped() async {
+    await _consentManager.showPrivacyOptionsForm();
+    await _prepareAds();
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<SharedPreferences?> _resolvePreferences({
@@ -2128,6 +2187,9 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                     adFreePrice: _adFreePrice,
                     onGoAdFreeTapped: _handleGoAdFree,
                     onRestorePurchasesTapped: _handleRestorePurchases,
+                    isPrivacyOptionsRequired:
+                        _consentManager.isPrivacyOptionsRequired,
+                    onPrivacyOptionsTapped: _handlePrivacyOptionsTapped,
                   ),
                 ),
               ),

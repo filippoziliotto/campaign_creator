@@ -49,6 +49,8 @@ app/lib/l10n/app_localizations.dart
 app/lib/l10n/app_localizations_en.dart
 app/lib/l10n/app_localizations_it.dart
 
+Admob.txt
+
 # ── IDE ────────────────────────────────────────────────────────────────────────
 .idea/
 *.iml

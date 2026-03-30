@@ -212,6 +212,63 @@ class AppLocalizationsEs extends AppLocalizations {
   String get entryHeroChooseRitual => 'Selecciona un formato para empezar.';
 
   @override
+  String get onboardingHowItWorks => 'Cómo funciona';
+
+  @override
+  String get onboardingChooseCampaignTitle => 'Elige tu campaña';
+
+  @override
+  String get onboardingChooseCampaignBody =>
+      'Elige primero el formato de la campaña para que el resto de la configuración tenga la forma adecuada.';
+
+  @override
+  String get onboardingDefineDetailsTitle => 'Define los detalles clave';
+
+  @override
+  String get onboardingDefineDetailsBody =>
+      'Configura el mundo, los temas, el tono, el estilo, el grupo y el giro antes de forjar el prompt.';
+
+  @override
+  String get onboardingForgePromptTitle => 'Forja el prompt';
+
+  @override
+  String get onboardingForgePromptBody =>
+      'Genera el prompt final, y llévalo a ChatGPT.';
+
+  @override
+  String get onboardingGeneratedPromptTitle => 'Prompt generado';
+
+  @override
+  String get onboardingPastePromptSubtitle => 'Pega allí el prompt generado.';
+
+  @override
+  String get onboardingNext => 'Siguiente';
+
+  @override
+  String get onboardingBack => 'Atrás';
+
+  @override
+  String get onboardingSkip => 'Saltar';
+
+  @override
+  String get onboardingStartForging => 'Empieza a forjar';
+
+  @override
+  String get onboardingCopyStep => 'Copia';
+
+  @override
+  String get onboardingSettingExample => 'Reino fronterizo';
+
+  @override
+  String get onboardingThemesExample => 'Tensión política';
+
+  @override
+  String get onboardingToneExample => 'Oscuro y noir';
+
+  @override
+  String get onboardingStyleExample => 'Fantasía realista';
+
+  @override
   String get entryResetDraft => 'Nueva sesión';
 
   @override
@@ -641,6 +698,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get settingsShareApp => 'Compartir la app';
+
+  @override
+  String get settingsPrivacyOptions => 'Ajustes de privacidad y cookies';
 
   @override
   String get settingsShareText =>

@@ -12,6 +12,8 @@ class _InfoButton extends StatelessWidget {
     this.adFreePrice,
     required this.onGoAdFreeTapped,
     required this.onRestorePurchasesTapped,
+    required this.isPrivacyOptionsRequired,
+    required this.onPrivacyOptionsTapped,
   });
 
   final Locale currentLocale;
@@ -24,6 +26,8 @@ class _InfoButton extends StatelessWidget {
   final String? adFreePrice;
   final VoidCallback onGoAdFreeTapped;
   final VoidCallback onRestorePurchasesTapped;
+  final Future<bool> Function() isPrivacyOptionsRequired;
+  final Future<void> Function() onPrivacyOptionsTapped;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +45,8 @@ class _InfoButton extends StatelessWidget {
         adFreePrice: adFreePrice,
         onGoAdFreeTapped: onGoAdFreeTapped,
         onRestorePurchasesTapped: onRestorePurchasesTapped,
+        isPrivacyOptionsRequired: isPrivacyOptionsRequired,
+        onPrivacyOptionsTapped: onPrivacyOptionsTapped,
       ),
     );
   }
@@ -341,6 +347,8 @@ class _SettingsSheet extends StatefulWidget {
     this.adFreePrice,
     required this.onGoAdFreeTapped,
     required this.onRestorePurchasesTapped,
+    required this.isPrivacyOptionsRequired,
+    required this.onPrivacyOptionsTapped,
   });
 
   final Locale currentLocale;
@@ -353,6 +361,8 @@ class _SettingsSheet extends StatefulWidget {
   final String? adFreePrice;
   final VoidCallback onGoAdFreeTapped;
   final VoidCallback onRestorePurchasesTapped;
+  final Future<bool> Function() isPrivacyOptionsRequired;
+  final Future<void> Function() onPrivacyOptionsTapped;
 
   @override
   State<_SettingsSheet> createState() => _SettingsSheetState();
@@ -589,6 +599,28 @@ class _SettingsSheetState extends State<_SettingsSheet> {
               style: textTheme.bodyLarge?.copyWith(color: palette.foreground),
             ),
             onTap: () => _shareApp(context),
+          ),
+          FutureBuilder<bool>(
+            future: widget.isPrivacyOptionsRequired(),
+            builder: (context, snapshot) {
+              if (!(snapshot.data ?? false)) {
+                return const SizedBox.shrink();
+              }
+
+              return ListTile(
+                key: const ValueKey<String>('settings-privacy-options-row'),
+                leading: Icon(Icons.privacy_tip_outlined, color: palette.accent),
+                title: Text(
+                  context.l10n.settingsPrivacyOptions,
+                  style:
+                      textTheme.bodyLarge?.copyWith(color: palette.foreground),
+                ),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  await widget.onPrivacyOptionsTapped();
+                },
+              );
+            },
           ),
           if (!widget.isAdFree) ...[
             Padding(

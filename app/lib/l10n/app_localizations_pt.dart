@@ -214,6 +214,63 @@ class AppLocalizationsPt extends AppLocalizations {
   String get entryHeroChooseRitual => 'Seleciona um formato para começar.';
 
   @override
+  String get onboardingHowItWorks => 'Como funciona';
+
+  @override
+  String get onboardingChooseCampaignTitle => 'Escolhe a tua campanha';
+
+  @override
+  String get onboardingChooseCampaignBody =>
+      'Escolhe primeiro o formato da campanha para que o resto da configuração tenha a forma certa.';
+
+  @override
+  String get onboardingDefineDetailsTitle => 'Define os detalhes-chave';
+
+  @override
+  String get onboardingDefineDetailsBody =>
+      'Define o mundo, os temas, o tom, o estilo, o grupo e a reviravolta antes de forjar o prompt.';
+
+  @override
+  String get onboardingForgePromptTitle => 'Forja o prompt';
+
+  @override
+  String get onboardingForgePromptBody =>
+      'Gera o prompt final, leva-o para o ChatGPT.';
+
+  @override
+  String get onboardingGeneratedPromptTitle => 'Prompt gerado';
+
+  @override
+  String get onboardingPastePromptSubtitle => 'Cola lá o prompt gerado.';
+
+  @override
+  String get onboardingNext => 'Seguinte';
+
+  @override
+  String get onboardingBack => 'Voltar';
+
+  @override
+  String get onboardingSkip => 'Saltar';
+
+  @override
+  String get onboardingStartForging => 'Começar a forjar';
+
+  @override
+  String get onboardingCopyStep => 'Copiar';
+
+  @override
+  String get onboardingSettingExample => 'Reino fronteiriço';
+
+  @override
+  String get onboardingThemesExample => 'Tensão política';
+
+  @override
+  String get onboardingToneExample => 'Sombrio e noir';
+
+  @override
+  String get onboardingStyleExample => 'Fantasia enraizada';
+
+  @override
   String get entryResetDraft => 'Nova sessão';
 
   @override
@@ -640,6 +697,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get settingsShareApp => 'Partilhar a app';
+
+  @override
+  String get settingsPrivacyOptions => 'Definições de privacidade e cookies';
 
   @override
   String get settingsShareText =>
