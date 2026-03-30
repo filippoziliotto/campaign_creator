@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:campaign_creator_flutter/src/app.dart';
 import 'package:campaign_creator_flutter/src/l10n_extension.dart';
+import 'package:campaign_creator_flutter/src/monetization/app_consent_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -301,6 +304,29 @@ void main() {
       ThemeMode.light,
     );
   });
+
+  testWidgets('CampaignCreatorApp renders immediately while consent bootstraps',
+      (tester) async {
+    final consentManager = _PendingAppConsentManager();
+
+    await tester.pumpWidget(
+      CampaignCreatorApp(
+        consentManager: consentManager,
+        bootstrapConsent: true,
+        homeBuilder: (_, onLocaleChanged, themeMode, onThemeModeChanged) =>
+            _AppProbe(
+          onLocaleChanged: onLocaleChanged,
+          themeMode: themeMode,
+          onThemeModeChanged: onThemeModeChanged,
+        ),
+      ),
+    );
+
+    await tester.pump();
+
+    expect(find.byType(MaterialApp), findsOneWidget);
+    expect(find.text('theme:dark'), findsOneWidget);
+  });
 }
 
 class _AppProbe extends StatelessWidget {
@@ -378,4 +404,21 @@ class _AppProbe extends StatelessWidget {
       ),
     );
   }
+}
+
+class _PendingAppConsentManager implements AppConsentManager {
+  @override
+  Future<bool> canRequestAds() async => false;
+
+  @override
+  Future<void> gatherConsent() => Completer<void>().future;
+
+  @override
+  Future<void> initializeAdsIfAllowed() async {}
+
+  @override
+  Future<bool> isPrivacyOptionsRequired() async => false;
+
+  @override
+  Future<void> showPrivacyOptionsForm() async {}
 }

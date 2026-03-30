@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -5,6 +7,7 @@ import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'l10n_extension.dart';
+import 'monetization/app_consent_manager.dart';
 import 'theme/fantasy_theme.dart';
 import 'ui/app_launch_onboarding.dart';
 import 'ui/pages/shell/campaign_builder_page.dart';
@@ -20,9 +23,13 @@ class CampaignCreatorApp extends StatefulWidget {
   const CampaignCreatorApp({
     super.key,
     this.homeBuilder,
+    this.consentManager,
+    this.bootstrapConsent,
   });
 
   final CampaignCreatorHomeBuilder? homeBuilder;
+  final AppConsentManager? consentManager;
+  final bool? bootstrapConsent;
 
   @override
   State<CampaignCreatorApp> createState() => _CampaignCreatorAppState();
@@ -45,16 +52,28 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
   static final _darkTheme = buildFantasyTheme();
 
   late Locale _locale;
+  late final AppConsentManager _consentManager;
   ThemeMode _themeMode = ThemeMode.dark;
   bool _showLaunchOnboarding = false;
 
   @override
   void initState() {
     super.initState();
+    _consentManager = widget.consentManager ?? appConsentManager;
     _locale = _resolveDeviceLocale();
     _restoreSavedLocale();
     _restoreSavedThemeMode();
     _restoreLaunchOnboardingVisibility();
+    final shouldBootstrapConsent =
+        widget.bootstrapConsent ?? widget.homeBuilder == null;
+    if (shouldBootstrapConsent) {
+      unawaited(_bootstrapConsent());
+    }
+  }
+
+  Future<void> _bootstrapConsent() async {
+    await _consentManager.gatherConsent();
+    await _consentManager.initializeAdsIfAllowed();
   }
 
   Future<void> _restoreSavedLocale() async {

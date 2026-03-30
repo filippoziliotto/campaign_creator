@@ -721,8 +721,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
       purchaseService: _purchaseService,
       prefs: MonetizationPrefs(),
     );
-    unawaited(_prepareAds());
-    unawaited(_restoreMonetizationState());
+    unawaited(_bootstrapMonetization());
     _purchaseSubscription =
         _purchaseService.purchaseStream.listen(_handlePurchaseUpdates);
     _textControllers = <TextEditingController>[
@@ -1556,6 +1555,15 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     );
   }
 
+  Future<void> _bootstrapMonetization() async {
+    await _restoreMonetizationState();
+    if (_isAdFree) {
+      _disableAdsForAdFree();
+      return;
+    }
+    await _prepareAds();
+  }
+
   Future<void> _restoreMonetizationState() async {
     final preferences = await _resolvePreferences();
     if (preferences == null) return;
@@ -1578,6 +1586,9 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         _isAdFree = adFree;
         _premiumTemporaryUnlockGrantedAt = temporaryUnlockGrantedAt;
       });
+    }
+    if (adFree) {
+      _disableAdsForAdFree();
     }
     if (!adFree) {
       final price = await _purchaseService.queryAdFreePrice();
@@ -1604,13 +1615,17 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
         setState(() {
           _isAdFree = true;
           _isPurchaseBusy = false;
+          _premiumTemporaryUnlockGrantedAt = null;
         });
+        _disableAdsForAdFree();
         _showCompactSnackBar(context.l10n.settingsAdFreeActive);
       case PurchaseEntitlementEvent.restored:
         setState(() {
           _isAdFree = true;
           _isPurchaseBusy = false;
+          _premiumTemporaryUnlockGrantedAt = null;
         });
+        _disableAdsForAdFree();
         _showSnackBar(context.l10n.settingsRestorePurchasesComplete);
       case PurchaseEntitlementEvent.pending:
         setState(() {
@@ -1672,8 +1687,11 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   }
 
   Future<void> _prepareAds() async {
+    if (_isAdFree) {
+      return;
+    }
     await _consentManager.initializeAdsIfAllowed();
-    if (!await _consentManager.canRequestAds() || _adsPrepared) {
+    if (_isAdFree || !await _consentManager.canRequestAds() || _adsPrepared) {
       return;
     }
 
@@ -1683,6 +1701,12 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     if (mounted) {
       setState(() {});
     }
+  }
+
+  void _disableAdsForAdFree() {
+    _adsPrepared = false;
+    _interstitialAdService.dispose();
+    _rewardedAdService.dispose();
   }
 
   Future<void> _handlePrivacyOptionsTapped() async {

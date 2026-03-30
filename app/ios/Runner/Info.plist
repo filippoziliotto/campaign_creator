@@ -71,7 +71,7 @@
 		<!-- AdMob app ID: test ID below. Override for production by setting
 		     ADMOB_APP_ID in Xcode build settings or via --dart-define. -->
 		<key>GADApplicationIdentifier</key>
-		<string>ca-app-pub-3940256099942544~1458002511</string>
+		<string>ca-app-pub-9007719672385552~4596809069</string>
 		<key>SKAdNetworkItems</key>
 		<array>
 			<dict>

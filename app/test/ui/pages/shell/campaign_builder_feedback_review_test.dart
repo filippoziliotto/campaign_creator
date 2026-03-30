@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
 import 'package:campaign_creator_flutter/src/audio/forge_sound_player.dart';
 import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
+import 'package:campaign_creator_flutter/src/monetization/interstitial_ad_service.dart';
 import 'package:campaign_creator_flutter/src/monetization/premium_access.dart';
+import 'package:campaign_creator_flutter/src/monetization/purchase_service.dart';
 import 'package:campaign_creator_flutter/src/monetization/rewarded_ad_service.dart';
 import 'package:campaign_creator_flutter/src/services/campaign_service.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_motion.dart';
@@ -1272,6 +1276,64 @@ void main() {
       isNull,
     );
   });
+
+  testWidgets('ad-free users do not preload ads on startup', (tester) async {
+    await _setLargeSurface(tester);
+    final interstitialAdService = _FakeInterstitialAdService();
+    final rewardedAdService = _FakeRewardedAdService();
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: _buildPage(
+          initialPreferences: const <String, Object>{
+            'app.ad_free_purchased': true,
+          },
+          interstitialAdService: interstitialAdService,
+          rewardedAdService: rewardedAdService,
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+
+    expect(interstitialAdService.preloadCallCount, 0);
+    expect(rewardedAdService.preloadCallCount, 0);
+  });
+
+  testWidgets('purchasing ad-free disables loaded ads in the same session', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+    final interstitialAdService = _FakeInterstitialAdService();
+    final rewardedAdService = _FakeRewardedAdService();
+    final purchaseService = _FakePurchaseService();
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: _buildPage(
+          interstitialAdService: interstitialAdService,
+          rewardedAdService: rewardedAdService,
+          purchaseService: purchaseService,
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+
+    expect(interstitialAdService.disposeCallCount, 0);
+    expect(rewardedAdService.disposeCallCount, 0);
+
+    purchaseService.emitUpdates(
+      const <NormalizedPurchaseUpdate>[
+        NormalizedPurchaseUpdate(
+          status: PurchaseUpdateStatus.purchased,
+          productId: 'ad_free_upgrade',
+        ),
+      ],
+    );
+    await _pumpUi(tester);
+
+    expect(interstitialAdService.disposeCallCount, greaterThanOrEqualTo(1));
+    expect(rewardedAdService.disposeCallCount, greaterThanOrEqualTo(1));
+  });
 }
 
 final List<String> _recordedHaptics = <String>[];
@@ -1307,7 +1369,9 @@ Widget _buildPage({
   AppReviewPrompter? reviewPrompter,
   CampaignService? service,
   ForgeSoundPlayer? forgeSoundPlayer,
+  InterstitialAdService? interstitialAdService,
   RewardedAdService? rewardedAdService,
+  PurchaseService? purchaseService,
   Locale locale = const Locale('it'),
 }) {
   if (initialPreferences != null) {
@@ -1320,7 +1384,9 @@ Widget _buildPage({
     onLocaleChanged: (_) {},
     reviewPrompter: reviewPrompter,
     forgeSoundPlayer: forgeSoundPlayer,
+    interstitialAdService: interstitialAdService,
     rewardedAdService: rewardedAdService,
+    purchaseService: purchaseService,
   );
 }
 
@@ -1480,6 +1546,7 @@ class _FakeForgeSoundPlayer implements ForgeSoundPlayer {
 class _FakeRewardedAdService implements RewardedAdService {
   int preloadCallCount = 0;
   int showCallCount = 0;
+  int disposeCallCount = 0;
   bool shouldBeReady = true;
   int? readyOnPreloadAttempt;
   bool showResult = true;
@@ -1505,7 +1572,63 @@ class _FakeRewardedAdService implements RewardedAdService {
   }
 
   @override
-  void dispose() {}
+  void dispose() {
+    disposeCallCount += 1;
+  }
+}
+
+class _FakeInterstitialAdService implements InterstitialAdService {
+  int preloadCallCount = 0;
+  int showCallCount = 0;
+  int disposeCallCount = 0;
+  bool shouldBeReady = true;
+
+  @override
+  bool get isReady => shouldBeReady;
+
+  @override
+  Future<void> preload() async {
+    preloadCallCount += 1;
+  }
+
+  @override
+  Future<bool> show() async {
+    showCallCount += 1;
+    return true;
+  }
+
+  @override
+  void dispose() {
+    disposeCallCount += 1;
+  }
+}
+
+class _FakePurchaseService implements PurchaseService {
+  final StreamController<List<NormalizedPurchaseUpdate>> _controller =
+      StreamController<List<NormalizedPurchaseUpdate>>.broadcast();
+
+  @override
+  Stream<List<NormalizedPurchaseUpdate>> get purchaseStream =>
+      _controller.stream;
+
+  void emitUpdates(List<NormalizedPurchaseUpdate> updates) {
+    _controller.add(updates);
+  }
+
+  @override
+  Future<bool> isAvailable() async => true;
+
+  @override
+  Future<PurchaseStartResult> buyAdFree() async => PurchaseStartResult.started;
+
+  @override
+  Future<String?> queryAdFreePrice() async => '€1.99';
+
+  @override
+  Future<void> restorePurchases() async {}
+
+  @override
+  Future<void> completePurchase(Object rawPurchase) async {}
 }
 
 class _FailingCampaignService extends FakeCampaignService {
