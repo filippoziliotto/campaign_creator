@@ -72,20 +72,25 @@ class DefaultAppConsentManager implements AppConsentManager {
     if (_mobileAdsInitialized) {
       return;
     }
+    if (!await canRequestAds()) {
+      return;
+    }
+
     _initializeAdsFuture ??= _initializeAdsIfAllowedInternal();
     await _initializeAdsFuture;
   }
 
   Future<void> _initializeAdsIfAllowedInternal() async {
-    if (!await canRequestAds()) {
-      return;
-    }
-
     try {
       await _platform.initializeMobileAds();
       _mobileAdsInitialized = true;
-    } catch (_) {
+    } catch (error) {
+      debugPrint('Mobile Ads init error: $error');
       return;
+    } finally {
+      if (!_mobileAdsInitialized) {
+        _initializeAdsFuture = null;
+      }
     }
   }
 
@@ -108,7 +113,10 @@ class DefaultAppConsentManager implements AppConsentManager {
           'Privacy options error: ${error.errorCode} ${error.message}',
         );
       }
-    } catch (_) {
+
+      await initializeAdsIfAllowed();
+    } catch (error) {
+      debugPrint('Show privacy options error: $error');
       return;
     }
   }

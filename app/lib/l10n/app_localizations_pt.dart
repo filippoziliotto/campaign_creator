@@ -699,7 +699,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get settingsShareApp => 'Partilhar a app';
 
   @override
-  String get settingsPrivacyOptions => 'Definições de privacidade e cookies';
+  String get settingsPrivacyOptions => 'Definições de privacidade';
 
   @override
   String get settingsShareText =>

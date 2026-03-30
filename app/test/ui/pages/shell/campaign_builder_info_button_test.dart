@@ -323,9 +323,10 @@ void main() {
         .tap(find.byKey(const ValueKey<String>('info-settings-button')));
     await tester.pumpAndSettle();
 
-    await tester.tap(
-      find.byKey(const ValueKey<String>('settings-privacy-options-row')),
-    );
+    final privacyRow =
+        find.byKey(const ValueKey<String>('settings-privacy-options-row'));
+    await tester.ensureVisible(privacyRow);
+    await tester.tap(privacyRow);
     await tester.pumpAndSettle();
 
     expect(consentManager.showPrivacyOptionsFormCallCount, 1);

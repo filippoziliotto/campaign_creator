@@ -600,28 +600,6 @@ class _SettingsSheetState extends State<_SettingsSheet> {
             ),
             onTap: () => _shareApp(context),
           ),
-          FutureBuilder<bool>(
-            future: widget.isPrivacyOptionsRequired(),
-            builder: (context, snapshot) {
-              if (!(snapshot.data ?? false)) {
-                return const SizedBox.shrink();
-              }
-
-              return ListTile(
-                key: const ValueKey<String>('settings-privacy-options-row'),
-                leading: Icon(Icons.privacy_tip_outlined, color: palette.accent),
-                title: Text(
-                  context.l10n.settingsPrivacyOptions,
-                  style:
-                      textTheme.bodyLarge?.copyWith(color: palette.foreground),
-                ),
-                onTap: () async {
-                  Navigator.of(context).pop();
-                  await widget.onPrivacyOptionsTapped();
-                },
-              );
-            },
-          ),
           if (!widget.isAdFree) ...[
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 8, 24, 4),
@@ -671,7 +649,59 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                 widget.onRestorePurchasesTapped();
               },
             ),
+            FutureBuilder<bool>(
+              future: widget.isPrivacyOptionsRequired(),
+              builder: (context, snapshot) {
+                if (!(snapshot.data ?? false)) {
+                  return const SizedBox.shrink();
+                }
+
+                return ListTile(
+                  key: const ValueKey<String>('settings-privacy-options-row'),
+                  leading: Icon(
+                    Icons.privacy_tip_outlined,
+                    color: palette.accent,
+                  ),
+                  title: Text(
+                    context.l10n.settingsPrivacyOptions,
+                    style: textTheme.bodyLarge?.copyWith(
+                      color: palette.foreground,
+                    ),
+                  ),
+                  onTap: () async {
+                    Navigator.of(context).pop();
+                    await widget.onPrivacyOptionsTapped();
+                  },
+                );
+              },
+            ),
           ] else ...[
+            FutureBuilder<bool>(
+              future: widget.isPrivacyOptionsRequired(),
+              builder: (context, snapshot) {
+                if (!(snapshot.data ?? false)) {
+                  return const SizedBox.shrink();
+                }
+
+                return ListTile(
+                  key: const ValueKey<String>('settings-privacy-options-row'),
+                  leading: Icon(
+                    Icons.privacy_tip_outlined,
+                    color: palette.accent,
+                  ),
+                  title: Text(
+                    context.l10n.settingsPrivacyOptions,
+                    style: textTheme.bodyLarge?.copyWith(
+                      color: palette.foreground,
+                    ),
+                  ),
+                  onTap: () async {
+                    Navigator.of(context).pop();
+                    await widget.onPrivacyOptionsTapped();
+                  },
+                );
+              },
+            ),
             ListTile(
               key: const ValueKey<String>('settings-ad-free-active-row'),
               leading: Icon(Icons.check_circle_rounded, color: palette.accent),

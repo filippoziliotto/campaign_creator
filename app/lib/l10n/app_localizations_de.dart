@@ -704,7 +704,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsShareApp => 'App teilen';
 
   @override
-  String get settingsPrivacyOptions => 'Datenschutz- und Cookie-Einstellungen';
+  String get settingsPrivacyOptions => 'Datenschutzeinstellungen';
 
   @override
   String get settingsShareText =>

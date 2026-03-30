@@ -31,6 +31,20 @@ void main() {
       expect(platform.initializeMobileAdsCallCount, 0);
     });
 
+    test('retries ad initialization later in the same session after consent',
+        () async {
+      final platform = _FakeConsentPlatform()..canRequestAdsValue = false;
+      final manager = DefaultAppConsentManager(platform: platform);
+
+      await manager.initializeAdsIfAllowed();
+      expect(platform.initializeMobileAdsCallCount, 0);
+
+      platform.canRequestAdsValue = true;
+      await manager.initializeAdsIfAllowed();
+
+      expect(platform.initializeMobileAdsCallCount, 1);
+    });
+
     test('shows privacy options form through the platform', () async {
       final platform = _FakeConsentPlatform()
         ..privacyStatus = PrivacyOptionsRequirementStatus.required;
@@ -39,6 +53,21 @@ void main() {
       await manager.showPrivacyOptionsForm();
 
       expect(platform.showPrivacyOptionsFormCallCount, 1);
+    });
+
+    test('privacy options flow can initialize ads after consent changes',
+        () async {
+      final platform = _FakeConsentPlatform()..canRequestAdsValue = false;
+      final manager = DefaultAppConsentManager(platform: platform);
+
+      platform.onShowPrivacyOptionsForm = () {
+        platform.canRequestAdsValue = true;
+      };
+
+      await manager.showPrivacyOptionsForm();
+
+      expect(platform.showPrivacyOptionsFormCallCount, 1);
+      expect(platform.initializeMobileAdsCallCount, 1);
     });
   });
 }
@@ -51,6 +80,7 @@ class _FakeConsentPlatform implements ConsentPlatform {
   bool canRequestAdsValue = false;
   PrivacyOptionsRequirementStatus privacyStatus =
       PrivacyOptionsRequirementStatus.notRequired;
+  void Function()? onShowPrivacyOptionsForm;
 
   @override
   Future<bool> canRequestAds() async => canRequestAdsValue;
@@ -82,6 +112,7 @@ class _FakeConsentPlatform implements ConsentPlatform {
   @override
   Future<FormError?> showPrivacyOptionsForm() async {
     showPrivacyOptionsFormCallCount += 1;
+    onShowPrivacyOptionsForm?.call();
     return null;
   }
 }

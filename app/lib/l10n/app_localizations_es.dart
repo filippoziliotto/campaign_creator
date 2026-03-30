@@ -700,7 +700,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsShareApp => 'Compartir la app';
 
   @override
-  String get settingsPrivacyOptions => 'Ajustes de privacidad y cookies';
+  String get settingsPrivacyOptions => 'Ajustes de privacidad';
 
   @override
   String get settingsShareText =>

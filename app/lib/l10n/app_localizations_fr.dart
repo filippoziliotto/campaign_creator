@@ -699,8 +699,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsShareApp => 'Partager l’app';
 
   @override
-  String get settingsPrivacyOptions =>
-      'Paramètres de confidentialité et de cookies';
+  String get settingsPrivacyOptions => 'Paramètres de confidentialité';
 
   @override
   String get settingsShareText =>
