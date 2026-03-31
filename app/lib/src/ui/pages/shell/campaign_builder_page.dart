@@ -1651,7 +1651,10 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     });
     final result = await _monetizationCoordinator.startAdFreePurchase();
     if (!mounted) return;
-    if (result == PurchaseStartResult.started) return;
+    if (result == PurchaseStartResult.started) {
+      _schedulePurchaseBusyReset();
+      return;
+    }
     setState(() {
       _isPurchaseBusy = false;
     });
@@ -1675,8 +1678,12 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     if (mounted) {
       _showCompactSnackBar(context.l10n.settingsRestorePurchasesStarted);
     }
-    // Safety timeout: if no purchase update clears _isPurchaseBusy within 15s,
-    // reset it so the UI doesn't get stuck.
+    _schedulePurchaseBusyReset();
+  }
+
+  void _schedulePurchaseBusyReset() {
+    // Safety timeout: if no purchase update clears _isPurchaseBusy,
+    // reset it so the purchase UI doesn't get stuck disabled.
     Future<void>.delayed(const Duration(seconds: 15), () {
       if (mounted && _isPurchaseBusy) {
         setState(() {

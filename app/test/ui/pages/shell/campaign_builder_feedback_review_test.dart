@@ -1334,6 +1334,46 @@ void main() {
     expect(interstitialAdService.disposeCallCount, greaterThanOrEqualTo(1));
     expect(rewardedAdService.disposeCallCount, greaterThanOrEqualTo(1));
   });
+
+  testWidgets('premium purchase button recovers after purchase sheet is dismissed',
+      (tester) async {
+    await _setLargeSurface(tester);
+    final purchaseService = _FakePurchaseService();
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: _buildPage(
+          purchaseService: purchaseService,
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+
+    await tester.tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    final goAdFreeRow =
+        find.byKey(const ValueKey<String>('settings-go-ad-free-row'));
+    expect(goAdFreeRow, findsOneWidget);
+    expect(tester.widget<ListTile>(goAdFreeRow).enabled, isTrue);
+
+    await tester.tap(goAdFreeRow);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+    expect(tester.widget<ListTile>(goAdFreeRow).enabled, isFalse);
+
+    await tester.pump(const Duration(seconds: 16));
+    await tester.pumpAndSettle();
+
+    Navigator.of(tester.element(goAdFreeRow)).pop();
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    expect(tester.widget<ListTile>(goAdFreeRow).enabled, isTrue);
+  });
 }
 
 final List<String> _recordedHaptics = <String>[];
