@@ -149,6 +149,25 @@ void main() {
     );
   });
 
+  testWidgets('help sheet opens at roughly seventy percent of the screen',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester.tap(find.byKey(const ValueKey<String>('help-guide-button')));
+    await tester.pumpAndSettle();
+
+    final helpSheet = find.byKey(const ValueKey<String>('help-sheet'));
+    expect(helpSheet, findsOneWidget);
+
+    final height = tester.getRect(helpSheet).height;
+    expect(height, moreOrLessEquals(844 * 0.70, epsilon: 2));
+  });
+
   testWidgets('help sheet is dismissed by dragging down from the top handle',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
@@ -309,7 +328,8 @@ void main() {
     );
   });
 
-  testWidgets('settings privacy row opens privacy options form', (tester) async {
+  testWidgets('settings privacy row opens privacy options form',
+      (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     final consentManager = _FakeAppConsentManager()

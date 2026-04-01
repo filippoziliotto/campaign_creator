@@ -64,6 +64,7 @@ class _HelpButton extends StatelessWidget {
     return _OverlaySheetButton(
       buttonKey: const ValueKey<String>('help-guide-button'),
       icon: Icons.menu_book_rounded,
+      scrollControlDisabledMaxHeightRatio: 0.70,
       sheetBuilder: (_) => _HelpSheet(
         currentThemeMode: currentThemeMode,
       ),
@@ -76,11 +77,13 @@ class _OverlaySheetButton extends StatefulWidget {
     required this.buttonKey,
     required this.icon,
     required this.sheetBuilder,
+    this.scrollControlDisabledMaxHeightRatio,
   });
 
   final Key buttonKey;
   final IconData icon;
   final WidgetBuilder sheetBuilder;
+  final double? scrollControlDisabledMaxHeightRatio;
 
   @override
   State<_OverlaySheetButton> createState() => _OverlaySheetButtonState();
@@ -145,6 +148,8 @@ class _OverlaySheetButtonState extends State<_OverlaySheetButton>
       isScrollControlled: false,
       enableDrag: true,
       backgroundColor: Colors.transparent,
+      scrollControlDisabledMaxHeightRatio:
+          widget.scrollControlDisabledMaxHeightRatio ?? (9 / 16),
       transitionAnimationController: _sheetController,
       builder: widget.sheetBuilder,
     );
