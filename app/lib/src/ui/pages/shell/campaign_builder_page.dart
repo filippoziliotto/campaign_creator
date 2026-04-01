@@ -606,6 +606,10 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   static const String _draftCampaignTypeKey =
       'campaign_builder.saved_campaign_type';
   static const String _draftSettingKey = 'campaign_builder.saved_setting';
+  static const Duration _parchmentHomeFadeInDuration =
+      Duration(milliseconds: 140);
+  static const Duration _parchmentHomeFadeOutDuration =
+      Duration(milliseconds: 200);
   static const Set<String> _neutralTwistValues = <String>{
     '',
     'nessun colpo di scena',
@@ -681,6 +685,8 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   bool _hasUnsavedChanges = false;
   bool _draftPersistenceAvailable = true;
   bool _isResetting = false;
+  bool _isReturningHomeFromParchment = false;
+  bool _suspendStageRemovalSync = false;
 
   _AppStage _appStage = _AppStage.entry;
   _ForgeSection _forgeSection = _ForgeSection.world;
@@ -1507,6 +1513,46 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
     setState(() => _isResetting = false);
   }
 
+  Future<void> _handleReturnHomeFromParchment() async {
+    if (_isReturningHomeFromParchment) {
+      return;
+    }
+
+    _triggerLightImpact();
+
+    if (prefersReducedMotion(context)) {
+      _goToStage(_AppStage.entry);
+      return;
+    }
+
+    setState(() {
+      _isReturningHomeFromParchment = true;
+    });
+
+    await Future.delayed(_parchmentHomeFadeInDuration);
+    if (!mounted) {
+      return;
+    }
+
+    _suspendStageRemovalSync = true;
+    _goToStage(_AppStage.entry);
+
+    await Future<void>.delayed(Duration.zero);
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _isReturningHomeFromParchment = false;
+    });
+
+    final routeCollapseDelay = Duration(
+      milliseconds: _currentAtmosphere().reverseRouteTransitionDuration.inMilliseconds * 2,
+    );
+    await Future.delayed(routeCollapseDelay);
+    _suspendStageRemovalSync = false;
+  }
+
   Future<void> _sealCurrentParchment() async {
     unawaited(_forgeSoundPlayer.playForgeSound());
     final persisted = await _savePromptDraft(showFeedback: false);
@@ -2189,6 +2235,33 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
                 ),
               ),
             IgnorePointer(
+              ignoring: !_isReturningHomeFromParchment,
+              child: AnimatedOpacity(
+                key: const ValueKey('parchment-home-return-veil'),
+                opacity: _isReturningHomeFromParchment ? 1.0 : 0.0,
+                duration: _isReturningHomeFromParchment
+                    ? _parchmentHomeFadeInDuration
+                    : _parchmentHomeFadeOutDuration,
+                curve: _isReturningHomeFromParchment
+                    ? Curves.easeInOutCubic
+                    : Curves.easeOutCubic,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: RadialGradient(
+                      center: Alignment.topCenter,
+                      radius: 1.18,
+                      colors: <Color>[
+                        atmosphere.cardTint.withValues(alpha: 0.20),
+                        atmosphere.primary.withValues(alpha: 0.30),
+                        Colors.black.withValues(alpha: 0.58),
+                      ],
+                    ),
+                  ),
+                  child: const SizedBox.expand(),
+                ),
+              ),
+            ),
+            IgnorePointer(
               child: AnimatedOpacity(
                 opacity: _isResetting ? 1.0 : 0.0,
                 duration: _isResetting
@@ -2278,6 +2351,9 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   }
 
   void _handleStagePageRemoved(Page<Object?> page) {
+    if (_suspendStageRemovalSync) {
+      return;
+    }
     _setShellState(() {
       switch (page.name) {
         case '/parchment':

@@ -617,6 +617,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get parchmentPreviewPromptTooltip => 'Vista previa del prompt';
 
   @override
+  String get parchmentGoHomeTooltip => 'Volver al inicio';
+
+  @override
   String get parchmentPreviewSheetTitle => 'Vista previa del prompt';
 
   @override

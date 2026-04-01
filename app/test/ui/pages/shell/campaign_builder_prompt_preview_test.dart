@@ -1,4 +1,5 @@
 import 'package:campaign_creator_flutter/l10n/app_localizations.dart';
+import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_primitives.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -73,14 +74,69 @@ void main() {
     await tester.pump();
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('home from parchment shows a soft return veil before leaving the page',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(430, 932));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        disableAnimations: false,
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: _noopLocale,
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openSavedParchment(
+      tester,
+      resumeLabel: 'Riprendi la forgia',
+      parchmentLabel: 'Pergamena',
+    );
+
+    await tester.tap(find.byKey(const ValueKey('parchment-action-home')));
+    await tester.pump();
+
+    expect(
+      tester.widget<AnimatedOpacity>(
+        find.byKey(const ValueKey('parchment-home-return-veil')),
+      ).opacity,
+      1,
+    );
+
+    await tester.pump(const Duration(milliseconds: 900));
+    await tester.pump();
+
+    final entryPill = tester.widget<StagePill>(
+      find.widgetWithText(StagePill, 'Scelta'),
+    );
+    final parchmentPill = tester.widget<StagePill>(
+      find.widgetWithText(StagePill, 'Pergamena'),
+    );
+
+    expect(entryPill.active, isTrue);
+    expect(parchmentPill.active, isFalse);
+    expect(
+      tester.widget<AnimatedOpacity>(
+        find.byKey(const ValueKey('parchment-home-return-veil')),
+      ).opacity,
+      0,
+    );
+  });
 }
 
 class _TestApp extends StatelessWidget {
   const _TestApp({
     required this.child,
+    this.disableAnimations = true,
   });
 
   final Widget child;
+  final bool disableAnimations;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +145,9 @@ class _TestApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       builder: (context, child) {
-        final data = MediaQuery.of(context).copyWith(disableAnimations: true);
+        final data = MediaQuery.of(
+          context,
+        ).copyWith(disableAnimations: disableAnimations);
         return MediaQuery(data: data, child: child!);
       },
       home: child,

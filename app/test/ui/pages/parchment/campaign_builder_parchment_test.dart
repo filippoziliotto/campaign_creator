@@ -117,6 +117,7 @@ Ingresso nel dungeon.
             atmosphere: _testAtmosphere,
             onCopy: () {},
             onPreviewPrompt: () {},
+            onGoHome: () {},
             onShare: (_) {},
             onOpenChatGpt: () {},
             onSaveDraft: () {},
@@ -146,6 +147,7 @@ Ingresso nel dungeon.
             atmosphere: _testAtmosphere,
             onCopy: () {},
             onPreviewPrompt: () {},
+            onGoHome: () {},
             onShare: (_) {},
             onOpenChatGpt: () {},
             onSaveDraft: () {},
@@ -170,6 +172,48 @@ Ingresso nel dungeon.
         (previewTopLeft.dy - sealTopLeft.dy).abs(),
         lessThanOrEqualTo(24),
       );
+    });
+
+    testWidgets('places Home between Preview and the seal and triggers its callback',
+        (tester) async {
+      var tapped = false;
+
+      await tester.pumpWidget(
+        _localizedParchmentApp(
+          child: ParchmentActionRail(
+            atmosphere: _testAtmosphere,
+            onCopy: () {},
+            onPreviewPrompt: () {},
+            onGoHome: () {
+              tapped = true;
+            },
+            onShare: (_) {},
+            onOpenChatGpt: () {},
+            onSaveDraft: () {},
+            onWaxSealTap: () {},
+            isCurrentDraftSaved: false,
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      final previewTopLeft = tester.getTopLeft(
+        find.byKey(const ValueKey('parchment-action-preview')),
+      );
+      final homeTopLeft = tester.getTopLeft(
+        find.byKey(const ValueKey('parchment-action-home')),
+      );
+      final sealTopLeft = tester.getTopLeft(
+        find.byKey(const ValueKey('parchment-action-seal')),
+      );
+
+      await tester.tap(find.byKey(const ValueKey('parchment-action-home')));
+      await tester.pumpAndSettle();
+
+      expect(homeTopLeft.dx, greaterThan(previewTopLeft.dx));
+      expect(homeTopLeft.dx, lessThan(sealTopLeft.dx));
+      expect(tapped, isTrue);
     });
   });
 

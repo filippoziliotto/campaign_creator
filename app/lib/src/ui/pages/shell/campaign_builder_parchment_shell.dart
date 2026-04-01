@@ -94,6 +94,9 @@ extension on _CampaignBuilderPageState {
             onPreviewPrompt: () {
               _showPromptPreview(atmosphere);
             },
+            onGoHome: () {
+              unawaited(_handleReturnHomeFromParchment());
+            },
             onShare: (originRect) {
               _sharePrompt(shareOrigin: originRect);
             },

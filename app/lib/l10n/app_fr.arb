@@ -265,6 +265,7 @@
   "parchmentQuickActionsTitle": "Actions rapides",
   "parchmentCopyPromptTitle": "Copier le prompt",
   "parchmentPreviewPromptTooltip": "Aperçu du prompt",
+  "parchmentGoHomeTooltip": "Retour à l'accueil",
   "parchmentPreviewSheetTitle": "Aperçu du prompt",
   "parchmentPreviewSheetSubtitle": "Consultez le prompt complet avant de le copier ou de le coller.",
   "parchmentCopyPromptSubtitle": "Envoie le prompt dans le presse-papiers.",

@@ -828,6 +828,7 @@ class ParchmentActionRail extends StatelessWidget {
     required this.atmosphere,
     required this.onCopy,
     required this.onPreviewPrompt,
+    required this.onGoHome,
     required this.onShare,
     required this.onOpenChatGpt,
     required this.onSaveDraft,
@@ -839,6 +840,7 @@ class ParchmentActionRail extends StatelessWidget {
   final CampaignAtmosphereData atmosphere;
   final VoidCallback onCopy;
   final VoidCallback onPreviewPrompt;
+  final VoidCallback onGoHome;
   final ValueChanged<Rect> onShare;
   final VoidCallback onOpenChatGpt;
   final VoidCallback onSaveDraft;
@@ -863,6 +865,12 @@ class ParchmentActionRail extends StatelessWidget {
               atmosphere: atmosphere,
               tooltip: context.l10n.parchmentPreviewPromptTooltip,
               onTap: onPreviewPrompt,
+            ),
+            const SizedBox(width: 8),
+            _GoHomeButton(
+              atmosphere: atmosphere,
+              tooltip: context.l10n.parchmentGoHomeTooltip,
+              onTap: onGoHome,
             ),
             const SizedBox(width: 8),
             _WaxSealButton(
@@ -1521,7 +1529,20 @@ class _WaxSealButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final diameter = compact ? 88.0 : 110.0;
+    final diameter = compact ? 80.0 : 110.0;
+    final iconSize = compact ? 18.0 : 24.0;
+    final labelSpacing = compact ? 2.0 : 4.0;
+    final labelStyle = compact
+        ? Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: FantasyPalette.parchment,
+              letterSpacing: 1.0,
+              fontSize: 9,
+              height: 1,
+            )
+        : Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: FantasyPalette.parchment,
+              letterSpacing: 1.5,
+            );
 
     return InkWell(
       onTap: onTap,
@@ -1574,14 +1595,12 @@ class _WaxSealButton extends StatelessWidget {
                     Icon(
                       Icons.local_fire_department_rounded,
                       color: FantasyPalette.parchment,
+                      size: iconSize,
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: labelSpacing),
                     Text(
                       context.l10n.parchmentSeal,
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            color: FantasyPalette.parchment,
-                            letterSpacing: 1.5,
-                          ),
+                      style: labelStyle,
                     ),
                   ],
                 ),
@@ -1601,6 +1620,42 @@ class _WaxSealButton extends StatelessWidget {
   }
 }
 
+class _HeaderIconActionButton extends StatelessWidget {
+  const _HeaderIconActionButton({
+    super.key,
+    required this.atmosphere,
+    required this.onTap,
+    required this.tooltip,
+    required this.icon,
+  });
+
+  final CampaignAtmosphereData atmosphere;
+  final VoidCallback onTap;
+  final String tooltip;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip,
+      child: IconButton(
+        onPressed: onTap,
+        icon: Icon(icon),
+        style: IconButton.styleFrom(
+          minimumSize: const Size(44, 44),
+          padding: EdgeInsets.zero,
+          foregroundColor: atmosphere.highlight,
+          backgroundColor: atmosphere.primary.withValues(alpha: 0.12),
+          shape: const CircleBorder(),
+          side: BorderSide(
+            color: atmosphere.primary.withValues(alpha: 0.35),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _PreviewPromptButton extends StatelessWidget {
   const _PreviewPromptButton({
     required this.atmosphere,
@@ -1614,23 +1669,35 @@ class _PreviewPromptButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: tooltip,
-      child: IconButton(
-        key: const ValueKey('parchment-action-preview'),
-        onPressed: onTap,
-        icon: const Icon(Icons.visibility_rounded),
-        style: IconButton.styleFrom(
-          minimumSize: const Size(44, 44),
-          padding: EdgeInsets.zero,
-          foregroundColor: atmosphere.highlight,
-          backgroundColor: atmosphere.primary.withValues(alpha: 0.12),
-          shape: const CircleBorder(),
-          side: BorderSide(
-            color: atmosphere.primary.withValues(alpha: 0.35),
-          ),
-        ),
-      ),
+    return _HeaderIconActionButton(
+      key: const ValueKey('parchment-action-preview'),
+      atmosphere: atmosphere,
+      tooltip: tooltip,
+      onTap: onTap,
+      icon: Icons.visibility_rounded,
+    );
+  }
+}
+
+class _GoHomeButton extends StatelessWidget {
+  const _GoHomeButton({
+    required this.atmosphere,
+    required this.onTap,
+    required this.tooltip,
+  });
+
+  final CampaignAtmosphereData atmosphere;
+  final VoidCallback onTap;
+  final String tooltip;
+
+  @override
+  Widget build(BuildContext context) {
+    return _HeaderIconActionButton(
+      key: const ValueKey('parchment-action-home'),
+      atmosphere: atmosphere,
+      tooltip: tooltip,
+      onTap: onTap,
+      icon: Icons.home_rounded,
     );
   }
 }

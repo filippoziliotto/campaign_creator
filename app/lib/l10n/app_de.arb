@@ -265,6 +265,7 @@
   "parchmentQuickActionsTitle": "Schnellaktionen",
   "parchmentCopyPromptTitle": "Prompt kopieren",
   "parchmentPreviewPromptTooltip": "Prompt-Vorschau",
+  "parchmentGoHomeTooltip": "Zur Startseite",
   "parchmentPreviewSheetTitle": "Prompt-Vorschau",
   "parchmentPreviewSheetSubtitle": "Prüfe den vollständigen Prompt, bevor du ihn kopierst oder einfügst.",
   "parchmentCopyPromptSubtitle": "Sendet den Prompt in die Zwischenablage.",
