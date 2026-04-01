@@ -8,6 +8,7 @@ import 'package:campaign_creator_flutter/src/monetization/premium_access.dart';
 import 'package:campaign_creator_flutter/src/monetization/purchase_service.dart';
 import 'package:campaign_creator_flutter/src/monetization/rewarded_ad_service.dart';
 import 'package:campaign_creator_flutter/src/services/campaign_service.dart';
+import 'package:campaign_creator_flutter/src/theme/fantasy_theme.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/design/campaign_builder_motion.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
 import 'package:flutter/material.dart';
@@ -524,6 +525,239 @@ void main() {
     expect(customText.style?.fontSize, 12);
   });
 
+  testWidgets('custom add chip matches standard chip chrome in light mode', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+
+    await tester.pumpWidget(
+      _TestApp(
+        themeMode: ThemeMode.light,
+        child: _buildPage(
+          currentThemeMode: ThemeMode.light,
+          initialPreferences: <String, Object>{
+            'app.ad_free_purchased': true,
+          },
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openWorldSection(tester);
+
+    final customDecoration = _chipDecoration(
+      tester,
+      find
+          .ancestor(
+            of: find.text('Custom').first,
+            matching: find.byType(AnimatedContainer),
+          )
+          .first,
+    );
+    final standardDecoration = _chipDecoration(
+      tester,
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('forge-option-chip-Intrigo')),
+        matching: find.byType(AnimatedContainer),
+      ),
+    );
+
+    expect(customDecoration.color, standardDecoration.color);
+    expect(
+      customDecoration.border?.top.color,
+      standardDecoration.border?.top.color,
+    );
+  });
+
+  testWidgets('custom add chip matches standard chip chrome in dark mode', (
+    tester,
+  ) async {
+    await _setLargeSurface(tester);
+
+    await tester.pumpWidget(
+      _TestApp(
+        themeMode: ThemeMode.dark,
+        child: _buildPage(
+          currentThemeMode: ThemeMode.dark,
+          initialPreferences: <String, Object>{
+            'app.ad_free_purchased': true,
+          },
+        ),
+      ),
+    );
+    await _pumpUi(tester);
+    await _openWorldSection(tester);
+
+    final customDecoration = _chipDecoration(
+      tester,
+      find
+          .ancestor(
+            of: find.text('Custom').first,
+            matching: find.byType(AnimatedContainer),
+          )
+          .first,
+    );
+    final standardDecoration = _chipDecoration(
+      tester,
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('forge-option-chip-Intrigo')),
+        matching: find.byType(AnimatedContainer),
+      ),
+    );
+
+    expect(customDecoration.color, standardDecoration.color);
+    expect(
+      customDecoration.border?.top.color,
+      standardDecoration.border?.top.color,
+    );
+  });
+
+  testWidgets(
+    'custom add chip refreshes after theme toggle on touch forge',
+    (tester) async {
+      await _setSmallSurface(tester);
+
+      await tester.pumpWidget(
+        _ThemeReactiveTestApp(
+          service: FakeCampaignService(minimalOptions()),
+        ),
+      );
+      await _pumpUi(tester);
+
+      await tester.tap(
+        find.byKey(const ValueKey<String>('entry-campaign-card-One-Shot')),
+        warnIfMissed: false,
+      );
+      await _pumpUi(tester);
+
+      await tester.tap(
+        find.byKey(const ValueKey<String>('info-settings-button')),
+        warnIfMissed: false,
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(
+        find.descendant(
+          of: find.byKey(const ValueKey<String>('settings-theme-control')),
+          matching: find.byIcon(Icons.wb_sunny_rounded),
+        ),
+        warnIfMissed: false,
+      );
+      await tester.pumpAndSettle();
+
+      Navigator.of(
+        tester.element(find.byKey(const ValueKey<String>('settings-sheet'))),
+      ).pop();
+      await tester.pumpAndSettle();
+
+      final worldSection = find.byKey(
+        const ValueKey<String>('forge-section-world'),
+      );
+      final customDecoration = _chipDecoration(
+        tester,
+        find.descendant(
+          of: worldSection,
+          matching: find.ancestor(
+            of: find.text('Custom').first,
+            matching: find.byType(AnimatedContainer),
+          ),
+        ),
+      );
+      final standardDecoration = _chipDecoration(
+        tester,
+        find.descendant(
+          of: find.descendant(
+            of: worldSection,
+            matching: find.byKey(
+              const ValueKey<String>('forge-option-chip-Intrigo'),
+            ),
+          ),
+          matching: find.byType(AnimatedContainer),
+        ),
+      );
+
+      expect(customDecoration.color, standardDecoration.color);
+      expect(
+        customDecoration.border?.top.color,
+        standardDecoration.border?.top.color,
+      );
+    },
+    variant: const TargetPlatformVariant(<TargetPlatform>{
+      TargetPlatform.android,
+    }),
+  );
+
+  testWidgets(
+    'custom value chips match standard chip chrome across dark atmospheres',
+    (tester) async {
+      await _setLargeSurface(tester);
+
+      Future<void> expectCustomValueChrome({
+        required String campaignType,
+      }) async {
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+
+        await tester.pumpWidget(
+          _TestApp(
+            themeMode: ThemeMode.dark,
+            child: _buildPage(
+              currentThemeMode: ThemeMode.dark,
+              service: FakeCampaignService(_multiCampaignTypeOptions()),
+              initialPreferences: <String, Object>{
+                'app.ad_free_purchased': true,
+              },
+            ),
+          ),
+        );
+        await _pumpUi(tester);
+
+        final cardFinder =
+            find.byKey(ValueKey<String>('entry-campaign-card-$campaignType'));
+        await tester.ensureVisible(cardFinder);
+        await tester.tap(cardFinder, warnIfMissed: false);
+        await _pumpUi(tester);
+
+        final customButton = find.ancestor(
+          of: find.text('Custom').first,
+          matching: find.byType(InkWell),
+        );
+        await tester.ensureVisible(customButton.first);
+        await tester.tap(customButton.first, warnIfMissed: false);
+        await _pumpUi(tester);
+
+        await tester.enterText(find.byType(TextField), 'Noir');
+        await tester.tap(find.widgetWithText(FilledButton, 'Add'));
+        await _pumpUi(tester);
+
+        final customDecoration = _chipDecoration(
+          tester,
+          find
+              .ancestor(
+                of: find.text('Noir'),
+                matching: find.byType(AnimatedContainer),
+              )
+              .first,
+        );
+        final standardDecoration = _chipDecoration(
+          tester,
+          find.descendant(
+            of: find.byKey(const ValueKey<String>('forge-option-chip-Intrigo')),
+            matching: find.byType(AnimatedContainer),
+          ),
+        );
+
+        expect(customDecoration.color, standardDecoration.color);
+        expect(
+          customDecoration.border?.top.color,
+          standardDecoration.border?.top.color,
+        );
+      }
+
+      await expectCustomValueChrome(campaignType: 'One-Shot');
+      await expectCustomValueChrome(campaignType: 'Campagna lunga');
+    },
+  );
+
   testWidgets('tapping the custom add chip triggers a light haptic impact', (
     tester,
   ) async {
@@ -750,8 +984,7 @@ void main() {
     );
   });
 
-  testWidgets(
-      'locked premium flow hides watch ad until rewarded ad is ready',
+  testWidgets('locked premium flow hides watch ad until rewarded ad is ready',
       (tester) async {
     await _setLargeSurface(tester);
     final rewardedAdService = _FakeRewardedAdService()
@@ -1335,7 +1568,8 @@ void main() {
     expect(rewardedAdService.disposeCallCount, greaterThanOrEqualTo(1));
   });
 
-  testWidgets('premium purchase button recovers after purchase sheet is dismissed',
+  testWidgets(
+      'premium purchase button recovers after purchase sheet is dismissed',
       (tester) async {
     await _setLargeSurface(tester);
     final purchaseService = _FakePurchaseService();
@@ -1349,7 +1583,8 @@ void main() {
     );
     await _pumpUi(tester);
 
-    await tester.tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
     await tester.pumpAndSettle();
 
     final goAdFreeRow =
@@ -1360,7 +1595,8 @@ void main() {
     await tester.tap(goAdFreeRow);
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
     await tester.pumpAndSettle();
     expect(tester.widget<ListTile>(goAdFreeRow).enabled, isFalse);
 
@@ -1369,7 +1605,8 @@ void main() {
 
     Navigator.of(tester.element(goAdFreeRow)).pop();
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
     await tester.pumpAndSettle();
 
     expect(tester.widget<ListTile>(goAdFreeRow).enabled, isTrue);
@@ -1413,6 +1650,7 @@ Widget _buildPage({
   RewardedAdService? rewardedAdService,
   PurchaseService? purchaseService,
   Locale locale = const Locale('it'),
+  ThemeMode currentThemeMode = ThemeMode.dark,
 }) {
   if (initialPreferences != null) {
     SharedPreferences.setMockInitialValues(initialPreferences);
@@ -1422,6 +1660,7 @@ Widget _buildPage({
     service: service ?? FakeCampaignService(minimalOptions()),
     currentLocale: locale,
     onLocaleChanged: (_) {},
+    currentThemeMode: currentThemeMode,
     reviewPrompter: reviewPrompter,
     forgeSoundPlayer: forgeSoundPlayer,
     interstitialAdService: interstitialAdService,
@@ -1534,10 +1773,12 @@ class _TestApp extends StatelessWidget {
   const _TestApp({
     required this.child,
     this.locale = const Locale('it'),
+    this.themeMode = ThemeMode.dark,
   });
 
   final Widget child;
   final Locale locale;
+  final ThemeMode themeMode;
 
   @override
   Widget build(BuildContext context) {
@@ -1545,6 +1786,9 @@ class _TestApp extends StatelessWidget {
       locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      theme: buildFantasyLightTheme(),
+      darkTheme: buildFantasyTheme(),
+      themeMode: themeMode,
       builder: (context, child) {
         final mediaQuery = MediaQuery.of(
           context,
@@ -1554,6 +1798,57 @@ class _TestApp extends StatelessWidget {
       home: child,
     );
   }
+}
+
+class _ThemeReactiveTestApp extends StatefulWidget {
+  const _ThemeReactiveTestApp({
+    required this.service,
+  });
+
+  final CampaignService service;
+
+  @override
+  State<_ThemeReactiveTestApp> createState() => _ThemeReactiveTestAppState();
+}
+
+class _ThemeReactiveTestAppState extends State<_ThemeReactiveTestApp> {
+  ThemeMode _themeMode = ThemeMode.dark;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      locale: const Locale('it'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      theme: buildFantasyLightTheme(),
+      darkTheme: buildFantasyTheme(),
+      themeMode: _themeMode,
+      builder: (context, child) {
+        final mediaQuery = MediaQuery.of(
+          context,
+        ).copyWith(disableAnimations: true);
+        return MediaQuery(data: mediaQuery, child: child!);
+      },
+      home: CampaignBuilderPage(
+        service: widget.service,
+        currentLocale: const Locale('it'),
+        onLocaleChanged: (_) {},
+        currentThemeMode: _themeMode,
+        onThemeModeChanged: (themeMode) {
+          setState(() {
+            _themeMode = themeMode;
+          });
+        },
+      ),
+    );
+  }
+}
+
+BoxDecoration _chipDecoration(WidgetTester tester, Finder finder) {
+  final widget = tester.widget<AnimatedContainer>(finder);
+  final decoration = widget.decoration;
+  expect(decoration, isA<BoxDecoration>());
+  return decoration! as BoxDecoration;
 }
 
 class _FakeForgeSoundPlayer implements ForgeSoundPlayer {
@@ -1700,6 +1995,22 @@ CampaignOptions _partyScaleOptions() {
     tones: const ['Epico'],
     styles: const ['Lineare'],
     partyArchetypes: const ['Tank', 'Healer', 'Scout', 'Mage', 'Bard'],
+    twists: const ['Tradimento'],
+    presets: const {},
+    settingDescriptions: const {'Forgotten Realms': 'Classico high fantasy.'},
+    presetDescriptions: const {},
+    presetNames: const {},
+  );
+}
+
+CampaignOptions _multiCampaignTypeOptions() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms'],
+    campaignTypes: const ['One-Shot', 'Campagna lunga'],
+    themes: const ['Intrigo'],
+    tones: const ['Epico'],
+    styles: const ['Lineare'],
+    partyArchetypes: const ['Tank'],
     twists: const ['Tradimento'],
     presets: const {},
     settingDescriptions: const {'Forgotten Realms': 'Classico high fantasy.'},

@@ -292,11 +292,13 @@ extension on _CampaignBuilderPageState {
     final atmosphereId = _currentAtmosphere(options).id;
     final localeCode = widget.currentLocale.languageCode;
     final premiumUnlocked = _isPremiumUnlocked;
+    final themeMode = widget.currentThemeMode;
 
     return <Object>[
       Object.hash(
         localeCode,
         atmosphereId,
+        themeMode,
         premiumUnlocked,
         _selectedCampaignType,
         _selectedSetting,
@@ -315,6 +317,7 @@ extension on _CampaignBuilderPageState {
       Object.hash(
         localeCode,
         atmosphereId,
+        themeMode,
         premiumUnlocked,
         _partyLevel,
         _partySize,
@@ -323,6 +326,7 @@ extension on _CampaignBuilderPageState {
       Object.hash(
         localeCode,
         atmosphereId,
+        themeMode,
         _includeNpcs,
         _includeEncounters,
       ),
@@ -1366,8 +1370,7 @@ extension on _CampaignBuilderPageState {
                                         Navigator.pop(stableContext);
                                         _handleGoAdFree();
                                       },
-                                      showAdOption:
-                                          _rewardedAdService.isReady,
+                                      showAdOption: _rewardedAdService.isReady,
                                     ),
                                   );
                                 } else if (isCustomSelected) {
@@ -2018,153 +2021,118 @@ extension on _CampaignBuilderPageState {
     Set<String> premiumOptionIds = const {},
   }) {
     final atmosphere = _currentAtmosphere();
+    return Builder(
+      builder: (context) {
+        final theme = Theme.of(context);
+        final colorScheme = theme.colorScheme;
+        final chipBackgroundColor =
+            colorScheme.surfaceContainerHighest.withValues(alpha: 0.6);
+        final chipBorderColor = colorScheme.outline.withValues(alpha: 0.45);
 
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: [
-        ...options.map((value) {
-          final isPremium = premiumOptionIds.contains(value);
-          final isLocked = isPremium && !_isPremiumUnlocked;
-          return AnimatedRuneFilterChip(
-            key: ValueKey<String>('forge-option-chip-$value'),
-            atmosphere: atmosphere,
-            label: value,
-            selected: selectedValues.contains(value),
-            onSelected: (sel) {
-              _triggerLightImpact();
-              _markDirty(() => onSelected(value, sel));
-            },
-            premiumCrownColor: isPremium ? atmosphere.glow : null,
-            onLockedTap: isLocked
-                ? () => _showPremiumUnlockForChip(atmosphere.glow)
-                : null,
-          );
-        }),
-        ...customEntries.map((entry) {
-          final atmospherePrimary =
-              _resolvedAtmosphereTheme().colorScheme.primary;
-          final chip = Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {
-                _triggerLightImpact();
-                _markDirty(() => onRemoveCustom(entry));
-              },
-              borderRadius: BorderRadius.circular(999),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 220),
-                curve: Curves.easeOutCubic,
-                decoration: BoxDecoration(
-                  color: atmospherePrimary.withValues(alpha: 0.84),
-                  borderRadius: BorderRadius.circular(999),
-                  border: Border.all(
-                    color: atmospherePrimary.withValues(alpha: 0.68),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 6,
-                  ),
-                  child: Text(
-                    entry,
-                    style: _resolvedAtmosphereTheme()
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(
-                          fontSize: 12,
-                          color: FantasyPalette.parchment,
-                        ),
-                  ),
-                ),
-              ),
-            ),
-          );
-          return Stack(
-            clipBehavior: Clip.none,
-            children: [
-              chip,
-              Positioned(
-                top: -1,
-                right: -2,
-                child: FaIcon(
-                  FontAwesomeIcons.crown,
-                  size: 13,
-                  color: atmosphere.glow,
-                ),
-              ),
-            ],
-          );
-        }),
-        Stack(
-          clipBehavior: Clip.none,
+        return Wrap(
+          spacing: 8,
+          runSpacing: 8,
           children: [
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: !_isPremiumUnlocked
+            ...options.map((value) {
+              final isPremium = premiumOptionIds.contains(value);
+              final isLocked = isPremium && !_isPremiumUnlocked;
+              return AnimatedRuneFilterChip(
+                key: ValueKey<String>('forge-option-chip-$value'),
+                atmosphere: atmosphere,
+                label: value,
+                selected: selectedValues.contains(value),
+                onSelected: (sel) {
+                  _triggerLightImpact();
+                  _markDirty(() => onSelected(value, sel));
+                },
+                premiumCrownColor: isPremium ? atmosphere.glow : null,
+                onLockedTap: isLocked
                     ? () => _showPremiumUnlockForChip(atmosphere.glow)
-                    : () {
-                        _triggerLightImpact();
-                        _showCustomEntryDialog(
-                          title: dialogTitle,
-                          hint: dialogHint,
-                          onAdd: (value) =>
-                              _markDirty(() => customEntries.add(value)),
-                        );
-                      },
-                borderRadius: BorderRadius.circular(999),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 220),
-                  curve: Curves.easeOutCubic,
-                  decoration: BoxDecoration(
-                    color: _resolvedAtmosphereTheme()
-                        .colorScheme
-                        .surfaceContainerHighest
-                        .withValues(alpha: 0.6),
+                    : null,
+              );
+            }),
+            ...customEntries.map((entry) {
+              return AnimatedRuneFilterChip(
+                key: ValueKey<String>('forge-custom-chip-$entry'),
+                atmosphere: atmosphere,
+                label: entry,
+                selected: false,
+                premiumCrownColor: atmosphere.glow,
+                onSelected: (_) {
+                  _triggerLightImpact();
+                  _markDirty(() => onRemoveCustom(entry));
+                },
+              );
+            }),
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: !_isPremiumUnlocked
+                        ? () => _showPremiumUnlockForChip(atmosphere.glow)
+                        : () {
+                            _triggerLightImpact();
+                            _showCustomEntryDialog(
+                              title: dialogTitle,
+                              hint: dialogHint,
+                              onAdd: (value) =>
+                                  _markDirty(() => customEntries.add(value)),
+                            );
+                          },
                     borderRadius: BorderRadius.circular(999),
-                    border: Border.all(
-                      color: atmosphere.glow.withValues(alpha: 0.45),
-                    ),
-                  ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        FaIcon(FontAwesomeIcons.plus,
-                            size: 10, color: atmosphere.glow),
-                        const SizedBox(width: 5),
-                        Text(
-                          'Custom',
-                          style: _resolvedAtmosphereTheme()
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 220),
+                      curve: Curves.easeOutCubic,
+                      decoration: BoxDecoration(
+                        color: chipBackgroundColor,
+                        borderRadius: BorderRadius.circular(999),
+                        border: Border.all(
+                          color: chipBorderColor,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            FaIcon(
+                              FontAwesomeIcons.plus,
+                              size: 10,
+                              color: atmosphere.glow,
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              'Custom',
+                              style: theme.textTheme.bodySmall?.copyWith(
                                 fontSize: 12,
                                 color: atmosphere.glow,
                               ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            Positioned(
-              top: -1,
-              right: -2,
-              child: FaIcon(
-                FontAwesomeIcons.crown,
-                size: 13,
-                color: atmosphere.glow,
-              ),
+                Positioned(
+                  top: -1,
+                  right: -2,
+                  child: FaIcon(
+                    FontAwesomeIcons.crown,
+                    size: 13,
+                    color: atmosphere.glow,
+                  ),
+                ),
+              ],
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 
