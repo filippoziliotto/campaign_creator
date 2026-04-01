@@ -188,6 +188,7 @@
   "forgeCustomSettingLabel": "Ambientação personalizada",
   "forgeCustomSettingHint": "Ex.: Reino em guerra, cidade vertical",
   "forgeTwistTitle": "Reviravolta inicial",
+  "forgeTwistHelpTooltip": "Ajuda da reviravolta inicial",
   "forgeTwistLabel": "Reviravolta",
   "forgeCustomTwistLabel": "Reviravolta personalizada",
   "forgeCustomTwistHint": "Um aliado mente, a masmorra está viva, a missão é uma armadilha...",

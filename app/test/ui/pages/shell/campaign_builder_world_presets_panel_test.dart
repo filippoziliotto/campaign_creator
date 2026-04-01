@@ -269,6 +269,52 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
+  testWidgets('twist panel help button toggles the helper bubble',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1200, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(presetsOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    expect(
+      find.byKey(const ValueKey('forge-twist-help-bubble')),
+      findsNothing,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('forge-twist-help-button')));
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey('forge-twist-help-bubble')),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Scegli un twist per dare subito tensione alla trama.'),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('forge-twist-help-button')));
+    await _pumpUi(tester);
+
+    expect(
+      find.byKey(const ValueKey('forge-twist-help-bubble')),
+      findsNothing,
+    );
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.android}));
+
   testWidgets('twist selector uses a bottom sheet for long readable options',
       (tester) async {
     const longTwist =

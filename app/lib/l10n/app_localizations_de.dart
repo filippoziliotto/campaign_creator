@@ -430,6 +430,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get forgeTwistTitle => 'Auftakt-Twist';
 
   @override
+  String get forgeTwistHelpTooltip => 'Hilfe zum Auftakt-Twist';
+
+  @override
   String get forgeTwistLabel => 'Twist';
 
   @override

@@ -188,6 +188,7 @@
   "forgeCustomSettingLabel": "Cadre personnalisé",
   "forgeCustomSettingHint": "Ex. royaume en guerre, ville verticale",
   "forgeTwistTitle": "Rebondissement initial",
+  "forgeTwistHelpTooltip": "Aide au rebondissement initial",
   "forgeTwistLabel": "Rebondissement",
   "forgeCustomTwistLabel": "Rebondissement personnalisé",
   "forgeCustomTwistHint": "Un allié ment, le donjon est vivant, la mission est un piège...",

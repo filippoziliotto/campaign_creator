@@ -188,6 +188,7 @@
   "forgeCustomSettingLabel": "Eigenes Setting",
   "forgeCustomSettingHint": "Z. B. Königreich im Krieg, vertikale Stadt",
   "forgeTwistTitle": "Auftakt-Twist",
+  "forgeTwistHelpTooltip": "Hilfe zum Auftakt-Twist",
   "forgeTwistLabel": "Twist",
   "forgeCustomTwistLabel": "Eigener Twist",
   "forgeCustomTwistHint": "Ein Verbündeter lügt, der Dungeon lebt, die Mission ist eine Falle...",

@@ -428,6 +428,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get forgeTwistTitle => 'Reviravolta inicial';
 
   @override
+  String get forgeTwistHelpTooltip => 'Ajuda da reviravolta inicial';
+
+  @override
   String get forgeTwistLabel => 'Reviravolta';
 
   @override

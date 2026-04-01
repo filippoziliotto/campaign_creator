@@ -188,6 +188,7 @@
   "forgeCustomSettingLabel": "Custom setting",
   "forgeCustomSettingHint": "E.g. Kingdom at war, vertical city",
   "forgeTwistTitle": "Opening twist",
+  "forgeTwistHelpTooltip": "Opening twist help",
   "forgeTwistLabel": "Twist",
   "forgeCustomTwistLabel": "Custom twist",
   "forgeCustomTwistHint": "An ally lies, the dungeon is alive, the mission is a trap...",

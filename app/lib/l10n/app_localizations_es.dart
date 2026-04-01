@@ -427,6 +427,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get forgeTwistTitle => 'Giro inicial';
 
   @override
+  String get forgeTwistHelpTooltip => 'Ayuda de giro inicial';
+
+  @override
   String get forgeTwistLabel => 'Giro';
 
   @override

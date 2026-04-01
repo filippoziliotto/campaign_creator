@@ -188,6 +188,7 @@
   "forgeCustomSettingLabel": "Ambientación personalizada",
   "forgeCustomSettingHint": "P. ej. reino en guerra, ciudad vertical",
   "forgeTwistTitle": "Giro inicial",
+  "forgeTwistHelpTooltip": "Ayuda de giro inicial",
   "forgeTwistLabel": "Giro",
   "forgeCustomTwistLabel": "Giro personalizado",
   "forgeCustomTwistHint": "Un aliado miente, la mazmorra está viva, la misión es una trampa...",

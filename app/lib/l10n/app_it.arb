@@ -188,6 +188,7 @@
   "forgeCustomSettingLabel": "Ambientazione personalizzata",
   "forgeCustomSettingHint": "Es: Inferno, città verticale",
   "forgeTwistTitle": "Twist iniziale",
+  "forgeTwistHelpTooltip": "Aiuto twist iniziale",
   "forgeTwistLabel": "Twist",
   "forgeCustomTwistLabel": "Twist personalizzato",
   "forgeCustomTwistHint": "Un alleato mente, il dungeon è vivo, la missione è una trappola...",

@@ -427,6 +427,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get forgeTwistTitle => 'Rebondissement initial';
 
   @override
+  String get forgeTwistHelpTooltip => 'Aide au rebondissement initial';
+
+  @override
   String get forgeTwistLabel => 'Rebondissement';
 
   @override
