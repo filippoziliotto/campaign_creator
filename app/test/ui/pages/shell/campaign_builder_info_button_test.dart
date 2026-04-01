@@ -625,6 +625,34 @@ void main() {
         findsOneWidget);
   });
 
+  testWidgets(
+      'settings sheet language control wraps onto a second row on compact phones',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(320, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    final firstRowTop = tester
+        .getTopLeft(
+          find.byKey(const ValueKey<String>('settings-language-segment-en')),
+        )
+        .dy;
+    final secondRowTop = tester
+        .getTopLeft(
+          find.byKey(const ValueKey<String>('settings-language-segment-ja')),
+        )
+        .dy;
+
+    expect(secondRowTop, greaterThan(firstRowTop));
+  });
+
   testWidgets('settings sheet language segments do not overflow on mobile',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));

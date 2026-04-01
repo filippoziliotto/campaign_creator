@@ -435,113 +435,68 @@ class _SettingsSheetState extends State<_SettingsSheet> {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
-            child: SegmentedButton<String>(
+            child: Wrap(
               key: const ValueKey<String>('settings-language-control'),
-              showSelectedIcon: false,
-              segments: <ButtonSegment<String>>[
-                ButtonSegment<String>(
-                  value: 'en',
-                  label: _LanguageSegmentLabel(
-                    key: const ValueKey<String>('settings-language-segment-en'),
-                    languageCode: 'en',
-                    shortLabel: context.l10n.languageEnglishShort,
-                    outlineColor: palette.outline.withValues(alpha: 0.72),
-                  ),
+              spacing: 8,
+              runSpacing: 8,
+              children: <Widget>[
+                _LanguageSegmentButton(
+                  languageCode: 'en',
+                  shortLabel: context.l10n.languageEnglishShort,
+                  selected: widget.currentLocale.languageCode == 'en',
+                  outlineColor: palette.outline.withValues(alpha: 0.72),
+                  onPressed: () => _handleLanguageSelection('en'),
                 ),
-                ButtonSegment<String>(
-                  value: 'it',
-                  label: _LanguageSegmentLabel(
-                    key: const ValueKey<String>('settings-language-segment-it'),
-                    languageCode: 'it',
-                    shortLabel: context.l10n.languageItalianShort,
-                    outlineColor: palette.outline.withValues(alpha: 0.72),
-                  ),
+                _LanguageSegmentButton(
+                  languageCode: 'it',
+                  shortLabel: context.l10n.languageItalianShort,
+                  selected: widget.currentLocale.languageCode == 'it',
+                  outlineColor: palette.outline.withValues(alpha: 0.72),
+                  onPressed: () => _handleLanguageSelection('it'),
                 ),
-                ButtonSegment<String>(
-                  value: 'es',
-                  label: _LanguageSegmentLabel(
-                    key: const ValueKey<String>('settings-language-segment-es'),
-                    languageCode: 'es',
-                    shortLabel: context.l10n.languageSpanishShort,
-                    outlineColor: palette.outline.withValues(alpha: 0.72),
-                  ),
+                _LanguageSegmentButton(
+                  languageCode: 'es',
+                  shortLabel: context.l10n.languageSpanishShort,
+                  selected: widget.currentLocale.languageCode == 'es',
+                  outlineColor: palette.outline.withValues(alpha: 0.72),
+                  onPressed: () => _handleLanguageSelection('es'),
                 ),
-                ButtonSegment<String>(
-                  value: 'fr',
-                  label: _LanguageSegmentLabel(
-                    key: const ValueKey<String>('settings-language-segment-fr'),
-                    languageCode: 'fr',
-                    shortLabel: context.l10n.languageFrenchShort,
-                    outlineColor: palette.outline.withValues(alpha: 0.72),
-                  ),
+                _LanguageSegmentButton(
+                  languageCode: 'fr',
+                  shortLabel: context.l10n.languageFrenchShort,
+                  selected: widget.currentLocale.languageCode == 'fr',
+                  outlineColor: palette.outline.withValues(alpha: 0.72),
+                  onPressed: () => _handleLanguageSelection('fr'),
                 ),
-                ButtonSegment<String>(
-                  value: 'de',
-                  label: _LanguageSegmentLabel(
-                    key: const ValueKey<String>('settings-language-segment-de'),
-                    languageCode: 'de',
-                    shortLabel: context.l10n.languageGermanShort,
-                    outlineColor: palette.outline.withValues(alpha: 0.72),
-                  ),
+                _LanguageSegmentButton(
+                  languageCode: 'de',
+                  shortLabel: context.l10n.languageGermanShort,
+                  selected: widget.currentLocale.languageCode == 'de',
+                  outlineColor: palette.outline.withValues(alpha: 0.72),
+                  onPressed: () => _handleLanguageSelection('de'),
                 ),
-                ButtonSegment<String>(
-                  value: 'pt',
-                  label: _LanguageSegmentLabel(
-                    key: const ValueKey<String>('settings-language-segment-pt'),
-                    languageCode: 'pt',
-                    shortLabel: context.l10n.languagePortugueseShort,
-                    outlineColor: palette.outline.withValues(alpha: 0.72),
-                  ),
+                _LanguageSegmentButton(
+                  languageCode: 'pt',
+                  shortLabel: context.l10n.languagePortugueseShort,
+                  selected: widget.currentLocale.languageCode == 'pt',
+                  outlineColor: palette.outline.withValues(alpha: 0.72),
+                  onPressed: () => _handleLanguageSelection('pt'),
                 ),
-                ButtonSegment<String>(
-                  value: 'pl',
-                  label: _LanguageSegmentLabel(
-                    key: const ValueKey<String>('settings-language-segment-pl'),
-                    languageCode: 'pl',
-                    shortLabel: context.l10n.languagePolishShort,
-                    outlineColor: palette.outline.withValues(alpha: 0.72),
-                  ),
+                _LanguageSegmentButton(
+                  languageCode: 'pl',
+                  shortLabel: context.l10n.languagePolishShort,
+                  selected: widget.currentLocale.languageCode == 'pl',
+                  outlineColor: palette.outline.withValues(alpha: 0.72),
+                  onPressed: () => _handleLanguageSelection('pl'),
                 ),
-                ButtonSegment<String>(
-                  value: 'ja',
-                  label: _LanguageSegmentLabel(
-                    key: const ValueKey<String>('settings-language-segment-ja'),
-                    languageCode: 'ja',
-                    shortLabel: context.l10n.languageJapaneseShort,
-                    outlineColor: palette.outline.withValues(alpha: 0.72),
-                  ),
+                _LanguageSegmentButton(
+                  languageCode: 'ja',
+                  shortLabel: context.l10n.languageJapaneseShort,
+                  selected: widget.currentLocale.languageCode == 'ja',
+                  outlineColor: palette.outline.withValues(alpha: 0.72),
+                  onPressed: () => _handleLanguageSelection('ja'),
                 ),
               ],
-              selected: <String>{widget.currentLocale.languageCode},
-              style: ButtonStyle(
-                visualDensity: VisualDensity.compact,
-                padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
-                  EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                ),
-                backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-                  (states) {
-                    if (states.contains(WidgetState.selected)) {
-                      return palette.cardSoft;
-                    }
-                    return palette.card.withValues(alpha: 0.82);
-                  },
-                ),
-                foregroundColor: WidgetStateProperty.resolveWith<Color?>(
-                  (states) {
-                    if (states.contains(WidgetState.selected)) {
-                      return palette.accent;
-                    }
-                    return palette.foreground;
-                  },
-                ),
-                side: WidgetStatePropertyAll<BorderSide>(
-                  BorderSide(
-                    color: palette.outline.withValues(alpha: 0.7),
-                  ),
-                ),
-              ),
-              onSelectionChanged: (selection) =>
-                  _handleLanguageSelection(selection.first),
             ),
           ),
           Padding(
@@ -1024,6 +979,63 @@ class _HelpTipRow extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _LanguageSegmentButton extends StatelessWidget {
+  const _LanguageSegmentButton({
+    required this.languageCode,
+    required this.shortLabel,
+    required this.selected,
+    required this.outlineColor,
+    required this.onPressed,
+  });
+
+  final String languageCode;
+  final String shortLabel;
+  final bool selected;
+  final Color outlineColor;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.fantasy;
+    final textTheme = Theme.of(context).textTheme;
+    final backgroundColor = selected
+        ? palette.cardSoft
+        : palette.card.withValues(alpha: 0.82);
+    final foregroundColor = selected ? palette.accent : palette.foreground;
+    final borderColor = selected
+        ? palette.accent.withValues(alpha: 0.72)
+        : palette.outline.withValues(alpha: 0.7);
+
+    return TextButton(
+      onPressed: onPressed,
+      style: TextButton.styleFrom(
+        backgroundColor: backgroundColor,
+        foregroundColor: foregroundColor,
+        side: BorderSide(color: borderColor),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        visualDensity: VisualDensity.compact,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+        ),
+        textStyle: textTheme.labelSmall?.copyWith(
+          color: foregroundColor,
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.2,
+        ),
+      ),
+      child: _LanguageSegmentLabel(
+        key: ValueKey<String>('settings-language-segment-$languageCode'),
+        languageCode: languageCode,
+        shortLabel: shortLabel,
+        outlineColor: outlineColor,
       ),
     );
   }
