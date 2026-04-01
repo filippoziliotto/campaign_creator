@@ -110,6 +110,31 @@ void main() {
         greaterThan(tester.getBottomLeft(ribbon).dy));
   });
 
+  testWidgets('forge swipe helper uses a tighter row gap on narrow screens',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(360, 800));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: _noopLocaleChanged,
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final ribbon = find.byKey(const ValueKey<String>('forge-section-ribbon'));
+    final helper = find.byKey(const ValueKey<String>('forge-swipe-helper'));
+    final gap = tester.getTopLeft(helper).dy - tester.getBottomLeft(ribbon).dy;
+
+    expect(gap, lessThanOrEqualTo(6));
+  });
+
   testWidgets(
       'forge swipe helper updates active mark when ribbon selection changes',
       (tester) async {

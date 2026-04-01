@@ -42,13 +42,13 @@ class ForgeRoutePage extends StatelessWidget {
             child: sectionRibbon,
           ),
           if (sectionHelper != null) ...[
-            const SizedBox(height: 4),
+            const SizedBox(height: 1),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 2),
               child: sectionHelper!,
             ),
           ],
-          const SizedBox(height: 4),
+          const SizedBox(height: 1),
           Expanded(
             child: Stack(
               children: [
@@ -96,7 +96,7 @@ class ForgeRoutePage extends StatelessWidget {
                   child: sectionRibbon,
                 ),
                 if (sectionHelper != null) ...[
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 2),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 2),
                     child: sectionHelper!,
