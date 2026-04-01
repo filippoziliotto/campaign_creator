@@ -4,6 +4,7 @@ import 'package:campaign_creator_flutter/src/models/campaign_models.dart';
 import 'package:campaign_creator_flutter/src/monetization/app_consent_manager.dart';
 import 'package:campaign_creator_flutter/src/theme/fantasy_theme.dart';
 import 'package:campaign_creator_flutter/src/ui/pages/shell/campaign_builder_page.dart';
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -259,6 +260,18 @@ void main() {
       'Dicas e boas práticas',
       'Escolhe uma reviravolta para dar tensão imediata ao enredo.',
     ),
+    (
+      const Locale('pl'),
+      'Typy kampanii',
+      'Wskazówki i dobre praktyki',
+      'Wybierz zwrot akcji, aby od razu nadać fabule napięcie.',
+    ),
+    (
+      const Locale('ja'),
+      'Campaign types',
+      'Tips & best practices',
+      'Pick a twist to give the plot immediate tension.',
+    ),
   ]) {
     testWidgets(
         'help sheet localizes static guide content for ${locale.languageCode}',
@@ -512,6 +525,56 @@ void main() {
     );
   });
 
+  testWidgets('settings sheet shows the Polish flag for the Polish locale mark',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    final polishMark = find.byKey(
+      const ValueKey<String>('settings-language-mark-pl'),
+    );
+    expect(polishMark, findsOneWidget);
+
+    final polishFlag = tester.widget<CountryFlag>(
+      find.descendant(of: polishMark, matching: find.byType(CountryFlag)),
+    );
+
+    expect(polishFlag.flagCode?.toUpperCase(), 'PL');
+  });
+
+  testWidgets('settings sheet shows the Japanese flag for the Japanese locale mark',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    final japaneseMark = find.byKey(
+      const ValueKey<String>('settings-language-mark-ja'),
+    );
+    expect(japaneseMark, findsOneWidget);
+
+    final japaneseFlag = tester.widget<CountryFlag>(
+      find.descendant(of: japaneseMark, matching: find.byType(CountryFlag)),
+    );
+
+    expect(japaneseFlag.flagCode?.toUpperCase(), 'JP');
+  });
+
   testWidgets('settings sheet shows language segmented control',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
@@ -540,6 +603,10 @@ void main() {
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-segment-pt')),
         findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-segment-pl')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-segment-ja')),
+        findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-mark-en')),
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-mark-it')),
@@ -551,6 +618,10 @@ void main() {
     expect(find.byKey(const ValueKey<String>('settings-language-mark-de')),
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-mark-pt')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-mark-pl')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-mark-ja')),
         findsOneWidget);
   });
 

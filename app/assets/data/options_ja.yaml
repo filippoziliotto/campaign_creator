@@ -1,0 +1,908 @@
+settings:
+  - Forgotten Realms
+  - Eberron
+  - Ravenloft
+  - Exandria
+  - Homebrew continent
+  - Dragonlance
+  - Feywild
+  - Frontier
+  - Greyhawk
+  - Ghosts of Saltmarsh Coast
+  - Ravnica
+  - Spelljammer
+  - Theros
+  - Dark Sun
+  - Wildemount
+  - Planescape
+  - Underdark
+  - Shadowfell
+  - Radiant Citadel
+  - Avernus
+  - Sigil
+
+setting_descriptions:
+  Forgotten Realms: Classic high-fantasy world, rich with kingdoms, ancient magic, and heroic adventures.
+  Eberron: Pulp-noir setting with arcane technology, political intrigue, and metropolitan mysteries.
+  Ravenloft: Gothic domain of horror, where mist conceals curses and dark lords.
+  Exandria: Epic and modern scenario, with grand conflicts, active deities, and vastly diverse regions.
+  Homebrew continent: Original world created at the table, flexible in tone, history, and custom rules.
+  Dragonlance: Heroic fantasy shaped by war between dragons, knightly orders, and prophecies.
+  Ravnica: Planar megalopolis dominated by rival guilds, perfect for urban plots and power struggles.
+  Spelljammer: Cosmic voyage between crystal spheres, flying ships, and mixed crews in space-fantasy adventures.
+  Theros: Greek-mythological setting with active gods, oracles, and legendary monsters tied to heroes' fates.
+  Dark Sun: Post-apocalyptic desert world, harsh and dystopian, where magic consumes resources and survival is central.
+  Wildemount: Political and warlike scenario of Exandria, ideal for campaigns of national conflict, intrigue, and war fronts.
+  Feywild: Fey plane, a distorted mirror of the material world, populated by magical creatures, enchanted realms, and unpredictable strangeness.
+  Planescape: Cosmic crossroads dominated by warring philosophies, where every faction claims the True Nature of Reality across infinite planes.
+  Underdark: Endless subterranean world of darkness, threaded by lightless tunnels, ruthless factions, and ancient secrets buried deep below.
+  Frontier: Wild lands at the edges of civilisation, where law is uncertain, communities are isolated, and danger is a constant.
+  Shadowfell: Bleak reflection of the material world, steeped in decay, muted emotion, and lingering dead.
+  Radiant Citadel: Luminous crossroads in the Ethereal Plane, linking distant cultures through magical gateways and living traditions.
+  Avernus: First layer of the Nine Hells, a scorched battlefield of infernal war, iron engines, and desperate bargains.
+  Sigil: City of Doors at the center of the planes, where factions, portals, and dangerous ideas shape every street.
+  Greyhawk: Classic old-school fantasy world of rival realms, deep dungeons, and grounded heroic adventure.
+  Ghosts of Saltmarsh Coast: Rugged coastal frontier of fishing towns, hidden coves, smugglers, and threats rising from the sea.
+
+campaign_types:
+  - One-Shot
+  - 短編キャンペーン
+  - 長編キャンペーン
+  - ダンジョン探索
+
+themes:
+  - 王道ファンタジー
+  - ゴシックホラー
+  - 政治的陰謀
+  - 荒野
+  - 怪物狩り
+  - 古代遺跡
+  - 救出
+  - 遠征
+  - 宝探し
+  - 都市強奪
+  - 次元航行
+  - 海洋冒険
+  - 勢力戦争
+  - 中世スチームパンク
+  - 闘技大会
+  - 終末後世界
+  - 反乱
+
+tones:
+  - 英雄的
+  - ダーク
+  - ミステリアス
+  - コミカル
+  - 緊迫
+  - 希望
+  - 不穏
+  - アイロニカル
+  - 悲劇的
+  - Noir
+  - 奇怪
+  - 夢幻的
+  - 混沌
+
+styles:
+  - エピック
+  - シネマティック
+  - リアリスティック
+  - ハードボイルド
+  - ハイファンタジー
+  - 捜査劇
+  - ミステリー
+  - ローファンタジー
+  - おとぎ話
+  - Sandbox
+  - サバイバル
+  - オープンワールド
+  - 戦術的
+  - 神話的
+
+party_archetypes:
+  - 戦士
+  - 魔法使い
+  - 聖職者
+  - 盗賊
+  - レンジャー
+  - Bard
+  - パラディン
+  - Druid
+  - ウォーロック
+  - ソーサラー
+  - モンク
+  - バーバリアン
+  - Artificer
+  - シャーマン
+  - ネクロマンサー
+
+twists:
+  - どんでん返しなし
+  - 予言は偽りだった
+  - 信頼していた味方こそ裏切り者
+  - 敵役はさらに大きな災厄を防ごうとしている
+  - パーティには忘れられた共通の起源がある
+  - 主たるアーティファクトは意思を持ち、操っている
+  - ダンジョンそのものが生きている
+  - 任務の対象は救われることを望んでいない
+  - 失踪者は自ら失踪を仕組んでいた
+  - 真の脅威は善良に見える組織だ（教会、ギルド、学院）
+  - 世界は目立たない時間ループに囚われている
+  - PCたちはすでに死んでいるが、それを知らない
+  - 悪役はすでに勝っており、任務は被害抑制に過ぎない
+  - パーティは知らぬ間に悪役に仕えている
+  - 怪物たちは破滅級の捕食者から逃げている
+  - 地域全体が魔法のシミュレーションか眠れる神の夢である
+  - 疫病の治療には依頼人の犠牲が必要となる
+  - 敵対勢力はパーティ敗北後の未来の生存者で構成されている
+  - 終末はすでに起きており、世界は修復呪文の中で生きている
+  - 予言は正しいが、英雄ではなく悪役を指している
+  - 死そのものが失踪し、別の何かが下手に代役を務めている
+  - 神は自らの望みについて嘘をついている
+  - その牢獄は中に閉じ込めるためでなく外を防ぐために造られた
+  - パーティの記憶は理由があって改竄されている
+  - パトロンは任務開始前からすでに死んでいた
+
+premium_option_ids:
+  settings:
+    - Ravnica
+    - Spelljammer
+    - Theros
+    - Dark Sun
+    - Wildemount
+    - Planescape
+    - Underdark
+    - Shadowfell
+    - Radiant Citadel
+    - Avernus
+    - Sigil
+  themes:
+    - 都市強奪
+    - 次元航行
+    - 海洋冒険
+    - 勢力戦争
+    - 中世スチームパンク
+    - 闘技大会
+    - 終末後世界
+    - 反乱
+  tones:
+    - アイロニカル
+    - 悲劇的
+    - Noir
+    - 奇怪
+    - 夢幻的
+    - 混沌
+  styles:
+    - ローファンタジー
+    - おとぎ話
+    - Sandbox
+    - サバイバル
+    - オープンワールド
+    - 戦術的
+    - 神話的
+  party_archetypes:
+    - Artificer
+    - シャーマン
+    - ネクロマンサー
+  twists:
+    - 真の脅威は善良に見える組織だ（教会、ギルド、学院）
+    - 世界は目立たない時間ループに囚われている
+    - PCたちはすでに死んでいるが、それを知らない
+    - 悪役はすでに勝っており、任務は被害抑制に過ぎない
+    - パーティは知らぬ間に悪役に仕えている
+    - 怪物たちは破滅級の捕食者から逃げている
+    - 地域全体が魔法のシミュレーションか眠れる神の夢である
+    - 疫病の治療には依頼人の犠牲が必要となる
+    - 敵対勢力はパーティ敗北後の未来の生存者で構成されている
+    - 終末はすでに起きており、世界は修復呪文の中で生きている
+    - 予言は正しいが、英雄ではなく悪役を指している
+    - 死そのものが失踪し、別の何かが下手に代役を務めている
+    - 神は自らの望みについて嘘をついている
+    - その牢獄は中に閉じ込めるためでなく外を防ぐために造られた
+    - パーティの記憶は理由があって改竄されている
+    - パトロンは任務開始前からすでに死んでいた
+
+
+presets:
+
+ # ── ONE-SHOT (10) ────────────────────────────────────────────────────────────
+
+  NULLA NELLE TORRI:
+    setting: Eberron
+    campaign_type: One-Shot
+    theme: 都市強奪
+    tone: Noir
+    style: シネマティック
+    party_level: 5
+    party_size: 4
+    twist: パーティは知らぬ間に悪役に仕えている
+
+  SPECCHI SENZA VITA:
+    setting: Ravenloft
+    campaign_type: One-Shot
+    theme: ゴシックホラー
+    tone: ダーク
+    style: 捜査劇
+    party_level: 4
+    party_size: 4
+    twist: PCたちはすでに死んでいるが、それを知らない
+
+  ORDINI SPEZZATI:
+    setting: Wildemount
+    campaign_type: One-Shot
+    theme: 勢力戦争
+    tone: 悲劇的
+    style: リアリスティック
+    party_level: 6
+    party_size: 4
+    twist: 信頼していた味方こそ裏切り者
+
+  CENERI SENZA SPERANZA:
+    setting: Dark Sun
+    campaign_type: One-Shot
+    theme: 荒野
+    tone: ダーク
+    style: ハードボイルド
+    party_level: 3
+    party_size: 5
+    twist: 悪役はすでに勝っており、任務は被害抑制に過ぎない
+
+  FIERA SOTTO PRESSIONE:
+    setting: Ravnica
+    campaign_type: One-Shot
+    theme: 政治的陰謀
+    tone: アイロニカル
+    style: シネマティック
+    party_level: 5
+    party_size: 4
+    twist: 任務の対象は救われることを望んでいない
+
+  FUNERALE SBAGLIATO:
+    setting: Forgotten Realms
+    campaign_type: One-Shot
+    theme: 王道ファンタジー
+    tone: ミステリアス
+    style: 捜査劇
+    party_level: 4
+    party_size: 4
+    twist: 敵役はさらに大きな災厄を防ごうとしている
+
+  OMBRA NELLA CACCIA:
+    setting: Homebrew continent
+    campaign_type: One-Shot
+    theme: 怪物狩り
+    tone: 奇怪
+    style: ローファンタジー
+    party_level: 3
+    party_size: 5
+    twist: 怪物たちは破滅級の捕食者から逃げている
+
+  ECO DAL FUTURO:
+    setting: Exandria
+    campaign_type: One-Shot
+    theme: 次元航行
+    tone: 奇怪
+    style: シネマティック
+    party_level: 7
+    party_size: 4
+    twist: 世界は目立たない時間ループに囚われている
+
+  LOCANDA AL CREPUSCOLO:
+    setting: Feywild
+    campaign_type: One-Shot
+    theme: ゴシックホラー
+    tone: ミステリアス
+    style: おとぎ話
+    party_level: 4
+    party_size: 4
+    twist: 主たるアーティファクトは意思を持ち、操っている
+
+  ROTTE STELLARI:
+    setting: Spelljammer
+    campaign_type: One-Shot
+    theme: 海洋冒険
+    tone: アイロニカル
+    style: シネマティック
+    party_level: 5
+    party_size: 5
+    twist: 任務の対象は救われることを望んでいない
+
+  # ── MINI-CAMPAIGN (10) ───────────────────────────────────────────────────────
+
+  CICATRICI DI FERRO:
+    setting: Wildemount
+    campaign_type: 短編キャンペーン
+    theme: 勢力戦争
+    tone: 悲劇的
+    style: リアリスティック
+    party_level: 5
+    party_size: 4
+    twist: パーティは知らぬ間に悪役に仕えている
+
+  MARE CHE SCOMPARE:
+    setting: Homebrew continent
+    campaign_type: 短編キャンペーン
+    theme: 海洋冒険
+    tone: ミステリアス
+    style: ローファンタジー
+    party_level: 4
+    party_size: 4
+    twist: 地域全体が魔法のシミュレーションか眠れる神の夢である
+
+  ARCHIVI IN FIAMME:
+    setting: Eberron
+    campaign_type: 短編キャンペーン
+    theme: 政治的陰謀
+    tone: Noir
+    style: 捜査劇
+    party_level: 5
+    party_size: 4
+    twist: 真の脅威は善良に見える組織だ（教会、ギルド、学院）
+
+  NODI DI SANGUE:
+    setting: Ravnica
+    campaign_type: 短編キャンペーン
+    theme: 政治的陰謀
+    tone: ミステリアス
+    style: シネマティック
+    party_level: 6
+    party_size: 4
+    twist: 信頼していた味方こそ裏切り者
+
+  RADICE DEL MORBO:
+    setting: Forgotten Realms
+    campaign_type: 短編キャンペーン
+    theme: ゴシックホラー
+    tone: ダーク
+    style: ハードボイルド
+    party_level: 4
+    party_size: 4
+    twist: 疫病の治療には依頼人の犠牲が必要となる
+
+  GIURAMENTO INFRANTO:
+    setting: Dragonlance
+    campaign_type: 短編キャンペーン
+    theme: 王道ファンタジー
+    tone: 悲劇的
+    style: エピック
+    party_level: 5
+    party_size: 4
+    twist: パーティには忘れられた共通の起源がある
+
+  PROFEZIA DI CARTA:
+    setting: Homebrew continent
+    campaign_type: 短編キャンペーン
+    theme: 王道ファンタジー
+    tone: ミステリアス
+    style: 捜査劇
+    party_level: 4
+    party_size: 5
+    twist: 予言は偽りだった
+
+  POLVERE E SILENZIO:
+    setting: Dark Sun
+    campaign_type: 短編キャンペーン
+    theme: 荒野
+    tone: ダーク
+    style: ハードボイルド
+    party_level: 3
+    party_size: 5
+    twist: 悪役はすでに勝っており、任務は被害抑制に過ぎない
+
+  SETTIMANA DI VETRO:
+    setting: Eberron
+    campaign_type: 短編キャンペーン
+    theme: 都市強奪
+    tone: Noir
+    style: シネマティック
+    party_level: 6
+    party_size: 4
+    twist: 主たるアーティファクトは意思を持ち、操っている
+
+  CERCHIO CHIUSO:
+    setting: Ravenloft
+    campaign_type: 短編キャンペーン
+    theme: ゴシックホラー
+    tone: ダーク
+    style: 捜査劇
+    party_level: 5
+    party_size: 4
+    twist: パーティは知らぬ間に悪役に仕えている
+
+  # ── LONG CAMPAIGN (10) ───────────────────────────────────────────────────────
+
+  CORONA DI CENERE:
+    setting: Dragonlance
+    campaign_type: 長編キャンペーン
+    theme: 王道ファンタジー
+    tone: 悲劇的
+    style: エピック
+    party_level: 4
+    party_size: 4
+    twist: 信頼していた味方こそ裏切り者
+
+  PATTO DELLE MAREE:
+    setting: Exandria
+    campaign_type: 長編キャンペーン
+    theme: 海洋冒険
+    tone: ミステリアス
+    style: Sandbox
+    party_level: 5
+    party_size: 5
+    twist: パーティには忘れられた共通の起源がある
+
+  ARCHIVIO DEI SANTI:
+    setting: Eberron
+    campaign_type: 長編キャンペーン
+    theme: 政治的陰謀
+    tone: Noir
+    style: 捜査劇
+    party_level: 5
+    party_size: 4
+    twist: 真の脅威は善良に見える組織だ（教会、ギルド、学院）
+
+  INVERNO SENZA EREDI:
+    setting: Ravenloft
+    campaign_type: 長編キャンペーン
+    theme: ゴシックホラー
+    tone: 悲劇的
+    style: リアリスティック
+    party_level: 4
+    party_size: 4
+    twist: 予言は偽りだった
+
+  LEGGI DELLA POLVERE:
+    setting: Dark Sun
+    campaign_type: 長編キャンペーン
+    theme: 荒野
+    tone: ダーク
+    style: ハードボイルド
+    party_level: 3
+    party_size: 5
+    twist: 悪役はすでに勝っており、任務は被害抑制に過ぎない
+
+  OSSA DELLA CITTA:
+    setting: Ravnica
+    campaign_type: 長編キャンペーン
+    theme: 勢力戦争
+    tone: Noir
+    style: シネマティック
+    party_level: 6
+    party_size: 4
+    twist: 主たるアーティファクトは意思を持ち、操っている
+
+  ALTARE DELLA COMETA:
+    setting: Forgotten Realms
+    campaign_type: 長編キャンペーン
+    theme: 次元航行
+    tone: Epic
+    style: 捜査劇
+    party_level: 7
+    party_size: 5
+    twist: 地域全体が魔法のシミュレーションか眠れる神の夢である
+
+  TRONO SOMMERSO:
+    setting: Wildemount
+    campaign_type: 長編キャンペーン
+    theme: 勢力戦争
+    tone: ミステリアス
+    style: Sandbox
+    party_level: 5
+    party_size: 4
+    twist: 敵役はさらに大きな災厄を防ごうとしている
+
+  RE DEL VETRO:
+    setting: Homebrew continent
+    campaign_type: 長編キャンペーン
+    theme: 政治的陰謀
+    tone: 奇怪
+    style: おとぎ話
+    party_level: 6
+    party_size: 4
+    twist: 世界は目立たない時間ループに囚われている
+
+  LANTERNE NELLA NEBBIA:
+    setting: Spelljammer
+    campaign_type: 長編キャンペーン
+    theme: 海洋冒険
+    tone: アイロニカル
+    style: シネマティック
+    party_level: 5
+    party_size: 5
+    twist: 任務の対象は救われることを望んでいない
+
+  # ── DUNGEON CRAWL (10) ────────────────────────────────────────────────────────
+
+  TOMBA RESPIRANTE:
+    setting: Forgotten Realms
+    campaign_type: ダンジョン探索
+    theme: 王道ファンタジー
+    tone: ミステリアス
+    style: 捜査劇
+    party_level: 4
+    party_size: 4
+    twist: ダンジョンそのものが生きている
+
+  PALUDE SENZA RITORNO:
+    setting: Homebrew continent
+    campaign_type: ダンジョン探索
+    theme: ゴシックホラー
+    tone: ダーク
+    style: ハードボイルド
+    party_level: 3
+    party_size: 4
+    twist: PCたちはすでに死んでいるが、それを知らない
+
+  FUGA DAL PROFONDO:
+    setting: Dark Sun
+    campaign_type: ダンジョン探索
+    theme: 荒野
+    tone: ダーク
+    style: ハードボイルド
+    party_level: 5
+    party_size: 5
+    twist: 怪物たちは破滅級の捕食者から逃げている
+
+  SANTUARIO DEL PECCATO:
+    setting: Ravenloft
+    campaign_type: ダンジョン探索
+    theme: ゴシックホラー
+    tone: 悲劇的
+    style: ハードボイルド
+    party_level: 6
+    party_size: 4
+    twist: 真の脅威は善良に見える組織だ（教会、ギルド、学院）
+
+  FONDERIA SENZA PADRONE:
+    setting: Eberron
+    campaign_type: ダンジョン探索
+    theme: 中世スチームパンク
+    tone: Noir
+    style: シネマティック
+    party_level: 5
+    party_size: 4
+    twist: 主たるアーティファクトは意思を持ち、操っている
+
+  SOGNO A LIVELLI:
+    setting: Exandria
+    campaign_type: ダンジョン探索
+    theme: 次元航行
+    tone: 奇怪
+    style: エピック
+    party_level: 8
+    party_size: 5
+    twist: 地域全体が魔法のシミュレーションか眠れる神の夢である
+
+  ABISSO NECESSARIO:
+    setting: Homebrew continent
+    campaign_type: ダンジョン探索
+    theme: 怪物狩り
+    tone: ダーク
+    style: ハードボイルド
+    party_level: 5
+    party_size: 4
+    twist: 敵役はさらに大きな災厄を防ごうとしている
+
+  LABIRINTO RISCRITTO:
+    setting: Feywild
+    campaign_type: ダンジョン探索
+    theme: ゴシックホラー
+    tone: 奇怪
+    style: おとぎ話
+    party_level: 4
+    party_size: 4
+    twist: 世界は目立たない時間ループに囚われている
+
+  TANA DELL'ORIGINE:
+    setting: Dragonlance
+    campaign_type: ダンジョン探索
+    theme: 怪物狩り
+    tone: 英雄的
+    style: エピック
+    party_level: 7
+    party_size: 5
+    twist: パーティには忘れられた共通の起源がある
+
+  AVAMPOSTO CONTESO:
+    setting: Wildemount
+    campaign_type: ダンジョン探索
+    theme: 勢力戦争
+    tone: ミステリアス
+    style: 捜査劇
+    party_level: 6
+    party_size: 4
+    twist: 信頼していた味方こそ裏切り者
+
+
+preset_names:
+  NULLA NELLE TORRI: 塔に潜む虚無
+  SPECCHI SENZA VITA: 命なき鏡
+  ORDINI SPEZZATI: 砕けた命令
+  CENERI SENZA SPERANZA: 希望なき灰
+  FIERA SOTTO PRESSIONE: 圧迫された市
+  FUNERALE SBAGLIATO: 間違った葬儀
+  OMBRA NELLA CACCIA: 狩りに落ちる影
+  ECO DAL FUTURO: 未来からの残響
+  LOCANDA AL CREPUSCOLO: 黄昏の宿
+  ROTTE STELLARI: 星路の航跡
+  CICATRICI DI FERRO: 鉄の傷痕
+  MARE CHE SCOMPARE: 消える海
+  ARCHIVI IN FIAMME: 炎の文書庫
+  NODI DI SANGUE: 血の結び目
+  RADICE DEL MORBO: 疫病の根
+  GIURAMENTO INFRANTO: 破られた誓い
+  PROFEZIA DI CARTA: 紙の予言
+  POLVERE E SILENZIO: 塵と沈黙
+  SETTIMANA DI VETRO: ガラスの一週間
+  CERCHIO CHIUSO: 閉じた輪
+  CORONA DI CENERE: 灰の冠
+  PATTO DELLE MAREE: 潮の盟約
+  ARCHIVIO DEI SANTI: 聖者の記録庫
+  INVERNO SENZA EREDI: 後継なき冬
+  LEGGI DELLA POLVERE: 塵の法
+  OSSA DELLA CITTA: 都市の骨
+  ALTARE DELLA COMETA: 彗星の祭壇
+  TRONO SOMMERSO: 沈んだ玉座
+  RE DEL VETRO: ガラスの王
+  LANTERNE NELLA NEBBIA: 霧の中の灯
+  TOMBA RESPIRANTE: 呼吸する墓
+  PALUDE SENZA RITORNO: 帰らずの沼
+  FUGA DAL PROFONDO: 深淵からの逃走
+  SANTUARIO DEL PECCATO: 罪の聖域
+  FONDERIA SENZA PADRONE: 主なき鋳造所
+  SOGNO A LIVELLI: 層を成す夢
+  ABISSO NECESSARIO: 必要なる深淵
+  LABIRINTO RISCRITTO: 書き換わる迷宮
+  TANA DELL'ORIGINE: 起源の巣
+  AVAMPOSTO CONTESO: 争奪の前哨地
+
+preset_descriptions:
+
+  # ── ONE-SHOT ─────────────────────────────────────────────────────────────────
+
+  NULLA NELLE TORRI: |
+    One-Shot · Eberron · Noir
+    奪われたアーティファクトが虚無への裂け目を開き、何かがこちら側へ渡ってくる。
+    まだ自分たちが破滅したと知らない都市で、時間との競争が始まる。
+    パーティは誰かのために働いている。本当の依頼主を知るのは遅すぎる。
+
+  SPECCHI SENZA VITA: |
+    One-Shot · Ravenloft · Horror
+    呪いが家から家へと広がり、パーティはすでに感染している。
+    内なる時計が刻む、逃げ道のない緊迫した調査劇。
+    どんでん返しは外から来ない。鏡の向こうから来る。
+
+  ORDINI SPEZZATI: |
+    One-Shot · Wildemount · 戦争
+    遂行すべき命令。笑顔が多すぎる味方。
+    衝突する勢力の戦場で行う潜入作戦。
+    狂騒のテンポ、道徳的な曖昧さ、重い結末を備えた一作。
+
+  CENERI SENZA SPERANZA: |
+    One-Shot · Dark Sun · サバイバル
+    悪役はすでに勝った。パーティが辿り着くのはその残骸だけだ。
+    救世主なき焦土世界での時間との競争。
+    生き延びるだけでは足りない。何を救うかを選ばなければならない。
+
+  FIERA SOTTO PRESSIONE: |
+    One-Shot · Ravnica · 陰謀
+    混み合う市で、何かを止めるまで残り三十分。
+    容疑者は三人、民衆は千人、使える権力はゼロ。
+    標的は止められることを望んでいない。それには彼らなりの理由がある。
+
+  FUNERALE SBAGLIATO: |
+    One-Shot · Forgotten Realms · ミステリー
+    間違った葬儀。そこにある死体は本物ではない。
+    死体をすり替えた者は、すでにパーティの存在を知っている。
+    悪役らしく見える人物は真の悪ではなく、しかも正しい。
+
+  OMBRA NELLA CACCIA: |
+    One-Shot · Homebrew · 狩り
+    単純な狩りのはずだった。獲物は想像していた存在ではなかった。
+    さらに巨大な何かが、パーティへ向けてそれを追い立てていた。
+    最後に迫る選択は、脅威と戦うか、その源まで追うかだ。
+
+  ECO DAL FUTURO: |
+    One-Shot · Exandria · ループ
+    ポータルが開き、その向こうから現れたのはパーティ自身だった。
+    未来の自分たち、不可能な警告、すべてを知る敵。
+    どこで始まったのかを理解したときにだけ、輪は閉じる。
+
+  LOCANDA AL CREPUSCOLO: |
+    One-Shot · Feywild · おとぎ話
+    国境前の最後の宿。ひとりの客だけが決して去らない。
+    部屋ごとに真実が剥がれる、閉塞感の強いホラー。
+    そのアーティファクトは武器ではない。記憶する“誰か”なのだ。
+
+  ROTTE STELLARI: |
+    One-Shot · Spelljammer · 宇宙
+    一隻の船、場違いな乗組員、そして不可能な配送任務。
+    追うべき相手は見つかることを望んでいない。しかも当然の理由がある。
+    皮肉と疾走感に満ちた、宇宙的混沌保証付きの物語。
+
+  # ── SHORT CAMPAIGN ───────────────────────────────────────────────────────────
+
+  CICATRICI DI FERRO: |
+    短編キャンペーン · Wildemount · 戦争
+    二年前に終わったはずの戦争。その傷はまだ塞がっていない。
+    パーティは公式には存在しない命令に起因する復讐劇を追う。
+    各セッションで、誰がなぜ嘘をついたのか新たな層が剥がれる。
+
+  MARE CHE SCOMPARE: |
+    短編キャンペーン · Homebrew · 海
+    三十年ごとに地図から消える沿岸の町。再びその時が来た。
+    数回のセッションで真相を見極め、それを止める価値があるかも判断しなければならない。
+    民間伝承、地方政治、そして最後に待つ宇宙論的啓示。
+
+  ARCHIVI IN FIAMME: |
+    短編キャンペーン · Eberron · 陰謀
+    誰かが三都市の秘術文書庫を、正確な順序で焼き払っている。
+    痕跡が導く先にあるのは、ギルドが埋葬したがる真実だ。
+    学術的陰謀、追跡劇、寝返る味方が絡み合う。
+
+  NODI DI SANGUE: |
+    短編キャンペーン · Ravnica · 権力
+    四つの名門、一つの相続争い、毎回見つかる死体。
+    パーティは不本意ながら巻き込まれ、誰もが彼らを利用しようとする。
+    最後の捻りは、誰が本当に誰を雇っていたかを暴く。
+
+  RADICE DEL MORBO: |
+    短編キャンペーン · Forgotten Realms · 疫病
+    村が助けを求めている。だがそこにいるのは怪物ではない。
+    クリーチャーは結果でしかなく、原因は人々の中で微笑んでいる。
+    強い感情的余韻を残す田園ホラー。
+
+  GIURAMENTO INFRANTO: |
+    短編キャンペーン · Dragonlance · 運命
+    かつてパーティが交わした誓い。その代償を求める者が現れる。
+    数セッションで、その誓いを守るか、裏切るか、別の意味へ作り替えるかを決める。
+    背景設定が中心となる、個人的で苦いクライマックス。
+
+  PROFEZIA DI CARTA: |
+    短編キャンペーン · Homebrew · 予言
+    予言は偽りだった。しかし誰かがその上に権力を築いている。
+    パーティは古い刻文を追い、不快な真実へと近づいていく。
+    物語の前提そのものを書き換える啓示へ向かう多層ミステリー。
+
+  POLVERE E SILENZIO: |
+    短編キャンペーン · Dark Sun · サバイバル
+    悪役はすでに勝利し、任務は残されたものを救うことだけ。
+    焼けた世界、乏しい資源、救い手の来ない現実。
+    最終的な結末は、何を選んで守ったかによって変わる。
+
+  SETTIMANA DI VETRO: |
+    短編キャンペーン · Eberron · パラノイア
+    一週間、誰かを守れ。今日は木曜で、すでに三度の暗殺は失敗した。
+    四度目は内側から来る。アーティファクトは口より多くを知っている。
+    高まる緊張、不完全な情報、締めつけるカウントダウン。
+
+  CERCHIO CHIUSO: |
+    短編キャンペーン · Ravenloft · カルト
+    その教団は公式には誰も傷つけない。だが元信者は消えていく。
+    パーティが潜入して見つけるのは、想像より悪い真実だ。
+    多層的なエスカレーション、二重の正体、そして不可能な選択。
+
+  # ── LONG CAMPAIGN ────────────────────────────────────────────────────────────
+
+  CORONA DI CENERE: |
+    長編キャンペーン · Dragonlance · 王道ファンタジー
+    王国がその重みを支えられない時に、ひとつの冠が再び姿を現す。
+    貴族、騎士団、退役兵たちが同じ正統性の象徴を奪い合う。
+    裏切り者は物語の最後に現れない。パーティの隣で育っていく。
+
+  PATTO DELLE MAREE: |
+    長編キャンペーン · Exandria · 海洋冒険
+    断たれた航路、現れては消える島々、海底に刻まれた誓い。
+    港ごとに、政治、謎、戦争、邪教のいずれか異なる篇が開く。
+    パーティに共有された過去こそ、長い叙事を結ぶ鍵となる。
+
+  ARCHIVIO DEI SANTI: |
+    長編キャンペーン · Eberron · 政治的陰謀
+    神聖な記録庫には、国家の輪郭すら描き直しかねない証拠が眠る。
+    教会、ギルド、学院は真実を奪い合っているように見えるが、本気で埋めたい組織は一つだけだ。
+    脆い同盟と遅効性の啓示、腐敗した権力を描く長編。
+
+  INVERNO SENZA EREDI: |
+    長編キャンペーン · Ravenloft · ゴシックホラー
+    王家は絶えようとしているのに、城はなお後継者を求め続ける。
+    それぞれの候補者が、領域の公式史と食い違う真実を抱えている。
+    国を支える予言は偽りであり、そのことを何世代も知る者がいる。
+
+  LEGGI DELLA POLVERE: |
+    長編キャンペーン · Dark Sun · 荒野
+    世界は救えない。ただ、何を生き残らせるべきか決めるために横断するしかない。
+    都市国家はひとつずつ崩れ、パーティの勝利は常に誰かにとって遅すぎる。
+    悪役はすでに勝っている。真の物語は、廃墟から何を奪い返せるかにある。
+
+  OSSA DELLA CITTA: |
+    長編キャンペーン · Ravnica · 勢力戦争
+    都市の地下には、表の争いより古く、より飢えた第二の戦争が眠る。
+    ギルドは現在のために戦っているつもりで、実際ははるか昔の何かを養っている。
+    誰もが求めるアーティファクトは武器ではない。帝国を渇望する助言者だ。
+
+  ALTARE DELLA COMETA: |
+    長編キャンペーン · Forgotten Realms · 次元航行
+    周期では説明できない彗星が空を裂き、傷を残していく。
+    各篇で、パーティは自分たちが知っていたはずの世界からさらに遠ざかる。
+    中心の啓示は地域だけでなく、現実そのものの在り方を揺るがす。
+
+  TRONO SOMMERSO: |
+    長編キャンペーン · Wildemount · 勢力戦争
+    海底に沈んだ王国が、地上政治の中心へと戻ってくる。
+    船、間者、遺物が、どの勢力も本当は理解していない戦争へパーティを引きずり込む。
+    混沌の元凶に見える敵は、実はさらに悪いものを止めようとしている。
+
+  RE DEL VETRO: |
+    長編キャンペーン · Homebrew continent · 政治的陰謀
+    優雅な宮廷が、童話のような気配で大陸の記憶を書き換えていく。
+    パーティが結ぶ同盟はどれも、現実に新たな亀裂を残す。
+    時間ループは露骨ではない。違和感は細部、失敗、そして覚えすぎている顔に宿る。
+
+  LANTERNE NELLA NEBBIA: |
+    長編キャンペーン · Spelljammer · 海洋冒険
+    小さな世界々の船団が、宇宙には属さない霧の向こうで消える。
+    パーティは救うべき相手を追うが、その人物には戻りたくない十分な理由がある。
+    比較的軽い口当たりながら、宇宙的エスカレーションと終盤の啓示に向く。
+
+  # ── DUNGEON CRAWL ─────────────────────────────────────────────────────────
+
+  TOMBA RESPIRANTE: |
+    ダンジョン · Forgotten Realms · ミステリー
+    空であるはずのない墓は、やはり空ではない。
+    ダンジョンは呼吸し、成長し、パーティの行動に応答する。
+    すべての部屋が啓示を隠し、最後のひとつがすべてを変える。
+
+  PALUDE SENZA RITORNO: |
+    ダンジョン · Homebrew · Horror
+    彼らは略奪のために入った。そして、存在してはならないものを見つけた。
+    パーティはすでに死んでいる。ただ、まだそれを知らない。
+    階層ごとに真実が剥がれる、閉塞感の強いホラー。
+
+  FUGA DAL PROFONDO: |
+    ダンジョン · Dark Sun · サバイバル
+    クリーチャーたちは地下から何かに追われ、地上へ逃げてきている。
+    パーティは皆が逃げてくるその“何か”へ向かって降りていく。
+    限られた資源、絶望的な勢力、そして破滅級の捕食者。
+
+  SANTUARIO DEL PECCATO: |
+    ダンジョン · Ravenloft · 組織
+    真実を隠すため教会が建てた、呪われた聖域。
+    脅威はアンデッドではなく、それを生み出した者と理由のほうにある。
+    調査色の強いホラーで、道徳的に重い結末を迎える。
+
+  FONDERIA SENZA PADRONE: |
+    ダンジョン · Eberron · 秘術
+    放棄された秘術鋳造所。ゴーレムたちは今もなお誰かのために働く。
+    中心のアーティファクトは見た目以上のことを知っており、自らの計画を持つ。
+    独特なギミックと意外な終盤の啓示を備えた地下スチームパンク。
+
+  SOGNO A LIVELLI: |
+    ダンジョン · Exandria · 宇宙
+    そのダンジョンは場所ではない。まだ目覚めぬ神の夢そのものだ。
+    各階層は異なる法則に従い、現実は交渉可能になる。
+    カテゴリーを拒むダンジョンクロールを求める者のための一作。
+
+  ABISSO NECESSARIO: |
+    ダンジョン · Homebrew · 狩り
+    彼らは怪物を殺すために降りた。だが怪物はもっと悪いものを止めようとしている。
+    内部勢力は対立し、啓示は当初の任務をひっくり返す。
+    最大の脅威が最深部ではなく、送り込んだ側にあるダンジョン。
+
+  LABIRINTO RISCRITTO: |
+    ダンジョン · Feywild · ループ
+    パーティが休息するたび、迷宮は自らを書き換える。
+    時の流れはここでは異なり、誰かがそれを利用している。
+    おとぎ話めいて不安定で、終幕にはこの場所の法則理解が求められる。
+
+  TANA DELL'ORIGINE: |
+    ダンジョン · Dragonlance · 遺産
+    竜の巣は空だった。竜たちは逃げ去り、パーティはそれを追い出した存在と同じ起源を持つ。
+    パーティの正体が中心の啓示となる、英雄的ダンジョン。
+    個人的で破壊力のある捻りを備えた古典的クロールを望む者へ。
+
+  AVAMPOSTO CONTESO: |
+    ダンジョン · Wildemount · 戦争
+    地下に崩れ落ちた軍事前哨地は、いまや誰かに制圧されている。
+    各階層で勢力が争い、パーティは予期せぬ変数となる。
+    中へ導く味方にも独自の思惑があり、そのすべてが一致しているわけではない。

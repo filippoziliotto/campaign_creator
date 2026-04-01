@@ -107,6 +107,52 @@ void main() {
       expect(options.presets, isNotEmpty);
     });
 
+    test('loads bundled Polish options from assets', () async {
+      final service = LocalCampaignService();
+
+      final options = await service.getOptions(localeCode: 'pl');
+
+      expect(options.settings, isNotEmpty);
+      expect(options.settings, contains('Forgotten Realms'));
+      expect(options.campaignTypes, contains('Długa kampania'));
+      expect(options.themes, contains('Klasyczne fantasy'));
+      expect(options.tones, contains('Mroczny'));
+      expect(options.styles, contains('Epicki'));
+      expect(options.twists, contains('Brak zwrotu akcji'));
+      expect(options.presets, isNotEmpty);
+    });
+
+    test('loads bundled Polish preset display names', () async {
+      final service = LocalCampaignService();
+
+      final options = await service.getOptions(localeCode: 'pl');
+
+      expect(
+        options.presetNames['NULLA NELLE TORRI'],
+        'Nic w wieżach',
+      );
+      expect(
+        options.presetNames['TOMBA RESPIRANTE'],
+        'Oddychający grobowiec',
+      );
+    });
+
+    test('loads bundled Japanese options and preset display names', () async {
+      final service = LocalCampaignService();
+
+      final options = await service.getOptions(localeCode: 'ja');
+
+      expect(options.settings, contains('Forgotten Realms'));
+      expect(options.campaignTypes, contains('長編キャンペーン'));
+      expect(options.themes, contains('王道ファンタジー'));
+      expect(options.tones, contains('ダーク'));
+      expect(options.styles, contains('エピック'));
+      expect(options.twists, contains('どんでん返しなし'));
+      expect(options.presetNames['NULLA NELLE TORRI'], '塔に潜む虚無');
+      expect(options.presetNames['TOMBA RESPIRANTE'], '呼吸する墓');
+      expect(options.presets, isNotEmpty);
+    });
+
     test(
         'returns the same CampaignOptions instance for repeated calls with the same locale',
         () async {

@@ -223,6 +223,102 @@ void main() {
     },
   );
 
+  testWidgets(
+      'Polish entry cards use distinct artwork and atmosphere per campaign type',
+      (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1200, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('pl'),
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(_entryOptionsPl()),
+          currentLocale: const Locale('pl'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    final oneShotCard = tester.widget<CampaignModeCard>(
+      find.byKey(const ValueKey<String>('entry-campaign-card-One-Shot')),
+    );
+    final miniCampaignCard = tester.widget<CampaignModeCard>(
+      find.byKey(const ValueKey<String>('entry-campaign-card-Mini-kampania')),
+    );
+    final longCampaignCard = tester.widget<CampaignModeCard>(
+      find.byKey(const ValueKey<String>('entry-campaign-card-Długa kampania')),
+    );
+    final dungeonCard = tester.widget<CampaignModeCard>(
+      find.byKey(
+        const ValueKey<String>('entry-campaign-card-Eksploracja lochów'),
+      ),
+    );
+
+    expect(oneShotCard.artAsset, 'assets/entry_cards/one_shot.jpg');
+    expect(oneShotCard.atmosphere.id, 'one-shot');
+
+    expect(miniCampaignCard.artAsset, 'assets/entry_cards/campagna_corta.jpg');
+    expect(miniCampaignCard.atmosphere.id, 'mini-campaign');
+
+    expect(longCampaignCard.artAsset, 'assets/entry_cards/campagna_lunga.jpg');
+    expect(longCampaignCard.atmosphere.id, 'long-campaign');
+
+    expect(dungeonCard.artAsset, 'assets/entry_cards/dungeon.jpg');
+    expect(dungeonCard.atmosphere.id, 'dungeon');
+  });
+
+  testWidgets(
+      'Japanese entry cards use distinct artwork and atmosphere per campaign type',
+      (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1200, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('ja'),
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(_entryOptionsJa()),
+          currentLocale: const Locale('ja'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    final oneShotCard = tester.widget<CampaignModeCard>(
+      find.byKey(const ValueKey<String>('entry-campaign-card-One-Shot')),
+    );
+    final miniCampaignCard = tester.widget<CampaignModeCard>(
+      find.byKey(const ValueKey<String>('entry-campaign-card-短編キャンペーン')),
+    );
+    final longCampaignCard = tester.widget<CampaignModeCard>(
+      find.byKey(const ValueKey<String>('entry-campaign-card-長編キャンペーン')),
+    );
+    final dungeonCard = tester.widget<CampaignModeCard>(
+      find.byKey(const ValueKey<String>('entry-campaign-card-ダンジョン探索')),
+    );
+
+    expect(oneShotCard.artAsset, 'assets/entry_cards/one_shot.jpg');
+    expect(oneShotCard.atmosphere.id, 'one-shot');
+
+    expect(miniCampaignCard.artAsset, 'assets/entry_cards/campagna_corta.jpg');
+    expect(miniCampaignCard.atmosphere.id, 'mini-campaign');
+
+    expect(longCampaignCard.artAsset, 'assets/entry_cards/campagna_lunga.jpg');
+    expect(longCampaignCard.atmosphere.id, 'long-campaign');
+
+    expect(dungeonCard.artAsset, 'assets/entry_cards/dungeon.jpg');
+    expect(dungeonCard.atmosphere.id, 'dungeon');
+  });
+
   testWidgets('new session resets forge selections back to defaults', (
     tester,
   ) async {
@@ -605,6 +701,48 @@ CampaignOptions _entryOptionsPt() {
     twists: const ['Traição'],
     presets: const {},
     settingDescriptions: const {'Forgotten Realms': 'Fantasia clássica.'},
+    presetDescriptions: const {},
+    presetNames: const {},
+  );
+}
+
+CampaignOptions _entryOptionsPl() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms'],
+    campaignTypes: const [
+      'One-Shot',
+      'Mini-kampania',
+      'Długa kampania',
+      'Eksploracja lochów',
+    ],
+    themes: const ['Intryga'],
+    tones: const ['Mroczny'],
+    styles: const ['Filmowy'],
+    partyArchetypes: const ['Wojownik'],
+    twists: const ['Zdrada'],
+    presets: const {},
+    settingDescriptions: const {'Forgotten Realms': 'Klasyczne high fantasy.'},
+    presetDescriptions: const {},
+    presetNames: const {},
+  );
+}
+
+CampaignOptions _entryOptionsJa() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms'],
+    campaignTypes: const [
+      'One-Shot',
+      '短編キャンペーン',
+      '長編キャンペーン',
+      'ダンジョン探索',
+    ],
+    themes: const ['陰謀'],
+    tones: const ['ダーク'],
+    styles: const ['シネマティック'],
+    partyArchetypes: const ['戦士'],
+    twists: const ['裏切り'],
+    presets: const {},
+    settingDescriptions: const {'Forgotten Realms': '王道ハイファンタジー。'},
     presetDescriptions: const {},
     presetNames: const {},
   );

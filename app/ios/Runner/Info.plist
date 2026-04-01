@@ -68,6 +68,8 @@
 		</array>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>ITSAppUsesNonExemptEncryption</key>
+		<false/>
 		<!-- AdMob app ID: test ID below. Override for production by setting
 		     ADMOB_APP_ID in Xcode build settings or via --dart-define. -->
 		<key>GADApplicationIdentifier</key>

@@ -33,6 +33,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get languagePortugueseShort => 'PT';
 
   @override
+  String get languagePolishShort => 'PL';
+
+  @override
+  String get languageJapaneseShort => 'JP';
+
+  @override
   String get commonRetry => 'Erneut versuchen';
 
   @override

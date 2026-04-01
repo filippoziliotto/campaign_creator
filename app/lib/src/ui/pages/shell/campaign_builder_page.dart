@@ -534,6 +534,8 @@ _CampaignTypeKind _campaignTypeKindFor(String? campaignType) {
     case 'Mini-campagne':
     case 'Mini-Kampagne':
     case 'Mini-campanha':
+    case 'Mini-kampania':
+    case '短編キャンペーン':
       return _CampaignTypeKind.miniCampaign;
     case 'Campagna lunga':
     case 'Long campaign':
@@ -541,6 +543,9 @@ _CampaignTypeKind _campaignTypeKindFor(String? campaignType) {
     case 'Longue campagne':
     case 'Lange Kampagne':
     case 'Campanha longa':
+    case 'Długa kampania':
+    case 'Dluga kampania':
+    case '長編キャンペーン':
       return _CampaignTypeKind.longCampaign;
     case 'Esplorazione dungeon':
     case 'Dungeon crawl':
@@ -549,6 +554,9 @@ _CampaignTypeKind _campaignTypeKindFor(String? campaignType) {
     case 'Dungeon-Erkundung':
     case 'Exploração de masmorra':
     case 'Exploracao de masmorra':
+    case 'Eksploracja lochów':
+    case 'Eksploracja lochow':
+    case 'ダンジョン探索':
       return _CampaignTypeKind.dungeon;
     default:
       return _CampaignTypeKind.custom;

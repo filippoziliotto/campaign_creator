@@ -66,6 +66,12 @@ class LocalCampaignService implements CampaignService {
       case 'de':
       case 'de-de':
         return 'de';
+      case 'pl':
+      case 'pl-pl':
+        return 'pl';
+      case 'ja':
+      case 'ja-jp':
+        return 'ja';
       case 'en':
       case 'en-us':
       case 'en-gb':
@@ -90,6 +96,9 @@ class LocalCampaignService implements CampaignService {
     'mini kampagne': 'mini_campaign',
     'mini-campanha': 'mini_campaign',
     'mini campanha': 'mini_campaign',
+    'mini-kampania': 'mini_campaign',
+    'mini kampania': 'mini_campaign',
+    '短編キャンペーン': 'mini_campaign',
     'campagna lunga': 'long_campaign',
     'long campaign': 'long_campaign',
     'campaña larga': 'long_campaign',
@@ -97,6 +106,9 @@ class LocalCampaignService implements CampaignService {
     'longue campagne': 'long_campaign',
     'lange kampagne': 'long_campaign',
     'campanha longa': 'long_campaign',
+    'długa kampania': 'long_campaign',
+    'dluga kampania': 'long_campaign',
+    '長編キャンペーン': 'long_campaign',
     'esplorazione dungeon': 'dungeon_exploration',
     'dungeon crawl': 'dungeon_exploration',
     'exploración de mazmorra': 'dungeon_exploration',
@@ -106,6 +118,9 @@ class LocalCampaignService implements CampaignService {
     'exploracao de masmorra': 'dungeon_exploration',
     'dungeon-erkundung': 'dungeon_exploration',
     'dungeonerkundung': 'dungeon_exploration',
+    'eksploracja lochów': 'dungeon_exploration',
+    'eksploracja lochow': 'dungeon_exploration',
+    'ダンジョン探索': 'dungeon_exploration',
   };
 
   static const _templatePathByFamily = <String, String>{
@@ -122,6 +137,8 @@ class LocalCampaignService implements CampaignService {
     'horror gótico',
     'horreur gothique',
     'gotischer horror',
+    'gotycki horror',
+    'ゴシックホラー',
   };
 
   static const _darkToneValues = <String>{
@@ -131,6 +148,8 @@ class LocalCampaignService implements CampaignService {
     'sombrio',
     'sombre',
     'düster',
+    'mroczny',
+    'ダーク',
   };
 
   static const _noTwistValues = <String>{
@@ -148,6 +167,8 @@ class LocalCampaignService implements CampaignService {
     'sans rebondissement',
     'kein twist',
     'keine wendung',
+    'brak zwrotu akcji',
+    'どんでん返しなし',
   };
 
   static const Map<String, _PromptLocaleBundle> _bundles =
@@ -496,6 +517,63 @@ class LocalCampaignService implements CampaignService {
             'Entwirf einen Bogen für 10+ Sitzungen mit Nebenhandlungen, sich entwickelnden Schlüssel-NSC, Fraktionen und dauerhaften Folgen der Entscheidungen der Gruppe.',
         'dungeon_exploration':
             'Entwirf eine Kampagne mit Fokus auf mehrstufige Erkundung, Ressourcenmanagement, Fallen, Entdeckungen und strategische Rückzüge an die Oberfläche.',
+      },
+    ),
+    'ja': _PromptLocaleBundle(
+      languageLabel: '日本語',
+      themeFallback: '強い希望なし（自由に組み合わせてよい）。',
+      toneFallback: '強い希望なし（自由に組み合わせてよい）。',
+      styleFallback: '強い希望なし（自由に組み合わせてよい）。',
+      defaultStructure:
+          '強い導入、段階的なエスカレーション、明確な結末を備えたモジュール型キャンペーンを設計する。',
+      partyArchetypesFallback: 'ユーザー指定なし。',
+      noTwistReference: '物語の中心となる転換点',
+      twistReferencePattern: '「{twist}」というどんでん返し',
+      npcInstructionsEnabled:
+          '目的、秘密、語り口がはっきり異なるNPCを最低5人作成すること。',
+      npcInstructionsDisabled:
+          'NPCは任意。メインプロットに必要な者だけを使うこと。',
+      encounterInstructionsEnabled:
+          '戦術面だけでなく物語上の目的を持つ重要な遭遇を3〜5個含めること。',
+      encounterInstructionsDisabled:
+          '戦闘遭遇は減らし、調査や社交シーンをより重視すること。',
+      missingPartyComposition:
+          'パーティ構成が未指定なら、PCのクラスと役割の自然な組み合わせを提案すること。',
+      missingNarrativeHooks:
+          '物語の導入が未指定なら、別案となる導入フックを3つ提案すること。',
+      missingCharacterNotes:
+          'キャラクターメモが未指定なら、PCと世界を結ぶもっともらしい関係性を作ること。',
+      missingFactions:
+          '勢力情報が未指定なら、舞台と中心対立に合う勢力を2〜3個提案すること。',
+      missingNpcFocus:
+          'NPC焦点が未指定なら、味方、ライバル、曖昧な中立者を混ぜて配置すること。',
+      missingEncounterFocus:
+          '遭遇の焦点が未指定なら、キャンペーンのテンポに合わせて社交、探索、戦闘を均衡させること。',
+      missingSafetyNotes:
+          'セーフティ指示が未指定なら、不必要なセンシティブ表現を避け、常識的な暗黙の境界内に収めること。',
+      missingTwist:
+          '強い暴露、転換、またはエスカレーションを軸に物語を組み立てること。',
+      qualityRules: <String>[
+        '選択された入力を尊重すること。舞台、テーマ、トーン、スタイルを扱いやすい別案に置き換えないこと。',
+        '二つの入力が緊張関係にある場合は、どちらも無視せず創造的に両立させること。',
+        '具体的なディテールで支えられていない汎用ファンタジーの穴埋め表現は避けること。',
+        'すべてのNPC、勢力、場所、遭遇には、卓上で使える覚えやすい特徴を最低一つ持たせること。',
+        '決して卓に出てこない抽象的な設定や過去話より、実際に感じられる結果を優先すること。',
+      ],
+      horrorConstraint:
+          'ホラーは雰囲気重視で保ち、露骨なゴア表現やスプラッター描写は避けること。',
+      agencyConstraint:
+          'PCの主体性を保つこと。意味のある選択肢がない不可避シーンは避けること。',
+      noConstraintsProvided: 'ユーザーから追加制約は提示されていない。',
+      structureRulesByFamily: <String, String>{
+        'one_shot':
+            '導入、展開、クライマックス＋エピローグの3幕構成で設計し、1セッション分の進行目安を含めること。',
+        'mini_campaign':
+            '4〜6セッションの短編弧として設計し、賭け金の上昇、中盤の暴露、強い結末を明確に含めること。',
+        'long_campaign':
+            '10セッション以上の長編弧として設計し、サブプロット、主要NPCの変化、勢力、選択の持続的な結果を含めること。',
+        'dungeon_exploration':
+            '階層探索、資源管理、罠、発見、地上への戦略的帰還を中心にしたキャンペーンとして設計すること。',
       },
     ),
   };

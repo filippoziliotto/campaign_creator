@@ -1,0 +1,359 @@
+{
+  "@@locale": "pl",
+  "appTitle": "Kreator Kampanii D&D",
+  "appNameShort": "Kreator Kampanii",
+  "languageItalianShort": "IT",
+  "languageEnglishShort": "EN",
+  "languageSpanishShort": "ES",
+  "languageFrenchShort": "FR",
+  "languageGermanShort": "DE",
+  "languagePortugueseShort": "PT",
+  "languagePolishShort": "PL",
+  "languageJapaneseShort": "JP",
+  "commonRetry": "Ponów",
+  "commonOpen": "Otwórz",
+  "commonOptional": "Opcjonalne",
+  "appFreeFormat": "Wybierz format",
+  "appSettingPending": "Świat do określenia",
+  "appTwistPending": "Zwrot akcji do określenia",
+  "appStageEntry": "Wybór",
+  "appStageForge": "Kuźnia",
+  "appStageParchment": "Pergamin",
+  "appOpenParchment": "Otwórz pergamin",
+  "appSealParchment": "Zapieczętuj pergamin",
+  "appSummaryLevel": "Poz. {level}",
+  "@appSummaryLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "appSummaryPartySize": "{size} BG",
+  "@appSummaryPartySize": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "appSummaryPreset": "Preset: {name}",
+  "@appSummaryPreset": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "appLoadOptionsError": "Nie udało się wczytać opcji: {error}",
+  "@appLoadOptionsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appGenerationFailedError": "Generowanie nie powiodło się: {error}",
+  "@appGenerationFailedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appInvalidArchetypeSelection": "Wybrano {count} archetypów, ale drużyna ma ustawione {size} postaci.",
+  "@appInvalidArchetypeSelection": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "appSnackForgedAndCopied": "Pergamin został wykuty, a prompt skopiowany do schowka.",
+  "appSnackGenerationFailed": "Generowanie nie powiodło się. Sprawdź komunikat na ekranie.",
+  "appSnackPromptCopied": "Prompt skopiowany do schowka.",
+  "appSnackNoParchmentToShare": "Nie ma jeszcze pergaminu do udostępnienia.",
+  "appSnackShareUnavailableOnDevice": "Udostępnianie nie jest dostępne na tym urządzeniu.",
+  "appSnackShareUnavailable": "Udostępnianie niedostępne: {error}",
+  "@appSnackShareUnavailable": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appSnackGenerateFirst": "Najpierw wygeneruj pergamin, zanim go wyślesz.",
+  "appSnackChatGptOpened": "Otworzono ChatGPT. Prompt jest już w schowku.",
+  "appSnackChatGptCopiedOnly": "Nie udało się otworzyć ChatGPT, ale prompt został skopiowany.",
+  "appSnackPremiumUnlockedTemporary": "Premium odblokowane na 5 minut",
+  "appSnackRewardedAdUnavailable": "Reklama jest teraz niedostępna. Spróbuj ponownie za chwilę.",
+  "appSnackNoParchmentToSave": "Nie ma pergaminu do zapisania.",
+  "appSnackDraftSaved": "Szkic pergaminu zapisano lokalnie.",
+  "appSnackDraftMemoryOnly": "Szkic zapisano tylko w pamięci. Uruchom aplikację ponownie, aby włączyć lokalne zapisywanie.",
+  "appSnackSealedSavedAndCopied": "Pergamin zapieczętowany: szkic zapisany, prompt skopiowany.",
+  "appSnackSealedCopiedOnlyMemory": "Pergamin zapieczętowany: prompt skopiowany. Uruchom aplikację ponownie, aby włączyć lokalne zapisywanie.",
+  "appSnackLocalSaveUnavailable": "Lokalne zapisywanie jest niedostępne w tej sesji. Zamknij i uruchom aplikację ponownie, aby zarejestrować wtyczkę.",
+  "appDraftMemoryOnly": "Szkic zachowany tylko w pamięci. Uruchom aplikację ponownie, aby przywrócić lokalne zapisywanie.",
+  "appDraftAligned": "Lokalny szkic zsynchronizowano {dateTime}.",
+  "@appDraftAligned": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "appDraftLastSaved": "Ostatni szkic zapisano {dateTime}.",
+  "@appDraftLastSaved": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "appErrorEyebrow": "Rytuał przerwany",
+  "appErrorTitle": "Grimuar nie odpowiada",
+  "appErrorUnknownLoad": "Nieznany błąd podczas wczytywania opcji.",
+  "entryCampaignTypesTitle": "Typy kampanii",
+  "entryResumeTitle": "Wznów sesję",
+  "entryResumeSubtitle": "Masz już aktywny szkic. Wróć od razu do właściwego etapu.",
+  "entryResumeForge": "Wznów kuźnię",
+  "entryOpenForge": "Otwórz kuźnię",
+  "entryHeroWelcomeTitle": "Wybierz swoją kampanię",
+  "entryHeroWelcomeBody": "Wykuty prompt kampanii, a potem ożyw go przy pomocy zaufanej SI.",
+  "entryHeroChooseRitual": "Wybierz format, aby rozpocząć.",
+  "onboardingHowItWorks": "Jak to działa",
+  "onboardingChooseCampaignTitle": "Wybierz kampanię",
+  "onboardingChooseCampaignBody": "Najpierw wybierz format kampanii, aby reszta konfiguracji miała właściwy kształt.",
+  "onboardingDefineDetailsTitle": "Określ kluczowe szczegóły",
+  "onboardingDefineDetailsBody": "Ustaw świat, motywy, ton, styl, drużynę i zwrot akcji przed wykuciem promptu.",
+  "onboardingForgePromptTitle": "Wykuj prompt",
+  "onboardingForgePromptBody": "Wygeneruj końcowy prompt, podejrzyj go i wklej do ChatGPT.",
+  "onboardingGeneratedPromptTitle": "Wygenerowany prompt",
+  "onboardingPastePromptSubtitle": "Wklej tam wygenerowany prompt.",
+  "onboardingNext": "Dalej",
+  "onboardingBack": "Wstecz",
+  "onboardingSkip": "Pomiń",
+  "onboardingStartForging": "Zacznij kuć",
+  "onboardingCopyStep": "Kopiuj",
+  "onboardingSettingExample": "Pograniczne królestwo",
+  "onboardingThemesExample": "Napięcie polityczne",
+  "onboardingToneExample": "Mroczny i noir",
+  "onboardingStyleExample": "Przyziemne fantasy",
+  "entryResetDraft": "Nowa sesja",
+  "entryResetDraftConfirm": "Szkic wyczyszczony.",
+  "entryBadgeDefault": "Format",
+  "entryDescriptionDefault": "Format kampanii gotowy na urządzeniu.",
+  "entryBadgeOneShot": "Szybkie ostrze",
+  "entryDescriptionOneShot": "Misja o dużym impakcie zaprojektowana na jedno posiedzenie, z natychmiastową wypłatą i precyzyjnym zwrotem akcji.",
+  "entryBadgeMiniCampaign": "Krótki łuk",
+  "entryDescriptionMiniCampaign": "Historia skondensowana do kilku sesji, z wyraźnym rozwojem, eskalacją i ostrym finałem.",
+  "entryBadgeLongCampaign": "Szeroka saga",
+  "entryDescriptionLongCampaign": "Frakcje, zmieniające się układy sił i trwałe wątki poboczne dla kampanii, która rośnie z czasem.",
+  "entryBadgeDungeon": "Głębie",
+  "entryDescriptionDungeon": "Ustrukturyzowane zejście przez mapy, ryzyko, wyczerpanie i warstwowe odkrycia.",
+  "forgeSectionWorld": "Świat",
+  "forgeSectionParty": "Drużyna",
+  "forgeSectionNarrative": "Fabuła",
+  "forgeButtonForging": "Kucie...",
+  "forgeNextParty": "Przejdź do drużyny",
+  "forgeNextNarrative": "Przejdź do fabuły",
+  "forgeReforgeParchment": "Przekuj pergamin",
+  "forgeForgeParchment": "Wykuj pergamin",
+  "forgeReforgeParchmentCompact": "Przekuj pergamin",
+  "forgeForgeParchmentCompact": "Wykuj pergamin",
+  "forgeAdvanceBlockedWorld": "Określ przynajmniej ton, styl lub motywy, zanim przejdziesz do drużyny.",
+  "forgeAdvanceBlockedParty": "Sprawdź poziom, liczebność i archetypy drużyny, zanim przejdziesz dalej.",
+  "forgeAdvanceBlockedNarrative": "Dodaj przynajmniej jeden szczegół fabularny przed wykuciem pergaminu.",
+  "forgeReadinessWorldReady": "Możesz przejść do drużyny.",
+  "forgeReadinessWorldPending": "Wybierz format, świat i kluczowe sygnały.",
+  "forgeReadinessPartyReady": "Możesz otworzyć fabułę.",
+  "forgeReadinessPartyPending": "Określ poziom, liczebność i role grupy.",
+  "forgeReadinessNarrativeReady": "Możesz wykuć pergamin.",
+  "forgeReadinessNarrativePending": "Dodaj przynajmniej jeden haczyk fabularny.",
+  "forgeWorldSectionTitle": "Budowanie świata",
+  "forgeWorldSectionSubtitle": "Format, świat i początkowe sygnały kampanii.",
+  "forgeFoundationLabel": "Podstawa",
+  "forgeFoundationTitle": "Ustawienia bazowe",
+  "forgeFoundationSubtitle": "Świat i scenariusz.",
+  "forgePresetSectionTitle": "Wybierz preset",
+  "forgePresetSectionSubtitle": "Zastosuj preset, aby szybko skonfigurować kampanię.",
+  "forgePresetPanelLabel": "Presety",
+  "forgePresetPanelTitle": "Szybkie presety",
+  "forgeQuickPresetLabel": "Szybki preset",
+  "forgeNoPresetSelected": "Brak presetu",
+  "forgeApplyPreset": "Wykuj z presetem",
+  "forgeApply": "Wykuj z presetem",
+  "forgeSettingLabel": "Świat",
+  "forgeCustomSettingLabel": "Własny świat",
+  "forgeCustomSettingHint": "Np. królestwo w stanie wojny, pionowe miasto",
+  "forgeTwistTitle": "Początkowy zwrot akcji",
+  "forgeTwistHelpTooltip": "Pomoc dotycząca początkowego zwrotu akcji",
+  "forgeTwistLabel": "Zwrot akcji",
+  "forgeCustomTwistLabel": "Własny zwrot akcji",
+  "forgeCustomTwistHint": "Sojusznik kłamie, loch żyje, misja jest pułapką...",
+  "forgeCreativeTitle": "Motywy, ton i styl",
+  "forgeCreativeHelpTooltip": "Pomoc dotycząca kierunku kreatywnego",
+  "forgeCreativeHelpBody": "Wybierz motywy, ton i styl narracyjny swojej kampanii.",
+  "forgeThemesTitle": "Motywy",
+  "forgeCustomThemesLabel": "Własne motywy",
+  "forgeCustomThemesHint": "Np. steampunk, kosmiczny horror",
+  "forgeToneTitle": "Ton",
+  "forgeStyleTitle": "Styl",
+  "forgeToneStyleOverrideLabel": "Własny ton i styl",
+  "forgeToneStyleOverrideHint": "Np. ton: mroczny; styl: brutalny",
+  "forgePartySectionTitle": "Drużyna i skala gry",
+  "forgePartySectionSubtitle": "Poziom, liczebność i główne role grupy.",
+  "forgeScaleLabel": "Skala",
+  "forgeScaleTitle": "Poziom i liczebność",
+  "forgePartyLevel": "Poziom drużyny: {level}",
+  "@forgePartyLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartySize": "Liczba postaci: {size}",
+  "@forgePartySize": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartyLevelPremiumHint": "Poziomy 4+ są premium",
+  "forgePartySizePremiumHint": "5+ postaci to premium",
+  "forgePartyArchetypesTitle": "Archetypy drużyny",
+  "forgePartyArchetypesSubtitle": "Wybierz do {size} archetypów.",
+  "@forgePartyArchetypesSubtitle": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "forgePartyArchetypesMaxReached": "Osiągnięto maksymalną liczbę archetypów możliwych do wybrania dla tej drużyny.",
+  "forgePartyInfoTitle": "Przydatne informacje",
+  "forgeCharacterNotesLabel": "Notatki o postaciach",
+  "forgeCharacterNotesHint": "Sekrety, więzi, lęki, ważna przeszłość...",
+  "forgeConstraintsLabel": "Ograniczenia",
+  "forgeConstraintsHint": "Krótki czas trwania, brak podróży międzyplanarnych, obowiązkowy finałowy boss...",
+  "forgeNarrativeSectionTitle": "Nacisk fabularny",
+  "forgeNarrativeSectionSubtitle": "Dodatkowe haczyki, frakcje i ograniczenia, które personalizują pergamin.",
+  "forgeNarrativePanelTitle": "Fabuła i siły w grze",
+  "forgeNarrativeHooksLabel": "Haczyki fabularne",
+  "forgeNarrativeHooksHint": "Misja otwierająca, zagrożenie, tajemnica, odliczanie...",
+  "forgeFactionsLabel": "Frakcje i siły",
+  "forgeFactionsHint": "Gildie, kulty, rody szlacheckie, antagoniści, niestabilni sojusznicy...",
+  "forgeNpcFocusLabel": "Kluczowe BN",
+  "forgeNpcFocusHint": "Dwuznaczny mentor, rywal, patron, zdrajca...",
+  "forgeEncounterFocusLabel": "Pożądane spotkania",
+  "forgeEncounterFocusHint": "Oblężenie, śledztwo społeczne, pościg, finałowy boss...",
+  "forgeContentConstraintsTitle": "Ograniczenia treści",
+  "forgeIncludeNpcsLabel": "Uwzględnij BN",
+  "forgeIncludeNpcsSubtitle": "Prompt będzie zawierał istotne postacie niezależne.",
+  "forgeIncludeEncountersLabel": "Uwzględnij spotkania",
+  "forgeIncludeEncountersSubtitle": "Prompt zasugeruje sceny i walki.",
+  "forgeSafetyNotesLabel": "Notatki bezpieczeństwa",
+  "forgeSafetyNotesHint": "Tematy do unikania, linie i zasłony, granice tonu...",
+  "forgeParchmentDirty": "Konfiguracja zmieniona: wygeneruj ponownie.",
+  "forgeParchmentReady": "Pergamin jest aktualny.",
+  "forgeParchmentIncomplete": "Uzupełnij fabułę, aby wygenerować.",
+  "statusReady": "Gotowe",
+  "statusNeedsPolish": "Wymaga dopracowania",
+  "parchmentReadyTitle": "Pergamin gotowy",
+  "parchmentReadySubtitleStale": "Zmieniłeś kuźnię: skopiowany prompt nie jest już aktualny.",
+  "parchmentReadySubtitleAligned": "Skopiowany prompt jest zgodny z bieżącym stanem kuźni.",
+  "parchmentQuickActionsTitle": "Szybkie akcje",
+  "parchmentCopyPromptTitle": "Kopiuj prompt",
+  "parchmentPreviewPromptTooltip": "Podgląd promptu",
+  "parchmentGoHomeTooltip": "Powrót do startu",
+  "parchmentPreviewSheetTitle": "Podgląd promptu",
+  "parchmentPreviewSheetSubtitle": "Przejrzyj cały prompt przed skopiowaniem lub wklejeniem.",
+  "parchmentCopyPromptSubtitle": "Wyślij prompt do schowka.",
+  "parchmentShareTitle": "Udostępnij",
+  "parchmentShareSubtitle": "Otwiera menu udostępniania.",
+  "parchmentOpenChatGptTitle": "Otwórz w ChatGPT",
+  "parchmentOpenChatGptSubtitle": "Otwiera ChatGPT w nowej karcie.",
+  "parchmentDraftUpdatedTitle": "Szkic zaktualizowany",
+  "parchmentSaveDraftTitle": "Zapisz szkic",
+  "parchmentSaveDraftSubtitle": "Zapisz prompt lokalnie na później.",
+  "parchmentPromptCopied": "Prompt skopiowany",
+  "parchmentCopiedStaleBanner": "Zmieniłeś kuźnię po ostatnim generowaniu. Wygeneruj ponownie, aby odświeżyć skopiowany prompt.",
+  "parchmentCopiedSuccessBody": "Pergamin został pomyślnie wykuty. Użyj rytuałów po prawej, aby go udostępnić, zapisać lub otworzyć w ChatGPT.",
+  "atmosphereOneShot": "Karmazynowa pilność",
+  "atmosphereMiniCampaign": "Złoty szlak",
+  "atmosphereLongCampaign": "Zielony atlas",
+  "atmosphereDungeon": "Sklepienie pochodni",
+  "parchmentSeal": "PIECZĘĆ",
+  "parchmentSealAndCopy": "Zapieczętuj i kopiuj",
+  "infoDialogLine1": "Ta aplikacja jest generatorem promptów inspirowanym fantasy grami fabularnymi.",
+  "infoDialogLine2": "Nie jest powiązana z Dungeons & Dragons ani z żadnym narzędziem językowym SI.",
+  "infoDialogLine3": "Możesz używać promptów z narzędziami SI do tworzenia własnych historii.",
+  "settingsTitle": "Ustawienia",
+  "settingsLeaveReview": "Zostaw opinię",
+  "settingsShareApp": "Udostępnij aplikację",
+  "settingsPrivacyOptions": "Ustawienia prywatności",
+  "settingsShareText": "Odkryj Campaign Forge, generator kampanii D&D: ",
+  "settingsLanguageLabel": "Język",
+  "settingsLanguageEnglish": "Angielski",
+  "settingsLanguageItalian": "Włoski",
+  "settingsThemeLabel": "Motyw",
+  "settingsThemeDark": "Ciemny",
+  "settingsThemeLight": "Jasny",
+  "settingsInfoLabel": "Informacje",
+  "settingsVersion": "Wersja",
+  "settingsGoAdFree": "Reklamy",
+  "settingsGoAdFreePrice": "Odblokuj Premium",
+  "settingsGoAdFreeSubtitle": "Jednorazowy zakup · £1.99",
+  "settingsGoAdFreeSubtitleWithAmount": "Jednorazowy zakup · {price}",
+  "@settingsGoAdFreeSubtitleWithAmount": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsGoAdFreePriceWithAmount": "Odblokuj Premium — {price}",
+  "@settingsGoAdFreePriceWithAmount": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsRestorePurchases": "Przywróć zakupy",
+  "settingsRestorePurchasesStarted": "Przywracanie zakupów…",
+  "settingsRestorePurchasesComplete": "Zakupy przywrócono pomyślnie.",
+  "settingsAdFreeActive": "Reklamy usunięte",
+  "settingsIapUnavailable": "Zakupy w aplikacji są niedostępne na tym urządzeniu.",
+  "settingsIapProductNotFound": "Nie znaleziono produktu. Spróbuj ponownie później.",
+  "settingsPurchasePending": "Przetwarzanie zakupu…",
+  "settingsPurchaseCancelled": "Zakup anulowany.",
+  "settingsPurchaseFailed": "Zakup nie powiódł się. Spróbuj ponownie.",
+  "premiumUnlockTitle": "Funkcja premium",
+  "premiumUnlockBodyWithAd": "Obejrzyj reklamę, aby odblokować wszystkie funkcje premium na 5 minut, albo odblokuj Premium, by mieć stały dostęp do wszystkiego.",
+  "premiumUnlockBodyNoAd": "Odblokuj Premium, aby uzyskać stały dostęp do tej funkcji.",
+  "premiumUnlockWatchAd": "Obejrzyj reklamę (5 min)",
+  "helpTitle": "Przewodnik",
+  "helpCampaignTypesTitle": "Typy kampanii",
+  "helpCampaignTypeOneShotTitle": "One-Shot",
+  "helpCampaignTypeOneShotBody": "Pełna przygoda zaprojektowana na jedną sesję, z mocnym otwarciem, jasnym celem i szybkim domknięciem. Wybierz ją, jeśli chcesz natychmiastowego tempa i zwartego łuku fabularnego.",
+  "helpCampaignTypeMiniCampaignTitle": "Mini-kampania",
+  "helpCampaignTypeMiniCampaignBody": "Krótki łuk rozgrywający się przez kilka sesji, z miejscem na eskalację i wyraźniejszy finał. Najlepszy wybór, gdy chcesz czegoś zwartego, ale mniej skompresowanego niż one-shot.",
+  "helpCampaignTypeLongCampaignTitle": "Długa kampania",
+  "helpCampaignTypeLongCampaignBody": "Rozbudowana struktura z frakcjami, wątkami pobocznymi i konsekwencjami rozwijającymi się z czasem. Idealna, jeśli chcesz ciągłości, progresji i świata reagującego na wybory graczy.",
+  "helpCampaignTypeDungeonTitle": "Eksploracja lochu",
+  "helpCampaignTypeDungeonBody": "Kampania skupiona na mapach, odkrywaniu, wyczerpaniu i sekretach ukrytych w niebezpiecznych miejscach. Doskonała, gdy chcesz presji, eksploracji i mocnego poczucia miejsca.",
+  "helpTipsTitle": "Wskazówki i dobre praktyki",
+  "helpTipWorld": "Zacznij od świata i motywu: to one wyznaczają ramy, które utrzymują wszystko w spójności.",
+  "helpTipTheme": "Użyj 1 lub 2 mocnych motywów zamiast piętrzyć zbyt wiele podobnych pomysłów.",
+  "helpTipTwist": "Wybierz zwrot akcji, aby od razu nadać fabule napięcie.",
+  "helpTipContrast": "Łącz kontrastujące tony, aby uzyskać mniej przewidywalne prompty.",
+  "helpTipPreset": "Używaj presetów, gdy chcesz szybkiej inspiracji albo mocnego punktu wyjścia.",
+  "helpTipCustom": "Dodawaj własne wpisy tylko wtedy, gdy potrzebnej opcji nie ma już na liście.",
+  "helpTipParty": "Utrzymuj zgodność poziomu, liczebności drużyny i archetypów, aby unikać nierównych promptów."
+}
