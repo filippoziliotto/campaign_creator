@@ -192,6 +192,8 @@
   "forgeCustomTwistLabel": "Giro personalizado",
   "forgeCustomTwistHint": "Un aliado miente, la mazmorra está viva, la misión es una trampa...",
   "forgeCreativeTitle": "Temas, tono y estilo",
+  "forgeCreativeHelpTooltip": "Ayuda de dirección creativa",
+  "forgeCreativeHelpBody": "Elige los temas, el tono y el estilo narrativo de tu campaña.",
   "forgeThemesTitle": "Temas",
   "forgeCustomThemesLabel": "Temas personalizados",
   "forgeCustomThemesHint": "P. ej. steampunk, horror cósmico",

@@ -192,6 +192,8 @@
   "forgeCustomTwistLabel": "Reviravolta personalizada",
   "forgeCustomTwistHint": "Um aliado mente, a masmorra está viva, a missão é uma armadilha...",
   "forgeCreativeTitle": "Temas, tom e estilo",
+  "forgeCreativeHelpTooltip": "Ajuda de direção criativa",
+  "forgeCreativeHelpBody": "Escolhe os temas, o tom e o estilo narrativo da tua campanha.",
   "forgeThemesTitle": "Temas",
   "forgeCustomThemesLabel": "Temas personalizados",
   "forgeCustomThemesHint": "Ex.: Steampunk, horror cósmico",

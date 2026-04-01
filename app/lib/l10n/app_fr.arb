@@ -192,6 +192,8 @@
   "forgeCustomTwistLabel": "Rebondissement personnalisé",
   "forgeCustomTwistHint": "Un allié ment, le donjon est vivant, la mission est un piège...",
   "forgeCreativeTitle": "Thèmes, ton et style",
+  "forgeCreativeHelpTooltip": "Aide à la direction créative",
+  "forgeCreativeHelpBody": "Choisissez les thèmes, le ton et le style narratif de votre campagne.",
   "forgeThemesTitle": "Thèmes",
   "forgeCustomThemesLabel": "Thèmes personnalisés",
   "forgeCustomThemesHint": "Ex. steampunk, horreur cosmique",

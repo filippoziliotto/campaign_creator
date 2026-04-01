@@ -192,6 +192,8 @@
   "forgeCustomTwistLabel": "Eigener Twist",
   "forgeCustomTwistHint": "Ein Verbündeter lügt, der Dungeon lebt, die Mission ist eine Falle...",
   "forgeCreativeTitle": "Themen, Ton und Stil",
+  "forgeCreativeHelpTooltip": "Hilfe zur kreativen Ausrichtung",
+  "forgeCreativeHelpBody": "Wähle Themen, Ton und Erzählstil deiner Kampagne.",
   "forgeThemesTitle": "Themen",
   "forgeCustomThemesLabel": "Eigene Themen",
   "forgeCustomThemesHint": "Z. B. Steampunk, kosmischer Horror",

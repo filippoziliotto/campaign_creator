@@ -192,6 +192,8 @@
   "forgeCustomTwistLabel": "Twist personalizzato",
   "forgeCustomTwistHint": "Un alleato mente, il dungeon è vivo, la missione è una trappola...",
   "forgeCreativeTitle": "Temi, tono e stile",
+  "forgeCreativeHelpTooltip": "Aiuto direzione creativa",
+  "forgeCreativeHelpBody": "Scegli temi, tono e stile narrativo della campagna.",
   "forgeThemesTitle": "Temi",
   "forgeCustomThemesLabel": "Temi personalizzati",
   "forgeCustomThemesHint": "Es: Steampunk, orrore cosmico",

@@ -443,6 +443,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get forgeCreativeTitle => 'Themen, Ton und Stil';
 
   @override
+  String get forgeCreativeHelpTooltip => 'Hilfe zur kreativen Ausrichtung';
+
+  @override
+  String get forgeCreativeHelpBody =>
+      'Wähle Themen, Ton und Erzählstil deiner Kampagne.';
+
+  @override
   String get forgeThemesTitle => 'Themen';
 
   @override

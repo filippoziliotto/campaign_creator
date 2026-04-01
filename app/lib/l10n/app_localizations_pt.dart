@@ -441,6 +441,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get forgeCreativeTitle => 'Temas, tom e estilo';
 
   @override
+  String get forgeCreativeHelpTooltip => 'Ajuda de direção criativa';
+
+  @override
+  String get forgeCreativeHelpBody =>
+      'Escolhe os temas, o tom e o estilo narrativo da tua campanha.';
+
+  @override
   String get forgeThemesTitle => 'Temas';
 
   @override

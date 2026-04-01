@@ -309,6 +309,7 @@ extension on _CampaignBuilderPageState {
         Object.hashAllUnordered(_customToneEntries),
         Object.hashAllUnordered(_selectedStyles),
         Object.hashAllUnordered(_customStyleEntries),
+        _showCreativeDirectionHelp,
       ),
       Object.hash(
         localeCode,
@@ -1338,9 +1339,14 @@ extension on _CampaignBuilderPageState {
     return ControlRoomPanel(
       title: context.l10n.forgeCreativeTitle,
       emphasis: PanelEmphasis.secondary,
+      trailing: _buildCreativeDirectionHelpButton(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (_showCreativeDirectionHelp) ...[
+            _buildCreativeDirectionHelpBubble(),
+            const SizedBox(height: 16),
+          ],
           Text(
             context.l10n.forgeThemesTitle,
             style: _resolvedAtmosphereTheme().textTheme.titleMedium,
@@ -1361,6 +1367,100 @@ extension on _CampaignBuilderPageState {
           ),
           const SizedBox(height: 10),
           _buildStylesChipSection(options),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCreativeDirectionHelpButton() {
+    final atmosphere = _currentAtmosphere();
+    final colorScheme = _resolvedAtmosphereTheme().colorScheme;
+
+    return Tooltip(
+      message: context.l10n.forgeCreativeHelpTooltip,
+      child: IconButton(
+        key: const ValueKey('forge-creative-help-button'),
+        onPressed: () {
+          _triggerLightImpact();
+          _applyShellState(() {
+            _showCreativeDirectionHelp = !_showCreativeDirectionHelp;
+          });
+        },
+        icon: const Text('?'),
+        style: IconButton.styleFrom(
+          minimumSize: const Size(32, 32),
+          maximumSize: const Size(32, 32),
+          padding: EdgeInsets.zero,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          foregroundColor: _showCreativeDirectionHelp
+              ? FantasyPalette.parchment
+              : atmosphere.highlight,
+          backgroundColor: _showCreativeDirectionHelp
+              ? atmosphere.glow.withValues(alpha: 0.9)
+              : colorScheme.surfaceContainerHighest.withValues(alpha: 0.56),
+          side: BorderSide(
+            color: _showCreativeDirectionHelp
+                ? atmosphere.glow.withValues(alpha: 0.95)
+                : atmosphere.glow.withValues(alpha: 0.38),
+          ),
+          shape: const CircleBorder(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCreativeDirectionHelpBubble() {
+    final atmosphere = _currentAtmosphere();
+    final theme = _resolvedAtmosphereTheme();
+
+    return Container(
+      key: const ValueKey('forge-creative-help-bubble'),
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Color.lerp(theme.colorScheme.surface, atmosphere.cardTint, 0.26)!
+            .withValues(alpha: 0.94),
+        border: Border.all(
+          color: atmosphere.glow.withValues(alpha: 0.34),
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: atmosphere.glow.withValues(alpha: 0.10),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: atmosphere.glow.withValues(alpha: 0.16),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              '?',
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: atmosphere.highlight,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              context.l10n.forgeCreativeHelpBody,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.88),
+                height: 1.4,
+              ),
+            ),
+          ),
         ],
       ),
     );

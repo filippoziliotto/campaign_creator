@@ -7,5 +7,6 @@ Apply this fix to all files that are above 1000 lines if possible.
 # 4 
 Forgia Pergamena è troppo lungo
 
-# 12
-Can we add a parallel app or a new app for something similar when choosing the character class, race, style etc..
+# 5
+Next to theme, tone, style having a small circular icon with a "?" that if pressed explains: e.g. "select the tone of your campaign".
+

@@ -192,6 +192,8 @@
   "forgeCustomTwistLabel": "Custom twist",
   "forgeCustomTwistHint": "An ally lies, the dungeon is alive, the mission is a trap...",
   "forgeCreativeTitle": "Themes, tone and style",
+  "forgeCreativeHelpTooltip": "Creative direction help",
+  "forgeCreativeHelpBody": "Choose the themes, tone, and narrative style of your campaign.",
   "forgeThemesTitle": "Themes",
   "forgeCustomThemesLabel": "Custom themes",
   "forgeCustomThemesHint": "E.g. Steampunk, cosmic horror",

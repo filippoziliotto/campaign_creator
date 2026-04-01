@@ -685,6 +685,7 @@ class _CampaignBuilderPageState extends State<CampaignBuilderPage> {
   bool _hasUnsavedChanges = false;
   bool _draftPersistenceAvailable = true;
   bool _isResetting = false;
+  bool _showCreativeDirectionHelp = false;
   bool _isReturningHomeFromParchment = false;
   bool _suspendStageRemovalSync = false;
 
