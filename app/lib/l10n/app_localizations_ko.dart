@@ -54,10 +54,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get appFreeFormat => '형식 선택';
 
   @override
-  String get appSettingPending => 'Ambientazione da definire';
+  String get appSettingPending => '배경 설정 예정';
 
   @override
-  String get appTwistPending => 'Twist da definire';
+  String get appTwistPending => '반전 설정 예정';
 
   @override
   String get appStageEntry => '선택';
@@ -76,123 +76,114 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String appSummaryLevel(int level) {
-    return 'Lv $level';
+    return '레벨 $level';
   }
 
   @override
   String appSummaryPartySize(int size) {
-    return '$size PG';
+    return '$size명';
   }
 
   @override
   String appSummaryPreset(String name) {
-    return 'Preset: $name';
+    return '프리셋: $name';
   }
 
   @override
   String appLoadOptionsError(String error) {
-    return 'Impossibile caricare le opzioni: $error';
+    return '옵션을 불러올 수 없습니다: $error';
   }
 
   @override
   String appGenerationFailedError(String error) {
-    return 'Generazione fallita: $error';
+    return '생성 실패: $error';
   }
 
   @override
   String appInvalidArchetypeSelection(int count, int size) {
-    return 'Hai selezionato $count archetipi, ma il party è impostato a $size PG.';
+    return '아키타입 $count개를 선택했지만 파티는 $size명으로 설정되어 있습니다.';
   }
 
   @override
-  String get appSnackForgedAndCopied =>
-      'Pergamena forgiata e prompt copiato negli appunti.';
+  String get appSnackForgedAndCopied => '양피지를 제작했고 프롬프트를 클립보드에 복사했습니다.';
 
   @override
-  String get appSnackGenerationFailed =>
-      'Generazione fallita. Controlla il messaggio mostrato nella schermata.';
+  String get appSnackGenerationFailed => '생성에 실패했습니다. 화면에 표시된 메시지를 확인하세요.';
 
   @override
-  String get appSnackPromptCopied => 'Prompt copiato negli appunti.';
+  String get appSnackPromptCopied => '프롬프트를 클립보드에 복사했습니다.';
 
   @override
-  String get appSnackNoParchmentToShare =>
-      'Non c\'è ancora una pergamena da condividere.';
+  String get appSnackNoParchmentToShare => '공유할 양피지가 아직 없습니다.';
 
   @override
-  String get appSnackShareUnavailableOnDevice =>
-      'La condivisione non è disponibile su questo dispositivo.';
+  String get appSnackShareUnavailableOnDevice => '이 기기에서는 공유를 사용할 수 없습니다.';
 
   @override
   String appSnackShareUnavailable(String error) {
-    return 'Condivisione non disponibile: $error';
+    return '공유를 사용할 수 없습니다: $error';
   }
 
   @override
-  String get appSnackGenerateFirst => 'Genera prima una pergamena da inviare.';
+  String get appSnackGenerateFirst => '보내기 전에 먼저 양피지를 생성하세요.';
 
   @override
-  String get appSnackChatGptOpened =>
-      'ChatGPT aperto. Il prompt è già negli appunti.';
+  String get appSnackChatGptOpened => 'ChatGPT를 열었습니다. 프롬프트는 이미 클립보드에 있습니다.';
 
   @override
-  String get appSnackChatGptCopiedOnly =>
-      'Impossibile aprire ChatGPT, ma il prompt è stato copiato.';
+  String get appSnackChatGptCopiedOnly => 'ChatGPT를 열 수는 없었지만 프롬프트는 복사되었습니다.';
 
   @override
-  String get appSnackPremiumUnlockedTemporary =>
-      'Premium sbloccato per 5 minuti';
+  String get appSnackPremiumUnlockedTemporary => '프리미엄이 5분 동안 잠금 해제되었습니다';
 
   @override
   String get appSnackRewardedAdUnavailable =>
-      'Annuncio non disponibile in questo momento. Riprova tra poco.';
+      '지금은 광고를 사용할 수 없습니다. 잠시 후 다시 시도하세요.';
 
   @override
-  String get appSnackNoParchmentToSave =>
-      'Non c\'è nessuna pergamena da salvare.';
+  String get appSnackNoParchmentToSave => '저장할 양피지가 없습니다.';
 
   @override
-  String get appSnackDraftSaved => 'Bozza della pergamena salvata in locale.';
+  String get appSnackDraftSaved => '양피지 초안을 로컬에 저장했습니다.';
 
   @override
   String get appSnackDraftMemoryOnly =>
-      'Bozza salvata solo in memoria. Riavvia completamente l\'app per abilitare la persistenza locale.';
+      '초안을 메모리에만 저장했습니다. 로컬 저장을 활성화하려면 앱을 완전히 다시 시작하세요.';
 
   @override
   String get appSnackSealedSavedAndCopied =>
-      'Pergamena sigillata: bozza salvata e prompt copiato.';
+      '양피지를 봉인했습니다: 초안을 저장했고 프롬프트를 복사했습니다.';
 
   @override
   String get appSnackSealedCopiedOnlyMemory =>
-      'Pergamena sigillata: prompt copiato. Riavvia completamente l\'app per abilitare il salvataggio locale.';
+      '양피지를 봉인했습니다: 프롬프트를 복사했습니다. 로컬 저장을 활성화하려면 앱을 완전히 다시 시작하세요.';
 
   @override
   String get appSnackLocalSaveUnavailable =>
-      'Salvataggio locale non disponibile in questa sessione. Chiudi e rilancia l\'app per registrare il plugin.';
+      '이번 세션에서는 로컬 저장을 사용할 수 없습니다. 플러그인을 등록하려면 앱을 닫았다가 다시 실행하세요.';
 
   @override
   String get appDraftMemoryOnly =>
-      'Bozza mantenuta solo in memoria. Riavvia completamente l\'app per riattivare il salvataggio locale.';
+      '초안은 메모리에만 유지됩니다. 로컬 저장을 다시 활성화하려면 앱을 완전히 다시 시작하세요.';
 
   @override
   String appDraftAligned(String dateTime) {
-    return 'Bozza locale allineata il $dateTime.';
+    return '로컬 초안이 $dateTime 기준으로 동기화되었습니다.';
   }
 
   @override
   String appDraftLastSaved(String dateTime) {
-    return 'Ultima bozza salvata il $dateTime.';
+    return '마지막 초안 저장 시각: $dateTime';
   }
 
   @override
-  String get appErrorEyebrow => 'Rituale interrotto';
+  String get appErrorEyebrow => '의식 중단';
 
   @override
-  String get appErrorTitle => 'Il grimorio non risponde';
+  String get appErrorTitle => '그리모어가 응답하지 않습니다';
 
   @override
-  String get appErrorUnknownLoad =>
-      'Errore sconosciuto nel caricamento opzioni.';
+  String get appErrorUnknownLoad => '옵션을 불러오는 중 알 수 없는 오류가 발생했습니다.';
 
   @override
   String get entryCampaignTypesTitle => '캠페인 유형';
@@ -219,61 +210,61 @@ class AppLocalizationsKo extends AppLocalizations {
   String get entryHeroChooseRitual => '시작할 형식을 선택하세요.';
 
   @override
-  String get onboardingHowItWorks => 'Come funziona';
+  String get onboardingHowItWorks => '사용 방법';
 
   @override
-  String get onboardingChooseCampaignTitle => 'Scegli la tua campagna';
+  String get onboardingChooseCampaignTitle => '캠페인 선택';
 
   @override
   String get onboardingChooseCampaignBody =>
-      'Scegli prima il formato della campagna, così il resto dell\'impostazione avrà la forma giusta.';
+      '먼저 캠페인 형식을 선택하면 이후 설정이 올바른 형태를 갖춥니다.';
 
   @override
-  String get onboardingDefineDetailsTitle => 'Definisci i dettagli chiave';
+  String get onboardingDefineDetailsTitle => '핵심 정보 정의';
 
   @override
   String get onboardingDefineDetailsBody =>
-      'Imposta mondo, temi, tono, stile, party e twist prima di forgiare il prompt.';
+      '프롬프트를 제작하기 전에 세계, 테마, 톤, 스타일, 파티, 반전을 정하세요.';
 
   @override
-  String get onboardingForgePromptTitle => 'Forgia il prompt';
+  String get onboardingForgePromptTitle => '프롬프트 제작';
 
   @override
   String get onboardingForgePromptBody =>
-      'Genera il prompt finale e incollalo su ChatGPT.';
+      '최종 프롬프트를 생성하고, 미리 본 다음, ChatGPT에 붙여넣으세요.';
 
   @override
-  String get onboardingGeneratedPromptTitle => 'Prompt generato';
+  String get onboardingGeneratedPromptTitle => '생성된 프롬프트';
 
   @override
-  String get onboardingPastePromptSubtitle => 'Incolla lì il prompt generato.';
+  String get onboardingPastePromptSubtitle => '생성된 프롬프트를 այնտեղ 붙여넣으세요.';
 
   @override
-  String get onboardingNext => 'Avanti';
+  String get onboardingNext => '다음';
 
   @override
-  String get onboardingBack => 'Indietro';
+  String get onboardingBack => '이전';
 
   @override
-  String get onboardingSkip => 'Salta';
+  String get onboardingSkip => '건너뛰기';
 
   @override
-  String get onboardingStartForging => 'Inizia a forgiare';
+  String get onboardingStartForging => '제작 시작';
 
   @override
-  String get onboardingCopyStep => 'Copia';
+  String get onboardingCopyStep => '복사';
 
   @override
-  String get onboardingSettingExample => 'Regno di frontiera';
+  String get onboardingSettingExample => '변방 왕국';
 
   @override
-  String get onboardingThemesExample => 'Tensione politica';
+  String get onboardingThemesExample => '정치적 긴장';
 
   @override
-  String get onboardingToneExample => 'Cupo e noir';
+  String get onboardingToneExample => '다크 & 누아르';
 
   @override
-  String get onboardingStyleExample => 'Fantasy concreta';
+  String get onboardingStyleExample => '현실적인 판타지';
 
   @override
   String get entryResetDraft => '새 세션';
@@ -591,101 +582,95 @@ class AppLocalizationsKo extends AppLocalizations {
   String get statusNeedsPolish => '다듬기 필요';
 
   @override
-  String get parchmentReadyTitle => 'Pergamena pronta';
+  String get parchmentReadyTitle => '양피지 준비 완료';
 
   @override
   String get parchmentReadySubtitleStale =>
-      'Hai modificato la forgia: il prompt copiato non è più aggiornato.';
+      '포지를 변경했습니다. 복사된 프롬프트가 더 이상 최신 상태가 아닙니다.';
 
   @override
-  String get parchmentReadySubtitleAligned =>
-      'Il prompt copiato è allineato con lo stato attuale della forgia.';
+  String get parchmentReadySubtitleAligned => '복사된 프롬프트가 현재 포지 상태와 일치합니다.';
 
   @override
-  String get parchmentQuickActionsTitle => 'Azioni rapide';
+  String get parchmentQuickActionsTitle => '빠른 동작';
 
   @override
-  String get parchmentCopyPromptTitle => 'Copia prompt';
+  String get parchmentCopyPromptTitle => '프롬프트 복사';
 
   @override
-  String get parchmentPreviewPromptTooltip => 'Anteprima prompt';
+  String get parchmentPreviewPromptTooltip => '프롬프트 미리보기';
 
   @override
-  String get parchmentGoHomeTooltip => 'Torna alla home';
+  String get parchmentGoHomeTooltip => '홈으로 돌아가기';
 
   @override
-  String get parchmentPreviewSheetTitle => 'Anteprima prompt';
+  String get parchmentPreviewSheetTitle => '프롬프트 미리보기';
 
   @override
-  String get parchmentPreviewSheetSubtitle =>
-      'Controlla il prompt completo prima di copiarlo o incollarlo.';
+  String get parchmentPreviewSheetSubtitle => '복사하거나 붙여넣기 전에 전체 프롬프트를 검토하세요.';
 
   @override
-  String get parchmentCopyPromptSubtitle => 'Invia il prompt negli appunti.';
+  String get parchmentCopyPromptSubtitle => '프롬프트를 클립보드로 보냅니다.';
 
   @override
-  String get parchmentShareTitle => 'Condividi';
+  String get parchmentShareTitle => '공유';
 
   @override
-  String get parchmentShareSubtitle => 'Apre il menu di condivisione.';
+  String get parchmentShareSubtitle => '공유 메뉴를 엽니다.';
 
   @override
-  String get parchmentOpenChatGptTitle => 'Apri in ChatGPT';
+  String get parchmentOpenChatGptTitle => 'ChatGPT에서 열기';
 
   @override
-  String get parchmentOpenChatGptSubtitle =>
-      'Apre ChatGPT in una nuova scheda.';
+  String get parchmentOpenChatGptSubtitle => '새 탭에서 ChatGPT를 엽니다.';
 
   @override
-  String get parchmentDraftUpdatedTitle => 'Bozza aggiornata';
+  String get parchmentDraftUpdatedTitle => '초안 업데이트됨';
 
   @override
-  String get parchmentSaveDraftTitle => 'Salva bozza';
+  String get parchmentSaveDraftTitle => '초안 저장';
 
   @override
-  String get parchmentSaveDraftSubtitle =>
-      'Salva il prompt localmente per dopo.';
+  String get parchmentSaveDraftSubtitle => '나중에 사용할 수 있도록 프롬프트를 로컬에 저장합니다.';
 
   @override
-  String get parchmentPromptCopied => 'Prompt copiato';
+  String get parchmentPromptCopied => '프롬프트 복사됨';
 
   @override
   String get parchmentCopiedStaleBanner =>
-      'Hai modificato la forgia dopo l\'ultima generazione. Rigenera per aggiornare il prompt copiato.';
+      '마지막 생성 이후 포지를 변경했습니다. 복사된 프롬프트를 새로 고치려면 다시 생성하세요.';
 
   @override
   String get parchmentCopiedSuccessBody =>
-      'La pergamena è stata forgiata con successo. Usa i rituali a destra per condividerla, salvarla o aprirla in ChatGPT.';
+      '양피지가 성공적으로 제작되었습니다. 오른쪽 의식을 사용해 공유하거나 저장하거나 ChatGPT에서 열 수 있습니다.';
 
   @override
-  String get atmosphereOneShot => 'Urgenza cremisi';
+  String get atmosphereOneShot => '진홍의 긴박감';
 
   @override
-  String get atmosphereMiniCampaign => 'Strada dorata';
+  String get atmosphereMiniCampaign => '황금빛 여로';
 
   @override
-  String get atmosphereLongCampaign => 'Atlante verde';
+  String get atmosphereLongCampaign => '녹색의 지도첩';
 
   @override
-  String get atmosphereDungeon => 'Volta di torce';
+  String get atmosphereDungeon => '횃불 금고';
 
   @override
-  String get parchmentSeal => 'SIGILLA';
+  String get parchmentSeal => '봉인';
 
   @override
-  String get parchmentSealAndCopy => 'Sigilla e copia';
+  String get parchmentSealAndCopy => '봉인하고 복사';
 
   @override
-  String get infoDialogLine1 =>
-      'Questa app è un generatore di prompt ispirato ai giochi di ruolo fantasy.';
+  String get infoDialogLine1 => '이 앱은 판타지 롤플레잉 게임에서 영감을 받은 프롬프트 생성기입니다.';
 
   @override
   String get infoDialogLine2 =>
-      'Non è affiliata a Dungeons & Dragons né a nessun altro Tool di AI.';
+      'Dungeons & Dragons 또는 어떤 AI 언어 도구와도 공식적으로 관련되어 있지 않습니다.';
 
   @override
-  String get infoDialogLine3 =>
-      'Puoi usare i prompt con strumenti di AI per creare le tue storie.';
+  String get infoDialogLine3 => 'AI 도구와 함께 이 프롬프트를 사용해 자신만의 이야기를 만들 수 있습니다.';
 
   @override
   String get settingsTitle => '설정';
@@ -758,21 +743,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsAdFreeActive => '광고 제거됨';
 
   @override
-  String get settingsIapUnavailable =>
-      'Acquisti in-app non disponibili su questo dispositivo.';
+  String get settingsIapUnavailable => '이 기기에서는 인앱 구매를 사용할 수 없습니다.';
 
   @override
-  String get settingsIapProductNotFound =>
-      'Prodotto non trovato. Riprova più tardi.';
+  String get settingsIapProductNotFound => '상품을 찾을 수 없습니다. 나중에 다시 시도하세요.';
 
   @override
-  String get settingsPurchasePending => 'Acquisto in elaborazione…';
+  String get settingsPurchasePending => '구매 처리 중…';
 
   @override
-  String get settingsPurchaseCancelled => 'Acquisto annullato.';
+  String get settingsPurchaseCancelled => '구매가 취소되었습니다.';
 
   @override
-  String get settingsPurchaseFailed => 'Acquisto non riuscito. Riprova.';
+  String get settingsPurchaseFailed => '구매에 실패했습니다. 다시 시도하세요.';
 
   @override
   String get premiumUnlockTitle => '프리미엄 기능';
