@@ -154,19 +154,10 @@ extension on _CampaignBuilderPageState {
                 softWrap: false,
               ),
               icon: completed
-                  ? Text(
-                      _completedForgeSectionEmoji(),
-                      style: TextStyle(
-                        fontSize: iconSize - 1,
-                        height: 1,
-                      ),
-                    )
-                  : Text(
-                      _forgeSectionEmoji(forgeSection),
-                      style: TextStyle(
-                        fontSize: iconSize + 1,
-                        height: 1,
-                      ),
+                  ? _buildCompletedForgeSectionGlyph(iconSize - 1)
+                  : _buildForgeSectionGlyph(
+                      forgeSection,
+                      iconSize: iconSize + 1,
                     ),
             );
           }).toList();
@@ -226,6 +217,50 @@ extension on _CampaignBuilderPageState {
 
   String _completedForgeSectionEmoji() {
     return _emojiCode('white_check_mark', fallback: '✅');
+  }
+
+  Widget _buildForgeSectionGlyph(
+    _ForgeSection section, {
+    required double iconSize,
+  }) {
+    final icon = switch (section) {
+      _ForgeSection.world => Icons.public_rounded,
+      _ForgeSection.party => Icons.groups_2_rounded,
+      _ForgeSection.narrative => Icons.auto_stories_rounded,
+    };
+
+    if (_shouldUseIconFallbackForForgeGlyphs()) {
+      return Icon(icon, size: iconSize);
+    }
+
+    return Text(
+      _forgeSectionEmoji(section),
+      style: TextStyle(
+        fontSize: iconSize,
+        height: 1,
+      ),
+    );
+  }
+
+  Widget _buildCompletedForgeSectionGlyph(double iconSize) {
+    if (_shouldUseIconFallbackForForgeGlyphs()) {
+      return Icon(Icons.check_rounded, size: iconSize);
+    }
+
+    return Text(
+      _completedForgeSectionEmoji(),
+      style: TextStyle(
+        fontSize: iconSize,
+        height: 1,
+      ),
+    );
+  }
+
+  bool _shouldUseIconFallbackForForgeGlyphs() {
+    return switch (defaultTargetPlatform) {
+      TargetPlatform.iOS || TargetPlatform.macOS => true,
+      _ => false,
+    };
   }
 
   String _emojiCode(String name, {required String fallback}) {

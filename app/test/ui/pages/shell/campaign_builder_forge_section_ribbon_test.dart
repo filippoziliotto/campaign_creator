@@ -59,7 +59,66 @@ void main() {
     );
   },
       variant: const TargetPlatformVariant(
-          <TargetPlatform>{TargetPlatform.android, TargetPlatform.iOS}));
+          <TargetPlatform>{TargetPlatform.android}));
+
+  testWidgets(
+      'forge section ribbon falls back to material icons on iOS to avoid missing emoji glyphs',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(360, 800));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(minimalOptions()),
+          currentLocale: const Locale('it'),
+          onLocaleChanged: _noopLocaleChanged,
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+    await _openForgeFromEntry(tester);
+
+    final ribbon = find.byKey(const ValueKey<String>('forge-section-ribbon'));
+    expect(ribbon, findsOneWidget);
+
+    expect(
+      find.descendant(of: ribbon, matching: find.byIcon(Icons.public_rounded)),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: ribbon,
+        matching: find.byIcon(Icons.groups_2_rounded),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: ribbon,
+        matching: find.byIcon(Icons.auto_stories_rounded),
+      ),
+      findsOneWidget,
+    );
+
+    expect(
+        find.descendant(of: ribbon, matching: find.text('🌍')), findsNothing);
+    expect(
+        find.descendant(of: ribbon, matching: find.text('⚔️')), findsNothing);
+    expect(
+        find.descendant(of: ribbon, matching: find.text('📜')), findsNothing);
+
+    await tester.tap(find.descendant(of: ribbon, matching: find.text('Party')));
+    await _pumpUi(tester);
+
+    expect(
+      find.descendant(of: ribbon, matching: find.byIcon(Icons.check_rounded)),
+      findsOneWidget,
+    );
+  },
+      variant:
+          const TargetPlatformVariant(<TargetPlatform>{TargetPlatform.iOS}));
 
   testWidgets('forge swipe helper renders under the ribbon on narrow screens',
       (tester) async {
