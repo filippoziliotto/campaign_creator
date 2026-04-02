@@ -496,6 +496,13 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                   outlineColor: palette.outline.withValues(alpha: 0.72),
                   onPressed: () => _handleLanguageSelection('ja'),
                 ),
+                _LanguageSegmentButton(
+                  languageCode: 'ko',
+                  shortLabel: context.l10n.languageKoreanShort,
+                  selected: widget.currentLocale.languageCode == 'ko',
+                  outlineColor: palette.outline.withValues(alpha: 0.72),
+                  onPressed: () => _handleLanguageSelection('ko'),
+                ),
               ],
             ),
           ),
@@ -1105,6 +1112,7 @@ class _LanguageMark extends StatelessWidget {
       'pt' => 'PT',
       'pl' => 'PL',
       'ja' => 'JP',
+      'ko' => 'KR',
       _ => 'US',
     };
 

@@ -153,6 +153,70 @@ void main() {
       expect(options.presets, isNotEmpty);
     });
 
+    test('loads bundled Korean options and preset display names', () async {
+      final service = LocalCampaignService();
+
+      final options = await service.getOptions(localeCode: 'ko');
+
+      expect(options.settings, contains('Forgotten Realms'));
+      expect(options.campaignTypes, contains('장기 캠페인'));
+      expect(options.themes, contains('정통 판타지'));
+      expect(options.tones, contains('다크'));
+      expect(options.styles, contains('에픽'));
+      expect(options.twists, contains('반전 없음'));
+      expect(options.presetNames['NULLA NELLE TORRI'], '탑 속의 공허');
+      expect(options.presetNames['TOMBA RESPIRANTE'], '숨 쉬는 무덤');
+      expect(options.presets, isNotEmpty);
+    });
+
+    test('localized setting descriptions are translated for pl ja and ko',
+        () async {
+      final service = LocalCampaignService();
+
+      final plOptions = await service.getOptions(localeCode: 'pl');
+      final jaOptions = await service.getOptions(localeCode: 'ja');
+      final koOptions = await service.getOptions(localeCode: 'ko');
+
+      expect(
+        plOptions.settingDescriptions['Forgotten Realms'],
+        'Klasyczny świat high fantasy, pełen królestw, starożytnej magii i heroicznych przygód.',
+      );
+      expect(
+        plOptions.settingDescriptions['Eberron'],
+        'Świat pulp-noir z technologią arkaniczną, politycznymi intrygami i tajemnicami wielkich metropolii.',
+      );
+
+      expect(
+        jaOptions.settingDescriptions['Forgotten Realms'],
+        '王国、古代魔法、英雄的な冒険に満ちた、王道ハイファンタジー世界。',
+      );
+      expect(
+        jaOptions.settingDescriptions['Eberron'],
+        '秘術技術、政治的陰謀、大都市の謎が絡み合うパルプノワール世界。',
+      );
+
+      expect(
+        koOptions.settingDescriptions['Forgotten Realms'],
+        '왕국, 고대 마법, 영웅적인 모험으로 가득한 정통 하이 판타지 세계.',
+      );
+      expect(
+        koOptions.settingDescriptions['Eberron'],
+        '비전 기술, 정치적 음모, 대도시의 미스터리가 얽힌 펄프 느와르 세계.',
+      );
+    });
+
+    test('all Korean preset display names are localized', () async {
+      final service = LocalCampaignService();
+
+      final options = await service.getOptions(localeCode: 'ko');
+
+      expect(options.presetNames, isNotEmpty);
+      for (final entry in options.presetNames.entries) {
+        expect(entry.value, isNot(entry.key));
+        expect(RegExp(r'[A-Za-z]').hasMatch(entry.value), isFalse);
+      }
+    });
+
     test(
         'returns the same CampaignOptions instance for repeated calls with the same locale',
         () async {

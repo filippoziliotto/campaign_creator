@@ -48,6 +48,18 @@ void main() {
       'Ver anúncio (5 min)',
       'Desbloquear Premium',
     ),
+    (
+      const Locale('ja'),
+      'プレミアム機能',
+      '広告を見る（5分）',
+      'プレミアムを解除',
+    ),
+    (
+      const Locale('ko'),
+      '프리미엄 기능',
+      '광고 보기 (5분)',
+      '프리미엄 잠금 해제',
+    ),
   ]) {
     testWidgets(
       'premium unlock prompt localizes copy for ${locale.languageCode}',

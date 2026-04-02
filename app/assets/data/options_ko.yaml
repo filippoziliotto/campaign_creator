@@ -1,0 +1,730 @@
+settings:
+  - Forgotten Realms
+  - Eberron
+  - Ravenloft
+  - Exandria
+  - Homebrew continent
+  - Dragonlance
+  - Feywild
+  - Frontier
+  - Greyhawk
+  - Ghosts of Saltmarsh Coast
+  - Ravnica
+  - Spelljammer
+  - Theros
+  - Dark Sun
+  - Wildemount
+  - Planescape
+  - Underdark
+  - Shadowfell
+  - Radiant Citadel
+  - Avernus
+  - Sigil
+
+setting_descriptions:
+  Forgotten Realms: 왕국, 고대 마법, 영웅적인 모험으로 가득한 정통 하이 판타지 세계.
+  Eberron: 비전 기술, 정치적 음모, 대도시의 미스터리가 얽힌 펄프 느와르 세계.
+  Ravenloft: 안개가 저주와 어둠의 군주를 감추는 고딕 호러의 영역.
+  Exandria: 거대한 갈등, 활동하는 신들, 매우 다양한 지역을 품은 현대적이고 장대한 세계.
+  Homebrew continent: 테이블에서 직접 만든 오리지널 세계로, 분위기, 역사, 하우스룰을 유연하게 조정할 수 있다.
+  Dragonlance: 용들의 전쟁, 기사단, 예언으로 형성된 영웅적 판타지.
+  Ravnica: 경쟁하는 길드가 지배하는 차원 대도시로, 도시 음모와 권력 투쟁에 완벽하다.
+  Spelljammer: 크리스털 구체 사이를 비행선과 혼성 승무원으로 항해하는 우주 판타지 모험.
+  Theros: 영웅의 운명과 얽힌 신들, 신탁, 전설적 괴물들이 살아 있는 그리스 신화풍 세계.
+  Dark Sun: 마법이 자원을 소모하고 생존 자체가 핵심이 되는, 혹독하고 디스토피아적인 종말 이후 사막 세계.
+  Wildemount: 국가 간 갈등, 음모, 전선을 다루는 캠페인에 알맞은 Exandria의 정치적이고 전쟁적인 무대.
+  Feywild: 마법 생물, 마법 어린 영역, 예측할 수 없는 기이함으로 가득한 물질계의 뒤틀린 거울 같은 요정계.
+  Planescape: 모든 세력이 무한한 차원에 걸쳐 현실의 진정한 본질을 주장하는, 철학이 충돌하는 우주의 교차로.
+  Underdark: 빛 없는 터널, 잔혹한 세력, 깊은 곳에 묻힌 고대 비밀이 이어지는 끝없는 지하 어둠의 세계.
+  Frontier: 문명의 가장자리에 놓인 황야로, 법은 불확실하고 공동체는 고립되어 있으며 위험이 끊이지 않는다.
+  Shadowfell: 쇠퇴, 무뎌진 감정, 떠도는 망자에 스며든 물질계의 음울한 반영 세계.
+  Radiant Citadel: 마법 관문과 살아 있는 전통을 통해 먼 문화를 잇는 에테르계의 빛나는 교차 도시.
+  Avernus: 아홉 지옥의 첫 번째 층으로, 지옥 전쟁, 철제 전쟁 기계, 절박한 거래가 뒤엉킨 불타는 전장.
+  Sigil: 차원의 중심에 자리한 문들의 도시로, 세력, 포털, 위험한 사상이 모든 거리를 규정한다.
+  Greyhawk: 경쟁하는 왕국, 깊은 던전, 현실감 있는 영웅 모험이 살아 있는 고전적인 올드스쿨 판타지 세계.
+  Ghosts of Saltmarsh Coast: 어촌 마을, 숨겨진 만, 밀수업자, 바다에서 떠오르는 위협이 얽힌 거친 해안 변경 지대.
+
+campaign_types:
+  - One-Shot
+  - 미니 캠페인
+  - 장기 캠페인
+  - 던전 탐험
+
+themes:
+  - 정통 판타지
+  - 고딕 호러
+  - 정치적 음모
+  - 황야
+  - 괴물 사냥
+  - 고대 유적
+  - 구출
+  - 원정
+  - 보물 사냥
+  - 도시 강탈
+  - 차원 여행
+  - 해양 모험
+  - 세력 전쟁
+  - 중세 스팀펑크
+  - 투기 대회
+  - 종말 이후 세계
+  - 반란
+
+tones:
+  - 영웅적
+  - 다크
+  - 미스터리
+  - 코믹
+  - 긴장감
+  - 희망적
+  - 불길함
+  - 아이러니컬
+  - 비극적
+  - 느와르
+  - 기괴함
+  - 몽환적
+  - 혼돈
+
+styles:
+  - 에픽
+  - 시네마틱
+  - 리얼리즘
+  - 하드보일드
+  - 하이 판타지
+  - 수사물
+  - 미스터리
+  - 로우 판타지
+  - 동화풍
+  - 샌드박스
+  - 서바이벌
+  - 오픈 월드
+  - 전술적
+  - 신화적
+
+party_archetypes:
+  - 전사
+  - 마법사
+  - 성직자
+  - 도적
+  - 레인저
+  - 바드
+  - 팔라딘
+  - 드루이드
+  - 워록
+  - 소서러
+  - 수도승
+  - 바바리안
+  - 아티피서
+  - 주술사
+  - 강령술사
+
+twists:
+  - 반전 없음
+  - 예언은 거짓이었다
+  - 믿었던 아군이야말로 배신자다
+  - 적대자는 더 큰 재앙을 막으려 하고 있다
+  - 파티에게는 잊힌 공통의 기원이 있다
+  - 핵심 유물은 의식을 지녔고 조종하고 있다
+  - 던전 자체가 살아 있다
+  - 임무의 대상은 구원받기를 원하지 않는다
+  - 실종자는 스스로 실종을 꾸몄다
+  - 진짜 위협은 선의로 보이는 조직이다(교회, 길드, 아카데미)
+  - 세계는 눈에 띄지 않는 시간 루프에 갇혀 있다
+  - PC들은 이미 죽었지만 그 사실을 모른다
+  - 악당은 이미 승리했고 임무는 피해를 줄이는 것뿐이다
+  - 파티는 자신도 모르게 악당을 섬기고 있다
+  - 괴물들은 파멸급 포식자에게서 도망치고 있다
+  - 지역 전체가 마법적 시뮬레이션이거나 잠든 신의 꿈이다
+  - 역병을 치료하려면 의뢰인의 희생이 필요하다
+  - 적대 세력은 파티 패배 이후 미래의 생존자들로 이루어져 있다
+  - 종말은 이미 일어났고 세계는 복구 주문 속에서 살아가고 있다
+  - 예언은 맞지만 영웅이 아니라 악당을 가리킨다
+  - 죽음 그 자체가 사라졌고 다른 무언가가 서투르게 그 자리를 대신하고 있다
+  - 신은 자신의 진정한 뜻에 대해 거짓말하고 있다
+  - 그 감옥은 안에 가두기 위한 것이 아니라 밖을 막기 위해 만들어졌다
+  - 파티의 기억은 이유가 있어 조작되었다
+  - 후원자는 임무가 시작되기 전부터 이미 죽어 있었다
+
+premium_option_ids:
+  settings:
+    - Ravnica
+    - Spelljammer
+    - Theros
+    - Dark Sun
+    - Wildemount
+    - Planescape
+    - Underdark
+    - Shadowfell
+    - Radiant Citadel
+    - Avernus
+    - Sigil
+  themes:
+    - 도시 강탈
+    - 차원 여행
+    - 해양 모험
+    - 세력 전쟁
+    - 중세 스팀펑크
+    - 투기 대회
+    - 종말 이후 세계
+    - 반란
+  tones:
+    - 아이러니컬
+    - 비극적
+    - 느와르
+    - 기괴함
+    - 몽환적
+    - 혼돈
+  styles:
+    - 로우 판타지
+    - 동화풍
+    - 샌드박스
+    - 서바이벌
+    - 오픈 월드
+    - 전술적
+    - 신화적
+  party_archetypes:
+    - 아티피서
+    - 주술사
+    - 강령술사
+  twists:
+    - 진짜 위협은 선의로 보이는 조직이다(교회, 길드, 아카데미)
+    - 세계는 눈에 띄지 않는 시간 루프에 갇혀 있다
+    - PC들은 이미 죽었지만 그 사실을 모른다
+    - 악당은 이미 승리했고 임무는 피해를 줄이는 것뿐이다
+    - 파티는 자신도 모르게 악당을 섬기고 있다
+    - 괴물들은 파멸급 포식자에게서 도망치고 있다
+    - 지역 전체가 마법적 시뮬레이션이거나 잠든 신의 꿈이다
+    - 역병을 치료하려면 의뢰인의 희생이 필요하다
+    - 적대 세력은 파티 패배 이후 미래의 생존자들로 이루어져 있다
+    - 종말은 이미 일어났고 세계는 복구 주문 속에서 살아가고 있다
+    - 예언은 맞지만 영웅이 아니라 악당을 가리킨다
+    - 죽음 그 자체가 사라졌고 다른 무언가가 서투르게 그 자리를 대신하고 있다
+    - 신은 자신의 진정한 뜻에 대해 거짓말하고 있다
+    - 그 감옥은 안에 가두기 위한 것이 아니라 밖을 막기 위해 만들어졌다
+    - 파티의 기억은 이유가 있어 조작되었다
+    - 후원자는 임무가 시작되기 전부터 이미 죽어 있었다
+
+presets:
+
+  NULLA NELLE TORRI:
+    setting: Eberron
+    campaign_type: One-Shot
+    theme: 도시 강탈
+    tone: 느와르
+    style: 시네마틱
+    party_level: 5
+    party_size: 4
+    twist: 파티는 자신도 모르게 악당을 섬기고 있다
+
+  SPECCHI SENZA VITA:
+    setting: Ravenloft
+    campaign_type: One-Shot
+    theme: 고딕 호러
+    tone: 다크
+    style: 수사물
+    party_level: 4
+    party_size: 4
+    twist: PC들은 이미 죽었지만 그 사실을 모른다
+
+  ORDINI SPEZZATI:
+    setting: Wildemount
+    campaign_type: One-Shot
+    theme: 세력 전쟁
+    tone: 비극적
+    style: 리얼리즘
+    party_level: 6
+    party_size: 4
+    twist: 믿었던 아군이야말로 배신자다
+
+  CENERI SENZA SPERANZA:
+    setting: Dark Sun
+    campaign_type: One-Shot
+    theme: 황야
+    tone: 다크
+    style: 하드보일드
+    party_level: 3
+    party_size: 5
+    twist: 악당은 이미 승리했고 임무는 피해를 줄이는 것뿐이다
+
+  FIERA SOTTO PRESSIONE:
+    setting: Ravnica
+    campaign_type: One-Shot
+    theme: 정치적 음모
+    tone: 아이러니컬
+    style: 시네마틱
+    party_level: 5
+    party_size: 4
+    twist: 임무의 대상은 구원받기를 원하지 않는다
+
+  FUNERALE SBAGLIATO:
+    setting: Forgotten Realms
+    campaign_type: One-Shot
+    theme: 정통 판타지
+    tone: 미스터리
+    style: 수사물
+    party_level: 4
+    party_size: 4
+    twist: 적대자는 더 큰 재앙을 막으려 하고 있다
+
+  OMBRA NELLA CACCIA:
+    setting: Homebrew continent
+    campaign_type: One-Shot
+    theme: 괴물 사냥
+    tone: 기괴함
+    style: 로우 판타지
+    party_level: 3
+    party_size: 5
+    twist: 괴물들은 파멸급 포식자에게서 도망치고 있다
+
+  ECO DAL FUTURO:
+    setting: Exandria
+    campaign_type: One-Shot
+    theme: 차원 여행
+    tone: 기괴함
+    style: 시네마틱
+    party_level: 7
+    party_size: 4
+    twist: 세계는 눈에 띄지 않는 시간 루프에 갇혀 있다
+
+  LOCANDA AL CREPUSCOLO:
+    setting: Feywild
+    campaign_type: One-Shot
+    theme: 고딕 호러
+    tone: 미스터리
+    style: 동화풍
+    party_level: 4
+    party_size: 4
+    twist: 핵심 유물은 의식을 지녔고 조종하고 있다
+
+  ROTTE STELLARI:
+    setting: Spelljammer
+    campaign_type: One-Shot
+    theme: 해양 모험
+    tone: 아이러니컬
+    style: 시네마틱
+    party_level: 5
+    party_size: 5
+    twist: 임무의 대상은 구원받기를 원하지 않는다
+
+  CICATRICI DI FERRO:
+    setting: Wildemount
+    campaign_type: 미니 캠페인
+    theme: 세력 전쟁
+    tone: 비극적
+    style: 리얼리즘
+    party_level: 5
+    party_size: 4
+    twist: 파티는 자신도 모르게 악당을 섬기고 있다
+
+  MARE CHE SCOMPARE:
+    setting: Homebrew continent
+    campaign_type: 미니 캠페인
+    theme: 해양 모험
+    tone: 미스터리
+    style: 로우 판타지
+    party_level: 4
+    party_size: 4
+    twist: 지역 전체가 마법적 시뮬레이션이거나 잠든 신의 꿈이다
+
+  ARCHIVI IN FIAMME:
+    setting: Eberron
+    campaign_type: 미니 캠페인
+    theme: 정치적 음모
+    tone: 느와르
+    style: 수사물
+    party_level: 5
+    party_size: 4
+    twist: 진짜 위협은 선의로 보이는 조직이다(교회, 길드, 아카데미)
+
+  NODI DI SANGUE:
+    setting: Ravnica
+    campaign_type: 미니 캠페인
+    theme: 정치적 음모
+    tone: 미스터리
+    style: 시네마틱
+    party_level: 6
+    party_size: 4
+    twist: 믿었던 아군이야말로 배신자다
+
+  RADICE DEL MORBO:
+    setting: Forgotten Realms
+    campaign_type: 미니 캠페인
+    theme: 고딕 호러
+    tone: 다크
+    style: 하드보일드
+    party_level: 4
+    party_size: 4
+    twist: 역병을 치료하려면 의뢰인의 희생이 필요하다
+
+  GIURAMENTO INFRANTO:
+    setting: Dragonlance
+    campaign_type: 미니 캠페인
+    theme: 정통 판타지
+    tone: 비극적
+    style: 에픽
+    party_level: 5
+    party_size: 4
+    twist: 파티에게는 잊힌 공통의 기원이 있다
+
+  PROFEZIA DI CARTA:
+    setting: Homebrew continent
+    campaign_type: 미니 캠페인
+    theme: 정통 판타지
+    tone: 미스터리
+    style: 수사물
+    party_level: 4
+    party_size: 5
+    twist: 예언은 거짓이었다
+
+  POLVERE E SILENZIO:
+    setting: Dark Sun
+    campaign_type: 미니 캠페인
+    theme: 황야
+    tone: 다크
+    style: 하드보일드
+    party_level: 3
+    party_size: 5
+    twist: 악당은 이미 승리했고 임무는 피해를 줄이는 것뿐이다
+
+  SETTIMANA DI VETRO:
+    setting: Eberron
+    campaign_type: 미니 캠페인
+    theme: 도시 강탈
+    tone: 느와르
+    style: 시네마틱
+    party_level: 6
+    party_size: 4
+    twist: 핵심 유물은 의식을 지녔고 조종하고 있다
+
+  CERCHIO CHIUSO:
+    setting: Ravenloft
+    campaign_type: 미니 캠페인
+    theme: 고딕 호러
+    tone: 다크
+    style: 수사물
+    party_level: 5
+    party_size: 4
+    twist: 파티는 자신도 모르게 악당을 섬기고 있다
+
+  CORONA DI CENERE:
+    setting: Dragonlance
+    campaign_type: 장기 캠페인
+    theme: 정통 판타지
+    tone: 비극적
+    style: 에픽
+    party_level: 4
+    party_size: 4
+    twist: 믿었던 아군이야말로 배신자다
+
+  PATTO DELLE MAREE:
+    setting: Exandria
+    campaign_type: 장기 캠페인
+    theme: 해양 모험
+    tone: 미스터리
+    style: 샌드박스
+    party_level: 5
+    party_size: 5
+    twist: 파티에게는 잊힌 공통의 기원이 있다
+
+  ARCHIVIO DEI SANTI:
+    setting: Eberron
+    campaign_type: 장기 캠페인
+    theme: 정치적 음모
+    tone: 느와르
+    style: 수사물
+    party_level: 5
+    party_size: 4
+    twist: 진짜 위협은 선의로 보이는 조직이다(교회, 길드, 아카데미)
+
+  INVERNO SENZA EREDI:
+    setting: Ravenloft
+    campaign_type: 장기 캠페인
+    theme: 고딕 호러
+    tone: 비극적
+    style: 리얼리즘
+    party_level: 4
+    party_size: 4
+    twist: 예언은 거짓이었다
+
+  LEGGI DELLA POLVERE:
+    setting: Dark Sun
+    campaign_type: 장기 캠페인
+    theme: 황야
+    tone: 다크
+    style: 하드보일드
+    party_level: 3
+    party_size: 5
+    twist: 악당은 이미 승리했고 임무는 피해를 줄이는 것뿐이다
+
+  OSSA DELLA CITTA:
+    setting: Ravnica
+    campaign_type: 장기 캠페인
+    theme: 세력 전쟁
+    tone: 느와르
+    style: 시네마틱
+    party_level: 6
+    party_size: 4
+    twist: 핵심 유물은 의식을 지녔고 조종하고 있다
+
+  ALTARE DELLA COMETA:
+    setting: Forgotten Realms
+    campaign_type: 장기 캠페인
+    theme: 차원 여행
+    tone: 영웅적
+    style: 수사물
+    party_level: 7
+    party_size: 5
+    twist: 지역 전체가 마법적 시뮬레이션이거나 잠든 신의 꿈이다
+
+  TRONO SOMMERSO:
+    setting: Wildemount
+    campaign_type: 장기 캠페인
+    theme: 세력 전쟁
+    tone: 미스터리
+    style: 샌드박스
+    party_level: 5
+    party_size: 4
+    twist: 적대자는 더 큰 재앙을 막으려 하고 있다
+
+  RE DEL VETRO:
+    setting: Homebrew continent
+    campaign_type: 장기 캠페인
+    theme: 정치적 음모
+    tone: 기괴함
+    style: 동화풍
+    party_level: 6
+    party_size: 4
+    twist: 세계는 눈에 띄지 않는 시간 루프에 갇혀 있다
+
+  LANTERNE NELLA NEBBIA:
+    setting: Spelljammer
+    campaign_type: 장기 캠페인
+    theme: 해양 모험
+    tone: 아이러니컬
+    style: 시네마틱
+    party_level: 5
+    party_size: 5
+    twist: 임무의 대상은 구원받기를 원하지 않는다
+
+  TOMBA RESPIRANTE:
+    setting: Forgotten Realms
+    campaign_type: 던전 탐험
+    theme: 정통 판타지
+    tone: 미스터리
+    style: 수사물
+    party_level: 4
+    party_size: 4
+    twist: 던전 자체가 살아 있다
+
+  PALUDE SENZA RITORNO:
+    setting: Homebrew continent
+    campaign_type: 던전 탐험
+    theme: 고딕 호러
+    tone: 다크
+    style: 하드보일드
+    party_level: 3
+    party_size: 4
+    twist: PC들은 이미 죽었지만 그 사실을 모른다
+
+  FUGA DAL PROFONDO:
+    setting: Dark Sun
+    campaign_type: 던전 탐험
+    theme: 황야
+    tone: 다크
+    style: 하드보일드
+    party_level: 5
+    party_size: 5
+    twist: 괴물들은 파멸급 포식자에게서 도망치고 있다
+
+  SANTUARIO DEL PECCATO:
+    setting: Ravenloft
+    campaign_type: 던전 탐험
+    theme: 고딕 호러
+    tone: 비극적
+    style: 하드보일드
+    party_level: 6
+    party_size: 4
+    twist: 진짜 위협은 선의로 보이는 조직이다(교회, 길드, 아카데미)
+
+  FONDERIA SENZA PADRONE:
+    setting: Eberron
+    campaign_type: 던전 탐험
+    theme: 중세 스팀펑크
+    tone: 느와르
+    style: 시네마틱
+    party_level: 5
+    party_size: 4
+    twist: 핵심 유물은 의식을 지녔고 조종하고 있다
+
+  SOGNO A LIVELLI:
+    setting: Exandria
+    campaign_type: 던전 탐험
+    theme: 차원 여행
+    tone: 기괴함
+    style: 에픽
+    party_level: 8
+    party_size: 5
+    twist: 지역 전체가 마법적 시뮬레이션이거나 잠든 신의 꿈이다
+
+  ABISSO NECESSARIO:
+    setting: Homebrew continent
+    campaign_type: 던전 탐험
+    theme: 괴물 사냥
+    tone: 다크
+    style: 하드보일드
+    party_level: 5
+    party_size: 4
+    twist: 적대자는 더 큰 재앙을 막으려 하고 있다
+
+  LABIRINTO RISCRITTO:
+    setting: Feywild
+    campaign_type: 던전 탐험
+    theme: 고딕 호러
+    tone: 기괴함
+    style: 동화풍
+    party_level: 4
+    party_size: 4
+    twist: 세계는 눈에 띄지 않는 시간 루프에 갇혀 있다
+
+  TANA DELL'ORIGINE:
+    setting: Dragonlance
+    campaign_type: 던전 탐험
+    theme: 괴물 사냥
+    tone: 영웅적
+    style: 에픽
+    party_level: 7
+    party_size: 5
+    twist: 파티에게는 잊힌 공통의 기원이 있다
+
+  AVAMPOSTO CONTESO:
+    setting: Wildemount
+    campaign_type: 던전 탐험
+    theme: 세력 전쟁
+    tone: 미스터리
+    style: 수사물
+    party_level: 6
+    party_size: 4
+    twist: 믿었던 아군이야말로 배신자다
+
+preset_names:
+  NULLA NELLE TORRI: 탑 속의 공허
+  SPECCHI SENZA VITA: 생명 없는 거울
+  ORDINI SPEZZATI: 부서진 명령
+  CENERI SENZA SPERANZA: 희망 없는 재
+  FIERA SOTTO PRESSIONE: 압박받는 장터
+  FUNERALE SBAGLIATO: 잘못된 장례식
+  OMBRA NELLA CACCIA: 사냥의 그림자
+  ECO DAL FUTURO: 미래의 메아리
+  LOCANDA AL CREPUSCOLO: 황혼의 여관
+  ROTTE STELLARI: 별길 항로
+  CICATRICI DI FERRO: 철의 흉터
+  MARE CHE SCOMPARE: 사라지는 바다
+  ARCHIVI IN FIAMME: 불타는 기록 보관소
+  NODI DI SANGUE: 피의 매듭
+  RADICE DEL MORBO: 역병의 뿌리
+  GIURAMENTO INFRANTO: 깨진 맹세
+  PROFEZIA DI CARTA: 종이 예언
+  POLVERE E SILENZIO: 먼지와 침묵
+  SETTIMANA DI VETRO: 유리의 일주일
+  CERCHIO CHIUSO: 닫힌 원
+  CORONA DI CENERE: 재의 왕관
+  PATTO DELLE MAREE: 조수의 서약
+  ARCHIVIO DEI SANTI: 성자의 기록고
+  INVERNO SENZA EREDI: 후계 없는 겨울
+  LEGGI DELLA POLVERE: 먼지의 법칙
+  OSSA DELLA CITTA: 도시의 뼈
+  ALTARE DELLA COMETA: 혜성의 제단
+  TRONO SOMMERSO: 가라앉은 왕좌
+  RE DEL VETRO: 유리 왕
+  LANTERNE NELLA NEBBIA: 안개의 등불
+  TOMBA RESPIRANTE: 숨 쉬는 무덤
+  PALUDE SENZA RITORNO: 돌아올 수 없는 늪
+  FUGA DAL PROFONDO: 심연으로부터의 탈출
+  SANTUARIO DEL PECCATO: 죄의 성역
+  FONDERIA SENZA PADRONE: 주인 없는 주조소
+  SOGNO A LIVELLI: 층을 이룬 꿈
+  ABISSO NECESSARIO: 필요한 심연
+  LABIRINTO RISCRITTO: 다시 쓰인 미궁
+  TANA DELL'ORIGINE: 기원의 소굴
+  AVAMPOSTO CONTESO: 분쟁의 전초기지
+
+preset_descriptions:
+  NULLA NELLE TORRI: |
+    One-Shot · Eberron · 느와르
+  SPECCHI SENZA VITA: |
+    One-Shot · Ravenloft · 고딕 호러
+  ORDINI SPEZZATI: |
+    One-Shot · Wildemount · 세력 전쟁
+  CENERI SENZA SPERANZA: |
+    One-Shot · Dark Sun · 서바이벌
+  FIERA SOTTO PRESSIONE: |
+    One-Shot · Ravnica · 정치적 음모
+  FUNERALE SBAGLIATO: |
+    One-Shot · Forgotten Realms · 미스터리
+  OMBRA NELLA CACCIA: |
+    One-Shot · Homebrew · 괴물 사냥
+  ECO DAL FUTURO: |
+    One-Shot · Exandria · 차원 여행
+  LOCANDA AL CREPUSCOLO: |
+    One-Shot · Feywild · 동화풍
+  ROTTE STELLARI: |
+    One-Shot · Spelljammer · 해양 모험
+  CICATRICI DI FERRO: |
+    미니 캠페인 · Wildemount · 세력 전쟁
+  MARE CHE SCOMPARE: |
+    미니 캠페인 · Homebrew · 해양 모험
+  ARCHIVI IN FIAMME: |
+    미니 캠페인 · Eberron · 정치적 음모
+  NODI DI SANGUE: |
+    미니 캠페인 · Ravnica · 정치적 음모
+  RADICE DEL MORBO: |
+    미니 캠페인 · Forgotten Realms · 고딕 호러
+  GIURAMENTO INFRANTO: |
+    미니 캠페인 · Dragonlance · 정통 판타지
+  PROFEZIA DI CARTA: |
+    미니 캠페인 · Homebrew · 정통 판타지
+  POLVERE E SILENZIO: |
+    미니 캠페인 · Dark Sun · 황야
+  SETTIMANA DI VETRO: |
+    미니 캠페인 · Eberron · 도시 강탈
+  CERCHIO CHIUSO: |
+    미니 캠페인 · Ravenloft · 고딕 호러
+  CORONA DI CENERE: |
+    장기 캠페인 · Dragonlance · 정통 판타지
+  PATTO DELLE MAREE: |
+    장기 캠페인 · Exandria · 해양 모험
+  ARCHIVIO DEI SANTI: |
+    장기 캠페인 · Eberron · 정치적 음모
+  INVERNO SENZA EREDI: |
+    장기 캠페인 · Ravenloft · 고딕 호러
+  LEGGI DELLA POLVERE: |
+    장기 캠페인 · Dark Sun · 황야
+  OSSA DELLA CITTA: |
+    장기 캠페인 · Ravnica · 세력 전쟁
+  ALTARE DELLA COMETA: |
+    장기 캠페인 · Forgotten Realms · 차원 여행
+  TRONO SOMMERSO: |
+    장기 캠페인 · Wildemount · 세력 전쟁
+  RE DEL VETRO: |
+    장기 캠페인 · Homebrew · 정치적 음모
+  LANTERNE NELLA NEBBIA: |
+    장기 캠페인 · Spelljammer · 해양 모험
+  TOMBA RESPIRANTE: |
+    던전 탐험 · Forgotten Realms · 미스터리
+  PALUDE SENZA RITORNO: |
+    던전 탐험 · Homebrew · 고딕 호러
+  FUGA DAL PROFONDO: |
+    던전 탐험 · Dark Sun · 황야
+  SANTUARIO DEL PECCATO: |
+    던전 탐험 · Ravenloft · 고딕 호러
+  FONDERIA SENZA PADRONE: |
+    던전 탐험 · Eberron · 중세 스팀펑크
+  SOGNO A LIVELLI: |
+    던전 탐험 · Exandria · 차원 여행
+  ABISSO NECESSARIO: |
+    던전 탐험 · Homebrew · 괴물 사냥
+  LABIRINTO RISCRITTO: |
+    던전 탐험 · Feywild · 고딕 호러
+  TANA DELL'ORIGINE: |
+    던전 탐험 · Dragonlance · 괴물 사냥
+  AVAMPOSTO CONTESO: |
+    던전 탐험 · Wildemount · 세력 전쟁

@@ -1,0 +1,39 @@
+{
+  "@@locale": "ko",
+  "appTitle": "D&D 캠페인 크리에이터",
+  "appNameShort": "캠페인 크리에이터",
+  "languageKoreanShort": "KR",
+  "commonRetry": "다시 시도",
+  "commonOpen": "열기",
+  "commonOptional": "선택",
+  "appFreeFormat": "형식 선택",
+  "appStageEntry": "선택",
+  "appStageForge": "포지",
+  "appStageParchment": "양피지",
+  "appOpenParchment": "양피지 열기",
+  "appSealParchment": "양피지 봉인",
+  "entryCampaignTypesTitle": "캠페인 유형",
+  "entryResumeTitle": "세션 이어하기",
+  "entryDescriptionDefault": "캠페인 형식이 기기에 준비되었습니다.",
+  "settingsTitle": "설정",
+  "settingsLanguageLabel": "언어",
+  "settingsThemeLabel": "테마",
+  "settingsLeaveReview": "리뷰 남기기",
+  "settingsShareApp": "앱 공유",
+  "settingsGoAdFreePrice": "프리미엄 잠금 해제",
+  "settingsGoAdFreePriceWithAmount": "프리미엄 잠금 해제 — {price}",
+  "@settingsGoAdFreePriceWithAmount": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumUnlockTitle": "프리미엄 기능",
+  "premiumUnlockBodyWithAd": "광고를 보면 모든 프리미엄 기능을 5분 동안 잠금 해제할 수 있습니다. 영구적으로 이용하려면 프리미엄을 잠금 해제하세요.",
+  "premiumUnlockBodyNoAd": "이 기능을 영구적으로 이용하려면 프리미엄을 잠금 해제하세요.",
+  "premiumUnlockWatchAd": "광고 보기 (5분)",
+  "helpCampaignTypesTitle": "캠페인 유형",
+  "helpTipsTitle": "팁과 모범 사례",
+  "helpTipTwist": "반전을 선택해 줄거리에 즉각적인 긴장을 더하세요."
+}

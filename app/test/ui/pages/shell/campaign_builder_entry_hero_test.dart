@@ -319,6 +319,53 @@ void main() {
     expect(dungeonCard.atmosphere.id, 'dungeon');
   });
 
+  testWidgets(
+      'Korean entry cards use distinct artwork and atmosphere per campaign type',
+      (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1200, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      _TestApp(
+        locale: const Locale('ko'),
+        child: CampaignBuilderPage(
+          service: FakeCampaignService(_entryOptionsKo()),
+          currentLocale: const Locale('ko'),
+          onLocaleChanged: (_) {},
+        ),
+      ),
+    );
+
+    await _pumpUi(tester);
+
+    final oneShotCard = tester.widget<CampaignModeCard>(
+      find.byKey(const ValueKey<String>('entry-campaign-card-One-Shot')),
+    );
+    final miniCampaignCard = tester.widget<CampaignModeCard>(
+      find.byKey(const ValueKey<String>('entry-campaign-card-미니 캠페인')),
+    );
+    final longCampaignCard = tester.widget<CampaignModeCard>(
+      find.byKey(const ValueKey<String>('entry-campaign-card-장기 캠페인')),
+    );
+    final dungeonCard = tester.widget<CampaignModeCard>(
+      find.byKey(const ValueKey<String>('entry-campaign-card-던전 탐험')),
+    );
+
+    expect(oneShotCard.artAsset, 'assets/entry_cards/one_shot.jpg');
+    expect(oneShotCard.atmosphere.id, 'one-shot');
+
+    expect(miniCampaignCard.artAsset, 'assets/entry_cards/campagna_corta.jpg');
+    expect(miniCampaignCard.atmosphere.id, 'mini-campaign');
+
+    expect(longCampaignCard.artAsset, 'assets/entry_cards/campagna_lunga.jpg');
+    expect(longCampaignCard.atmosphere.id, 'long-campaign');
+
+    expect(dungeonCard.artAsset, 'assets/entry_cards/dungeon.jpg');
+    expect(dungeonCard.atmosphere.id, 'dungeon');
+  });
+
   testWidgets('new session resets forge selections back to defaults', (
     tester,
   ) async {
@@ -743,6 +790,27 @@ CampaignOptions _entryOptionsJa() {
     twists: const ['裏切り'],
     presets: const {},
     settingDescriptions: const {'Forgotten Realms': '王道ハイファンタジー。'},
+    presetDescriptions: const {},
+    presetNames: const {},
+  );
+}
+
+CampaignOptions _entryOptionsKo() {
+  return CampaignOptions(
+    settings: const ['Forgotten Realms'],
+    campaignTypes: const [
+      'One-Shot',
+      '미니 캠페인',
+      '장기 캠페인',
+      '던전 탐험',
+    ],
+    themes: const ['음모'],
+    tones: const ['다크'],
+    styles: const ['시네마틱'],
+    partyArchetypes: const ['전사'],
+    twists: const ['배신'],
+    presets: const {},
+    settingDescriptions: const {'Forgotten Realms': '정통 하이 판타지.'},
     presetDescriptions: const {},
     presetNames: const {},
   );

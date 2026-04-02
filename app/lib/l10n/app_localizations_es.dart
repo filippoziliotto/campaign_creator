@@ -39,6 +39,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get languageJapaneseShort => 'JP';
 
   @override
+  String get languageKoreanShort => 'KR';
+
+  @override
   String get commonRetry => 'Reintentar';
 
   @override

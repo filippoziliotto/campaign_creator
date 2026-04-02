@@ -49,6 +49,7 @@ class _CampaignCreatorAppState extends State<CampaignCreatorApp> {
     Locale('pt'),
     Locale('pl'),
     Locale('ja'),
+    Locale('ko'),
   ];
   static final _lightTheme = buildFantasyLightTheme();
   static final _darkTheme = buildFantasyTheme();

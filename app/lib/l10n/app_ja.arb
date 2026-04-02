@@ -10,6 +10,7 @@
   "languagePortugueseShort": "PT",
   "languagePolishShort": "PL",
   "languageJapaneseShort": "JP",
+  "languageKoreanShort": "KR",
   "commonRetry": "再試行",
   "commonOpen": "開く",
   "commonOptional": "任意",
@@ -307,7 +308,7 @@
   "settingsInfoLabel": "Info",
   "settingsVersion": "Version",
   "settingsGoAdFree": "Ads",
-  "settingsGoAdFreePrice": "Unlock Premium",
+  "settingsGoAdFreePrice": "プレミアムを解除",
   "settingsGoAdFreeSubtitle": "One-time purchase · £1.99",
   "settingsGoAdFreeSubtitleWithAmount": "One-time purchase · {price}",
   "@settingsGoAdFreeSubtitleWithAmount": {
@@ -317,7 +318,7 @@
       }
     }
   },
-  "settingsGoAdFreePriceWithAmount": "Unlock Premium — {price}",
+  "settingsGoAdFreePriceWithAmount": "プレミアムを解除 — {price}",
   "@settingsGoAdFreePriceWithAmount": {
     "placeholders": {
       "price": {
@@ -334,10 +335,10 @@
   "settingsPurchasePending": "Purchase processing…",
   "settingsPurchaseCancelled": "Purchase cancelled.",
   "settingsPurchaseFailed": "Purchase failed. Please try again.",
-  "premiumUnlockTitle": "Premium feature",
-  "premiumUnlockBodyWithAd": "Watch an ad to unlock all premium features for 5 minutes, or unlock Premium to access everything permanently.",
-  "premiumUnlockBodyNoAd": "Unlock Premium to access this feature permanently.",
-  "premiumUnlockWatchAd": "Watch ad (5 min)",
+  "premiumUnlockTitle": "プレミアム機能",
+  "premiumUnlockBodyWithAd": "広告を見ると、すべてのプレミアム機能を5分間アンロックできます。恒久的に使うにはプレミアムを解除してください。",
+  "premiumUnlockBodyNoAd": "この機能を恒久的に使うにはプレミアムを解除してください。",
+  "premiumUnlockWatchAd": "広告を見る（5分）",
   "helpTitle": "Guide",
   "helpCampaignTypesTitle": "Campaign types",
   "helpCampaignTypeOneShotTitle": "One-Shot",

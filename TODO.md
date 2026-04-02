@@ -10,3 +10,5 @@ Forgia Pergamena è troppo lungo
 # 5
 Next to theme, tone, style having a small circular icon with a "?" that if pressed explains: e.g. "select the tone of your campaign".
 
+# 6
+Sistemare "watch ad", "sblocca premium" in giapponese.

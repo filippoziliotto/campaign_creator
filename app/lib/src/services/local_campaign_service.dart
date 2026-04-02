@@ -72,6 +72,9 @@ class LocalCampaignService implements CampaignService {
       case 'ja':
       case 'ja-jp':
         return 'ja';
+      case 'ko':
+      case 'ko-kr':
+        return 'ko';
       case 'en':
       case 'en-us':
       case 'en-gb':
@@ -99,6 +102,7 @@ class LocalCampaignService implements CampaignService {
     'mini-kampania': 'mini_campaign',
     'mini kampania': 'mini_campaign',
     '短編キャンペーン': 'mini_campaign',
+    '미니 캠페인': 'mini_campaign',
     'campagna lunga': 'long_campaign',
     'long campaign': 'long_campaign',
     'campaña larga': 'long_campaign',
@@ -109,6 +113,7 @@ class LocalCampaignService implements CampaignService {
     'długa kampania': 'long_campaign',
     'dluga kampania': 'long_campaign',
     '長編キャンペーン': 'long_campaign',
+    '장기 캠페인': 'long_campaign',
     'esplorazione dungeon': 'dungeon_exploration',
     'dungeon crawl': 'dungeon_exploration',
     'exploración de mazmorra': 'dungeon_exploration',
@@ -121,6 +126,7 @@ class LocalCampaignService implements CampaignService {
     'eksploracja lochów': 'dungeon_exploration',
     'eksploracja lochow': 'dungeon_exploration',
     'ダンジョン探索': 'dungeon_exploration',
+    '던전 탐험': 'dungeon_exploration',
   };
 
   static const _templatePathByFamily = <String, String>{
@@ -139,6 +145,7 @@ class LocalCampaignService implements CampaignService {
     'gotischer horror',
     'gotycki horror',
     'ゴシックホラー',
+    '고딕 호러',
   };
 
   static const _darkToneValues = <String>{
@@ -150,6 +157,7 @@ class LocalCampaignService implements CampaignService {
     'düster',
     'mroczny',
     'ダーク',
+    '다크',
   };
 
   static const _noTwistValues = <String>{
@@ -169,6 +177,7 @@ class LocalCampaignService implements CampaignService {
     'keine wendung',
     'brak zwrotu akcji',
     'どんでん返しなし',
+    '반전 없음',
   };
 
   static const Map<String, _PromptLocaleBundle> _bundles =
@@ -574,6 +583,61 @@ class LocalCampaignService implements CampaignService {
             '10セッション以上の長編弧として設計し、サブプロット、主要NPCの変化、勢力、選択の持続的な結果を含めること。',
         'dungeon_exploration':
             '階層探索、資源管理、罠、発見、地上への戦略的帰還を中心にしたキャンペーンとして設計すること。',
+      },
+    ),
+    'ko': _PromptLocaleBundle(
+      languageLabel: '한국어',
+      themeFallback: '강한 선호 없음(자유 조합).',
+      toneFallback: '강한 선호 없음(자유 조합).',
+      styleFallback: '강한 선호 없음(자유 조합).',
+      defaultStructure: '강한 도입, 점진적 고조, 분명한 결말을 갖춘 모듈형 캠페인을 설계한다.',
+      partyArchetypesFallback: '사용자 지정 없음.',
+      noTwistReference: '이야기의 핵심 전환점',
+      twistReferencePattern: '"{twist}"라는 반전',
+      npcInstructionsEnabled:
+          '목표, 비밀, 말투가 뚜렷이 다른 NPC를 최소 5명 정의한다.',
+      npcInstructionsDisabled: 'NPC는 선택 사항이다. 메인 플롯에 필요한 인물만 사용한다.',
+      encounterInstructionsEnabled:
+          '전술뿐 아니라 서사적 목적을 지닌 중요한 조우를 3~5개 포함한다.',
+      encounterInstructionsDisabled:
+          '전투 조우를 줄이고 조사와 사회적 장면의 비중을 높인다.',
+      missingPartyComposition:
+          '파티 구성이 비어 있으면 PC 클래스와 역할의 자연스러운 조합을 제안한다.',
+      missingNarrativeHooks:
+          '이야기 훅이 비어 있으면 대체 가능한 도입 훅을 3개 제안한다.',
+      missingCharacterNotes:
+          '캐릭터 메모가 비어 있으면 PC와 세계를 잇는 그럴듯한 관계를 만든다.',
+      missingFactions:
+          '세력 정보가 비어 있으면 배경과 중심 갈등에 맞는 세력을 2~3개 제안한다.',
+      missingNpcFocus:
+          'NPC 초점이 비어 있으면 아군, 라이벌, 애매한 중립 인물을 섞어 배치한다.',
+      missingEncounterFocus:
+          '조우 초점이 비어 있으면 캠페인 리듬에 맞춰 사회, 탐험, 전투를 균형 있게 배치한다.',
+      missingSafetyNotes:
+          '안전 메모가 비어 있으면 불필요한 민감 표현을 피하고 합리적인 암묵적 경계 안에 머문다.',
+      missingTwist:
+          '강한 폭로, 전환, 또는 고조 지점을 중심으로 이야기를 구축한다.',
+      qualityRules: <String>[
+        '선택된 입력을 존중한다. 배경, 테마, 톤, 스타일을 더 쉬운 대안으로 바꾸지 않는다.',
+        '두 입력이 긴장 관계에 있으면 어느 하나도 무시하지 말고 창의적으로 양립시킨다.',
+        '구체적 디테일로 뒷받침되지 않는 일반적인 판타지 채우기 표현은 피한다.',
+        '모든 NPC, 세력, 장소, 조우에는 탁자 위에서 바로 쓸 수 있는 기억할 만한 특징을 최소 하나 둔다.',
+        '절대 플레이에 나오지 않는 추상적 설정이나 과거사보다 실제로 체감되는 결과를 우선한다.',
+      ],
+      horrorConstraint:
+          '호러는 분위기 중심으로 유지하고 노골적인 고어와 스플래터 묘사는 피한다.',
+      agencyConstraint:
+          '플레이어 주도권을 보존한다. 의미 있는 선택 없이 피할 수 없는 장면은 피한다.',
+      noConstraintsProvided: '사용자가 추가 제약을 제공하지 않았다.',
+      structureRulesByFamily: <String, String>{
+        'one_shot':
+            '도입, 전개, 클라이맥스+에필로그의 3막 구조로 설계하고 1세션 분량의 대략적 진행 흐름을 포함한다.',
+        'mini_campaign':
+            '4~6세션짜리 짧은 아크로 설계하고, 판돈 상승, 중반 폭로, 강한 결말을 분명히 포함한다.',
+        'long_campaign':
+            '10세션 이상의 장기 아크로 설계하고, 서브플롯, 변화하는 주요 NPC, 세력, 선택의 지속적 결과를 포함한다.',
+        'dungeon_exploration':
+            '층별 탐험, 자원 관리, 함정, 발견, 지상으로의 전략적 복귀를 중심으로 한 캠페인으로 설계한다.',
       },
     ),
   };

@@ -525,6 +525,43 @@ void main() {
     expect(customText.style?.fontSize, 12);
   });
 
+  testWidgets(
+    'custom chip added with the keyboard submit action appears selected',
+    (tester) async {
+      await _setLargeSurface(tester);
+
+      await tester.pumpWidget(
+        _TestApp(
+          child: _buildPage(
+            initialPreferences: <String, Object>{
+              'app.ad_free_purchased': true,
+            },
+          ),
+        ),
+      );
+      await _pumpUi(tester);
+      await _openWorldSection(tester);
+
+      final customButton = find.ancestor(
+        of: find.text('Custom').first,
+        matching: find.byType(InkWell),
+      );
+      await tester.ensureVisible(customButton.first);
+      await tester.tap(customButton.first, warnIfMissed: false);
+      await _pumpUi(tester);
+
+      final textField = find.byType(TextField);
+      await tester.enterText(textField, 'Noir');
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await _pumpUi(tester);
+
+      final customChip =
+          find.byKey(const ValueKey<String>('forge-custom-chip-Noir'));
+      expect(customChip, findsOneWidget);
+      expect(tester.widget<AnimatedRuneFilterChip>(customChip).selected, isTrue);
+    },
+  );
+
   testWidgets('custom add chip matches standard chip chrome in light mode', (
     tester,
   ) async {
@@ -687,7 +724,7 @@ void main() {
   );
 
   testWidgets(
-    'custom value chips match standard chip chrome across dark atmospheres',
+    'custom value chips use selected chip chrome across dark atmospheres',
     (tester) async {
       await _setLargeSurface(tester);
 
@@ -729,6 +766,11 @@ void main() {
         await tester.tap(find.widgetWithText(FilledButton, 'Add'));
         await _pumpUi(tester);
 
+        final intrigueChip =
+            find.byKey(const ValueKey<String>('forge-option-chip-Intrigo'));
+        tester.widget<AnimatedRuneFilterChip>(intrigueChip).onSelected(true);
+        await _pumpUi(tester);
+
         final customDecoration = _chipDecoration(
           tester,
           find
@@ -741,7 +783,7 @@ void main() {
         final standardDecoration = _chipDecoration(
           tester,
           find.descendant(
-            of: find.byKey(const ValueKey<String>('forge-option-chip-Intrigo')),
+            of: intrigueChip,
             matching: find.byType(AnimatedContainer),
           ),
         );

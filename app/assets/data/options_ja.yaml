@@ -22,27 +22,27 @@ settings:
   - Sigil
 
 setting_descriptions:
-  Forgotten Realms: Classic high-fantasy world, rich with kingdoms, ancient magic, and heroic adventures.
-  Eberron: Pulp-noir setting with arcane technology, political intrigue, and metropolitan mysteries.
-  Ravenloft: Gothic domain of horror, where mist conceals curses and dark lords.
-  Exandria: Epic and modern scenario, with grand conflicts, active deities, and vastly diverse regions.
-  Homebrew continent: Original world created at the table, flexible in tone, history, and custom rules.
-  Dragonlance: Heroic fantasy shaped by war between dragons, knightly orders, and prophecies.
-  Ravnica: Planar megalopolis dominated by rival guilds, perfect for urban plots and power struggles.
-  Spelljammer: Cosmic voyage between crystal spheres, flying ships, and mixed crews in space-fantasy adventures.
-  Theros: Greek-mythological setting with active gods, oracles, and legendary monsters tied to heroes' fates.
-  Dark Sun: Post-apocalyptic desert world, harsh and dystopian, where magic consumes resources and survival is central.
-  Wildemount: Political and warlike scenario of Exandria, ideal for campaigns of national conflict, intrigue, and war fronts.
-  Feywild: Fey plane, a distorted mirror of the material world, populated by magical creatures, enchanted realms, and unpredictable strangeness.
-  Planescape: Cosmic crossroads dominated by warring philosophies, where every faction claims the True Nature of Reality across infinite planes.
-  Underdark: Endless subterranean world of darkness, threaded by lightless tunnels, ruthless factions, and ancient secrets buried deep below.
-  Frontier: Wild lands at the edges of civilisation, where law is uncertain, communities are isolated, and danger is a constant.
-  Shadowfell: Bleak reflection of the material world, steeped in decay, muted emotion, and lingering dead.
-  Radiant Citadel: Luminous crossroads in the Ethereal Plane, linking distant cultures through magical gateways and living traditions.
-  Avernus: First layer of the Nine Hells, a scorched battlefield of infernal war, iron engines, and desperate bargains.
-  Sigil: City of Doors at the center of the planes, where factions, portals, and dangerous ideas shape every street.
-  Greyhawk: Classic old-school fantasy world of rival realms, deep dungeons, and grounded heroic adventure.
-  Ghosts of Saltmarsh Coast: Rugged coastal frontier of fishing towns, hidden coves, smugglers, and threats rising from the sea.
+  Forgotten Realms: 王国、古代魔法、英雄的な冒険に満ちた、王道ハイファンタジー世界。
+  Eberron: 秘術技術、政治的陰謀、大都市の謎が絡み合うパルプノワール世界。
+  Ravenloft: 霧が呪いと闇の君主を覆い隠す、ゴシックホラーの領域。
+  Exandria: 壮大な対立、活動する神々、多彩な地域を持つ、現代的で叙事的な世界。
+  Homebrew continent: 卓上で創られたオリジナル世界。雰囲気、歴史、独自ルールを柔軟に調整できる。
+  Dragonlance: 竜の戦争、騎士団、予言によって形作られた英雄的ファンタジー。
+  Ravnica: 対立するギルドが支配する次元都市。都市型陰謀や権力闘争に最適。
+  Spelljammer: クリスタルスフィアを巡り、飛行船と寄せ集めの乗組員で進む宇宙ファンタジー航海。
+  Theros: 英雄の運命に結びつく神々、神託、伝説の怪物が息づくギリシャ神話風世界。
+  Dark Sun: 魔法が資源を喰らい、生存そのものが中心となる、過酷で退廃的な終末砂漠世界。
+  Wildemount: 国家間戦争、陰謀、前線劇に適した、Exandriaの政治的かつ軍事的な舞台。
+  Feywild: 魔法生物、幻想領域、予測不能な奇妙さに満ちた、物質界の歪んだ鏡像である妖精界。
+  Planescape: 無限の次元をまたいで、あらゆる派閥が「現実の真の姿」を主張する、哲学が衝突する宇宙の交差点。
+  Underdark: 光なき坑道、容赦ない勢力、深奥に埋もれた古代の秘密が広がる、果てなき地下世界。
+  Frontier: 文明の縁に広がる荒野。法は曖昧で、共同体は孤立し、危険が常に付きまとう。
+  Shadowfell: 崩壊、鈍い感情、さまよう死者に満ちた、物質界の陰鬱な反映世界。
+  Radiant Citadel: 魔法の門と生きた伝統を通じて遠い文化を結ぶ、エーテル界に輝く交差都市。
+  Avernus: 地獄の九層の第一層。焦土の戦場、鉄の戦争機械、絶望的な取引が渦巻く世界。
+  Sigil: 次元の中心にある「扉の都」。派閥、門、危険な思想があらゆる通りを形作る。
+  Greyhawk: 競い合う王国、深い地下迷宮、地に足のついた英雄譚が息づく古典的オールドスクールファンタジー世界。
+  Ghosts of Saltmarsh Coast: 漁村、隠れ入り江、密輸業者、海から迫る脅威が渦巻く、険しい海辺の辺境地帯。
 
 campaign_types:
   - One-Shot

@@ -39,6 +39,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get languageJapaneseShort => 'JP';
 
   @override
+  String get languageKoreanShort => 'KR';
+
+  @override
   String get commonRetry => '再試行';
 
   @override
@@ -741,7 +744,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsGoAdFree => 'Ads';
 
   @override
-  String get settingsGoAdFreePrice => 'Unlock Premium';
+  String get settingsGoAdFreePrice => 'プレミアムを解除';
 
   @override
   String get settingsGoAdFreeSubtitle => 'One-time purchase · £1.99';
@@ -753,7 +756,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String settingsGoAdFreePriceWithAmount(String price) {
-    return 'Unlock Premium — $price';
+    return 'プレミアムを解除 — $price';
   }
 
   @override
@@ -787,18 +790,17 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsPurchaseFailed => 'Purchase failed. Please try again.';
 
   @override
-  String get premiumUnlockTitle => 'Premium feature';
+  String get premiumUnlockTitle => 'プレミアム機能';
 
   @override
   String get premiumUnlockBodyWithAd =>
-      'Watch an ad to unlock all premium features for 5 minutes, or unlock Premium to access everything permanently.';
+      '広告を見ると、すべてのプレミアム機能を5分間アンロックできます。恒久的に使うにはプレミアムを解除してください。';
 
   @override
-  String get premiumUnlockBodyNoAd =>
-      'Unlock Premium to access this feature permanently.';
+  String get premiumUnlockBodyNoAd => 'この機能を恒久的に使うにはプレミアムを解除してください。';
 
   @override
-  String get premiumUnlockWatchAd => 'Watch ad (5 min)';
+  String get premiumUnlockWatchAd => '広告を見る（5分）';
 
   @override
   String get helpTitle => 'Guide';

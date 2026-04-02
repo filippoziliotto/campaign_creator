@@ -22,27 +22,27 @@ settings:
   - Sigil
 
 setting_descriptions:
-  Forgotten Realms: Classic high-fantasy world, rich with kingdoms, ancient magic, and heroic adventures.
-  Eberron: Pulp-noir setting with arcane technology, political intrigue, and metropolitan mysteries.
-  Ravenloft: Gothic domain of horror, where mist conceals curses and dark lords.
-  Exandria: Epic and modern scenario, with grand conflicts, active deities, and vastly diverse regions.
-  Homebrew continent: Original world created at the table, flexible in tone, history, and custom rules.
-  Dragonlance: Heroic fantasy shaped by war between dragons, knightly orders, and prophecies.
-  Ravnica: Planar megalopolis dominated by rival guilds, perfect for urban plots and power struggles.
-  Spelljammer: Cosmic voyage between crystal spheres, flying ships, and mixed crews in space-fantasy adventures.
-  Theros: Greek-mythological setting with active gods, oracles, and legendary monsters tied to heroes' fates.
-  Dark Sun: Post-apocalyptic desert world, harsh and dystopian, where magic consumes resources and survival is central.
-  Wildemount: Political and warlike scenario of Exandria, ideal for campaigns of national conflict, intrigue, and war fronts.
-  Feywild: Fey plane, a distorted mirror of the material world, populated by magical creatures, enchanted realms, and unpredictable strangeness.
-  Planescape: Cosmic crossroads dominated by warring philosophies, where every faction claims the True Nature of Reality across infinite planes.
-  Underdark: Endless subterranean world of darkness, threaded by lightless tunnels, ruthless factions, and ancient secrets buried deep below.
-  Frontier: Wild lands at the edges of civilisation, where law is uncertain, communities are isolated, and danger is a constant.
-  Shadowfell: Bleak reflection of the material world, steeped in decay, muted emotion, and lingering dead.
-  Radiant Citadel: Luminous crossroads in the Ethereal Plane, linking distant cultures through magical gateways and living traditions.
-  Avernus: First layer of the Nine Hells, a scorched battlefield of infernal war, iron engines, and desperate bargains.
-  Sigil: City of Doors at the center of the planes, where factions, portals, and dangerous ideas shape every street.
-  Greyhawk: Classic old-school fantasy world of rival realms, deep dungeons, and grounded heroic adventure.
-  Ghosts of Saltmarsh Coast: Rugged coastal frontier of fishing towns, hidden coves, smugglers, and threats rising from the sea.
+  Forgotten Realms: Klasyczny świat high fantasy, pełen królestw, starożytnej magii i heroicznych przygód.
+  Eberron: Świat pulp-noir z technologią arkaniczną, politycznymi intrygami i tajemnicami wielkich metropolii.
+  Ravenloft: Gotycka domena grozy, gdzie mgła skrywa klątwy i mrocznych władców.
+  Exandria: Epicki i nowoczesny świat z wielkimi konfliktami, aktywnymi bóstwami i niezwykle różnorodnymi krainami.
+  Homebrew continent: Oryginalny świat stworzony przy stole, elastyczny pod względem tonu, historii i własnych zasad.
+  Dragonlance: Heroiczne fantasy kształtowane przez wojny smoków, zakony rycerskie i proroctwa.
+  Ravnica: Planarna metropolia rządzona przez rywalizujące gildie, idealna do miejskich intryg i walk o władzę.
+  Spelljammer: Kosmiczna podróż między kryształowymi sferami, latającymi statkami i mieszanymi załogami w przygodach space fantasy.
+  Theros: Świat inspirowany mitologią grecką, z aktywnymi bogami, wyroczniami i legendarnymi potworami związanymi z losem bohaterów.
+  Dark Sun: Postapokaliptyczny pustynny świat, surowy i dystopijny, gdzie magia pożera zasoby, a przetrwanie jest najważniejsze.
+  Wildemount: Polityczny i wojenny region Exandrii, idealny do kampanii o konflikcie narodów, intrygach i liniach frontu.
+  Feywild: Baśniowy plan, zniekształcone odbicie świata materialnego, pełne magicznych istot, zaczarowanych krain i nieprzewidywalnej dziwności.
+  Planescape: Kosmiczne skrzyżowanie zdominowane przez walczące filozofie, gdzie każda frakcja rości sobie prawo do Prawdziwej Natury Rzeczywistości na nieskończonych planach.
+  Underdark: Bezkresny podziemny świat ciemności, przecięty pozbawionymi światła tunelami, bezwzględnymi frakcjami i pradawnymi sekretami pogrzebanymi w głębinach.
+  Frontier: Dzikie ziemie na krańcach cywilizacji, gdzie prawo jest niepewne, społeczności odizolowane, a zagrożenie nieustanne.
+  Shadowfell: Ponure odbicie świata materialnego, przesiąknięte rozkładem, stłumionymi emocjami i obecnością niespokojnych zmarłych.
+  Radiant Citadel: Jaśniejące skrzyżowanie w Planie Eterycznym, łączące odległe kultury przez magiczne bramy i żywe tradycje.
+  Avernus: Pierwsza warstwa Dziewięciu Piekieł, spopielone pole bitwy infernalnej wojny, żelaznych machin i rozpaczliwych układów.
+  Sigil: Miasto Wrót w centrum planów, gdzie frakcje, portale i niebezpieczne idee kształtują każdą ulicę.
+  Greyhawk: Klasyczny oldschoolowy świat fantasy rywalizujących królestw, głębokich lochów i przyziemnej heroicznej przygody.
+  Ghosts of Saltmarsh Coast: Surowe nadmorskie pogranicze rybackich miasteczek, ukrytych zatok, przemytników i zagrożeń wynurzających się z morza.
 
 campaign_types:
   - One-Shot

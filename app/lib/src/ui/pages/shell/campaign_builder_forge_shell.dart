@@ -2056,7 +2056,7 @@ extension on _CampaignBuilderPageState {
                 key: ValueKey<String>('forge-custom-chip-$entry'),
                 atmosphere: atmosphere,
                 label: entry,
-                selected: false,
+                selected: true,
                 premiumCrownColor: atmosphere.glow,
                 onSelected: (_) {
                   _triggerLightImpact();

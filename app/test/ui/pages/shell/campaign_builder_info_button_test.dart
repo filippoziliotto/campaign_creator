@@ -272,6 +272,12 @@ void main() {
       'Tips & best practices',
       'Pick a twist to give the plot immediate tension.',
     ),
+    (
+      const Locale('ko'),
+      '캠페인 유형',
+      '팁과 모범 사례',
+      '반전을 선택해 줄거리에 즉각적인 긴장을 더하세요.',
+    ),
   ]) {
     testWidgets(
         'help sheet localizes static guide content for ${locale.languageCode}',
@@ -575,6 +581,31 @@ void main() {
     expect(japaneseFlag.flagCode?.toUpperCase(), 'JP');
   });
 
+  testWidgets('settings sheet shows the Korean flag for the Korean locale mark',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(_testApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    await tester
+        .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+    await tester.pumpAndSettle();
+
+    final koreanMark = find.byKey(
+      const ValueKey<String>('settings-language-mark-ko'),
+    );
+    expect(koreanMark, findsOneWidget);
+
+    final koreanFlag = tester.widget<CountryFlag>(
+      find.descendant(of: koreanMark, matching: find.byType(CountryFlag)),
+    );
+
+    expect(koreanFlag.flagCode?.toUpperCase(), 'KR');
+  });
+
   testWidgets('settings sheet shows language segmented control',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
@@ -607,6 +638,8 @@ void main() {
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-segment-ja')),
         findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-segment-ko')),
+        findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-mark-en')),
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-mark-it')),
@@ -622,6 +655,8 @@ void main() {
     expect(find.byKey(const ValueKey<String>('settings-language-mark-pl')),
         findsOneWidget);
     expect(find.byKey(const ValueKey<String>('settings-language-mark-ja')),
+        findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('settings-language-mark-ko')),
         findsOneWidget);
   });
 
