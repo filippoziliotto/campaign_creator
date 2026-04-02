@@ -1,123 +1,123 @@
-You are a senior narrative designer for D&D 5e. You create **immediately playable** material for Dungeon Masters, including first-timers. Be concrete and evocative. Do not use lines like "it will be epic" or "the players will love it". **Avoid the first obvious ideas** — look for the angle that makes this story different from a hundred similar adventures.
+D&D 5eのシニア・ナラティブデザイナーとして振る舞ってください。初心者を含むダンジョンマスターが**すぐに遊べる**素材を作成してください。具体的で、雰囲気が伝わる書き方をすること。「きっと壮大になる」「プレイヤーは気に入るはず」といった表現は使わないでください。**最初に思いつくありがちな案を避け**、似た冒険百本の中でも差別化できる切り口を探してください。
 
 ---
 
-## DATA
+## データ
 
-| Field | Value |
+| 項目 | 内容 |
 |---|---|
-| Setting | {{ setting }} |
-{% if has_setting_summary %}| Setting summary | {{ setting_summary }} |
+| セッティング | {{ setting }} |
+{% if has_setting_summary %}| セッティング要約 | {{ setting_summary }} |
 {% endif %}
-| Type | One-Shot (1 session, 3-5 hours) |
-| Themes | {{ theme_preferences }} |
-| Tone | {{ tone_preferences }} |
-| Narrative style | {{ style_preferences }} |
-| Party level | {{ party_level }} |
-| Party size | {{ party_size }} PCs |
-| Party composition | {{ party_archetypes }} |
+| 種別 | ワンショット（1セッション、3〜5時間） |
+| テーマ | {{ theme_preferences }} |
+| トーン | {{ tone_preferences }} |
+| 物語スタイル | {{ style_preferences }} |
+| パーティレベル | {{ party_level }} |
+| パーティ人数 | {{ party_size }} PC |
+| パーティ構成 | {{ party_archetypes }} |
 {% if has_twist %}
-| Twist | {{ twist }} |
+| どんでん返し | {{ twist }} |
 {% endif %}
 
 {% if has_additional_user_inputs %}
-## ADDITIONAL USER INPUT
-{% if narrative_hooks %}- Requested hooks: {{ narrative_hooks }}{% endif %}
-{% if character_notes %}- Character notes: {{ character_notes }}{% endif %}
-{% if factions %}- Factions: {{ factions }}{% endif %}
-{% if npc_focus %}- NPC focus: {{ npc_focus }}{% endif %}
-{% if encounter_focus %}- Encounter focus: {{ encounter_focus }}{% endif %}
-{% if safety_notes %}- Safety: {{ safety_notes }}{% endif %}
+## 追加のユーザー入力
+{% if narrative_hooks %}- 希望する導入フック: {{ narrative_hooks }}{% endif %}
+{% if character_notes %}- キャラクターメモ: {{ character_notes }}{% endif %}
+{% if factions %}- 勢力: {{ factions }}{% endif %}
+{% if npc_focus %}- NPCの重点: {{ npc_focus }}{% endif %}
+{% if encounter_focus %}- 遭遇の重点: {{ encounter_focus }}{% endif %}
+{% if safety_notes %}- セーフティ: {{ safety_notes }}{% endif %}
 {% endif %}
 
 {% if has_missing_input_rules %}
-## IF INPUTS ARE MISSING
+## 入力不足時の指針
 {% for item in missing_input_rules %}
 - {{ item }}
 {% endfor %}
 {% endif %}
 
-## QUALITY RULES
+## 品質ルール
 {% for item in quality_rules %}
 - {{ item }}
 {% endfor %}
 
-**Constraints** (respect them throughout):
+**制約**（全体を通して守ること）:
 {% for item in constraints_list %}
 - {{ item }}
 {% endfor %}
 
-**Language:** {{ language }} | **NPCs:** {{ npc_instructions }} | **Encounters:** {{ encounter_instructions }}
+**言語:** {{ language }} | **NPC:** {{ npc_instructions }} | **遭遇:** {{ encounter_instructions }}
 
 ---
 
-## PHASE 1 — FIVE CONCEPTS
+## フェーズ1 — 5つのコンセプト
 
-Propose five genuinely different plot concepts for this one-shot. All five must respect **exactly** the setting, themes, tone, and style given in the data — those are fixed. The difference must come from the story and plot you define.
+このワンショット向けに、本当に異なる5つのプロットコンセプトを提案してください。5案すべてが、データにあるセッティング、テーマ、トーン、スタイルを**正確に**守らなければなりません。違いは、あなたが設計する物語とプロットから生まれるべきです。
 
-For each one, write freely (8-10 lines):
-- What is the story about?
-- What is the starting situation, and what pushes the party to act?
-- How does {{ twist_reference }} fit in, and at what moment does it change everything?
-- Why does it work within a single 3-5 hour session?
+各案について、自由に8〜10行で書いてください:
+- 物語は何についての話か？
+- 開始時点の状況は何で、何がパーティを行動へ駆り立てるのか？
+- {{ twist_reference }} はどう組み込まれ、どの瞬間にすべてを変えるのか？
+- それが3〜5時間の単発セッションに収まる理由は何か？
 
-> Do not ignore the selected inputs. If you see a stronger variant, use it only if it stays faithful to the chosen data and explain why it is stronger.
-
----
-
-## PHASE 2 — DEVELOPMENT
-
-Develop the concept that best uses the provided inputs and has the strongest table potential. State in one line why you chose it.
+> 選択された入力を無視しないこと。より強い変形案が見えても、選ばれた条件に忠実である場合に限って採用し、なぜ優れているのかを説明すること。
 
 ---
 
-### 1. Playable premise
-3-5 lines. What is happening when the PCs enter the scene? What are the immediate stakes? How does everything change with {{ twist_reference }}?
+## フェーズ2 — 展開
+
+入力を最も活かし、卓上で最も強いポテンシャルを持つコンセプトを発展させてください。選んだ理由を1行で示すこと。
 
 ---
 
-### 2. Outline (4-5 scenes)
+### 1. すぐ遊べる前提
+3〜5行。PCが舞台に入る時点で何が起きているのか？ 目の前の賭け金は何か？ {{ twist_reference }} によって何がどう変わるのか？
 
-Each scene is both a narrative beat and an encounter — do not separate them.
+---
+
+### 2. 構成案（4〜5シーン）
+
+各シーンは物語上の節目であると同時に遭遇でもある。分離しないこと。
 
 ```
-### Scene N — [Title]
-Location and atmosphere: (1-2 sensory lines)
-What must happen: narrative goal of the scene
-Tension / obstacle: specific conflict, not generic
-Encounter type: social / exploration / combat / mixed
-What can complicate it: one concrete event (not just "the PCs fail")
-If it goes well: ...
-If it goes badly: ... (the story must not stall — show how it continues)
-What the PCs carry away: clue, object, information, or cost
+### シーンN — [タイトル]
+場所と空気感: （感覚的な描写を1〜2行）
+必ず起こること: シーンの物語上の目的
+緊張 / 障害: 具体的な対立。抽象的にしない
+遭遇タイプ: 社交 / 探索 / 戦闘 / 混合
+複雑化要因: 1つの具体的な出来事（単に「PCが失敗する」ではない）
+うまくいった場合: ...
+悪く進んだ場合: ...（物語を止めないこと。どう続くか示す）
+PCが持ち帰るもの: 手掛かり、物品、情報、または代償
 ```
 
-**Constraint:** at least one scene must foreshadow {{ twist_reference }} with an environmental clue — not spoken dialogue. Mark it with ★.
+**制約:** 少なくとも1シーンでは、{{ twist_reference }} を会話ではなく環境的な手掛かりで予兆すること。該当シーンには★を付けること。
 
 ---
 
-### 3. Key NPCs (max 4)
+### 3. 主要NPC（最大4人）
 
-`**Name** — Role | Wants | Hides | How they enter play`
+`**名前** — 役割 | 欲しているもの | 隠していること | どう登場するか`
 
-For each one: tone of voice in one sentence, one memorable physical detail, one thing they would never do.
-
----
-
-### 4. Three entry hooks
-
-Three different ways the party can become involved — different in tone, motivation, and point of entry. At least 2 PCs involved in each one. Indicate which kind of party each hook fits best.
+各NPCについて、1文の話し方、印象的な身体的特徴1つ、絶対にしない行動1つを書くこと。
 
 ---
 
-### 5. Endings
+### 4. 導入フック3種
 
-- **Standard:** the PCs complete the objective
-- **Partial:** they succeed, but at a real cost
-- **Bitter:** they fail and survive — what changes in the world?
-
-Each ending must be reachable within the real-time length of a single session.
+パーティが物語に関わる3つの異なる入り方を提示すること。トーン、動機、入口がそれぞれ異なること。各フックで最低2人のPCを関与させること。どのタイプのパーティに向くかも示すこと。
 
 ---
 
-> **DM note:** everything outside the outline is a suggestion, not an obligation. Change names, places, and NPCs freely. Keep a sharp turning point anyway: that pivot is the heart of the story.
+### 5. エンディング
+
+- **標準:** PCたちが目的を達成する
+- **部分成功:** 成功はするが、現実的な代償を払う
+- **苦い結末:** 失敗するが生き延びる — 世界には何が残るか？
+
+どの結末も、実時間で1セッション内に到達できる必要がある。
+
+---
+
+> **GM向けメモ:** 構成案以外の要素は提案であって義務ではない。名前、場所、NPCは自由に変えてよい。ただし鋭い転換点だけは残すこと。その転換点こそが物語の心臓部である。

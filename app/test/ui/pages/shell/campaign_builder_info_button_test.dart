@@ -268,9 +268,9 @@ void main() {
     ),
     (
       const Locale('ja'),
-      'Campaign types',
-      'Tips & best practices',
-      'Pick a twist to give the plot immediate tension.',
+      'キャンペーンタイプ',
+      'ヒントとベストプラクティス',
+      'ひねりを選んで、物語に即座に緊張感を与えましょう。',
     ),
     (
       const Locale('ko'),
@@ -303,6 +303,152 @@ void main() {
       );
       expect(
         find.descendant(of: helpSheet, matching: find.text(sampleTip)),
+        findsOneWidget,
+      );
+    });
+  }
+
+  for (final (
+        locale,
+        settingsTitle,
+        languageLabel,
+        themeLabel,
+        reviewLabel,
+        shareLabel,
+        privacyLabel,
+        infoLabel,
+        versionLabel,
+      ) in <(
+        Locale,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+      )>[
+        (
+          const Locale('ja'),
+          '設定',
+          '言語',
+          'テーマ',
+          'レビューを書く',
+          'アプリを共有',
+          'プライバシー設定',
+          '情報',
+          'バージョン',
+        ),
+        (
+          const Locale('ko'),
+          '설정',
+          '언어',
+          '테마',
+          '리뷰 남기기',
+          '앱 공유',
+          '개인정보 설정',
+          '정보',
+          '버전',
+        ),
+      ]) {
+    testWidgets(
+        'settings sheet localizes visible menu labels for ${locale.languageCode}',
+        (tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 844));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final consentManager = _FakeAppConsentManager()
+        ..privacyOptionsRequired = true;
+
+      await tester.pumpWidget(
+        _testApp(
+          currentLocale: locale,
+          consentManager: consentManager,
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 800));
+
+      await tester
+          .tap(find.byKey(const ValueKey<String>('info-settings-button')));
+      await tester.pumpAndSettle();
+
+      final settingsSheet = find.byKey(const ValueKey<String>('settings-sheet'));
+      expect(
+        find.descendant(of: settingsSheet, matching: find.text(settingsTitle)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: settingsSheet, matching: find.text(languageLabel)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: settingsSheet, matching: find.text(themeLabel)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: settingsSheet, matching: find.text(reviewLabel)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: settingsSheet, matching: find.text(shareLabel)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: settingsSheet, matching: find.text(privacyLabel)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: settingsSheet, matching: find.text(infoLabel)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: settingsSheet, matching: find.textContaining(versionLabel)),
+        findsOneWidget,
+      );
+    });
+  }
+
+  for (final (
+        locale,
+        helpTitle,
+        oneShotBody,
+      ) in <(
+        Locale,
+        String,
+        String,
+      )>[
+        (
+          const Locale('ja'),
+          'ガイド',
+          '1セッションで完結する冒険で、強い導入、明確な目標、素早い見返りを備えています。即効性と引き締まった展開が欲しいときに最適です。',
+        ),
+        (
+          const Locale('ko'),
+          '가이드',
+          '강한 도입, 분명한 목표, 빠른 보상을 갖춘 단일 세션용 완결형 모험입니다. 즉각적인 추진력과 압축된 전개가 필요할 때 적합합니다.',
+        ),
+      ]) {
+    testWidgets(
+        'help sheet localizes guide title and campaign body for ${locale.languageCode}',
+        (tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 844));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(_testApp(currentLocale: locale));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 800));
+
+      await tester.tap(find.byKey(const ValueKey<String>('help-guide-button')));
+      await tester.pumpAndSettle();
+
+      final helpSheet = find.byKey(const ValueKey<String>('help-sheet'));
+      expect(
+        find.descendant(of: helpSheet, matching: find.text(helpTitle)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: helpSheet, matching: find.text(oneShotBody)),
         findsOneWidget,
       );
     });

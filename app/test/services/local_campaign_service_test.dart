@@ -820,6 +820,84 @@ void main() {
         expect(prompt, isNot(contains('PHASE 1 — FIVE CONCEPTS')));
       });
 
+      test('Polish generic requests use the Polish generic template',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          campaignType: 'Autorski łuk',
+          localeCode: 'pl',
+        ));
+
+        expect(prompt, contains('# Rola'));
+        expect(prompt, contains('## Format wyjściowy'));
+        expect(prompt, isNot(contains('## Output format')));
+      });
+
+      test('Polish One-Shot requests use the Polish one-shot template',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          localeCode: 'pl',
+        ));
+
+        expect(prompt, contains('FAZA 1 — PIĘĆ KONCEPCJI'));
+        expect(prompt, isNot(contains('PHASE 1 — FIVE CONCEPTS')));
+      });
+
+      test('Japanese generic requests use the Japanese generic template',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          campaignType: 'カスタムアーク',
+          localeCode: 'ja',
+        ));
+
+        expect(prompt, contains('# 役割'));
+        expect(prompt, contains('## 出力形式'));
+        expect(prompt, isNot(contains('## Output format')));
+      });
+
+      test('Japanese One-Shot requests use the Japanese one-shot template',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          localeCode: 'ja',
+        ));
+
+        expect(prompt, contains('フェーズ1 — 5つのコンセプト'));
+        expect(prompt, isNot(contains('PHASE 1 — FIVE CONCEPTS')));
+      });
+
+      test('Korean generic requests use the Korean generic template',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          campaignType: '커스텀 아크',
+          localeCode: 'ko',
+        ));
+
+        expect(prompt, contains('# 역할'));
+        expect(prompt, contains('## 출력 형식'));
+        expect(prompt, isNot(contains('## Output format')));
+      });
+
+      test('Korean One-Shot requests use the Korean one-shot template',
+          () async {
+        final service = LocalCampaignService();
+
+        final prompt = await service.generatePrompt(buildRequest(
+          localeCode: 'ko',
+        ));
+
+        expect(prompt, contains('1단계 — 다섯 가지 콘셉트'));
+        expect(prompt, isNot(contains('PHASE 1 — FIVE CONCEPTS')));
+      });
+
       test('Spanish horror prompts add the gore guidance line', () async {
         final service = LocalCampaignService();
 
@@ -925,6 +1003,129 @@ void main() {
               isNot(contains(marker)),
               reason:
                   'French prompt for "$campaignType" still contains English marker "$marker".',
+            );
+          }
+        }
+      });
+
+      test(
+          'Polish localized campaign templates do not leak English instructions',
+          () async {
+        final service = LocalCampaignService();
+        const campaignTypes = <String>[
+          'Mini-kampania',
+          'Długa kampania',
+          'Eksploracja lochów',
+        ];
+        const englishMarkers = <String>[
+          'You are a senior narrative designer',
+          'Requested hooks:',
+          'Premise and stakes',
+          'Game world',
+          'NPCs and event timeline',
+          'Three entry hooks',
+          'DM note:',
+          'Mini-campaign (3-6 sessions)',
+          'Long campaign (10-25+ sessions)',
+          'Dungeon exploration (multi-session)',
+          '**NPCs:**',
+          '**Encounters:**',
+        ];
+
+        for (final campaignType in campaignTypes) {
+          final prompt = await service.generatePrompt(buildRequest(
+            campaignType: campaignType,
+            localeCode: 'pl',
+          ));
+
+          for (final marker in englishMarkers) {
+            expect(
+              prompt,
+              isNot(contains(marker)),
+              reason:
+                  'Polish prompt for "$campaignType" still contains English marker "$marker".',
+            );
+          }
+        }
+      });
+
+      test(
+          'Japanese localized campaign templates do not leak English instructions',
+          () async {
+        final service = LocalCampaignService();
+        const campaignTypes = <String>[
+          '短編キャンペーン',
+          '長編キャンペーン',
+          'ダンジョン探索',
+        ];
+        const englishMarkers = <String>[
+          'You are a senior narrative designer',
+          'Requested hooks:',
+          'Premise and stakes',
+          'Game world',
+          'NPCs and event timeline',
+          'Three entry hooks',
+          'DM note:',
+          'Mini-campaign (3-6 sessions)',
+          'Long campaign (10-25+ sessions)',
+          'Dungeon exploration (multi-session)',
+          '**NPCs:**',
+          '**Encounters:**',
+        ];
+
+        for (final campaignType in campaignTypes) {
+          final prompt = await service.generatePrompt(buildRequest(
+            campaignType: campaignType,
+            localeCode: 'ja',
+          ));
+
+          for (final marker in englishMarkers) {
+            expect(
+              prompt,
+              isNot(contains(marker)),
+              reason:
+                  'Japanese prompt for "$campaignType" still contains English marker "$marker".',
+            );
+          }
+        }
+      });
+
+      test(
+          'Korean localized campaign templates do not leak English instructions',
+          () async {
+        final service = LocalCampaignService();
+        const campaignTypes = <String>[
+          '미니 캠페인',
+          '장기 캠페인',
+          '던전 탐험',
+        ];
+        const englishMarkers = <String>[
+          'You are a senior narrative designer',
+          'Requested hooks:',
+          'Premise and stakes',
+          'Game world',
+          'NPCs and event timeline',
+          'Three entry hooks',
+          'DM note:',
+          'Mini-campaign (3-6 sessions)',
+          'Long campaign (10-25+ sessions)',
+          'Dungeon exploration (multi-session)',
+          '**NPCs:**',
+          '**Encounters:**',
+        ];
+
+        for (final campaignType in campaignTypes) {
+          final prompt = await service.generatePrompt(buildRequest(
+            campaignType: campaignType,
+            localeCode: 'ko',
+          ));
+
+          for (final marker in englishMarkers) {
+            expect(
+              prompt,
+              isNot(contains(marker)),
+              reason:
+                  'Korean prompt for "$campaignType" still contains English marker "$marker".',
             );
           }
         }

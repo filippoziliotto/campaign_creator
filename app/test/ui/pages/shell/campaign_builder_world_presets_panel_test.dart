@@ -223,6 +223,105 @@ void main() {
       variant: const TargetPlatformVariant(
           <TargetPlatform>{TargetPlatform.android}));
 
+  for (final (
+        locale,
+        campaignType,
+        worldTitle,
+        foundationTitle,
+        foundationSubtitle,
+        presetTitle,
+        presetSubtitle,
+        creativeTitle,
+        twistTitle,
+        themesTitle,
+        toneTitle,
+        styleTitle,
+        forgePresetLabel,
+      ) in <(
+        Locale,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+      )>[
+        (
+          const Locale('ja'),
+          'One-Shot',
+          'World building',
+          '基本設定',
+          '舞台とシナリオ。',
+          'プリセットを選択',
+          'プリセットを適用してキャンペーンをすばやく設定します。',
+          'テーマ・トーン・スタイル',
+          'Opening twist',
+          'テーマ',
+          'トーン',
+          'スタイル',
+          'プリセットで鍛造',
+        ),
+        (
+          const Locale('ko'),
+          'One-Shot',
+          '세계 구축',
+          '기본 설정',
+          '배경과 시나리오.',
+          '프리셋 선택',
+          '프리셋을 적용해 캠페인을 빠르게 설정하세요.',
+          '테마, 톤, 스타일',
+          '오프닝 반전',
+          '테마',
+          '톤',
+          '스타일',
+          '프리셋으로 제작',
+        ),
+      ]) {
+    testWidgets(
+        'world forge panels localize key preset and creative labels for ${locale.languageCode}',
+        (tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 1600));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(
+        _TestApp(
+          locale: locale,
+          child: CampaignBuilderPage(
+            service: FakeCampaignService(presetsOptions()),
+            currentLocale: locale,
+            onLocaleChanged: (_) {},
+          ),
+        ),
+      );
+
+      await _pumpUi(tester);
+      await _openForgeFromEntry(
+        tester,
+        ValueKey<String>('entry-campaign-card-$campaignType'),
+      );
+
+      expect(find.text(foundationTitle), findsOneWidget);
+      expect(find.text(foundationSubtitle), findsOneWidget);
+      expect(find.text(worldTitle), findsOneWidget);
+      expect(find.text(presetTitle), findsOneWidget);
+      expect(find.text(presetSubtitle), findsOneWidget);
+      expect(find.text(creativeTitle), findsOneWidget);
+      expect(find.text(twistTitle), findsOneWidget);
+      expect(find.text(themesTitle), findsOneWidget);
+      expect(find.text(toneTitle), findsOneWidget);
+      expect(find.text(styleTitle), findsOneWidget);
+      expect(find.widgetWithText(FilledButton, forgePresetLabel), findsOneWidget);
+    },
+        variant: const TargetPlatformVariant(
+            <TargetPlatform>{TargetPlatform.android}));
+  }
+
   testWidgets('creative panel help button toggles the helper bubble',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(1200, 1600));

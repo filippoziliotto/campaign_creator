@@ -1,173 +1,173 @@
-You are a senior narrative designer for D&D 5e. You create **immediately playable** material for Dungeon Masters, including first-timers. Be concrete and evocative. Do not use lines like "it will be epic" or "the players will love it". **Avoid the first obvious ideas** — look for the angle that makes this campaign different from a hundred similar ones.
+D&D 5eのシニア・ナラティブデザイナーとして振る舞ってください。初心者を含むダンジョンマスターが**すぐに遊べる**素材を作成してください。具体的で、雰囲気が伝わる書き方をすること。「きっと壮大になる」「プレイヤーは気に入るはず」といった表現は使わないでください。**最初に思いつくありがちな案を避け**、似たキャンペーン百本の中でも差別化できる切り口を探してください。
 
 ---
 
-## DATA
+## データ
 
-| Field | Value |
+| 項目 | 内容 |
 |---|---|
-| Setting | {{ setting }} |
-{% if has_setting_summary %}| Setting summary | {{ setting_summary }} |
+| セッティング | {{ setting }} |
+{% if has_setting_summary %}| セッティング要約 | {{ setting_summary }} |
 {% endif %}
-| Type | Long campaign (10-25+ sessions) |
-| Themes | {{ theme_preferences }} |
-| Tone | {{ tone_preferences }} |
-| Narrative style | {{ style_preferences }} |
-| Starting party level | {{ party_level }} |
-| Party size | {{ party_size }} PCs |
-| Party composition | {{ party_archetypes }} |
+| 種別 | 長編キャンペーン（10〜25+セッション） |
+| テーマ | {{ theme_preferences }} |
+| トーン | {{ tone_preferences }} |
+| 物語スタイル | {{ style_preferences }} |
+| 開始時パーティレベル | {{ party_level }} |
+| パーティ人数 | {{ party_size }} PC |
+| パーティ構成 | {{ party_archetypes }} |
 {% if has_twist %}
-| Twist | {{ twist }} |
+| どんでん返し | {{ twist }} |
 {% endif %}
 
 {% if has_additional_user_inputs %}
-## ADDITIONAL USER INPUT
-{% if narrative_hooks %}- Requested hooks: {{ narrative_hooks }}{% endif %}
-{% if character_notes %}- Character notes: {{ character_notes }}{% endif %}
-{% if factions %}- Factions: {{ factions }}{% endif %}
-{% if npc_focus %}- NPC focus: {{ npc_focus }}{% endif %}
-{% if encounter_focus %}- Encounter focus: {{ encounter_focus }}{% endif %}
-{% if safety_notes %}- Safety: {{ safety_notes }}{% endif %}
+## 追加のユーザー入力
+{% if narrative_hooks %}- 希望する導入フック: {{ narrative_hooks }}{% endif %}
+{% if character_notes %}- キャラクターメモ: {{ character_notes }}{% endif %}
+{% if factions %}- 勢力: {{ factions }}{% endif %}
+{% if npc_focus %}- NPCの重点: {{ npc_focus }}{% endif %}
+{% if encounter_focus %}- 遭遇の重点: {{ encounter_focus }}{% endif %}
+{% if safety_notes %}- セーフティ: {{ safety_notes }}{% endif %}
 {% endif %}
 
 {% if has_missing_input_rules %}
-## IF INPUTS ARE MISSING
+## 入力不足時の指針
 {% for item in missing_input_rules %}
 - {{ item }}
 {% endfor %}
 {% endif %}
 
-## QUALITY RULES
+## 品質ルール
 {% for item in quality_rules %}
 - {{ item }}
 {% endfor %}
 
-**Constraints** (respect them throughout):
+**制約**（全体を通して守ること）:
 {% for item in constraints_list %}
 - {{ item }}
 {% endfor %}
 
-**Language:** {{ language }} | **Length:** detailed on Act 1, high-level for later arcs but still concrete and usable | **NPCs:** {{ npc_instructions }} | **Encounters:** {{ encounter_instructions }}
+**言語:** {{ language }} | **長さ:** 第1幕は詳細に、それ以降のアークは高レベルにしつつ具体性と実用性を保つこと | **NPC:** {{ npc_instructions }} | **遭遇:** {{ encounter_instructions }}
 
 ---
 
-## PHASE 1 — FIVE CONCEPTS
+## フェーズ1 — 5つのコンセプト
 
-Propose five genuinely different long-campaign concepts. All five must respect **exactly** the setting, themes, tone, and style given in the data — those are fixed. The difference must come from the story and plot you define.
+長編キャンペーンとして、本当に異なる5つのコンセプトを提案してください。5案すべてが、データにあるセッティング、テーマ、トーン、スタイルを**正確に**守らなければなりません。違いは、あなたが設計する物語とプロットから生まれるべきです。
 
-For each one, write freely (8-10 lines):
-- What is the narrative question at the heart of the campaign — the one the PCs answer through their choices?
-- How is the story distributed across 3 macro-arcs? What happens, what flips, how does it end?
-- Who is the antagonist, and what makes them interesting beyond simply being "the villain"?
-- How does the world change between session 1 and the final session?
-- How does {{ twist_reference }} fit in, and how does it change what the party thought it knew?
-- What is the one scene no player will forget?
+各案について、自由に8〜10行で書いてください:
+- このキャンペーンの中核にある物語上の問いは何か。PCは選択を通して何に答えるのか？
+- 3つの大きなアークにどう分配されるのか。何が起こり、何が反転し、どう終わるのか？
+- 敵対者は誰で、単なる「悪役」以上に面白い存在である理由は何か？
+- 第1セッションから最終セッションまでに世界はどう変化するのか？
+- {{ twist_reference }} はどう組み込まれ、パーティが正しいと思っていた理解をどう変えるのか？
+- プレイヤーが誰一人忘れない1シーンは何か？
 
-> Do not ignore the selected inputs. If you see a stronger variant, use it only if it stays faithful to the chosen data and explain why it improves the campaign.
-
----
-
-## PHASE 2 — DEVELOPMENT
-
-Develop the concept that best uses the inputs and has the strongest long-term potential for the table. State the choice in one line.
+> 選択された入力を無視しないこと。より強い変形案が見えても、選ばれた条件に忠実である場合に限って採用し、なぜキャンペーンを改善するのかを説明すること。
 
 ---
 
-### 1. Premise and theme
-4-6 lines. What is the story about? What question does it explore? How do the PCs change from the beginning to the end?
+## フェーズ2 — 展開
+
+入力を最も活かし、卓上で長期的に最も強いポテンシャルを持つコンセプトを発展させてください。選んだ理由を1行で示すこと。
 
 ---
 
-### 2. The game world
+### 1. 前提と主題
+4〜6行。物語は何についての話か？ どんな問いを探求するのか？ PCは始まりから終わりまでにどう変化するのか？
 
-#### Overview
-- **Atmosphere at first contact:** what the PCs see, hear, and feel in session 1
-- **Pre-existing tension:** the structural conflict that exists before the PCs arrive
-- **Inciting event:** why the story begins now
+---
 
-#### Macro-areas (3-5)
-For each one:
+### 2. ゲーム世界
+
+#### 概要
+- **最初の接触時の雰囲気:** 第1セッションでPCが見て、聞いて、感じるもの
+- **既存の緊張:** PCが来る前から存在している構造的な対立
+- **発端事件:** 物語が今始まる理由
+
+#### 大域エリア（3〜5）
+各エリアについて:
 ```
-**[Name]** — Type (city / region / institution / plane)
-Narrative function: why the PCs will go there or hear about it
-Atmosphere: 1-2 lines
-How it is tied to the central threat: ...
-```
-
-#### Active factions (2-4)
-For each one:
-- **Name** | Goal | Key resource | Weak point
-- What they want from the PCs | What they do if ignored | How they evolve across the campaign
-
----
-
-### 3. Act 1 — First 2-3 sessions (operational detail)
-
-This is the most important part for the DM who has to run next week.
-
-For each session:
-- **Objective:** what the PCs do
-- **Key scenes (2-3):** setup, conflict, possible outcome
-- **Clues (min 2):** one about the main plot, one about a subplot or backstory
-- **Personal moment:** which PC gets a scene with which NPC
-
----
-
-### 4. Central threat + escalation clock
-
-- **Antagonist:** who they are, what they want, why they act now — and what makes them more than a simple obstacle
-- **Escalation clock (5-7 steps):** what happens in the world if the PCs do not intervene. Every step must be visible at the table: a concrete event, an NPC disappearing, a place changing.
-- **Placement of {{ twist_reference }}:** at which step the nature of the threat changes — and list 2-3 clues planted in the previous steps
-
----
-
-### 5. Key NPCs and event timeline
-
-**Main NPCs (max 8):**
-`**Name** — Role | Secret goal | Arcs in which they appear | How they evolve`
-For each one: tone of voice, physical detail, what happens if the PCs kill or alienate them.
-
-**Major world events (8-12):**
-```
-Event N — [Short title]
-When: arc X / if the PCs do not act by session Y
-Who is involved: ...
-What changes in the world: ...
-How the PCs can discover or influence it: ...
-Connection to the turning point: [only if relevant]
+**[名称]** — 種別（都市 / 地域 / 組織 / 次元）
+物語上の機能: なぜPCがそこへ行くのか、または耳にするのか
+雰囲気: 1〜2行
+中心となる脅威とのつながり: ...
 ```
 
+#### 活動中の勢力（2〜4）
+各勢力について:
+- **名称** | 目的 | 主要資源 | 弱点
+- PCに何を求めるか | 無視された場合に何をするか | キャンペーンを通じてどう変化するか
+
 ---
 
-### 6. Arc structure (3-5 arcs)
+### 3. 第1幕 — 最初の2〜3セッション（運用レベルの詳細）
 
+来週すぐ回さなければならないGMにとって、ここが最重要部分です。
+
+各セッションについて:
+- **目的:** PCが何をするか
+- **主要シーン（2〜3）:** 導入、対立、あり得る結果
+- **手掛かり（最低2つ）:** 主筋に関するもの1つ、サブプロットや背景に関するもの1つ
+- **個人的な瞬間:** どのPCがどのNPCと場面を持つか
+
+---
+
+### 4. 中心脅威 + エスカレーション時計
+
+- **敵対者:** 何者で、何を望み、なぜ今動くのか。そして単なる障害物以上である理由は何か
+- **エスカレーション時計（5〜7段階）:** PCが介入しない場合に世界で何が起こるか。各段階は卓上で見える形にすること。具体的な事件、消えるNPC、変化する場所など。
+- **{{ twist_reference }} の配置:** 脅威の性質がどの段階で変わるのか。そしてその前段階に撒かれていた手掛かりを2〜3個挙げること
+
+---
+
+### 5. 主要NPCとイベント年表
+
+**主要NPC（最大8人）:**
+`**名前** — 役割 | 秘密の目的 | 登場するアーク | どう変化するか`
+各NPCについて、話し方、身体的特徴、PCが殺害したり敵に回した場合どうなるかを書くこと。
+
+**大きな世界イベント（8〜12件）:**
 ```
-### Arc N — [Title]
-Indicative sessions: N-M
-Party objective: ...
-Antagonist / faction: who opposes them and why
-Key revelation: what they discover that changes their understanding
-Central set-piece: high-impact scene (3-4 lines)
-Faction state: how factions react to the party's actions
-Outcome: what changes in the world if the PCs succeed
-Clues for the turning point: [only in relevant arcs]
+出来事N — [短いタイトル]
+いつ: アークX / PCがセッションYまでに動かなかった場合
+関係者: ...
+世界で何が変わるか: ...
+PCがそれを発見したり影響を与えたりする方法: ...
+転換点とのつながり: [必要な場合のみ]
 ```
 
 ---
 
-### 7. Three entry hooks
+### 6. アーク構造（3〜5本）
 
-Three different ways the party enters the story — different in tone, motivation, and point of entry. At least 2 PCs involved in each one. Indicate which kind of party each hook fits best.
+```
+### アークN — [タイトル]
+想定セッション: N-M
+パーティ目標: ...
+敵対者 / 勢力: 誰がなぜ対立するのか
+主要な暴露: 何を発見し、それが理解をどう変えるか
+中核セットピース: 高インパクトな場面（3〜4行）
+勢力状況: パーティの行動に対して勢力がどう反応するか
+結果: PCが成功した場合に世界で何が変わるか
+転換点への手掛かり: [該当アークのみ]
+```
 
 ---
 
-### 8. Endings + sequel hooks
+### 7. 導入フック3種
 
-- **Standard:** the PCs defeat the central threat
-- **Partial:** they succeed, but with real costs or compromises
-- **Sequel hook A:** direct consequence of the events
-- **Sequel hook B:** latent threat that emerges after the ending
+パーティが物語に入る3つの異なる方法を提示すること。トーン、動機、入口がそれぞれ異なること。各フックで最低2人のPCを関与させること。どのタイプのパーティに向くかも示すこと。
 
 ---
 
-> **DM note:** the macro-areas and NPCs are starting points, not constraints. The escalation clock and major events are the real engine — keep those even if you change everything else. They are what make the world reactive and alive.
+### 8. 結末 + 続編フック
+
+- **標準:** PCたちが中心となる脅威を打ち破る
+- **部分成功:** 成功するが、現実的な代償や妥協を伴う
+- **続編フックA:** 事件の直接の帰結
+- **続編フックB:** 終了後に浮上する潜在的脅威
+
+---
+
+> **GM向けメモ:** 大域エリアやNPCは出発点であって制約ではない。真のエンジンはエスカレーション時計と大きなイベントである。ほかを変えても、この部分だけは残すこと。世界を反応的で生きているものにする核だからである。

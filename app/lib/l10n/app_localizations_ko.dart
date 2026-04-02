@@ -201,24 +201,22 @@ class AppLocalizationsKo extends AppLocalizations {
   String get entryResumeTitle => '세션 이어하기';
 
   @override
-  String get entryResumeSubtitle =>
-      'Hai già una bozza attiva. Torna subito al punto giusto.';
+  String get entryResumeSubtitle => '이미 진행 중인 초안이 있습니다. 적절한 지점으로 바로 돌아가세요.';
 
   @override
-  String get entryResumeForge => 'Riprendi la forgia';
+  String get entryResumeForge => '포지 이어하기';
 
   @override
-  String get entryOpenForge => 'Apri la forgia';
+  String get entryOpenForge => '포지 열기';
 
   @override
-  String get entryHeroWelcomeTitle => 'Scegli la tua campagna';
+  String get entryHeroWelcomeTitle => '캠페인을 선택하세요';
 
   @override
-  String get entryHeroWelcomeBody =>
-      'Forgia il prompt della tua campagna, poi portalo in vita con la tua AI di fiducia.';
+  String get entryHeroWelcomeBody => '캠페인 프롬프트를 제작한 뒤, 신뢰하는 AI로 생명을 불어넣으세요.';
 
   @override
-  String get entryHeroChooseRitual => 'Seleziona un formato per iniziare.';
+  String get entryHeroChooseRitual => '시작할 형식을 선택하세요.';
 
   @override
   String get onboardingHowItWorks => 'Come funziona';
@@ -278,339 +276,319 @@ class AppLocalizationsKo extends AppLocalizations {
   String get onboardingStyleExample => 'Fantasy concreta';
 
   @override
-  String get entryResetDraft => 'Nuova sessione';
+  String get entryResetDraft => '새 세션';
 
   @override
-  String get entryResetDraftConfirm => 'Bozza eliminata.';
+  String get entryResetDraftConfirm => '초안이 지워졌습니다.';
 
   @override
-  String get entryBadgeDefault => 'Formato';
+  String get entryBadgeDefault => '형식';
 
   @override
   String get entryDescriptionDefault => '캠페인 형식이 기기에 준비되었습니다.';
 
   @override
-  String get entryBadgeOneShot => 'Singola';
+  String get entryBadgeOneShot => '빠른 일격';
 
   @override
   String get entryDescriptionOneShot =>
-      'Una missione ad alto impatto da giocare in una sola seduta, con payoff immediato e twist preciso.';
+      '단 한 번의 세션을 위해 설계된 강렬한 임무로, 즉각적인 보상과 선명한 반전을 제공합니다.';
 
   @override
-  String get entryBadgeMiniCampaign => 'Arco breve';
+  String get entryBadgeMiniCampaign => '짧은 아크';
 
   @override
   String get entryDescriptionMiniCampaign =>
-      'Una storia concentrata in poche sessioni, con progressione forte, escalation e finale netto.';
+      '몇 번의 세션에 응축된 이야기로, 강한 진행감, 고조, 날카로운 결말을 담고 있습니다.';
 
   @override
-  String get entryBadgeLongCampaign => 'Saga ampia';
+  String get entryBadgeLongCampaign => '장대한 사가';
 
   @override
   String get entryDescriptionLongCampaign =>
-      'Fazioni, cambi di equilibrio e sottotrame persistenti per una campagna da far crescere nel tempo.';
+      '시간에 따라 성장하는 캠페인을 위한 세력, 변화하는 균형, 지속되는 서브플롯이 중심입니다.';
 
   @override
-  String get entryBadgeDungeon => 'Profondità';
+  String get entryBadgeDungeon => '심연';
 
   @override
   String get entryDescriptionDungeon =>
-      'Una discesa strutturata tra mappe, rischio, logoramento e scoperte stratificate.';
+      '지도, 위험, 소모, 층층이 이어지는 발견으로 이루어진 구조적 하강입니다.';
 
   @override
-  String get forgeSectionWorld => 'Mondo';
+  String get forgeSectionWorld => '세계';
 
   @override
-  String get forgeSectionParty => 'Party';
+  String get forgeSectionParty => '파티';
 
   @override
-  String get forgeSectionNarrative => 'Trama';
+  String get forgeSectionNarrative => '이야기';
 
   @override
-  String get forgeButtonForging => 'Forgiando...';
+  String get forgeButtonForging => '제작 중...';
 
   @override
-  String get forgeNextParty => 'Vai al Party';
+  String get forgeNextParty => '파티로 이동';
 
   @override
-  String get forgeNextNarrative => 'Vai alla Trama';
+  String get forgeNextNarrative => '이야기로 이동';
 
   @override
-  String get forgeReforgeParchment => 'Riforgia la Pergamena';
+  String get forgeReforgeParchment => '양피지 다시 제작';
 
   @override
-  String get forgeForgeParchment => 'Forgia la Pergamena';
+  String get forgeForgeParchment => '양피지 제작';
 
   @override
-  String get forgeReforgeParchmentCompact => 'Riforgia Pergamena';
+  String get forgeReforgeParchmentCompact => '다시 제작';
 
   @override
-  String get forgeForgeParchmentCompact => 'Forgia Pergamena';
+  String get forgeForgeParchmentCompact => '양피지 제작';
 
   @override
-  String get forgeAdvanceBlockedWorld =>
-      'Definisci almeno tono, stile o temi prima di passare al party.';
+  String get forgeAdvanceBlockedWorld => '파티로 이동하기 전에 최소한 톤, 스타일 또는 테마를 정하세요.';
 
   @override
-  String get forgeAdvanceBlockedParty =>
-      'Controlla livello, dimensione e archetipi del party prima di procedere.';
+  String get forgeAdvanceBlockedParty => '계속하기 전에 파티 레벨, 인원수, 아키타입을 확인하세요.';
 
   @override
   String get forgeAdvanceBlockedNarrative =>
-      'Aggiungi almeno un dettaglio narrativo prima di forgiare la pergamena.';
+      '양피지를 제작하기 전에 최소 하나의 서사 요소를 추가하세요.';
 
   @override
-  String get forgeReadinessWorldReady => 'Puoi passare al party.';
+  String get forgeReadinessWorldReady => '이제 파티 섹션으로 이동할 수 있습니다.';
 
   @override
-  String get forgeReadinessWorldPending =>
-      'Scegli formato, ambientazione e segnali chiave.';
+  String get forgeReadinessWorldPending => '형식, 배경, 핵심 신호를 선택하세요.';
 
   @override
-  String get forgeReadinessPartyReady => 'Puoi aprire la trama.';
+  String get forgeReadinessPartyReady => '이제 이야기 섹션을 열 수 있습니다.';
 
   @override
-  String get forgeReadinessPartyPending =>
-      'Definisci livello, dimensione e ruoli del gruppo.';
+  String get forgeReadinessPartyPending => '레벨, 인원수, 그룹 역할을 정하세요.';
 
   @override
-  String get forgeReadinessNarrativeReady => 'Puoi forgiare la pergamena.';
+  String get forgeReadinessNarrativeReady => '양피지를 제작할 수 있습니다.';
 
   @override
-  String get forgeReadinessNarrativePending =>
-      'Aggiungi almeno un aggancio narrativo.';
+  String get forgeReadinessNarrativePending => '최소 하나의 서사 훅을 추가하세요.';
 
   @override
-  String get forgeWorldSectionTitle => 'Costruzione del Mondo';
+  String get forgeWorldSectionTitle => '세계 구축';
 
   @override
-  String get forgeWorldSectionSubtitle =>
-      'Formato, ambientazione e segnali iniziali della campagna.';
+  String get forgeWorldSectionSubtitle => '형식, 배경, 그리고 캠페인의 첫 신호를 정합니다.';
 
   @override
-  String get forgeFoundationLabel => 'Fondazione';
+  String get forgeFoundationLabel => '기초';
 
   @override
-  String get forgeFoundationTitle => 'Impostazioni base';
+  String get forgeFoundationTitle => '기본 설정';
 
   @override
-  String get forgeFoundationSubtitle => 'Ambientazione e scenario.';
+  String get forgeFoundationSubtitle => '배경과 시나리오.';
 
   @override
-  String get forgePresetSectionTitle => 'Scegli un preset';
+  String get forgePresetSectionTitle => '프리셋 선택';
 
   @override
-  String get forgePresetSectionSubtitle =>
-      'Applica un preset per configurare rapidamente la campagna.';
+  String get forgePresetSectionSubtitle => '프리셋을 적용해 캠페인을 빠르게 설정하세요.';
 
   @override
-  String get forgePresetPanelLabel => 'Preset';
+  String get forgePresetPanelLabel => '프리셋';
 
   @override
-  String get forgePresetPanelTitle => 'Preset rapidi';
+  String get forgePresetPanelTitle => '빠른 프리셋';
 
   @override
-  String get forgeQuickPresetLabel => 'Preset rapido';
+  String get forgeQuickPresetLabel => '빠른 프리셋';
 
   @override
-  String get forgeNoPresetSelected => 'Nessun preset';
+  String get forgeNoPresetSelected => '프리셋 없음';
 
   @override
-  String get forgeApplyPreset => 'Forgia con preset';
+  String get forgeApplyPreset => '프리셋으로 제작';
 
   @override
-  String get forgeApply => 'Forgia con preset';
+  String get forgeApply => '프리셋으로 제작';
 
   @override
-  String get forgeSettingLabel => 'Ambientazione';
+  String get forgeSettingLabel => '배경';
 
   @override
-  String get forgeCustomSettingLabel => 'Ambientazione personalizzata';
+  String get forgeCustomSettingLabel => '사용자 지정 배경';
 
   @override
-  String get forgeCustomSettingHint => 'Es: Inferno, città verticale';
+  String get forgeCustomSettingHint => '예: 전쟁 중인 왕국, 수직 도시';
 
   @override
-  String get forgeTwistTitle => 'Twist iniziale';
+  String get forgeTwistTitle => '오프닝 반전';
 
   @override
-  String get forgeTwistHelpTooltip => 'Aiuto twist iniziale';
+  String get forgeTwistHelpTooltip => '오프닝 반전 도움말';
 
   @override
-  String get forgeTwistLabel => 'Twist';
+  String get forgeTwistLabel => '반전';
 
   @override
-  String get forgeCustomTwistLabel => 'Twist personalizzato';
+  String get forgeCustomTwistLabel => '사용자 지정 반전';
 
   @override
-  String get forgeCustomTwistHint =>
-      'Un alleato mente, il dungeon è vivo, la missione è una trappola...';
+  String get forgeCustomTwistHint => '동료가 거짓말한다, 던전이 살아 있다, 임무가 함정이다...';
 
   @override
-  String get forgeCreativeTitle => 'Temi, tono e stile';
+  String get forgeCreativeTitle => '테마, 톤, 스타일';
 
   @override
-  String get forgeCreativeHelpTooltip => 'Aiuto direzione creativa';
+  String get forgeCreativeHelpTooltip => '창작 방향 도움말';
 
   @override
-  String get forgeCreativeHelpBody =>
-      'Scegli temi, tono e stile narrativo della campagna.';
+  String get forgeCreativeHelpBody => '캠페인의 테마, 톤, 서사 스타일을 선택하세요.';
 
   @override
-  String get forgeThemesTitle => 'Temi';
+  String get forgeThemesTitle => '테마';
 
   @override
-  String get forgeCustomThemesLabel => 'Temi personalizzati';
+  String get forgeCustomThemesLabel => '사용자 지정 테마';
 
   @override
-  String get forgeCustomThemesHint => 'Es: Steampunk, orrore cosmico';
+  String get forgeCustomThemesHint => '예: 스팀펑크, 코스믹 호러';
 
   @override
-  String get forgeToneTitle => 'Tono';
+  String get forgeToneTitle => '톤';
 
   @override
-  String get forgeStyleTitle => 'Stile';
+  String get forgeStyleTitle => '스타일';
 
   @override
-  String get forgeToneStyleOverrideLabel => 'Toni e stile personalizzati';
+  String get forgeToneStyleOverrideLabel => '사용자 지정 톤 및 스타일';
 
   @override
-  String get forgeToneStyleOverrideHint => 'Es: Tono: cupo; Stile: gritty';
+  String get forgeToneStyleOverrideHint => '예: 톤: 다크; 스타일: 거칠고 현실적';
 
   @override
-  String get forgePartySectionTitle => 'Party e scala di gioco';
+  String get forgePartySectionTitle => '파티와 게임 규모';
 
   @override
-  String get forgePartySectionSubtitle =>
-      'Livello, dimensione e ruoli principali del gruppo.';
+  String get forgePartySectionSubtitle => '레벨, 인원수, 주요 그룹 역할을 정합니다.';
 
   @override
-  String get forgeScaleLabel => 'Scala';
+  String get forgeScaleLabel => '규모';
 
   @override
-  String get forgeScaleTitle => 'Livello e dimensione';
+  String get forgeScaleTitle => '레벨과 인원수';
 
   @override
   String forgePartyLevel(int level) {
-    return 'Livello party: $level';
+    return '파티 레벨: $level';
   }
 
   @override
   String forgePartySize(int size) {
-    return 'Numero personaggi: $size';
+    return '캐릭터 수: $size';
   }
 
   @override
-  String get forgePartyLevelPremiumHint => 'I livelli 4+ sono premium';
+  String get forgePartyLevelPremiumHint => '레벨 4 이상은 프리미엄입니다';
 
   @override
-  String get forgePartySizePremiumHint => '5+ personaggi sono premium';
+  String get forgePartySizePremiumHint => '캐릭터 5명 이상은 프리미엄입니다';
 
   @override
-  String get forgePartyArchetypesTitle => 'Archetipi del party';
+  String get forgePartyArchetypesTitle => '파티 아키타입';
 
   @override
   String forgePartyArchetypesSubtitle(int size) {
-    return 'Seleziona fino a $size archetipi.';
+    return '최대 $size개의 아키타입을 선택하세요.';
   }
 
   @override
   String get forgePartyArchetypesMaxReached =>
-      'Hai raggiunto il massimo di archetipi selezionabili per il party attuale.';
+      '현재 파티에 대해 선택 가능한 최대 아키타입 수에 도달했습니다.';
 
   @override
-  String get forgePartyInfoTitle => 'Informazioni utili';
+  String get forgePartyInfoTitle => '유용한 정보';
 
   @override
-  String get forgeCharacterNotesLabel => 'Note sui personaggi';
+  String get forgeCharacterNotesLabel => '캐릭터 메모';
 
   @override
-  String get forgeCharacterNotesHint =>
-      'Segreti, legami, paure, background importanti...';
+  String get forgeCharacterNotesHint => '비밀, 유대, 두려움, 중요한 배경 이야기...';
 
   @override
-  String get forgeConstraintsLabel => 'Vincoli';
+  String get forgeConstraintsLabel => '제약 조건';
 
   @override
-  String get forgeConstraintsHint =>
-      'Durata breve, niente viaggi planari, boss finale obbligatorio...';
+  String get forgeConstraintsHint => '짧은 플레이 시간, 차원 이동 금지, 필수 최종 보스...';
 
   @override
-  String get forgeNarrativeSectionTitle => 'Pressione narrativa';
+  String get forgeNarrativeSectionTitle => '서사 압력';
 
   @override
-  String get forgeNarrativeSectionSubtitle =>
-      'Agganci, fazioni e vincoli extra per personalizzare la pergamena.';
+  String get forgeNarrativeSectionSubtitle => '양피지를 맞춤화할 추가 훅, 세력, 제약 조건입니다.';
 
   @override
-  String get forgeNarrativePanelTitle => 'Trama e forze in gioco';
+  String get forgeNarrativePanelTitle => '이야기와 작동하는 세력';
 
   @override
-  String get forgeNarrativeHooksLabel => 'Agganci narrativi';
+  String get forgeNarrativeHooksLabel => '서사 훅';
 
   @override
-  String get forgeNarrativeHooksHint =>
-      'Missione iniziale, minaccia, mistero, countdown...';
+  String get forgeNarrativeHooksHint => '시작 임무, 위협, 미스터리, 카운트다운...';
 
   @override
-  String get forgeFactionsLabel => 'Fazioni e poteri';
+  String get forgeFactionsLabel => '세력과 권력';
 
   @override
-  String get forgeFactionsHint =>
-      'Gilde, culti, casate, antagonisti, alleati instabili...';
+  String get forgeFactionsHint => '길드, 컬트, 귀족 가문, 적대자, 불안정한 동맹...';
 
   @override
-  String get forgeNpcFocusLabel => 'NPC chiave';
+  String get forgeNpcFocusLabel => '핵심 NPC';
 
   @override
-  String get forgeNpcFocusHint =>
-      'Mentore ambiguo, rivale, patrono, traditore...';
+  String get forgeNpcFocusHint => '애매한 멘토, 라이벌, 후원자, 배신자...';
 
   @override
-  String get forgeEncounterFocusLabel => 'Incontri desiderati';
+  String get forgeEncounterFocusLabel => '원하는 조우';
 
   @override
-  String get forgeEncounterFocusHint =>
-      'Assedio, indagine sociale, inseguimento, boss finale...';
+  String get forgeEncounterFocusHint => '공성전, 사회적 조사, 추격전, 최종 보스...';
 
   @override
-  String get forgeContentConstraintsTitle => 'Vincoli di contenuto';
+  String get forgeContentConstraintsTitle => '콘텐츠 제약';
 
   @override
-  String get forgeIncludeNpcsLabel => 'Includi NPC';
+  String get forgeIncludeNpcsLabel => 'NPC 포함';
 
   @override
-  String get forgeIncludeNpcsSubtitle =>
-      'Il prompt includerà personaggi non giocanti rilevanti.';
+  String get forgeIncludeNpcsSubtitle => '프롬프트에 관련 비플레이어 캐릭터가 포함됩니다.';
 
   @override
-  String get forgeIncludeEncountersLabel => 'Includi incontri';
+  String get forgeIncludeEncountersLabel => '조우 포함';
 
   @override
-  String get forgeIncludeEncountersSubtitle =>
-      'Il prompt suggerirà scene e combattimenti.';
+  String get forgeIncludeEncountersSubtitle => '프롬프트가 장면과 전투를 제안합니다.';
 
   @override
-  String get forgeSafetyNotesLabel => 'Note di sicurezza';
+  String get forgeSafetyNotesLabel => '안전 메모';
 
   @override
-  String get forgeSafetyNotesHint =>
-      'Temi da evitare, linee e veli, limiti di tono...';
+  String get forgeSafetyNotesHint => '피해야 할 주제, 라인과 베일, 톤 제한...';
 
   @override
-  String get forgeParchmentDirty => 'Configurazione modificata: rigenera.';
+  String get forgeParchmentDirty => '설정이 변경되었습니다: 다시 생성하세요.';
 
   @override
-  String get forgeParchmentReady => 'Pergamena aggiornata.';
+  String get forgeParchmentReady => '양피지가 최신 상태입니다.';
 
   @override
-  String get forgeParchmentIncomplete => 'Completa la trama per generare.';
+  String get forgeParchmentIncomplete => '생성하려면 이야기를 완성하세요.';
 
   @override
-  String get statusReady => 'Pronto';
+  String get statusReady => '준비 완료';
 
   @override
-  String get statusNeedsPolish => 'Da rifinire';
+  String get statusNeedsPolish => '다듬기 필요';
 
   @override
   String get parchmentReadyTitle => 'Pergamena pronta';
@@ -719,11 +697,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsShareApp => '앱 공유';
 
   @override
-  String get settingsPrivacyOptions => 'Impostazioni privacy';
+  String get settingsPrivacyOptions => '개인정보 설정';
 
   @override
-  String get settingsShareText =>
-      'Scopri Campaign Forge, il generatore di campagne D&D: ';
+  String get settingsShareText => 'D&D 캠페인 생성기 Campaign Forge를 확인해 보세요: ';
 
   @override
   String get settingsLanguageLabel => '언어';
@@ -738,29 +715,29 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsThemeLabel => '테마';
 
   @override
-  String get settingsThemeDark => 'Scuro';
+  String get settingsThemeDark => '다크';
 
   @override
-  String get settingsThemeLight => 'Chiaro';
+  String get settingsThemeLight => '라이트';
 
   @override
-  String get settingsInfoLabel => 'Info';
+  String get settingsInfoLabel => '정보';
 
   @override
-  String get settingsVersion => 'Versione';
+  String get settingsVersion => '버전';
 
   @override
-  String get settingsGoAdFree => 'Pubblicità';
+  String get settingsGoAdFree => '광고';
 
   @override
   String get settingsGoAdFreePrice => '프리미엄 잠금 해제';
 
   @override
-  String get settingsGoAdFreeSubtitle => 'Acquisto una tantum · £1.99';
+  String get settingsGoAdFreeSubtitle => '일회성 구매 · £1.99';
 
   @override
   String settingsGoAdFreeSubtitleWithAmount(String price) {
-    return 'Acquisto una tantum · $price';
+    return '일회성 구매 · $price';
   }
 
   @override
@@ -769,17 +746,16 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get settingsRestorePurchases => 'Ripristina acquisti';
+  String get settingsRestorePurchases => '구매 복원';
 
   @override
-  String get settingsRestorePurchasesStarted => 'Ripristino acquisti in corso…';
+  String get settingsRestorePurchasesStarted => '구매 복원 중…';
 
   @override
-  String get settingsRestorePurchasesComplete =>
-      'Acquisti ripristinati con successo.';
+  String get settingsRestorePurchasesComplete => '구매가 성공적으로 복원되었습니다.';
 
   @override
-  String get settingsAdFreeActive => 'Pubblicità rimosse';
+  String get settingsAdFreeActive => '광고 제거됨';
 
   @override
   String get settingsIapUnavailable =>
@@ -812,7 +788,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumUnlockWatchAd => '광고 보기 (5분)';
 
   @override
-  String get helpTitle => 'Guida';
+  String get helpTitle => '가이드';
 
   @override
   String get helpCampaignTypesTitle => '캠페인 유형';
@@ -822,56 +798,50 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get helpCampaignTypeOneShotBody =>
-      'Un\'avventura completa pensata per una sola sessione, con inizio forte, obiettivo chiaro e finale rapido. Sceglila quando vuoi ritmo alto e payoff immediato.';
+      '강한 도입, 분명한 목표, 빠른 보상을 갖춘 단일 세션용 완결형 모험입니다. 즉각적인 추진력과 압축된 전개가 필요할 때 적합합니다.';
 
   @override
-  String get helpCampaignTypeMiniCampaignTitle => 'Mini-campagna';
+  String get helpCampaignTypeMiniCampaignTitle => '미니 캠페인';
 
   @override
   String get helpCampaignTypeMiniCampaignBody =>
-      'Un arco breve che si sviluppa in poche sessioni, lasciando spazio a escalation e finale più netto. Ideale se vuoi qualcosa di compatto ma meno compresso di un one-shot.';
+      '몇 번의 세션에 걸쳐 진행되는 짧은 아크로, 상승과 더 날카로운 결말을 담을 여유가 있습니다. 원샷보다 덜 압축된 콤팩트한 구성을 원할 때 적합합니다.';
 
   @override
-  String get helpCampaignTypeLongCampaignTitle => 'Campagna lunga';
+  String get helpCampaignTypeLongCampaignTitle => '장기 캠페인';
 
   @override
   String get helpCampaignTypeLongCampaignBody =>
-      'Una struttura estesa con fazioni, sottotrame e conseguenze che crescono nel tempo. Perfetta se vuoi continuità, progressione e un mondo che reagisce alle scelte del party.';
+      '시간에 따라 발전하는 세력, 서브플롯, 결과를 담은 장기 구조입니다. 연속성, 성장, 플레이어 선택에 반응하는 세계를 원할 때 이상적입니다.';
 
   @override
-  String get helpCampaignTypeDungeonTitle => 'Esplorazione dungeon';
+  String get helpCampaignTypeDungeonTitle => '던전 탐험';
 
   @override
   String get helpCampaignTypeDungeonBody =>
-      'Una campagna centrata su mappe, scoperta, attrito e segreti nascosti in luoghi pericolosi. Ottima se vuoi pressione costante, esplorazione e forte senso del luogo.';
+      '지도, 발견, 자원 소모, 위험한 장소에 숨겨진 비밀에 초점을 둔 캠페인입니다. 압박감, 탐험, 강한 장소성을 원할 때 잘 맞습니다.';
 
   @override
   String get helpTipsTitle => '팁과 모범 사례';
 
   @override
-  String get helpTipWorld =>
-      'Parti da ambientazione e tema: sono i vincoli che danno coerenza al resto.';
+  String get helpTipWorld => '배경과 테마부터 시작하세요. 전체를 일관되게 유지해 주는 핵심 제약입니다.';
 
   @override
-  String get helpTipTheme =>
-      'Usa 1-2 temi forti invece di accumulare troppe idee simili.';
+  String get helpTipTheme => '비슷한 아이디어를 너무 많이 쌓기보다 강한 테마 1~2개를 선택하세요.';
 
   @override
   String get helpTipTwist => '반전을 선택해 줄거리에 즉각적인 긴장을 더하세요.';
 
   @override
-  String get helpTipContrast =>
-      'Prova a combinare toni in contrasto per ottenere prompt meno prevedibili.';
+  String get helpTipContrast => '대비되는 톤을 조합해 더 예측하기 어려운 프롬프트를 만들어 보세요.';
 
   @override
-  String get helpTipPreset =>
-      'Usa i preset quando vuoi ispirazione rapida o una base solida da rifinire.';
+  String get helpTipPreset => '빠른 영감이나 강한 출발점이 필요할 때 프리셋을 사용하세요.';
 
   @override
-  String get helpTipCustom =>
-      'Aggiungi voci custom solo quando l\'opzione esatta che ti serve non esiste già.';
+  String get helpTipCustom => '필요한 옵션이 기존에 없을 때만 사용자 지정 항목을 추가하세요.';
 
   @override
-  String get helpTipParty =>
-      'Tieni coerenti livello, dimensione del party e archetipi per evitare prompt sbilanciati.';
+  String get helpTipParty => '불균형한 프롬프트를 피하려면 레벨, 파티 규모, 아키타입을 맞춰 두세요.';
 }

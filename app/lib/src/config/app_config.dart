@@ -5,7 +5,7 @@ class AppConfig {
   static const String playStoreUrl =
       'https://play.google.com/store/apps/details?id=com.fzlabs.campaignforge';
 
-  // TODO: replace idPLACEHOLDER with real Apple App Store ID after publishing
+  // Real Apple App Store ID.
   static const String appStoreUrl =
-      'https://apps.apple.com/app/campaign-forge/idPLACEHOLDER';
+      'https://apps.apple.com/app/campaign-forge/id6761498172';
 }

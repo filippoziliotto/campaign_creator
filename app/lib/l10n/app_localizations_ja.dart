@@ -386,17 +386,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get forgeFoundationLabel => 'Foundation';
 
   @override
-  String get forgeFoundationTitle => 'Base setup';
+  String get forgeFoundationTitle => '基本設定';
 
   @override
-  String get forgeFoundationSubtitle => 'Setting and scenario.';
+  String get forgeFoundationSubtitle => '舞台とシナリオ。';
 
   @override
-  String get forgePresetSectionTitle => 'Choose a preset';
+  String get forgePresetSectionTitle => 'プリセットを選択';
 
   @override
-  String get forgePresetSectionSubtitle =>
-      'Apply a preset to quickly configure your campaign.';
+  String get forgePresetSectionSubtitle => 'プリセットを適用してキャンペーンをすばやく設定します。';
 
   @override
   String get forgePresetPanelLabel => 'Presets';
@@ -411,10 +410,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get forgeNoPresetSelected => 'No preset';
 
   @override
-  String get forgeApplyPreset => 'Forge with preset';
+  String get forgeApplyPreset => 'プリセットで鍛造';
 
   @override
-  String get forgeApply => 'Forge with preset';
+  String get forgeApply => 'プリセットで鍛造';
 
   @override
   String get forgeSettingLabel => 'Setting';
@@ -442,7 +441,7 @@ class AppLocalizationsJa extends AppLocalizations {
       'An ally lies, the dungeon is alive, the mission is a trap...';
 
   @override
-  String get forgeCreativeTitle => 'Themes, tone and style';
+  String get forgeCreativeTitle => 'テーマ・トーン・スタイル';
 
   @override
   String get forgeCreativeHelpTooltip => 'Creative direction help';
@@ -452,7 +451,7 @@ class AppLocalizationsJa extends AppLocalizations {
       'Choose the themes, tone, and narrative style of your campaign.';
 
   @override
-  String get forgeThemesTitle => 'Themes';
+  String get forgeThemesTitle => 'テーマ';
 
   @override
   String get forgeCustomThemesLabel => 'Custom themes';
@@ -461,10 +460,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get forgeCustomThemesHint => 'E.g. Steampunk, cosmic horror';
 
   @override
-  String get forgeToneTitle => 'Tone';
+  String get forgeToneTitle => 'トーン';
 
   @override
-  String get forgeStyleTitle => 'Style';
+  String get forgeStyleTitle => 'スタイル';
 
   @override
   String get forgeToneStyleOverrideLabel => 'Custom tones & style';
@@ -701,23 +700,22 @@ class AppLocalizationsJa extends AppLocalizations {
       'You can use the prompts with AI tools to create your own stories.';
 
   @override
-  String get settingsTitle => 'Settings';
+  String get settingsTitle => '設定';
 
   @override
-  String get settingsLeaveReview => 'Leave a review';
+  String get settingsLeaveReview => 'レビューを書く';
 
   @override
-  String get settingsShareApp => 'Share the app';
+  String get settingsShareApp => 'アプリを共有';
 
   @override
-  String get settingsPrivacyOptions => 'Privacy Settings';
+  String get settingsPrivacyOptions => 'プライバシー設定';
 
   @override
-  String get settingsShareText =>
-      'Discover Campaign Forge, the D&D campaign generator: ';
+  String get settingsShareText => 'D&Dキャンペーン生成アプリ「Campaign Forge」をチェック: ';
 
   @override
-  String get settingsLanguageLabel => 'Language';
+  String get settingsLanguageLabel => '言語';
 
   @override
   String get settingsLanguageEnglish => 'English';
@@ -726,32 +724,32 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsLanguageItalian => 'Italiano';
 
   @override
-  String get settingsThemeLabel => 'Theme';
+  String get settingsThemeLabel => 'テーマ';
 
   @override
-  String get settingsThemeDark => 'Dark';
+  String get settingsThemeDark => 'ダーク';
 
   @override
-  String get settingsThemeLight => 'Light';
+  String get settingsThemeLight => 'ライト';
 
   @override
-  String get settingsInfoLabel => 'Info';
+  String get settingsInfoLabel => '情報';
 
   @override
-  String get settingsVersion => 'Version';
+  String get settingsVersion => 'バージョン';
 
   @override
-  String get settingsGoAdFree => 'Ads';
+  String get settingsGoAdFree => '広告';
 
   @override
   String get settingsGoAdFreePrice => 'プレミアムを解除';
 
   @override
-  String get settingsGoAdFreeSubtitle => 'One-time purchase · £1.99';
+  String get settingsGoAdFreeSubtitle => '一度限りの購入 · £1.99';
 
   @override
   String settingsGoAdFreeSubtitleWithAmount(String price) {
-    return 'One-time purchase · $price';
+    return '一度限りの購入 · $price';
   }
 
   @override
@@ -760,17 +758,16 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get settingsRestorePurchases => 'Restore purchases';
+  String get settingsRestorePurchases => '購入を復元';
 
   @override
-  String get settingsRestorePurchasesStarted => 'Restoring purchases…';
+  String get settingsRestorePurchasesStarted => '購入を復元中…';
 
   @override
-  String get settingsRestorePurchasesComplete =>
-      'Purchases restored successfully.';
+  String get settingsRestorePurchasesComplete => '購入が正常に復元されました。';
 
   @override
-  String get settingsAdFreeActive => 'Ads removed';
+  String get settingsAdFreeActive => '広告削除済み';
 
   @override
   String get settingsIapUnavailable =>
@@ -803,66 +800,60 @@ class AppLocalizationsJa extends AppLocalizations {
   String get premiumUnlockWatchAd => '広告を見る（5分）';
 
   @override
-  String get helpTitle => 'Guide';
+  String get helpTitle => 'ガイド';
 
   @override
-  String get helpCampaignTypesTitle => 'Campaign types';
+  String get helpCampaignTypesTitle => 'キャンペーンタイプ';
 
   @override
   String get helpCampaignTypeOneShotTitle => 'One-Shot';
 
   @override
   String get helpCampaignTypeOneShotBody =>
-      'A complete adventure built for a single session, with a strong opening, a clear goal, and a fast payoff. Choose it when you want immediate momentum and a tight arc.';
+      '1セッションで完結する冒険で、強い導入、明確な目標、素早い見返りを備えています。即効性と引き締まった展開が欲しいときに最適です。';
 
   @override
-  String get helpCampaignTypeMiniCampaignTitle => 'Mini-Campaign';
+  String get helpCampaignTypeMiniCampaignTitle => 'ミニキャンペーン';
 
   @override
   String get helpCampaignTypeMiniCampaignBody =>
-      'A short arc that unfolds across a few sessions, leaving room for escalation and a sharper finale. Best when you want something compact but less compressed than a one-shot.';
+      '数回のセッションで展開する短い物語で、エスカレーションと鋭い結末の余地があります。ワンショットほど圧縮されていない、コンパクトな体験に向いています。';
 
   @override
-  String get helpCampaignTypeLongCampaignTitle => 'Long Campaign';
+  String get helpCampaignTypeLongCampaignTitle => '長編キャンペーン';
 
   @override
   String get helpCampaignTypeLongCampaignBody =>
-      'An extended structure with factions, subplots, and consequences that develop over time. Ideal if you want continuity, progression, and a world that reacts to player choices.';
+      '時間をかけて発展する勢力、サブプロット、結果を含む長期構成です。継続性、成長、プレイヤーの選択に反応する世界が欲しい場合に理想的です。';
 
   @override
-  String get helpCampaignTypeDungeonTitle => 'Dungeon Exploration';
+  String get helpCampaignTypeDungeonTitle => 'ダンジョン探索';
 
   @override
   String get helpCampaignTypeDungeonBody =>
-      'A campaign focused on maps, discovery, attrition, and secrets hidden in dangerous places. Perfect when you want pressure, exploration, and a strong sense of place.';
+      '地図、発見、消耗、危険な場所に隠された秘密に焦点を当てたキャンペーンです。緊張感、探索、強い場所性を求めるときに最適です。';
 
   @override
-  String get helpTipsTitle => 'Tips & best practices';
+  String get helpTipsTitle => 'ヒントとベストプラクティス';
 
   @override
-  String get helpTipWorld =>
-      'Start from setting and theme: they are the constraints that keep everything coherent.';
+  String get helpTipWorld => '設定とテーマから始めましょう。それが全体の一貫性を保つ制約になります。';
 
   @override
-  String get helpTipTheme =>
-      'Use 1 or 2 strong themes instead of piling on too many similar ideas.';
+  String get helpTipTheme => '似たアイデアを詰め込みすぎず、強いテーマを1つか2つ選びましょう。';
 
   @override
-  String get helpTipTwist => 'Pick a twist to give the plot immediate tension.';
+  String get helpTipTwist => 'ひねりを選んで、物語に即座に緊張感を与えましょう。';
 
   @override
-  String get helpTipContrast =>
-      'Try combining contrasting tones to get less predictable prompts.';
+  String get helpTipContrast => '対照的なトーンを組み合わせると、より予測しにくいプロンプトになります。';
 
   @override
-  String get helpTipPreset =>
-      'Use presets when you want quick inspiration or a strong starting point.';
+  String get helpTipPreset => '素早く着想を得たいときや、強い出発点が欲しいときはプリセットを使いましょう。';
 
   @override
-  String get helpTipCustom =>
-      'Add custom entries only when the exact option you need does not already exist.';
+  String get helpTipCustom => '必要な項目が既存の選択肢にない場合にだけカスタム項目を追加しましょう。';
 
   @override
-  String get helpTipParty =>
-      'Keep level, party size, and archetypes aligned to avoid uneven prompts.';
+  String get helpTipParty => '偏りのないプロンプトにするため、レベル、人数、アーキタイプを揃えましょう。';
 }
