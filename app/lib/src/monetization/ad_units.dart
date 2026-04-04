@@ -6,29 +6,36 @@ class MonetizationIds {
   MonetizationIds._();
 
   static const String adFreeProductId = 'ad_free_upgrade';
+  static const String _androidProductionInterstitial =
+      'ca-app-pub-9007719672385552/1565750802';
+  static const String _iosProductionInterstitial =
+      'ca-app-pub-9007719672385552/1526222351';
+  static const String _androidProductionRewarded =
+      'ca-app-pub-9007719672385552/9497781954';
+  static const String _iosProductionRewarded =
+      'ca-app-pub-9007719672385552/1959037430';
+  static const String _androidProductionAppId =
+      'ca-app-pub-9007719672385552~3698660365';
+  static const String _iosProductionAppId =
+      'ca-app-pub-9007719672385552~4596809069';
 
   static const String _androidTestInterstitial =
       'ca-app-pub-3940256099942544/1033173712';
-  static const String _iosTestInterstitial =
-      'ca-app-pub-3940256099942544/4411468910';
   static const String _androidTestRewarded =
       'ca-app-pub-3940256099942544/5224354917';
-  static const String _iosTestRewarded =
-      'ca-app-pub-3940256099942544/1712485313';
 
-  static const String _androidTestAppId =
-      'ca-app-pub-3940256099942544~3347511713';
-  static const String _iosTestAppId =
-      'ca-app-pub-3940256099942544~1458002511';
-
+  /// Retained for tooling/reference. Android registration actually uses
+  /// `android/key.properties`, while iOS registration uses `Info.plist`.
   static String get androidAppId => const String.fromEnvironment(
         'ADMOB_APP_ID_ANDROID',
-        defaultValue: _androidTestAppId,
+        defaultValue: _androidProductionAppId,
       );
 
+  /// Retained for tooling/reference. Android registration actually uses
+  /// `android/key.properties`, while iOS registration uses `Info.plist`.
   static String get iosAppId => const String.fromEnvironment(
         'ADMOB_APP_ID_IOS',
-        defaultValue: _iosTestAppId,
+        defaultValue: _iosProductionAppId,
       );
 
   static String get interstitialAdUnitId {
@@ -63,7 +70,7 @@ class MonetizationIds {
     if (Platform.isIOS) {
       return const String.fromEnvironment(
         'ADMOB_INTERSTITIAL_IOS',
-        defaultValue: _iosTestInterstitial,
+        defaultValue: _iosProductionInterstitial,
       );
     }
     return '';
@@ -79,7 +86,7 @@ class MonetizationIds {
     if (Platform.isIOS) {
       return const String.fromEnvironment(
         'ADMOB_REWARDED_IOS',
-        defaultValue: _iosTestRewarded,
+        defaultValue: _iosProductionRewarded,
       );
     }
     return '';

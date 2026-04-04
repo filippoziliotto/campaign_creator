@@ -1,7 +1,7 @@
 name: campaign_creator_flutter
 description: "Campaign Forge — Campaign prompt creator by FZ Labs."
 publish_to: 'none'
-version: 1.0.4+5
+version: 1.0.5+6
 
 environment:
   sdk: ">=3.3.0 <4.0.0"

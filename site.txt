@@ -1,0 +1,27 @@
+Campaign Forge
+
+Campaign Forge is a mobile app by FZ Labs for creating D&D and tabletop RPG campaign prompts directly on your device.
+
+The app is designed to help players and game masters quickly generate campaign ideas, settings, twists, party setup details, and narrative hooks in a fast and polished mobile experience.
+
+Key features
+- On-device campaign prompt creation
+- Multiple campaign formats and creative presets
+- Premium unlock options via rewarded ads or one-time purchase
+- Available on Android and iOS
+
+Store links
+Google Play:
+https://play.google.com/store/apps/details?id=com.fzlabs.campaignforge
+
+Apple App Store:
+https://apps.apple.com/app/campaign-forge/id6761498172
+
+Privacy Policy
+See the official privacy policy included with the app and store listing.
+
+Support
+For questions about Campaign Forge, use the contact method listed on the app store page or other official FZ Labs contact point for the app.
+
+Publisher
+FZ Labs
